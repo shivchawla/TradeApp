@@ -4,36 +4,23 @@ import {View, StyleSheet} from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 const Stack = createStackNavigator();
 
-import ShowContactInfo from '../screens/ShowContactInfo';
-import ShowIdentityInfo from '../screens/ShowIdentityInfo';
-import ShowDocumentUpload from '../screens/ShowDocumentUpload';
-import ShowAgreementInfo from '../screens/ShowAgreementInfo';
-import ShowDisclosureInfo from '../screens/ShowDisclosureInfo';
-import ShowTrustedContactInfo from '../screens/ShowTrustedContactInfo';
-
-import UpdateContactInfo from '../screens/updateContactInfo';
-import UpdateIdentityInfo from '../screens/updateIdentityInfo';
-import UpdateDocumentUpload from '../screens/updateDocumentUpload';
-import UpdateAgreementInfo from '../screens/updateAgreementInfo';
-import UpdateDisclosureInfo from '../screens/updateDisclosureInfo';
-import UpdateTrustedContactInfo from '../screens/updateTrustedContactInfo';
+import Contact from '../screens/account/Contact';
+import Identity from '../screens/account/Identity';
+import Document from '../screens/account/Document';
+import Agreement from '../screens/account/Agreement';
+import Disclosure from '../screens/account/Disclosure';
+import TrustedContact from '../screens/account/TrustedContact';
 
 
 const SettingStack = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="ShowContact" component={ShowContactInfo} />
-      <Stack.Screen name="UpdateContact" component={UpdateContactInfo} />
-      <Stack.Screen name="ShowIdentity" component={ShowIdentityInfo} />
-      <Stack.Screen name="UpdateIdentity" component={UpdateIdentityInfo} />
-      <Stack.Screen name="ShowDocument" component={ShowDocumentUpload} />
-      <Stack.Screen name="UpdateDocument" component={UpdateDocumentUpload} />
-      <Stack.Screen name="ShowAgreement" component={ShowAgreementInfo} />
-      <Stack.Screen name="UpdateAgreement" component={UpdateAgreementInfo} />
-      <Stack.Screen name="ShowDisclosure" component={ShowDisclosureInfo} />
-      <Stack.Screen name="UpdateDisclosure" component={UpdateDisclosureInfo} />
-      <Stack.Screen name="ShowTrustedContact" component={ShowTrustedContactInfo} />
-      <Stack.Screen name="UpdateTrustedContact" component={UpdateTrustedContactInfo} />
+      <Stack.Screen name="Contact" component={Contact} />
+      <Stack.Screen name="Identity" component={Identity} />
+      <Stack.Screen name="Document" component={Document} />
+      <Stack.Screen name="Agreement" component={Agreement} />
+      <Stack.Screen name="Disclosure" component={Disclosure} />
+      <Stack.Screen name="TrustedContact" component={TrustedContact} />
     </Stack.Navigator>
   );
 };

@@ -6,14 +6,15 @@ const Stack = createStackNavigator();
 
 import Market from '../screens/market';
 import StockDetail from '../screens/stockDetail';
+import commonOrderScreens from '../screens/order/common';
 
 const MarketStack = () => {
+  const common = commonOrderScreens(Stack);
   return (
     <Stack.Navigator>
       <Stack.Screen name="Market" component={Market} />
       <Stack.Screen name="StockDetail" component={StockDetail} />
-      <Stack.Screen name="PlaceOrder" component={PlaceOrder} />
-      <Stack.Screen name="OrderStatus" component={OrderStatus} />
+      {common}
     </Stack.Navigator>
   );
 };

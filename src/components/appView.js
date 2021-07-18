@@ -13,10 +13,13 @@ const AppHeader = (props) => {
 }
 
 const AppView = (props) => {
+	const  {footer, footerContainerStyle} = props;
+
 	return (
 		<View style={[styles.appContainer, props.appContainerStyle]}>
 			<AppHeader {...props}/> 
 			{props.children}
+			{footer && <View style={[styles.footerContainer, footerContainerStyle]}>{footer}</View>}
 		</View>	
 	);
 }
@@ -24,6 +27,7 @@ const AppView = (props) => {
 const styles = StyleSheet.create({
 	appContainer: {},
 	headerContainer: {},
+	footerContainer: {},
 	headerTitle:{}
 });
 
