@@ -8,7 +8,7 @@ import MarketStack from './marketStack';
 import PortfolioStack from './marketStack';
 import SettingStack from './settingStack';
 import OrderStack from './orderStack';
-import OnboardStack from './onboardStack';
+import AuthStack from './authStack';
 
 enableScreens()
 const Tabs = createBottomTabNavigator()
@@ -16,7 +16,7 @@ const Drawer = createDrawerNavigator()
 
 const Router = props => {
 
-	const {auth} = props;
+	const {isSignedIn} = props;
 
 	const tabStack = () => {
 	     return (
@@ -30,13 +30,13 @@ const Router = props => {
 
 	return (
 	  <NavigationContainer>
-	  	{auth ?
+	  	{isSignedIn ?
 		     <Drawer.Navigation>
 		        <Drawer.Screen name="Home" component={tabStack} />
 		        <Drawer.Screen name="Settings" component={SettingStack} />
 		     </Drawer.Navigation>
 		    : 
-		    <OnboardStack />
+		    <AuthStack />
 	    }
 	   </NavigationContainer>
 	   )
