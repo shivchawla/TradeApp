@@ -1,8 +1,13 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 
-const Contact = ({props}) => {
+import ScreenName from '../../components/screenName';
+
+const Contact = (props) => {
 	return (
+		<AppView>
+			<ScreenName name="Choose Stock Screen" />
+		</AppView>
 	);
 }
 

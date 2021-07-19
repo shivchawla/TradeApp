@@ -1,4 +1,5 @@
-import PlaceOrder from '../placeOrders';
+import React, {useEffect} from 'react';
+import PlaceOrder from '../placeOrder';
 import OrderStatus from '../orderStatus';
 
 const commonOrderScreens = (Stack) => {

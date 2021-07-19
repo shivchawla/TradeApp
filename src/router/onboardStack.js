@@ -17,7 +17,7 @@ import TrustedContact from '../screens/account/trustedContact';
 const OnboardStack = () => {
 
   return (
-    <Stack.Navigator screenOptions={{screenType: 'add'}}>
+    <Stack.Navigator screenOptions={{screenType: 'add', headerShown: false}}>
       <Stack.Screen name="Contact" component={Contact} />
       <Stack.Screen name="Identity" component={Identity} />
       <Stack.Screen name="Document" component={Document} />

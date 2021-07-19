@@ -11,7 +11,7 @@ import commonOrderScreens from '../screens/order/common';
 const PortfolioStack = () => {
   const common = commonOrderScreens(Stack);
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="Portfoio" component={Portfolio} />
       <Stack.Screen name="PortfolioStockDetail" component={PortfolioStockDetail} />
       {common}

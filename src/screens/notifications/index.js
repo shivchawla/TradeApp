@@ -1,8 +1,15 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 
-const Notifications = ({props}) => {
+import AppView from '../../components/appView';
+import ScreenName from '../../components/screenName'
+
+const Notifications = (props) => {
+
 	return (
+		<AppView>
+			<ScreenName name="Completed Orders Screen" />
+		</AppView>
 	);
 }
 

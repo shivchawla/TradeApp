@@ -1,19 +1,14 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 
-import AppView from '../components/appView';
-import SingleStock from '../components/singleStock';
+import AppView from '../../components/appView';
+import SingleStock from '../../components/singleStock';
+import ScreenName from '../../components/screenName';
 
 const StockDetail = (props) => {
-	const {stocks} = props;
-
 	return (
 		<AppView>
-			{stocks && stocks.length > 0 &&
-				stocks.map((stock, index) => {	
-					return <SingleStock stock={...}/>
-				})
-			}
+			<ScreenName name="Stock Detail Screen" />	
 		</AppView>
 	);
 }

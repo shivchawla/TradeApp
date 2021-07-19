@@ -1,8 +1,13 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 
+import ScreenName from '../../components/screenName';
+
 const Agreement = ({props}) => {
 	return (
+		<AppView>
+			<ScreenName name="Choose Stock Screen" />
+		</AppView>
 	);
 }
 

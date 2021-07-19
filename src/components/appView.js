@@ -1,14 +1,17 @@
 import React, {useState} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 
 const AppHeader = (props) => {
 
 	const {title, goBack, headerContainerStyle, headerTitleStyle} = props;
 	
 	return (
-		<View style={[styles.headerContainer, headerContainerStyle]}>
+		<>
+		{title && <View style={[styles.headerContainer, headerContainerStyle]}>
 			<Text style={[styles.headerTitle, headerTitleStyle]}>{title}</Text>
 		</View>
+		}
+		</>
 	);
 }
 
@@ -17,7 +20,6 @@ const AppView = (props) => {
 
 	return (
 		<View style={[styles.appContainer, props.appContainerStyle]}>
-			<AppHeader {...props}/> 
 			{props.children}
 			{footer && <View style={[styles.footerContainer, footerContainerStyle]}>{footer}</View>}
 		</View>	
@@ -25,7 +27,11 @@ const AppView = (props) => {
 }
 
 const styles = StyleSheet.create({
-	appContainer: {},
+	appContainer: { 
+		flex: 1,
+    	alignItems: 'center',
+    	backgroundColor:'white'
+    },
 	headerContainer: {},
 	footerContainer: {},
 	headerTitle:{}

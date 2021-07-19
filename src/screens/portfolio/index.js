@@ -4,11 +4,12 @@ import {View, StyleSheet} from 'react-native';
 import AppView from '../../components/appView';
 import ScreenName from '../../components/screenName'
 
-const OrderStatus = (props) => {
+const Portfolio = (props) => {
+	const {stocks} = props;
 
 	return (
 		<AppView>
-			<ScreenName name="Order Status Screen" />
+			<ScreenName name="Portfolio Home Screen" />
 		</AppView>
 	);
 }
@@ -17,4 +18,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default OrderStatus;
+export default Portfolio;

@@ -4,7 +4,7 @@ import {View, StyleSheet} from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 const Stack = createStackNavigator();
 
-import ChooseStock from '../screens/chooseStock';
+import ChooseStock from '../screens/order/chooseStock';
 import commonOrderScreens from '../screens/order/common';
 
 const OrderStack = () => {
@@ -12,7 +12,7 @@ const OrderStack = () => {
   const common = commonOrderScreens(Stack);
 
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="ChooseStock" component={ChooseStock} />
       {common}
     </Stack.Navigator>

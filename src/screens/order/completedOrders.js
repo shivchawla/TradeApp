@@ -1,8 +1,15 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 
-const CompletedOrders = ({props}) => {
+import AppView from '../../components/appView';
+import ScreenName from '../../components/screenName'
+
+const CompletedOrders = (props) => {
+
 	return (
+		<AppView>
+			<ScreenName name="Completed Orders Screen" />
+		</AppView>
 	);
 }
 

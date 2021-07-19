@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect}from 'react';
 import Router from './src/router';
 // import { AppState} from 'react-native';
 // import Keyguard from 'react-native-keyguard';
@@ -11,10 +11,12 @@ const App = props => {
 
   const queryClient = new QueryClient()
 
+  useEffect(() => {
+    console.log("In Use Effect - App")
+  })
+
   return (
-    <QueryClientProvider client={queryClient}> 
-      <Router/>
-    </QueryClientProvider>
+      <Router />
   );
 };
 
