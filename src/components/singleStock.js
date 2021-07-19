@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 
-import TinyChart from '../components/tinyChart'; 
+import TinyChart from './tinyChart'; 
+import {useTickerData} from  '../helper';
+import {ShowJson} from './showJson';
 
 const StockName = (props) => {
 	return (
@@ -12,20 +14,30 @@ const StockName = (props) => {
 	);
 }
 
-const PriceChange = () => {
+const PriceChange = ({lastPrice}) => {
+	console.log(lastPrice);
 	return (
-		<View>
-			
-		</View>
+		<ShowJson json={lastPrice} />
 	);
 }
 
-const SingleStock = ({props}) => {
+const SingleStockRealTime = ({ticker}) => {
+	const tickerData = useTickerRealtimeData(ticker);
+	return <>{tickerData && <ShowJson json={tickerData} /> }</>
+}
+
+const SingleStockEOD = ({ticker}) => {
+	const tickerData = useTickerEODData(ticker);
+	return <>{tickerData && <ShowJson json={tickerData} /> }</>
+}
+
+const SingleStock = ({ticker, realtime}) => {
 	return (
 		<View style={styles.container}>
-			<StockName/>
-			<TinyChart/>
-			<PriceChange/>
+			{/*<StockName/>*/}
+			{/*<TinyChart/>*/}
+			{/*<PriceChange lastPrice={tickerData}/>*/}
+			{realtime ? <SingleStockRealTime {...{ticker}}/> : <SingleStockEOD {...{ticker}} />}
 		</View>
 	);
 }

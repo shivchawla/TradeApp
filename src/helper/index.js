@@ -1,0 +1,1 @@
+export {useTickerData} from './tickerData';

@@ -31,9 +31,9 @@ const Router = (props) => {
 
 	const {isSignedIn = true} = props;
 
-	useEffect(() => {
-		console.log("In Use Effect - Router");
-	});
+	// useEffect(() => {
+	// 	console.log("In Use Effect - Router");
+	// });
 
 	return (
 	  <NavigationContainer>

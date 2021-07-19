@@ -11,12 +11,10 @@ const App = props => {
 
   const queryClient = new QueryClient()
 
-  useEffect(() => {
-    console.log("In Use Effect - App")
-  })
-
   return (
+    <QueryClientProvider client={queryClient}>
       <Router />
+    </QueryClientProvider>
   );
 };
 
