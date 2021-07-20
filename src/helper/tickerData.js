@@ -1,11 +1,11 @@
 // import useWebSocket from 'react-use-websocket';
 // import {wsUrl, apiKey, apiSecret} from './';
 import React, {useState, useEffect} from 'react';
+import {useQuery} from 'react-query';
 import {useWS} from '../config/webSocket'
+import {getSnapshot} from  './api'; 
 
-export function useTickerData(ticker) {
-
-  // console.log("In useTickerData", ticker);
+export function useTickerRealtimeData(ticker) {
 
   const [isAuthenticated, sendJsonMessage, lastJsonMessage] = useWS();
   const [tickerData, setTickerData] = useState(null);
@@ -59,4 +59,10 @@ export function useTickerData(ticker) {
 
   return tickerData;
 
+}
+
+
+export function useTickerEODData(ticker) {
+  const {isLoading, error, data} = useQuery(['stockSnapshot', ticker], () => getSnapshot(ticker))
+  return [isLoading, error, data];
 }

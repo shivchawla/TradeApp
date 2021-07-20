@@ -1,9 +1,11 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
-import TinyChart from './tinyChart'; 
-import {useTickerData} from  '../helper';
-import {ShowJson} from './showJson';
+// import TinyChart from './tinyChart'; 
+import { useTickerRealtimeData, useTickerEODData } from  '../helper';
+import ShowJson from './showJson';
+import {BarIndicator} from 'react-native-indicators';
+
 
 const StockName = (props) => {
 	return (
@@ -23,24 +25,39 @@ const PriceChange = ({lastPrice}) => {
 
 const SingleStockRealTime = ({ticker}) => {
 	const tickerData = useTickerRealtimeData(ticker);
-	return <>{tickerData && <ShowJson json={tickerData} /> }</>
+	return (
+		<View>{tickerData && <ShowJson json={tickerData} /> }</View>
+	);
 }
 
 const SingleStockEOD = ({ticker}) => {
-	const tickerData = useTickerEODData(ticker);
-	return <>{tickerData && <ShowJson json={tickerData} /> }</>
-}
+	// console.log("SingleStockEOD");
+	// console.log(ticker);
+	const [isLoading, error, data] = useTickerEODData(ticker);
+	
+	// console.log(data);
+	// console.log(isLoading);
+	// console.log(error);
 
-const SingleStock = ({ticker, realtime}) => {
 	return (
-		<View style={styles.container}>
-			{/*<StockName/>*/}
-			{/*<TinyChart/>*/}
-			{/*<PriceChange lastPrice={tickerData}/>*/}
-			{realtime ? <SingleStockRealTime {...{ticker}}/> : <SingleStockEOD {...{ticker}} />}
+		<View>
+			{isLoading && <BarIndicator color="black" />} 
+			{data && <ShowJson json={data} /> }
 		</View>
 	);
 }
+
+const SingleStock = ({ticker, realtime}) => {
+	// console.log("Single Stock");
+	// console.log(ticker);
+
+	return (
+		<View style={styles.container}>
+			<SingleStockEOD {...{ticker}} />
+		</View>
+	);
+}
+
 
 const styles = StyleSheet.create({
 	container: {
@@ -54,7 +71,6 @@ const styles = StyleSheet.create({
 	stockSymbol:{
 
 	}
-
 }); 
 
 export default SingleStock;
