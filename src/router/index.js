@@ -21,7 +21,7 @@ const tabStack = () => {
      return (
         <Tabs.Navigator>
           <Tabs.Screen name="Market" component={MarketStack} />
-          <Tabs.Screen name="Order" component={OrderStack} />
+          {/*<Tabs.Screen name="Order" component={OrderStack} />*/}
           <Tabs.Screen name="Portfolio" component={PortfolioStack} />
         </Tabs.Navigator>
      )

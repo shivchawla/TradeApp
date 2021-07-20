@@ -6,9 +6,13 @@ import SingleStock from '../../components/singleStock';
 import ScreenName from '../../components/screenName';
 
 const StockDetail = (props) => {
+	console.log("Stock Detail");
+	console.log(props);
+	const {ticker} = props.route.params;
 	return (
 		<AppView>
-			<ScreenName name="Stock Detail Screen" />	
+			<ScreenName name="Stock Detail Screen" />
+			<SingleStock {...{ticker}} detail={true}/>	
 		</AppView>
 	);
 }

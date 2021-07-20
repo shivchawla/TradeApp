@@ -3,14 +3,15 @@
 import React, {useState, useEffect} from 'react';
 import {useQuery} from 'react-query';
 import {useWS} from '../config/webSocket'
-import {getSnapshot} from  './api'; 
+import { getSnapshot, getIntradayData, getHistoricalData } from  './api'; 
+import { currentISODate, toISODate, yearStartISODate, dayStartISODate, dayEndISODate} from './date';
 
-export function useTickerRealtimeData(ticker) {
+export function useStockRealtimeData(symbol) {
 
   const [isAuthenticated, sendJsonMessage, lastJsonMessage] = useWS();
-  const [tickerData, setTickerData] = useState(null);
+  const [stockData, setStockData] = useState(null);
   const [isSubscribed, setIsSubscribed] = useState(false);
-  const {data:dailyData} = useQuery(['stockSnapshot', ticker], () => getSnapshot(ticker))
+  const {data:dailyData} = useQuery(['stockSnapshot', symbol], () => getSnapshot(symbol))
 
   useEffect(() => {
     // console.log("useTickerData - use Effect");
@@ -24,7 +25,7 @@ export function useTickerRealtimeData(ticker) {
         //Use every to shorcircuit the loop, once subscription is found
         msg.every(item => {
           const tradeList = item.trades;
-          if (tradeList.includes(ticker)) {
+          if (tradeList.includes(symbol)) {
             console.log("Setting Subscription to true");
             console.log(lastJsonMessage);
             setIsSubscribed(true);
@@ -47,9 +48,9 @@ export function useTickerRealtimeData(ticker) {
 
     if (isAuthenticated && isSubscribed) {
       //Filter LastJsonMessage for Ticker
-      const msg = (lastJsonMessage || []).filter(item => item.S == ticker).slice(-1)[0];
+      const msg = (lastJsonMessage || []).filter(item => item.S == symbol).slice(-1)[0];
       if(msg) {
-        setTickerData(msg);
+        setStockData(msg);
       }
     } 
 
@@ -57,28 +58,41 @@ export function useTickerRealtimeData(ticker) {
 
   //Use Effect only for cleanup at unmount
   useEffect(() => {
-
-
-
     //Cleanup
     return () => {
       if (isAuthenticated && isSubscribed) {
         console.log("Sending unsubscription Message");
-        console.log(JSON.stringify({"action":"unsubscribe","trades":[ticker]}));
+        console.log(JSON.stringify({"action":"unsubscribe","trades":[symbol]}));
         console.log("Setting isSubscribed: ", false);
-        sendJsonMessage({"action":"unsubscribe","trades":[ticker]});
+        sendJsonMessage({"action":"unsubscribe","trades":[symbol]});
         setIsSubscribed(false);
       }      
     }
 
   }, []);
 
-  return {...tickerData, ...dailyData};
-
+  return {...stockData, ...dailyData};
 }
 
-
-export function useTickerEODData(ticker) {
-  const {isLoading, error, data} = useQuery(['stockSnapshot', ticker], () => getSnapshot(ticker))
+export function useStockEODData(symbol) {
+  const {isLoading, error, data} = useQuery(['stockSnapshot', symbol], () => getSnapshot(symbol))
   return [isLoading, error, data];
 }
+
+export function useStockHistoricalData(symbol, {start = yearStartISODate(), end = dayEndISODate(), timeframe = '1Day'} = {}) {
+  console.log("useStockHistoricalData");
+  console.log(start);
+  console.log(end);
+  console.log(timeframe);
+
+  const query = `start=${start}&end=${end}&timeframe=${timeframe}`;
+  const {isLoading, error, data} = useQuery(['stockHistorical', {symbol, start, end, timeframe}], () => getHistoricalData(symbol, query))
+  return data;
+}
+
+export function useStockIntradayData(symbol, {start = dayStartISODate(), end = dayEndISODate(), timeframe = '30Min'} = {}) {
+  const query = `start=${start}&end=${end}&timeframe=${timeframe}`;
+  const {isLoading, error, data} = useQuery(['stockIntraday', {symbol, start, end, timeframe}], () => getIntradayData(symbol, params))
+  return data;
+}
+
