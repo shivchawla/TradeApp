@@ -53,7 +53,7 @@ const SingleStock = ({ticker, realtime}) => {
 
 	return (
 		<View style={styles.container}>
-			<SingleStockEOD {...{ticker}} />
+			{realtime ? <SingleStockRealTime {...{ticker}} /> : <SingleStockEOD {...{ticker}} />}
 		</View>
 	);
 }

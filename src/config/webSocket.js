@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import useWebSocket from 'react-use-websocket';
+import useWebSocket, {ReadyState} from 'react-use-websocket';
 
 import {wsUrl, apiKey, apiSecret} from './';
 
@@ -8,6 +8,8 @@ console.log(wsUrl);
 export function useWS() {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // const [connect, setConnect] = useState(true);
 
   const {
     sendJsonMessage,
@@ -28,10 +30,17 @@ export function useWS() {
 
   useEffect(() => {
 
+    // console.log(connectionStatus);
+
+    // if (connectionStatus == 'Closed' && !connect) {
+    //   console.log("Setting Connect: true");
+    //   setConnect(true);
+    // }
+   
     if (connectionStatus != 'Open') {
       return;
     }
-   
+    
     if (lastJsonMessage && lastJsonMessage.length > 0) {
       const data = lastJsonMessage.slice(-1)[0];
 
@@ -54,9 +63,11 @@ export function useWS() {
           setIsAuthenticated(true);   
         }
 
-        if (T == "error" && code == 406 && !isAuthenticated ) {
-          console.log("Already authenticated");
-          setIsAuthenticated(true);
+        if (T == "error" && code == 406 && !isAuthenticated) {
+          console.log("Too many connections");
+          // setIsAuthenticated(true);
+          // console.log("Setting Connect: false");
+          // setConnect(false);
         }
 
         if (T == "error" && [400, 401, 402, 404, 408, 409, 500].includes(code)) {
@@ -66,7 +77,7 @@ export function useWS() {
         
       } 
     }
-    
+
   })
 
   return [isAuthenticated, sendJsonMessage, lastJsonMessage];
