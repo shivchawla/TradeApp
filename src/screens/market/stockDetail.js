@@ -10,20 +10,20 @@ import StockPosition from '../../components/stockPosition';
 const StockDetail = (props) => {
 	console.log("Stock Detail");
 	console.log(props);
-	const {ticker} = props.route.params;
+	const {symbol} = props.route.params;
 	const {navigation} = props;
 	const onBuy = () => {
-		navigation.navigate('PlaceOrder', {ticker, action: "BUY"});
+		navigation.navigate('PlaceOrder', {symbol, action: "BUY"});
 	}
 
 	const onSell = () => {
-		navigation.navigate('PlaceOrder', {ticker, action: "SELL"});		
+		navigation.navigate('PlaceOrder', {symbol, action: "SELL"});		
 	}
 
 	return (
 		<AppView footer={<TradeButtons {...{onBuy, onSell}}/>} title="Stock Detail Screen">
-			<SingleStock {...{ticker}} detail={true}/>
-			<StockPosition {...{ticker}} />
+			<SingleStock {...{symbol}} detail={true}/>
+			<StockPosition {...{symbol}} />
 		</AppView>
 	);
 }

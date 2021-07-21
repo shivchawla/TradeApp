@@ -23,17 +23,17 @@ const PriceChange = ({lastPrice}) => {
 	);
 }
 
-const SingleStockRealTime = ({ticker}) => {
-	const tickerData = useStockRealtimeData(ticker);
+const SingleStockRealTime = ({symbol}) => {
+	const symbolData = useStockRealtimeData(symbol);
 	return (
-		<View>{tickerData && <ShowJson json={tickerData} /> }</View>
+		<View>{symbolData && <ShowJson json={symbolData} /> }</View>
 	);
 }
 
-const SingleStockEOD = ({ticker}) => {
+const SingleStockEOD = ({symbol}) => {
 	// console.log("SingleStockEOD");
-	// console.log(ticker);
-	const [isLoading, error, data] = useStockEODData(ticker);
+	// console.log(symbol);
+	const [isLoading, error, data] = useStockEODData(symbol);
 	
 	// console.log(data);
 	// console.log(isLoading);
@@ -47,14 +47,14 @@ const SingleStockEOD = ({ticker}) => {
 	);
 }
 
-const SingleStock = ({ticker, realtime, onClick, detail = false}) => {
+const SingleStock = ({symbol, realtime, onClick, detail = false}) => {
 	// console.log("Single Stock");
-	// console.log(ticker);
+	// console.log(symbol);
 
 	const PlainView = () => {
 		return (
 			<View style={styles.container}>
-				{realtime ? <SingleStockRealTime {...{ticker}} /> : <SingleStockEOD {...{ticker}} />}
+				{realtime ? <SingleStockRealTime {...{symbol}} /> : <SingleStockEOD {...{symbol}} />}
 			</View>
 		); 
 	}
@@ -64,12 +64,12 @@ const SingleStock = ({ticker, realtime, onClick, detail = false}) => {
 		{onClick ? 
 			<>
 			<Pressable onPressOut={onClick}><PlainView /></Pressable>
-			{detail && <StockChart {...{ticker}} />}
+			{detail && <StockChart {...{symbol}} />}
 			</>
 		:    
 			<>
 			<PlainView />
-			{detail && <StockChart {...{ticker}} size="full" type="historical"/>}
+			{detail && <StockChart {...{symbol}} size="full" type="historical"/>}
 			</>
 		}
 		</> 

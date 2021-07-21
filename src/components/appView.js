@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, Pressable, Image} from 'react-native';
+import {ScrollView, View, Text, StyleSheet, Pressable, Image} from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -14,7 +14,7 @@ const AppHeader = ({title, goBack = true, ...props}) => {
 		{showHeader &&
 			<View style={[styles.headerContainer, props.headerContainerStyle]}>
 				{goBack && 
-					<Pressable style={styles.backIconContainer} onPressOut={() => navigation.goBack()}>
+					<Pressable style={styles.backIconContainer} onPressOut={() => {typeof goBack === 'function' ? goBack() : navigation.goBack()}}>
 						<Image source={backIcon} resizeMode="contain" style={styles.iconImage}/>
 					</Pressable>}
 				{title && <Text style={[styles.headerTitle, props.headerTitleStyle]}>{title}</Text>}
@@ -27,11 +27,11 @@ const AppHeader = ({title, goBack = true, ...props}) => {
 const AppView = ({footer, hasHeader = true, header, ...props}) => {
 
 	return (
-		<View style={[styles.appContainer, props.appContainerStyle]}>
+		<ScrollView contentContainerStyle={[styles.appContainer, props.appContainerStyle]}>
 			{hasHeader || header ? header ? header : <AppHeader {...props}/> : <></>}
 			{props.children}
 			{footer && <View style={[styles.footerContainer, props.footerContainerStyle]}>{footer}</View>}
-		</View>	
+		</ScrollView>	
 	);
 }
 
@@ -58,7 +58,8 @@ const styles = StyleSheet.create({
 	    width: '90%',
 	    flexDirection:'row',
 	    justifyContent:'space-between',
-	    // alignItems:'center'
+	    alignItems:'center',
+	    // textAlign: 'center'
 	},
 	headerTitle:{
 		fontSize: 16,

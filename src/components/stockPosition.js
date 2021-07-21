@@ -5,8 +5,8 @@ import ShowJson from './showJson';
 
 import { useStockPositionData } from '../helper';
 
-const StockPosition = ({ticker}) => {
-	const [isError, position] = useStockPositionData(ticker);
+const StockPosition = ({symbol}) => {
+	const [isError, position] = useStockPositionData(symbol);
 	console.log("Stock Position");
 	console.log(position);
 	console.log(isError);

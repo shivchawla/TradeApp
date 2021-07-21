@@ -4,7 +4,7 @@ import React, {useState, useEffect} from 'react';
 import {useQuery} from 'react-query';
 import {useWS} from '../config/webSocket'
 import { getSnapshot, getIntradayData, getHistoricalData } from  './api'; 
-import { currentISODate, toISODate, yearStartISODate, dayStartISODate, dayEndISODate} from './date';
+import { currentISODate, toISODate, yearStartISODate, dayStartISODate, dayEndISODate} from '../utils';
 
 export function useStockRealtimeData(symbol) {
 
@@ -36,9 +36,9 @@ export function useStockRealtimeData(symbol) {
       }
 
       if(!isSubscribed) {
-        console.log("Sending Subscription for ", ticker);
-        console.log(JSON.stringify({"action":"subscribe","trades":[ticker]}));
-        sendJsonMessage({"action":"subscribe","trades":[ticker]});
+        console.log("Sending Subscription for ", symbol);
+        console.log(JSON.stringify({"action":"subscribe","trades":[symbol]}));
+        sendJsonMessage({"action":"subscribe","trades":[symbol]});
       }
     }
 

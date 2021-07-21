@@ -22,6 +22,7 @@ const homeTabs = () => {
      return (
         <Tabs.Navigator>
           <Tabs.Screen name="Market" component={Market} />
+        
           <Tabs.Screen name="Portfolio" component={Portfolio} />
         </Tabs.Navigator>
      )

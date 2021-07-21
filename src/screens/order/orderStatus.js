@@ -3,12 +3,15 @@ import {View, StyleSheet} from 'react-native';
 
 import AppView from '../../components/appView';
 import ScreenName from '../../components/screenName'
+import ShowJson from '../../components/showJson'
 
 const OrderStatus = (props) => {
 
+	const {response, goBack} = props.route.params;
+
 	return (
-		<AppView>
-			<ScreenName name="Order Status Screen" />
+		<AppView title="Order Status Screen" goBack={goBack || true}>
+			{response && <ShowJson json={response} />}
 		</AppView>
 	);
 }

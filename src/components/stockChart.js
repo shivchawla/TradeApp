@@ -14,43 +14,43 @@ const Chart = ({prices, size}) => {
 	);
 }
 
-const StockChartIntraday = ({ticker, size}) => {
-	const intradayData = useStockIntradayData(ticker);
+const StockChartIntraday = ({symbol, size}) => {
+	const intradayData = useStockIntradayData(symbol);
 
 	return (
 		<>
-		<Text>StockChartIntraday - {ticker} - {size}</Text>
+		<Text>StockChartIntraday - {symbol} - {size}</Text>
 		<Chart prices={intradayData} {...{size}} />
 		</>
 	)
 }
 
-const StockChartDaily = ({ticker, size}) => {
+const StockChartDaily = ({symbol, size}) => {
 	console.log("StockChartDaily");
-	console.log(ticker);
+	console.log(symbol);
 	console.log(size);
 
-	const dailyData = useStockHistoricalData(ticker);
+	const dailyData = useStockHistoricalData(symbol);
 
 	// console.log("Daily Data");
 	// console.log(dailyData);
 
 	return (
 		<>
-		<Text>StockChartDaily - {ticker} - {size}</Text>
+		<Text>StockChartDaily - {symbol} - {size}</Text>
 		<Chart prices={dailyData} {...{size}} />
 		</>
 	)
 }
 
-const StockChart = ({ticker, type, size}) => {
+const StockChart = ({symbol, type, size}) => {
 	return (
 		<>
 	 	{
 		 	type == "intraday" ? 
-		 		<StockChartIntraday {...{ticker, size}} />
+		 		<StockChartIntraday {...{symbol, size}} />
 		 	:	
-		 		<StockChartDaily {...{ticker, size}} />
+		 		<StockChartDaily {...{symbol, size}} />
  		}
 		</>
 	);

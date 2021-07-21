@@ -21,10 +21,10 @@ const Market = (props) => {
 	console.log(isLoading);
 	console.log(error);
 
-	const toStockDetail = (ticker) => {
+	const toStockDetail = (symbol) => {
 		console.log("Navigating to Stock Detail");
 		const {navigation} = props;
-		navigation.navigate('StockDetail', {ticker});
+		navigation.navigate('StockDetail', {symbol});
 	}
 
 	return (
@@ -32,8 +32,8 @@ const Market = (props) => {
 			<ScreenName name="Market Screen" />
 			{isLoading && <BarIndicator color='black' />}
 			{data && defaultStocks && defaultStocks.length > 0 &&
-				defaultStocks.map((ticker, index) => {	
-					return <SingleStock key={ticker} realtime={data.is_open} {...{ticker}} onClick={() => toStockDetail(ticker)}/>
+				defaultStocks.map((symbol, index) => {	
+					return <SingleStock key={symbol} realtime={data.is_open} {...{symbol}} onClick={() => toStockDetail(symbol)}/>
 				})
 			}
 		</AppView>

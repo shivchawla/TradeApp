@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 
 import PlaceOrder from '../screens/order/placeOrder';
+import OrderPreview from '../screens/order/orderPreview';
 import OrderStatus from '../screens/order/orderStatus';
 import ChooseStock from '../screens/order/chooseStock';
 import CompletedOrders from '../screens/order/completedOrders';

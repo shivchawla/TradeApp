@@ -1,16 +1,16 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {ScrollView, Text, StyleSheet} from 'react-native';
 
 const ShowJson = ({json}) => {
 	return (
-		<View>
+		<ScrollView>
 			{
 				Object.keys(json).map((key, index) => {
 					return <Text key={index}>{key} : {JSON.stringify(json[key])}</Text>
 				})
 			}
-		</View>
-		)
+		</ScrollView>
+	);
 }
 
 const styles = StyleSheet.create({
