@@ -2,4 +2,6 @@ export { useStockRealtimeData, useStockEODData, useStockIntradayData, useStockHi
 
 export {getClock, getSnapshot, getHistoricalData, getIntradayData} from './api';
 
-export {currentISODate, toISODate, dayStartISODate, yearStartISODate} from './date'
+export {currentISODate, toISODate, dayStartISODate, yearStartISODate} from './date';
+
+export { useStockPositionData } from './portfolioData';
