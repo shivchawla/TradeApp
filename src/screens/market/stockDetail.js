@@ -21,11 +21,9 @@ const StockDetail = (props) => {
 	}
 
 	return (
-		<AppView>
-			<ScreenName name="Stock Detail Screen" />
+		<AppView footer={<TradeButtons {...{onBuy, onSell}}/>} title="Stock Detail Screen">
 			<SingleStock {...{ticker}} detail={true}/>
 			<StockPosition {...{ticker}} />
-			<TradeButtons {...{onBuy, onSell}}/>	
 		</AppView>
 	);
 }

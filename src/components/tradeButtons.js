@@ -22,9 +22,10 @@ const TradeButtons = ({ticker, onBuy, onSell, ...props}) => {
 
 const styles = StyleSheet.create({
 	buttonContainer: {
-	    position: 'absolute',
-	    bottom:20,
-	    width: '90%',
+	    // position: 'absolute',
+	    // bottom:20,
+	    // width: '90%',
+	    width: '100%',
 	    flexDirection:'row',
 	    justifyContent:'space-between',
 	    // alignItems:'center'

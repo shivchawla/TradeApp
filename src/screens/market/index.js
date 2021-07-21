@@ -28,7 +28,7 @@ const Market = (props) => {
 	}
 
 	return (
-		<AppView>
+		<AppView hasHeader={false}>
 			<ScreenName name="Market Screen" />
 			{isLoading && <BarIndicator color='black' />}
 			{data && defaultStocks && defaultStocks.length > 0 &&
