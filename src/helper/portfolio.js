@@ -12,7 +12,6 @@ export function useStockPositionData(symbol) {
   return [isError, data];
 }
 
-
 export function useStockPortfolioData() {
   console.log("useStockPortfolioData");
   const {isError, error, data} = useQuery(['stockPortfolio'], () => getStockPortfolio());

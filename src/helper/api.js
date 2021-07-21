@@ -20,17 +20,18 @@ export const getSnapshot = async(symbol) => {
 	return await axios.get(`${dataUrl}/v2/stocks/${symbol}/snapshot`).then(r => processSnapshot(r.data));
 }
 
-export const getHistoricalData = async(symbol, query = '') => {
+export const getHistoricalData = async(symbol, params = {}) => {
 	console.log("Fetching Daily Historical");
 	console.log(`${dataUrl}/v2/stocks/${symbol}/bars`);
-	console.log(query);
-	return await axios.get(`${dataUrl}/v2/stocks/${symbol}/bars?${query}`).then(r => processBars(r.data));
+	console.log(params);
+	return await axios.get(`${dataUrl}/v2/stocks/${symbol}/bars`, {params}).then(r => processBars(r.data));
 }
 
-export const getIntradayData = async(symbol, query = '') => {
+export const getIntradayData = async(symbol, params = {}) => {
 	console.log("Fetching Intraday Historical");
 	console.log(`${dataUrl}/v2/stocks/${symbol}/bars`);
-	return await axios.get(`${dataUrl}/v2/stocks/${symbol}/bars?${query}`).then(r => processBars(r.data));
+	console.log(params);
+	return await axios.get(`${dataUrl}/v2/stocks/${symbol}/bars`, {params}).then(r => processBars(r.data));
 }
 
 export const getStockPosition = async(symbol) => {
@@ -54,3 +55,10 @@ export const placeOrder = async(request) => {
 	console.log(request);
 	return await axios.post(`/v1/trading/accounts/${account_id}/orders`, request).then(r => r.data)
 }
+
+export const getOrders = async(params = {}) => {
+	console.log("Get Pending Orders")
+	return await axios.get(`/v1/trading/accounts/${account_id}/orders`, {params}).then(r => r.data)	
+}
+
+

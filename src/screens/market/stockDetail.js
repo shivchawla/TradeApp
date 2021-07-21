@@ -6,6 +6,7 @@ import ScreenName from '../../components/screenName';
 import SingleStock from '../../components/singleStock';
 import TradeButtons from '../../components/tradeButtons';
 import StockPosition from '../../components/stockPosition';
+import PendingOrderList from '../../components/pendingOrderList';
 
 const StockDetail = (props) => {
 	console.log("Stock Detail");
@@ -22,6 +23,7 @@ const StockDetail = (props) => {
 
 	return (
 		<AppView footer={<TradeButtons {...{onBuy, onSell}}/>} title="Stock Detail Screen">
+			<PendingOrderList {...{symbol}} />
 			<SingleStock {...{symbol}} detail={true}/>
 			<StockPosition {...{symbol}} />
 		</AppView>

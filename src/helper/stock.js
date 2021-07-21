@@ -85,14 +85,14 @@ export function useStockHistoricalData(symbol, {start = yearStartISODate(), end 
   console.log(end);
   console.log(timeframe);
 
-  const query = `start=${start}&end=${end}&timeframe=${timeframe}`;
+  const query = {start, end, timeframe};
   const {isLoading, error, data} = useQuery(['stockHistorical', {symbol, start, end, timeframe}], () => getHistoricalData(symbol, query))
   return data;
 }
 
 export function useStockIntradayData(symbol, {start = dayStartISODate(), end = dayEndISODate(), timeframe = '30Min'} = {}) {
-  const query = `start=${start}&end=${end}&timeframe=${timeframe}`;
-  const {isLoading, error, data} = useQuery(['stockIntraday', {symbol, start, end, timeframe}], () => getIntradayData(symbol, params))
+  const query = {start, end, timeframe};
+  const {isLoading, error, data} = useQuery(['stockIntraday', {symbol, start, end, timeframe}], () => getIntradayData(symbol, query))
   return data;
 }
 
