@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, Pressable} from 'react-native';
 
 import StockChart from './stockChart'; 
-import { useStockRealtimeData, useStockEODData } from  '../helper';
+import { useStockRealtimeData, useStockEODData, useClock } from  '../helper';
 import ShowJson from './showJson';
 import {BarIndicator} from 'react-native-indicators';
 
@@ -47,9 +47,20 @@ const SingleStockEOD = ({symbol}) => {
 	);
 }
 
-const SingleStock = ({symbol, realtime, onClick, detail = false}) => {
+const SingleStock = ({symbol, onClick, detail = false}) => {
 	// console.log("Single Stock");
 	// console.log(symbol);
+	const clock = useClock();
+	const [realtime, setRealtime] = useState(false);
+
+	useEffect(() => {
+		console.log("Clock Effect")
+		if (clock && clock.is_open) {
+			setRealtime(true);
+		} else {
+			setRealtime(false);
+		}
+	});
 
 	const PlainView = () => {
 		return (

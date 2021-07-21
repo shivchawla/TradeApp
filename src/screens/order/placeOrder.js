@@ -7,6 +7,8 @@ import ConfirmButton from '../../components/confirmButton';
 import ShowJson from '../../components/showJson';
 import { usePlaceOrder } from '../../helper';
 
+
+//Preview should be added here
 const PlaceOrder = (props) => {
 
 	const {symbol, action} = props.route.params;

@@ -2,12 +2,13 @@ import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 
 import AppView from '../../components/appView';
-import SearchStockList from '../../components/searchStockList';
+import ScreenName from '../../components/screenName'
 
-const ChooseStock = (props) => {
+const UpdateOrder = (props) => {
+
 	return (
-		<AppView title="Choose Stock" scroll={false}>
-			<SearchStockList />
+		<AppView>
+			<ScreenName name="Update Order Screen" />
 		</AppView>
 	);
 }
@@ -16,4 +17,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default ChooseStock;
+export default UpdateOrder;

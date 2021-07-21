@@ -24,14 +24,26 @@ const AppHeader = ({title, goBack = true, ...props}) => {
 	);
 }
 
-const AppView = ({footer, hasHeader = true, header, ...props}) => {
+const AppView = ({scroll = true, footer, hasHeader = true, header, ...props}) => {
+
+	const Component = scroll ? ScrollView : View;
 
 	return (
-		<ScrollView contentContainerStyle={[styles.appContainer, props.appContainerStyle]}>
-			{hasHeader || header ? header ? header : <AppHeader {...props}/> : <></>}
-			{props.children}
-			{footer && <View style={[styles.footerContainer, props.footerContainerStyle]}>{footer}</View>}
-		</ScrollView>	
+		<>
+		{scroll ? 
+			<ScrollView contentContainerStyle={[styles.appContainer, props.appContainerStyle]}>
+				{hasHeader || header ? header ? header : <AppHeader {...props}/> : <></>}
+				{props.children}
+				{footer && <View style={[styles.footerContainer, props.footerContainerStyle]}>{footer}</View>}
+			</ScrollView>	
+			:
+			<View style={[styles.appContainer, props.appContainerStyle]}>
+				{hasHeader || header ? header ? header : <AppHeader {...props}/> : <></>}
+				{props.children}
+				{footer && <View style={[styles.footerContainer, props.footerContainerStyle]}>{footer}</View>}
+			</View>
+		}
+		</>
 	);
 }
 

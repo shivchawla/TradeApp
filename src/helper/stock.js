@@ -3,8 +3,9 @@
 import React, {useState, useEffect} from 'react';
 import {useQuery} from 'react-query';
 import {useWS} from '../config/webSocket'
-import { getSnapshot, getIntradayData, getHistoricalData } from  './api'; 
-import { currentISODate, toISODate, yearStartISODate, dayStartISODate, dayEndISODate} from '../utils';
+import { getSnapshot, getIntradayData, getHistoricalData, getStocks } from  './api'; 
+import { currentISODate, toISODate, yearStartISODate, dayStartISODate, dayEndISODate, duration} from '../utils';
+import { useClock } from './clock';
 
 export function useStockRealtimeData(symbol) {
 
@@ -92,7 +93,17 @@ export function useStockHistoricalData(symbol, {start = yearStartISODate(), end 
 
 export function useStockIntradayData(symbol, {start = dayStartISODate(), end = dayEndISODate(), timeframe = '30Min'} = {}) {
   const query = {start, end, timeframe};
-  const {isLoading, error, data} = useQuery(['stockIntraday', {symbol, start, end, timeframe}], () => getIntradayData(symbol, query))
+  const {isLoading, error, data} = useQuery(['stockIntraday', {symbol, start, end, timeframe}], () => getIntradayData(symbol, query));
   return data;
 }
 
+
+export function useStockList() {
+  const clock = useClock();
+  const cacheTime = clock ? duration(clock.next_open) : null;
+  const staleTime = cacheTime;
+  const {isError, error, data} = useQuery(['stockList', clock ? clock.next_open : ''], () => clock ? getStocks() : [], {...cacheTime && {cacheTime}, ...staleTime && {staleTime}});
+  
+  return data; 
+
+}

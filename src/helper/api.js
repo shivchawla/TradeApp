@@ -13,6 +13,11 @@ export const getClock = async() => {
 	return await axios.get('/v1/clock').then(r => r.data);
 } 
 
+export const getStocks = async() => {
+	console.log("Getting Stocks");
+	return await axios.get('/v1/assets', {params: {status: 'active'}}).then(r => r.data);
+}
+
 export const getSnapshot = async(symbol) => {
 	console.log("Fetching Snapshot");
 	console.log(axios.defaults.headers.common['Authorization']);
