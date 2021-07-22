@@ -1,5 +1,5 @@
-export { getClock, getSnapshot, getHistoricalData, getIntradayData, placeOrder } from './api';
+export { getClock, getSnapshot, getHistoricalData, getIntradayData, placeOrder, cancelOrder } from './api';
 export { useClock } from './clock';
 export { useStockRealtimeData, useStockEODData, useStockIntradayData, useStockHistoricalData, useStockList } from './stock';
 export { useStockPositionData, useStockPortfolioData, useTradingAccountData } from './portfolio';
-export { usePlaceOrder, useOrders } from './order';
+export { usePlaceOrder, useOrders, useCancelOrder, useOrderDetail } from './order';

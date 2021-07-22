@@ -9,6 +9,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Market from '../screens/market';
 import ChooseStock from '../screens/order/chooseStock';
+import PendingOrders from '../screens/order/pendingOrders';
 import Portfolio from '../screens/portfolio';
 import Settings from '../screens/settings'
 
@@ -22,8 +23,9 @@ const Stack = createStackNavigator();
 const homeTabs = () => {
      return (
         <Tabs.Navigator>
-          {/*<Tabs.Screen name="Market" component={Market} />*/}
-          <Tabs.Screen name="ChooseStock" component={ChooseStock}/>
+          <Tabs.Screen name="Market" component={Market} />
+          {/*<Tabs.Screen name="ChooseStock" component={ChooseStock}/>*/}
+          <Tabs.Screen name="PendingOrders" component={PendingOrders} />
 
           <Tabs.Screen name="Portfolio" component={Portfolio} />
         </Tabs.Navigator>

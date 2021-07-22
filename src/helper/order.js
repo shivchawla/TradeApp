@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { useQuery, useMutation} from 'react-query';
-import { placeOrder, getOrders } from  './api'; 
+import { placeOrder, getOrders, getOrder, cancelOrder } from  './api'; 
 
 //Write a order key validation function
 const validateOrder = (params) => {
@@ -21,6 +21,18 @@ export function usePlaceOrder() {
 }
 
 
+export function useCancelOrder() {
+  const {isError, mutate} = useMutation(orderId => cancelOrder(orderId));
+  return [isError, mutate];
+}
+
+
+export function useOrderDetail(orderId) {
+  const {isError, error, data} = useQuery(['getOrder', orderId], () => getOrder(orderId));
+  return [isError, data];
+}
+
+
 export function useOrders({symbol, status}) {
   console.log(`Symbol: ${symbol ? symbol : 'No Symbol provided (ALL)'}`);
   console.log(`Status: ${status ? status: 'No Status provided (ALL)'}`);
@@ -28,6 +40,6 @@ export function useOrders({symbol, status}) {
   const queryKey = 'getOrders' + (symbol || '') + (status || 'open');
 
   const {isError, error, data} = useQuery(queryKey, () => getOrders(query));
-  
+
   return [isError, data];
 }

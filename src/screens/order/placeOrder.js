@@ -20,7 +20,7 @@ const PlaceOrder = (props) => {
 		console.log(symbol);
 		console.log(action);
 		mutate({symbol, side: action.toLowerCase(), qty: 1, type: 'limit', limit_price: 100}, {
-			onSuccess: (response, input) => navigation.navigate('OrderStatus', {goBack: () => navigation.navigate('StockDetail', {symbol}), response}),
+			onSuccess: (response, input) => navigation.navigate('OrderStatus', {goBack: () => navigation.navigate('StockDetail', {symbol}), order: response}),
 			onError: (err, input) => console.log(err)
 		});
 	}

@@ -1,17 +1,26 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
+import get from 'lodash/get';
 
 import AppView from '../../components/appView';
-import ScreenName from '../../components/screenName'
-import ShowJson from '../../components/showJson'
+import ScreenName from '../../components/screenName';
+import ShowJson from '../../components/showJson';
+
+import { useNavigation } from '@react-navigation/native';
+
+import { useOrderDetail } from '../../helper';
 
 const OrderStatus = (props) => {
+	const {order, goBack} = get(props, 'route.params', {});
 
-	const {response, goBack} = props.route.params;
+	//Get Order Id and refetch the order (in case the status has changed)
+	const {id} = order;
+	const orderDetail = useOrderDetail(id)
+	const navigation = useNavigation();
 
 	return (
 		<AppView title="Order Status Screen" goBack={goBack || true}>
-			{response && <ShowJson json={response} />}
+			{orderDetail && <ShowJson json={orderDetail} />}
 		</AppView>
 	);
 }
