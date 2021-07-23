@@ -3,7 +3,7 @@ import {View, StyleSheet} from 'react-native';
 import get from 'lodash/get';
 
 import AppView from '../../components/appView';
-import OrderList from '../../components/pendingOrderList';
+import OrderList from '../../components/orderList';
 
 //Now this scrren is not updated on routing back - how to update screen
 const OrdersTrades = (props) => {

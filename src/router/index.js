@@ -8,8 +8,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // import Icon from 'react-native-vector-icons/FontAwesome';
 
 import Market from '../screens/market';
-import ChooseStock from '../screens/order/chooseStock';
-import PendingOrders from '../screens/order/pendingOrders';
+// import ChooseStock from '../screens/order/chooseStock';
+import OrdersTrades from '../screens/order/ordersTrades';
 import Portfolio from '../screens/portfolio';
 import Settings from '../screens/settings'
 
@@ -25,7 +25,7 @@ const homeTabs = () => {
         <Tabs.Navigator>
           <Tabs.Screen name="Market" component={Market} />
           {/*<Tabs.Screen name="ChooseStock" component={ChooseStock}/>*/}
-          {/*<Tabs.Screen name="PendingOrders" component={PendingOrders} />*/}
+          <Tabs.Screen name="OrdersTrades" component={OrdersTrades} />
 
           <Tabs.Screen name="Portfolio" component={Portfolio} />
         </Tabs.Navigator>

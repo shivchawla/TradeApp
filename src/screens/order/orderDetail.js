@@ -17,10 +17,12 @@ const SingleButton = ({title, onClick, ...props}) => {
 }
 	
 
-const OrderButtons = ({order, goBack}) => {
+const OrderButtons = ({order}) => {
 
 	const [isError, mutate] = useCancelOrder();
 	const navigation = useNavigation();
+
+	const goBack = () => navigation.dispatch(StackActions.pop(2)); //Go Back two screens
 
 	const onCancelOrder = (order) => {
 		mutate(order.id, {
@@ -29,14 +31,14 @@ const OrderButtons = ({order, goBack}) => {
 				console.log(response); 
 				navigation.navigate('OrderStatus', 
 					{
-						goBack: navigation.dispatch(StackActions.pop(2)), //Go Back two screens
+						goBack,
 						order: {id: order.id}
 					})},
 			onError: (error, input) => console.log(error)
 		})
 	}	
 	
-	const onUpdateOrder = (order) => navigation.navigate('UpdateOrder', {order});
+	const onUpdateOrder = (order) => navigation.navigate('UpdateOrder', {order, goBack});
 
 	return (
 		<View style={styles.buttonContainer}>
@@ -54,7 +56,7 @@ const OrderDetail = (props) => {
 
 	const canceledStatus = ['pending_cancel', 'canceled']
 	return (
-		<AppView title="Order Detail Screen" goBack={goBack || true} footer={order && !canceledStatus.includes(order.status) && <OrderButtons {...{order, goBack}} />} >
+		<AppView title="Order Detail Screen" goBack={goBack || true} footer={order && !canceledStatus.includes(order.status) && <OrderButtons {...{order}} />} >
 			{order && <ShowJson json={order} />}
 		</AppView>
 	);

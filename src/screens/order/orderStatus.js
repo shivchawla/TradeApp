@@ -15,12 +15,12 @@ const OrderStatus = (props) => {
 
 	//Get Order Id and refetch the order (in case the status has changed)
 	const {id} = order;
-	const orderDetail = useOrderDetail(id)
+	const [isError, orderDetail] = useOrderDetail(id)
 	const navigation = useNavigation();
 
 	return (
 		<AppView title="Order Status Screen" goBack={goBack || true}>
-			{orderDetail && <ShowJson json={orderDetail} />}
+			{orderDetail && <ShowJson json={orderDetail} full={false}/>}
 		</AppView>
 	);
 }

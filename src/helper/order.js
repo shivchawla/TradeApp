@@ -1,9 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import { useQuery, useMutation} from 'react-query';
-import { placeOrder, getOrders, getOrder, cancelOrder } from  './api'; 
+import { placeOrder, getOrders, getOrder, cancelOrder, updateOrder } from  './api'; 
 
 //Write a order key validation function
 const validateOrder = (params) => {
+  return true
+}
+
+//Write a order key validation function
+const validateUpdateOrder = (params) => {
   return true
 }
 
@@ -12,6 +17,19 @@ export function usePlaceOrder() {
     const updatedParams = {type:"market", time_in_force:"day", ...orderParams};
     if (validateOrder(updatedParams)) {
       return placeOrder(updatedParams);
+    }
+
+    throw new Error("Invalid Order Parameters");
+  });
+
+  return [isError, mutate];
+}
+
+export function useUpdateOrder() {
+  const {isError, mutate} = useMutation(orderParams => {
+    const {order_id, ...updatedParams} = orderParams;
+    if (validateUpdateOrder(updatedParams)) {
+      return updateOrder(order_id, updatedParams);
     }
 
     throw new Error("Invalid Order Parameters");

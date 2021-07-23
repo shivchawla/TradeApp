@@ -61,6 +61,12 @@ export const placeOrder = async(request) => {
 	return await axios.post(`/v1/trading/accounts/${account_id}/orders`, request).then(r => r.data)
 }
 
+export const updateOrder = async(order_id, request) => {
+	console.log("Updating Order");
+	console.log(request);
+	return await axios.patch(`/v1/trading/accounts/${account_id}/orders/${order_id}`, request).then(r => r.data)
+}
+
 export const cancelOrder = async(order_id) => {
 	console.log("Canceling Order: ", order_id);
 	return await axios.delete(`/v1/trading/accounts/${account_id}/orders/${order_id}`).then(r => r.data)
@@ -69,7 +75,7 @@ export const cancelOrder = async(order_id) => {
 export const getOrders = async(params = {}) => {
 	console.log("Get Pending Orders")
 	console.log("Params ", params);
-	
+
 	return await axios.get(`/v1/trading/accounts/${account_id}/orders`, {params}).then(r => r.data)	
 }
 

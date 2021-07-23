@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import ShowJson from './showJson';
 import { useOrders } from '../helper';
 
-const OrdersList = ({symbol, status, goBack, status}) => {
+const OrdersList = ({symbol, status, goBack}) => {
 
 	const [isError, orders, refetch] = useOrders({symbol, status});
 	
@@ -32,7 +32,7 @@ const OrdersList = ({symbol, status, goBack, status}) => {
 	}
 
 	const toDetailScreen = (order, status) => {
-		return status == "closed" ? toTradeDetail(order) : toOrderDetail(order);
+		return status == "closed" ? toTradeDetail(order) : toOrderDetail(order.id);
 	}
 
 	return (

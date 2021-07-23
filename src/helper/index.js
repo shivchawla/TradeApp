@@ -2,4 +2,4 @@ export { getClock, getSnapshot, getHistoricalData, getIntradayData, placeOrder, 
 export { useClock } from './clock';
 export { useStockRealtimeData, useStockEODData, useStockIntradayData, useStockHistoricalData, useStockList } from './stock';
 export { useStockPositionData, useStockPortfolioData, useTradingAccountData } from './portfolio';
-export { usePlaceOrder, useOrders, useCancelOrder, useOrderDetail } from './order';
+export { usePlaceOrder, useUpdateOrder, useOrders, useCancelOrder, useOrderDetail } from './order';

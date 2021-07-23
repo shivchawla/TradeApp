@@ -4,9 +4,11 @@ import PlaceOrder from '../screens/order/placeOrder';
 import UpdateOrder from '../screens/order/updateOrder';
 import OrderStatus from '../screens/order/orderStatus';
 import OrderDetail from '../screens/order/orderDetail';
+import TradeDetail from '../screens/order/tradeDetail';
 import ChooseStock from '../screens/order/chooseStock';
-import CompletedOrders from '../screens/order/completedOrders';
-import PendingOrders from '../screens/order/pendingOrders';
+// import CompletedOrders from '../screens/order/completedOrders';
+// import PendingOrders from '../screens/order/pendingOrders';
+import OrdersTrades from '../screens/order/ordersTrades';
 import StockDetail from '../screens/market/stockDetail';
 import PortfolioStock from '../screens/portfolio/portfolioStock';
 
