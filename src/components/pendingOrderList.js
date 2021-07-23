@@ -7,12 +7,20 @@ import { useOrders } from '../helper';
 
 const PendingOrdersList = ({symbol, status, goBack}) => {
 
-	const [isError, pendingOrders] = useOrders({symbol, status});
+	const [isError, pendingOrders, refetch] = useOrders({symbol, status});
 	
-	console.log("pendingOrders");
-	console.log(pendingOrders);
-
 	const navigation = useNavigation();
+
+	React.useEffect(() => {
+		const refetchOnFocus = navigation.addListener('focus', () => {
+		console.log("Calling Refetch on Pending orders");
+		    if (refetch) {
+		      refetch();
+		    }
+		});
+
+		return refetchOnFocus;
+	}, [navigation]); // Run Effect only on changing Nav (to prevent re-renders)
 
 	const toOrderDetail = (orderId) => {
 		console.log("To Order Detail");
@@ -21,13 +29,13 @@ const PendingOrdersList = ({symbol, status, goBack}) => {
 
 	return (
 		<ScrollView>
-		{pendingOrders && pendingOrders.map((order, index) => {
-			return (
-				<Pressable style={{marginBottom: 50}} key={index} onPressOut={() => toOrderDetail(order.id)}> 
-					<ShowJson json={order} full={false}/>
-				</Pressable> );
-			})
-		}
+			{pendingOrders && pendingOrders.map((order, index) => {
+				return (
+					<Pressable style={{marginBottom: 50}} key={index} onPressOut={() => toOrderDetail(order.id)}> 
+						<ShowJson json={order} full={false}/>
+					</Pressable> );
+				})
+			}
 		</ScrollView>
 	);
 }

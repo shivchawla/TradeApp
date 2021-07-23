@@ -52,8 +52,9 @@ const OrderDetail = (props) => {
 	const {orderId, goBack} = get(props, 'route.params', {});
 	const [isError, order] = useOrderDetail(orderId);
 
+	const canceledStatus = ['pending_cancel', 'canceled']
 	return (
-		<AppView title="Order Detail Screen" goBack={goBack || true} footer={order && order.status != 'canceled' && <OrderButtons {...{order, goBack}} />} >
+		<AppView title="Order Detail Screen" goBack={goBack || true} footer={order && !canceledStatus.includes(order.status) && <OrderButtons {...{order, goBack}} />} >
 			{order && <ShowJson json={order} />}
 		</AppView>
 	);

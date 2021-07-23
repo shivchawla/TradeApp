@@ -68,6 +68,8 @@ export const cancelOrder = async(order_id) => {
 
 export const getOrders = async(params = {}) => {
 	console.log("Get Pending Orders")
+	console.log("Params ", params);
+	
 	return await axios.get(`/v1/trading/accounts/${account_id}/orders`, {params}).then(r => r.data)	
 }
 

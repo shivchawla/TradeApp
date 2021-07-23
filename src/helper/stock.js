@@ -102,8 +102,10 @@ export function useStockList() {
   const clock = useClock();
   const cacheTime = clock ? duration(clock.next_open) : null;
   const staleTime = cacheTime;
-  const {isError, error, data} = useQuery(['stockList', clock ? clock.next_open : ''], () => clock ? getStocks() : [], {...cacheTime && {cacheTime}, ...staleTime && {staleTime}});
+  const {isError, error, data} = useQuery(['stockList', clock ? clock.next_open : ''], () => clock ? getStocks() : []);
   
   return data; 
 
 }
+
+// {...cacheTime && {cacheTime}, ...staleTime && {staleTime}}
