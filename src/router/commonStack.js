@@ -10,6 +10,8 @@ import PendingOrders from '../screens/order/pendingOrders';
 import StockDetail from '../screens/market/stockDetail';
 import PortfolioStock from '../screens/portfolio/portfolioStock';
 
+//Where to show canceled orders?
+
 const innerScreens = (Stack) => {
   return [
       <Stack.Screen key="StockDetail" name="StockDetail" component={StockDetail} />,
@@ -18,8 +20,8 @@ const innerScreens = (Stack) => {
       <Stack.Screen key="UpdateOrder" name="UpdateOrder" component={UpdateOrder} /> ,
       <Stack.Screen key="OrderStatus" name="OrderStatus" component={OrderStatus} />,
       <Stack.Screen key="OrderDetail" name="OrderDetail" component={OrderDetail} />,
-      <Stack.Screen key="CompletedOrders" name="CompletedOrders" component={CompletedOrders} />,
-      <Stack.Screen key="PendingOrders" name="PendingOrders" component={PendingOrders} />,
+      <Stack.Screen key="TradeDetail" name="TradeDetail" component={TradeDetail} />,
+      <Stack.Screen key="OrdersTrades" name="OrdersTrades" component={OrdersTrades} />,
       <Stack.Screen key="PortfolioStock" name="PortfolioStock" component={PortfolioStock} />
   ];
 };

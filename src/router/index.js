@@ -25,7 +25,7 @@ const homeTabs = () => {
         <Tabs.Navigator>
           <Tabs.Screen name="Market" component={Market} />
           {/*<Tabs.Screen name="ChooseStock" component={ChooseStock}/>*/}
-          <Tabs.Screen name="PendingOrders" component={PendingOrders} />
+          {/*<Tabs.Screen name="PendingOrders" component={PendingOrders} />*/}
 
           <Tabs.Screen name="Portfolio" component={Portfolio} />
         </Tabs.Navigator>

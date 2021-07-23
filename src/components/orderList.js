@@ -5,15 +5,14 @@ import { useNavigation } from '@react-navigation/native';
 import ShowJson from './showJson';
 import { useOrders } from '../helper';
 
-const PendingOrdersList = ({symbol, status, goBack}) => {
+const OrdersList = ({symbol, status, goBack, status}) => {
 
-	const [isError, pendingOrders, refetch] = useOrders({symbol, status});
+	const [isError, orders, refetch] = useOrders({symbol, status});
 	
 	const navigation = useNavigation();
 
 	React.useEffect(() => {
 		const refetchOnFocus = navigation.addListener('focus', () => {
-		console.log("Calling Refetch on Pending orders");
 		    if (refetch) {
 		      refetch();
 		    }
@@ -27,11 +26,20 @@ const PendingOrdersList = ({symbol, status, goBack}) => {
 		navigation.navigate('OrderDetail', {orderId, goBack});
 	} 
 
+	const toTradeDetail = (order) => {
+		console.log("To Trade Detail");
+		navigation.navigate('TradeDetail', {order, goBack});	
+	}
+
+	const toDetailScreen = (order, status) => {
+		return status == "closed" ? toTradeDetail(order) : toOrderDetail(order);
+	}
+
 	return (
 		<ScrollView>
-			{pendingOrders && pendingOrders.map((order, index) => {
+			{orders && orders.map((order, index) => {
 				return (
-					<Pressable style={{marginBottom: 50}} key={index} onPressOut={() => toOrderDetail(order.id)}> 
+					<Pressable style={{marginBottom: 50}} key={index} onPressOut={() => toDetailScreen(order, status)}> 
 						<ShowJson json={order} full={false}/>
 					</Pressable> );
 				})
@@ -44,4 +52,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default PendingOrdersList;
+export default OrdersList;
