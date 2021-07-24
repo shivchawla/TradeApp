@@ -1,4 +1,4 @@
-package com.tradeapp;
+package com.fincript.rndev;
 
 import com.facebook.react.ReactActivity;
 

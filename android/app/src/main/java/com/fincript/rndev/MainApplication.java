@@ -1,4 +1,4 @@
-package com.tradeapp;
+package com.fincript.rndev;
 
 import android.app.Application;
 import android.content.Context;

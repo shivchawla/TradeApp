@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "324602696751",
+    "project_id": "fincript-dev",
+    "storage_bucket": "fincript-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:324602696751:android:9e30ccc054976e329022da",
+        "android_client_info": {
+          "package_name": "com.fincript.rndev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "324602696751-um7n24sl7ffl16sn6l613n0469bpifl4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fincript.rndev",
+            "certificate_hash": "cd0d676c98598d18aa66b2d22ff7fddab068390c"
+          }
+        },
+        {
+          "client_id": "324602696751-dhurklppeem9u8p70ei1488hb4cl65nr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1PA5j3L6bSMVfXxliy9ojBiLNLrfbt1s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "324602696751-dhurklppeem9u8p70ei1488hb4cl65nr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
