@@ -5,15 +5,16 @@ import AppView from '../../components/appView';
 import ScreenName from '../../components/screenName'
 import ShowJson from '../../components/showJson'
 
-import { useStockPortfolioData, useTradingAccountData } from '../../helper';
+import { useStockPortfolioData, useTradingAccountData, usePortfolioHistory } from '../../helper';
 
 const Portfolio = (props) => {
 	const [isErrorPortfolio, portfolio] = useStockPortfolioData(); 
 	const [isErrorAccount, account] = useTradingAccountData();
+	const [isErrorHistory, portfolioHistory] = usePortfolioHistory();
 
 	return (
-		<AppView hasHeader={false}>
-			<ScreenName name="Portfolio Home Screen" />
+		<AppView hasHeader={false} title="Portfolio Home Screen">
+			{portfolioHistory && <ShowJson json={portfolioHistory || {}} full={false} />}
 			{account && <ShowJson json={account || {}} />}
 			{portfolio && <ShowJson json={portfolio || {}} />}
 		</AppView>

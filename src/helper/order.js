@@ -2,6 +2,18 @@ import React, {useState, useEffect} from 'react';
 import { useQuery, useMutation} from 'react-query';
 import { placeOrder, getOrders, getOrder, cancelOrder, updateOrder } from  './api'; 
 
+import { COMPLETE_ORDER_STATUS, OPEN_ORDER_STATUS } from '../config'
+
+import { filterTrades, filterOpenOrders } from '../helper';
+
+export const filterTrades = (trades) => {
+  return trades.filter(item => COMPLETE_ORDER_STATUS.includes(item.status));  
+}
+
+export const filterOpenOrders = (orders) => {
+  return orders.filter(item => OPEN_ORDER_STATUS.includes(item.status));  
+}
+
 //Write a order key validation function
 const validateOrder = (params) => {
   return true

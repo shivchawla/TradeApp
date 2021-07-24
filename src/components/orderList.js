@@ -5,6 +5,9 @@ import { useNavigation } from '@react-navigation/native';
 import ShowJson from './showJson';
 import { useOrders } from '../helper';
 
+//What's the differene between TradeHistory and this component
+//Also, do we need the goBack here?
+
 const OrdersList = ({symbol, status, goBack}) => {
 
 	const [isError, orders, refetch] = useOrders({symbol, status});

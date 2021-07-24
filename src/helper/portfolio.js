@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {useQuery} from 'react-query';
 
-import { getStockPosition, getStockPortfolio, getTradingAccount } from  './api'; 
+import { getStockPosition, getStockPortfolio, getTradingAccount, getPortfolioHistory } from  './api'; 
 
 export function useStockPositionData(symbol) {
   console.log("useStockPositionData: ", symbol);
@@ -30,3 +30,12 @@ export function useTradingAccountData() {
   return [isError, data];  
 }
 
+
+export function usePortfolioHistory({period = '1M', timeframe = '1D'}) {
+  console.log("usePortfolioHistory");
+  const {isError, error, data} = useQuery(['portfolioHistory', {period, timeframe}], () => getPortfolioHistory({period, timeframe}));
+  if (isError) {
+    console.log(`ERROR (usePortfolioHistory): ${error}`);
+  }
+  return [isError, data];  
+}

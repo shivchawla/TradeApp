@@ -2,13 +2,18 @@ import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 
 import AppView from '../../components/appView';
-import ScreenName from '../../components/screenName'
+import StockPosition from '../../components/stockPosition' 
+import SingleStock from '../../components/singleStock' 
+import { TradeHistory, OpenOrders } from '../../components/stockActivity';
 
-const PortfolioStock = (props) => {
+const PortfolioStock = ({symbol, position}) => {
 
 	return (
-		<AppView>
-			<ScreenName name="Portfolio Stock Screen" />
+		<AppView title="Portfolio Stock Screen">
+			<SingleStock {...{symbol}} />
+			<StockPosition {...{symbol, position}} />
+			<TradeHistory {...{symbol}} />
+			<OpenOrders {...{symbol}} />
 		</AppView>
 	);
 }

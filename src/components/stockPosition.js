@@ -5,17 +5,28 @@ import ShowJson from './showJson';
 
 import { useStockPositionData } from '../helper';
 
-const StockPosition = ({symbol}) => {
+const ShowPosition = (position) => <ShowJson json={position || {}} />
+
+const StockPositionWithSymbol = ({symbol}) => {
 	const [isError, position] = useStockPositionData(symbol);
 	console.log("Stock Position");
 	console.log(position);
 	console.log(isError);
 
 	return (
-		<>	
-			{(!isError && position) && <ShowJson json={position || {}} />}
+		<ShowPosition json={position || {}} />
+	);	
+}
+
+const StockPosition = ({symbol, position}) => {
+	return (
+		<>
+			{position ? <ShowPosition json = {position} /> 
+				: symbol ? <StockPositionWithSymbol {...{symbol}} />
+				: <ShowJson json = {{error: "No Positions found"}} />
+			}
 		</>
-	);
+	)	
 }
 
 const styles = StyleSheet.create({
