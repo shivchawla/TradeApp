@@ -12,9 +12,7 @@ const ShowTradeActivity = ({type, list}) => {
 	return (
 		<>
 			list.length == 0 ? <ShowJson json={{info: "No trades found"}} />
-			: list.map((item, index) => {
-				return <ShowJson key={index} json={item} />
-			})
+			: list.map((item, index) => <ShowJson key={index} json={item} />)
 		</>
 	)
 }

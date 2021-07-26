@@ -12,6 +12,8 @@ import Market from '../screens/market';
 import OrdersTrades from '../screens/order/ordersTrades';
 import Portfolio from '../screens/portfolio';
 import Settings from '../screens/settings'
+import SignUp from '../screens/auth/signUp'
+import SignIn from '../screens/auth/signIn'
 
 import innerScreens from './commonStack';
 
@@ -23,7 +25,8 @@ const Stack = createStackNavigator();
 const homeTabs = () => {
      return (
         <Tabs.Navigator>
-          <Tabs.Screen name="Market" component={Market} />
+          <Tabs.Screen name="SignIn" component={SignIn} />
+          {/*<Tabs.Screen name="Market" component={Market} />*/}
           {/*<Tabs.Screen name="ChooseStock" component={ChooseStock}/>*/}
           <Tabs.Screen name="OrdersTrades" component={OrdersTrades} />
 

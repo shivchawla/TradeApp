@@ -1,29 +1,36 @@
 import React, {useState} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 
 import auth from '@react-native-firebase/auth';
 
+import AppView from '../../components/appView';
 import ConfirmButton from '../../components/confirmButton';
+
 
 const SignUp = ({props}) => {
 
   // const [email , setemail] = useState('');
   // const [password , setpassword] = useState('');
+  const [signedUp, setSignedUp] = useState(false);
   
   const onSignup = ({email, password}) => {
-      auth.createUserWithEmailAndPassword(email , password)
+      console.log("In onSignup")
+      auth().createUserWithEmailAndPassword(email , password)
       .then(userCredential => {
         // send verification mail.
         userCredential.user.sendEmailVerification();
         auth.signOut();
-        alert("Email sent");
+        setSignedUp(true);
       })
       .catch(alert);
   }
   
+  const signupMsg = "Successfully signed up! Please Check your email";
+
   return (
     <AppView title="Sign Up">
-        <ConfirmButton title="Sign Up" onClick={() => onSignUp({email: "shiv.chawla@yandex.com", password: "Fincript"})} />
+        {!signedUp && <ConfirmButton title="Sign Up" onClick={() => onSignup({email: "shiv.chawla@yandex.com", password: "Fincript"})} />}
+        {signedUp && <Text>{signupMsg}</Text>}
     </AppView>
   );
 }

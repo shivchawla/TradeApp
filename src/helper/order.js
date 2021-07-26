@@ -4,8 +4,6 @@ import { placeOrder, getOrders, getOrder, cancelOrder, updateOrder } from  './ap
 
 import { COMPLETE_ORDER_STATUS, OPEN_ORDER_STATUS } from '../config'
 
-import { filterTrades, filterOpenOrders } from '../helper';
-
 export const filterTrades = (trades) => {
   return trades.filter(item => COMPLETE_ORDER_STATUS.includes(item.status));  
 }
