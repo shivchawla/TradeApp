@@ -1,12 +1,20 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 
-import ScreenName from '../../components/screenName';
+import AppView from '../../components/appView';
+import ConfirmButton from '../../components/confirmButton';
 
-const Agreement = ({props}) => {
+const Agreement = (props) => {
+
+	const {navigation} = props;
+
+	const toNextScreen = () => {
+		navigation.navigate('Document');
+	}
+
 	return (
-		<AppView>
-			<ScreenName name="Choose Stock Screen" />
+		<AppView title="Accept Agreement" goBack={false}>
+			<ConfirmButton title="Next" onClick={toNextScreen}/>
 		</AppView>
 	);
 }

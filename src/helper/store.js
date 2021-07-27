@@ -22,3 +22,4 @@ export const getStorageData = async (key) => {
     console.error(e);
   }
 }
+

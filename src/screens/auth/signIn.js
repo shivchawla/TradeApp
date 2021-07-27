@@ -1,11 +1,10 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import auth from '@react-native-firebase/auth';
-import { setStorageData, getStorageData } from '../../helper'
+
+import { signIn, findUserDb, updateCurrentUser, getBrokerageAccount } from '../../helper'
 
 import AppView from '../../components/appView';
 import ConfirmButton from '../../components/confirmButton';
-const USER_STORAGE_KEY = 'userCredentials';
 
 //Add logic to save auth state to temp storage
 const SignIn = ({props}) => {
@@ -14,30 +13,28 @@ const SignIn = ({props}) => {
 	// const [password , setpassword] = useState('');
 	const [signedIn, setSignedIn] = useState(false);
 	
-	React.useEffect(() => {
-		const checkUserCredential  = async () => {
-			const userCredential = await getStorageData(USER_STORAGE_KEY);
-			if (userCredentials) {
-				setSignedIn(true);
-			}
-		}
-
-		checkUserCredential();
-  	}, []);
+	const navigation = props;
 
 	const onSignIn = async ({email, password}) => {
-		
-		console.log("In onSignIn")
-
 		try {
-			const userCredential = await auth().signInWithEmailAndPassword(email , password)
-			console.log(userCredential);
+			const userAccount = await signIn({email, password});
+			if(userAccount) {
+				await updateCurrentUser(userCredential);
+				const userAccount = await findUserDb(userAccount.user.email);
+				if (userAccount && userAccount.id) {
+					const tradingAccount = await getBrokerageAccount(userAccount.id);
+					if (tradingAccount.status == AccountStatus.ACTIVE) {
+						navigation.navigate('Home')	
+					} 
 
-		  	if (userCredential.user.emailVerified) {
-		        await setStorageData(USER_STORAGE_KEY, JSON.stringify(userCredential));
-		        setSignedIn(true);
-		  	}
-		}  catch(error) {
+					//What to do in other status message
+
+				} else {
+					navigation.navigate('OnBoard')
+				}
+			} 
+					
+		} catch(error) {
 		  	if (error.code == "auth/user-not-found") {
 		  		alert("User not registered! Please sign up");
 		  	}
@@ -51,17 +48,20 @@ const SignIn = ({props}) => {
 		  	}
 
 		  	if (error.code == "auth/user-disabled") {
-		  		alert("Accout has been disabled. Please contact Customer care!");	
+		  		alert("Accout has been disabled. Please contact Customer care!");
 		  	}
 
-		    console.error(error);
+		  	//My error
+		  	if (error.code == "auth/email-not-verified") {
+		  		alert("Accout has been disabled. Please contact Customer care!");	
+		  	}
 		}
 	}
-
+		
 	const signInMsg = "Successfully signed in!";
 
 	return (
-		<AppView title="Sign In">
+		<AppView title="Sign In" goBack={false}>
 		    {!signedIn && <ConfirmButton title="Sign In" onClick={() => onSignIn({email: "shiv.chawla@yandex.com", password: "Fincript"})} />}
 		    {signedIn && <Text>{signInMsg}</Text>}
 		</AppView>

@@ -90,4 +90,15 @@ export const getOrder = async(order_id) => {
 	return await axios.get(`/v1/trading/accounts/${account_id}/orders/${order_id}`).then(r => r.data)	
 }
 
+export const createBrokerageAccount = async(accountParams) => {
+	console.log("Create Account");
+	console.log(accountParams);
 
+	return await axios.post(`/v1/accounts`, accountParams).then(r => r.data)	
+} 
+
+
+export const getBrokerageAccount = async(account_id) => {
+	console.log("Get Brokerage Account");
+	return await axios.get(`/v1/accounts/${account_id}`).then(r => r.data)	
+} 

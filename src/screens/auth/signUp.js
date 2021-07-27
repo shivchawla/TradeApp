@@ -19,10 +19,20 @@ const SignUp = ({props}) => {
       .then(userCredential => {
         // send verification mail.
         userCredential.user.sendEmailVerification();
-        auth.signOut();
+        auth().signOut();
         setSignedUp(true);
       })
-      .catch(alert);
+      .catch(error => {
+        if (error.code === 'auth/email-already-in-use') {
+          alert('That email address is already in use!');
+        }
+
+        if (error.code === 'auth/invalid-email') {
+          alert('That email address is invalid!');
+        }
+
+        console.error(error);
+      });
   }
   
   const signupMsg = "Successfully signed up! Please Check your email";

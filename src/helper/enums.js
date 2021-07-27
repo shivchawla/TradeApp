@@ -1,0 +1,11 @@
+export const AccountStatus = {
+	SUBMITTED: 0,
+	ACTION_REQUIRED: 1,
+	APPROVAL_PENDING: 2,
+	APPROVED: 3,
+	REJECTED: 4,
+	ACTIVE: 5,
+	DISABLED: 6,
+	ACCOUNT_CLOSE: 7
+};
+
