@@ -33,11 +33,12 @@ export function useCreateBrokerageAccount() {
 }
 
 
-export function useBrokerageAccountData(accoundId) {
+export function useBrokerageAccountData(params = {}) {
   console.log("useBrokerageAccountData");
-  const {isError, error, data} = useQuery(['brokerageAccount'], () => getBrokerageAccount(accoundId));
+  const {isError, error, data, isLoading} = useQuery(['brokerageAccount'], () => getBrokerageAccount(), params);
   if (isError) {
     console.log(`ERROR (useBrokerageAccountData): ${error}`);
   }
-  return [isError, data];  
+
+  return {isError, data};  
 }

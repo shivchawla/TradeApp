@@ -29,23 +29,5 @@ export const addUserDb = async(email, userAccount) => {
 	})
 }
 
-export const signIn = async ({email, password}) => {
-	const userCredential = await auth().signInWithEmailAndPassword(email , password)
-
-  	if (userCredential.user.emailVerified) {
-        return userCredential;
-  	} else {
-  		throw new Error({code: "auth/email-not-verified"});
-  	}
-}
-
-export const useUserAccount = (email) => {
-	const [userAccount, setUserAccount] = useState(null);
-
-	React.useEffect(() => {
-		const getUser = async() = await findUserDb(email).then(account => setUserAccount(account));
-
-		getUser();
-	}, []);
-}
+export const signInWithEmailPassword = async ({email, password}) => await auth().signInWithEmailAndPassword(email , password);
 

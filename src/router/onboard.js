@@ -4,6 +4,7 @@ import {View, StyleSheet} from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 const Stack = createStackNavigator();
 
+import Welcome from '../screens/account/welcome';
 import Contact from '../screens/account/contact';
 import Identity from '../screens/account/identity';
 import Document from '../screens/account/document';
@@ -18,6 +19,7 @@ const OnboardStack = () => {
 
   return (
     <Stack.Navigator screenOptions={{screenType: 'add', headerShown: false}}>
+      <Stack.Screen name="Welcome" component={Welcome} />
       <Stack.Screen name="Contact" component={Contact} />
       <Stack.Screen name="Identity" component={Identity} />
       <Stack.Screen name="Document" component={Document} />

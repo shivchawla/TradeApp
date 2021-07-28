@@ -1,39 +1,47 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
-import { signIn, findUserDb, updateCurrentUser, getBrokerageAccount } from '../../helper'
+import { useAuth } from '../../helper'
 
 import AppView from '../../components/appView';
 import ConfirmButton from '../../components/confirmButton';
 
 //Add logic to save auth state to temp storage
-const SignIn = ({props}) => {
+const SignIn = (props) => {
 
 	// const [email , setemail] = useState('');
 	// const [password , setpassword] = useState('');
-	const [signedIn, setSignedIn] = useState(false);
+	const {navigation} = props;
+
+	const {currentUser, userAccount, signIn, brokerageAccount} = useAuth();
 	
-	const navigation = props;
+	React.useEffect(() => {
+		console.log("Running the useEffect in SignIn");
+		console.log("Whats the brokerage Account");
+		console.log(brokerageAccount);
+
+		if (!!brokerageAccount?.data) {
+			if (brokerageAccount.data.status == AccountStatus.ACTIVE) {
+				navigation.navigate('Trading')	
+			} 
+
+			//What to do in other status message
+
+		} else if (!!currentUser) {
+			console.log("Navigating to Onboard");
+			navigation.navigate('Onboard')
+		}
+
+	}, [currentUser, brokerageAccount]);
+
+	console.log("Auth Stack - SignIn");
+	console.log("Current User");
+	console.log(currentUser);
 
 	const onSignIn = async ({email, password}) => {
+		console.log("onSignIn Pressed")
 		try {
-			const userAccount = await signIn({email, password});
-			if(userAccount) {
-				await updateCurrentUser(userCredential);
-				const userAccount = await findUserDb(userAccount.user.email);
-				if (userAccount && userAccount.id) {
-					const tradingAccount = await getBrokerageAccount(userAccount.id);
-					if (tradingAccount.status == AccountStatus.ACTIVE) {
-						navigation.navigate('Home')	
-					} 
-
-					//What to do in other status message
-
-				} else {
-					navigation.navigate('OnBoard')
-				}
-			} 
-					
+			await signIn({email, password});			
 		} catch(error) {
 		  	if (error.code == "auth/user-not-found") {
 		  		alert("User not registered! Please sign up");
@@ -62,8 +70,9 @@ const SignIn = ({props}) => {
 
 	return (
 		<AppView title="Sign In" goBack={false}>
-		    {!signedIn && <ConfirmButton title="Sign In" onClick={() => onSignIn({email: "shiv.chawla@yandex.com", password: "Fincript"})} />}
-		    {signedIn && <Text>{signInMsg}</Text>}
+		    {!!!currentUser ? 
+	    		<ConfirmButton title="Sign In" onClick={() => onSignIn({email: "shiv.chawla@yandex.com", password: "Fincript"})} />
+		    : <Text>{signInMsg}</Text>}
 		</AppView>
 	);
 }

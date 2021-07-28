@@ -4,8 +4,8 @@ export { useStockRealtimeData, useStockEODData, useStockIntradayData, useStockHi
 export { useStockPositionData, useStockPortfolioData, usePortfolioHistory } from './portfolio';
 export { usePlaceOrder, useUpdateOrder, useOrders, useCancelOrder, useOrderDetail, filterTrades, filterOpenOrders } from './order';
 export { useCreateBrokerageAccount, useTradingAccountData, useBrokerageAccountData } from './account';
-export { signIn, findUserDb, addUserDb } from './firebase';
+// export { findUserDb, addUserDb } from './firebase';
 
 export { AccountStatus } from './enums';
 
-export { useCheckCredentials } from './user';
+export { useAuth, AuthProvider } from './user';
