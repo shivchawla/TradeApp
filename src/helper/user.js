@@ -1,11 +1,48 @@
 import React, {useState} from 'react';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import {useQuery} from 'react-query';
 
-import { signInWithEmailPassword, findUserDb, addUserDb } from './firebase';
+// import { signInWithEmailPassword, createUserWithEmailPassword, signOutFirebase findUserDb, addUserDb } from './firebase';
 import {getStorageData, setStorageData} from './store';
 import { currentISODate, toISODate } from '../utils';
 
 import { useBrokerageAccountData } from './account';
+
+export const findUserDb = async(email) => {
+	console.log("findUserDb");
+	console.log(email);
+	return firestore().collection('Users')
+	.where('email','==', email)
+	.limit(1)
+  	.get()
+	.then(querySnapshot => {
+		
+		if (querySnapshot.size < 1) {
+			return null;
+		}
+
+	    return querySnapshot.docs[0];
+	})
+	.catch(err => {
+		console.log(err);
+	})
+}
+
+export const addUserDb = async(email, userAccount) => {
+	return firestore().collection('Users')
+	.add({
+		email,
+	    ...userAccount
+	})
+}
+
+// export const signInWithEmailPassword = async ({email, password}) => await auth().signInWithEmailAndPassword(email, password);
+
+// export const createUserWithEmailPassword = async({email, password}) => await auth().createUserWithEmailAndPassword(email, password);
+
+// export const signOutFirebase = async() => await auth().signOut();
+
 
 const USER_CREDENTIAL_KEY = 'userCredentials';
 const ALPACA_ACCOUNT_KEY = 'alpacaAccount';
@@ -86,7 +123,7 @@ const useAuthHelper = () => {
 	};
 
 	const signIn = async ({email, password}) => {
-		const userCredential = await signInWithEmailPassword({email, password});
+		const userCredential = await auth().signInWithEmailAndPassword(email, password);
 
 		console.log("Signed In");
 		console.log(userCredential);
@@ -103,8 +140,25 @@ const useAuthHelper = () => {
 
 	  	return;
 	}
+
+	const signUp = async ({email, password}) => {
+		const userCredential = await auth().createUserWithEmailAndPassword(email, password);
+        userCredential.user.sendEmailVerification();
+        auth().signOut();
+        return true;
+	}
+
+	const signOut = async () => await auth().signOut();
+
+	const requestResetPassword = async (email) => {
+		return await auth().sendPasswordResetEmail(email, {handleCodeInApp: true});
+	}
+
+	const resetPassword = async (code, newPassword) => {
+		return await auth().confirmPasswordReset(code, newPassword);
+	} 
 	
-	return {currentUser, userAccount, brokerageAccount, signIn};
+	return {currentUser, userAccount, brokerageAccount, signIn, signUp, signOut, requestResetPassword, resetPassword };
 }
 
 

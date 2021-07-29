@@ -1,8 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
-import auth from '@react-native-firebase/auth';
-
+import {useAuth} from '../../helper';
 import AppView from '../../components/appView';
 import ConfirmButton from '../../components/confirmButton';
 
@@ -12,17 +11,17 @@ const SignUp = ({props}) => {
   // const [email , setemail] = useState('');
   // const [password , setpassword] = useState('');
   const [signedUp, setSignedUp] = useState(false);
+  const {signUp} = useAuth();
   
-  const onSignup = ({email, password}) => {
+  const onSignup = async ({email, password}) => {
       console.log("In onSignup")
-      auth().createUserWithEmailAndPassword(email , password)
-      .then(userCredential => {
-        // send verification mail.
-        userCredential.user.sendEmailVerification();
-        auth().signOut();
-        setSignedUp(true);
-      })
-      .catch(error => {
+      try{
+        const signedUp = await signUp({email, password});
+        if (signedUp) {
+          setSignedUp(true);
+        }
+      
+      } catch(error) {
         if (error.code === 'auth/email-already-in-use') {
           alert('That email address is already in use!');
         }
@@ -32,7 +31,7 @@ const SignUp = ({props}) => {
         }
 
         console.error(error);
-      });
+      }
   }
   
   const signupMsg = "Successfully signed up! Please Check your email";

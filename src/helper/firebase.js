@@ -29,5 +29,8 @@ export const addUserDb = async(email, userAccount) => {
 	})
 }
 
-export const signInWithEmailPassword = async ({email, password}) => await auth().signInWithEmailAndPassword(email , password);
+export const signInWithEmailPassword = async ({email, password}) => await auth().signInWithEmailAndPassword(email, password);
 
+export const createUserWithEmailPassword = async({email, password}) => await auth().createUserWithEmailAndPassword(email, password);
+
+export const signOutFirebase = async() => await auth().signOut();
