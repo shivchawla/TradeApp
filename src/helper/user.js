@@ -73,6 +73,7 @@ const useCheckCredentials = () => {
 
 const useGetUserAccount = (email, {enabled = false}) => {
 	const [userAccount, setUserAccount] = useState(null);
+	const [isError, setError] = useState(false);
 
 	React.useEffect(() => {
 		if (enabled) {
@@ -80,37 +81,56 @@ const useGetUserAccount = (email, {enabled = false}) => {
 
 			const getUser = async () => {
 				const account = await findUserDb(email)
-				await updateAlpacaAccount(account);	
-				setUserAccount(account);
+				if (account) {
+					await updateAlpacaAccount(account);	
+					setUserAccount(account);
+				} else {
+					setError(true);
+				}
 			};
 
 			getUser();
 		}
 	}, [email]);
 
-	return userAccount;
+	return {userAccount, setUserAccount, isError};
 }
 
 
+//User Email is Loaded
+//Based on Email, db Account is loaded
+//Based on AccountId, Brokerage account is fetched
+
+
 const useAuthHelper = () => {
-	const [userAccount, setUserAccount] = useState(null);
+	// const [userAccount, setUserAccount] = useState(null);
 	const [currentUser, setCurrentUser] = useState(null);
+	const [isErrorUser, setErrorUser] = useState(false);
+
+	const email = currentUser?.user?.email;
+	const {userAccount, setUserAccount, isError: isErrorAccount} = useGetUserAccount(email, {enabled: !!email});
 
 	const accountId = userAccount?.id;
 	console.log("AccountId ", accountId);
 
-	const brokerageAccount = useBrokerageAccountData({enabled: !!accountId})
+	const {data: brokerageAccount, isError: isErrorBrokerage} = useBrokerageAccountData({enabled: !!accountId})
 
 	React.useEffect(() => {
 		console.log("useCheckCredentials");
 		const checkUserCredential  = async () => {
 			//Update logic to check for last signed in time 
-			setCurrentUser(await getCurrentUser())
+			const currentUser = await getCurrentUser();
+			if (!!currentUser?.user?.email) {
+				setCurrentUser(currentUser);
+			} else {
+				setErrorUser(true);
+			}
 		}
 
 		checkUserCredential()
 
 	}, []);
+
 
 	const getUserFromDb = async (email) => {
 		console.log("Getting User");
@@ -122,7 +142,7 @@ const useAuthHelper = () => {
 		setUserAccount(account);
 	};
 
-	const signIn = async ({email, password}) => {
+	const signIn = async (email, password) => {
 		const userCredential = await auth().signInWithEmailAndPassword(email, password);
 
 		console.log("Signed In");
@@ -148,7 +168,11 @@ const useAuthHelper = () => {
         return true;
 	}
 
-	const signOut = async () => await auth().signOut();
+	const signOut = async () => {
+		await auth().signOut();
+		await updateCurrentUser(null);
+		await updateAlpacaAccount(null);
+	}
 
 	const requestResetPassword = async (email) => {
 		return await auth().sendPasswordResetEmail(email, {handleCodeInApp: true});
@@ -158,7 +182,9 @@ const useAuthHelper = () => {
 		return await auth().confirmPasswordReset(code, newPassword);
 	} 
 	
-	return {currentUser, userAccount, brokerageAccount, signIn, signUp, signOut, requestResetPassword, resetPassword };
+	return {currentUser, userAccount, brokerageAccount, 
+			isErrorUser, isErrorAccount, isErrorBrokerage,  
+			signIn, signUp, signOut, requestResetPassword, resetPassword };
 }
 
 

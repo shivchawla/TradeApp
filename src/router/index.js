@@ -51,7 +51,7 @@ const TradingStack = () => {
 }
 
 const Routes = () => {
-	const {currentUser, userAccount, brokerageAccount} = useAuth(); 
+	const {currentUser, userAccount, brokerageAccount, isErrorUser, isErrorAccount, isErrorBrokerage} = useAuth(); 
 	
 	console.log("Current User");
 	console.log(currentUser);
@@ -59,19 +59,40 @@ const Routes = () => {
 	console.log("User Account");
 	console.log(userAccount);
 
-	const isLoading = !!!currentUser && !!!brokerageAccount;
+	//This is covoluted logic
+	//Because User Auth is fetching all data upto brokerage Data
+	//But the hook to fetch data are pseudo conditional
+	//Hence we have to wait for one of the steps to fail or till we get Brokerage Data to proceed
 
-	return (	
+	const isLoading = !isErrorUser && !isErrorAccount && !isErrorBrokerage && !!!brokerageAccount?.data;
+
+	console.log("Is Loading");
+	console.log(isLoading);
+
+	console.log("isErrorUser");
+	console.log(!isErrorUser);
+
+	console.log("isErrorAccount");
+	console.log(!isErrorAccount);
+
+	
+	console.log("isErrorBrokerage");
+	console.log(!isErrorBrokerage);
+		
+	return (<>
+		{isLoading ? 
+			<Text style={{color: 'white'}}>Loading...</Text>
+			:	
 		<NavigationContainer>
 			<Stack.Navigator screenOptions={{headerShown: false}}>
-				{!!currentUser && !!brokerageAccount?.data && 
+				{!!currentUser?.user && !!brokerageAccount && 
 					<Stack.Screen name="Trading" component={TradingStack} />}
-				{!!currentUser ?
+				{!!currentUser?.user ?
 					 <Stack.Screen name="Onboard" component={OnboardStack} />
 					: <Stack.Screen name="Auth" component={AuthStack} />
 				}
 			</Stack.Navigator>
-	   </NavigationContainer>
+	   </NavigationContainer>}</>
 	)
 }
 

@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
 	appContainer: { 
 		flex: 1,
     	alignItems: 'center',
-    	backgroundColor:'white'
+    	backgroundColor:'black',
     },
 	headerContainer: {
 		flexDirection: 'row',

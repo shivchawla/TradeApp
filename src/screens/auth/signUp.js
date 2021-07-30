@@ -4,9 +4,8 @@ import {View, Text, StyleSheet} from 'react-native';
 import {useAuth} from '../../helper';
 import AppView from '../../components/appView';
 import ConfirmButton from '../../components/confirmButton';
-
-
-const SignUp = ({props}) => {
+ 
+const SignUp = (props) => {
 
   // const [email , setemail] = useState('');
   // const [password , setpassword] = useState('');
@@ -15,7 +14,7 @@ const SignUp = ({props}) => {
   
   const onSignup = async ({email, password}) => {
       console.log("In onSignup")
-      try{
+      try {
         const signedUp = await signUp({email, password});
         if (signedUp) {
           setSignedUp(true);

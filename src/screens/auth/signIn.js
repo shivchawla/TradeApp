@@ -1,24 +1,79 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-
-import { useAuth } from '../../helper'
+import React, {useState, useRef} from 'react';
+import {View, Text, StyleSheet, Pressable, TextInput} from 'react-native';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 import AppView from '../../components/appView';
 import ConfirmButton from '../../components/confirmButton';
+
+import { useAuth } from '../../helper';
+
+const SigninSchema = Yup.object().shape({
+   email: Yup.string().email('Please enter valid email').required('Email is required'),
+   password: Yup.string()
+    		.min(8, ({ min }) => `Password must be at least ${min} characters`)
+    		.required('Password is required'),
+
+ });
+
+const SignInForm = ({ handleChange, handleBlur, handleSubmit, values, errors, touched, setErrors, setSignInError}) => {
+	console.log("SignInForm Props");
+	// console.log(handleChange);
+	// console.log(handleBlur);
+	// console.log(handleSubmit);
+	console.log(values);
+	console.log(errors);
+
+	const password = useRef(null);
+
+	return (
+		<View style={styles.formContainer}>
+			<TextInput style={[styles.textInput, styles.emailInput]}
+				type="email"
+				placeholder="Email"
+				placeholderTextColor='black'
+				onChangeText={handleChange('email')}
+				onBlur={handleBlur('email')}
+				onFocus={() => {setErrors({}); setSignInError();}}
+				onSubmitEditing={() => password.current?.focus()}
+				value={values.email}
+			/>
+			{errors.email && touched.email && <Text style={styles.errorText}>{errors.email}</Text>}
+			<TextInput style={[styles.textInput, styles.passwordInput]}
+				type="password"
+				ref={password}
+				placeholder="Password"
+				placeholderTextColor='black'
+				onChangeText={handleChange('password')}
+				onBlur={handleBlur('password')}
+				onFocus={() => {setErrors({}); setSignInError();}}
+				value={values.password}
+			/>
+			{errors.password && touched.password && <Text style={styles.errorText}>{errors.password}</Text>}
+			<Pressable style={styles.submitButton} onPressOut={handleSubmit}>
+				<Text style={styles.submitButtonText}>SIGN IN</Text> 
+			</Pressable>
+		</View>
+	)
+}
+
 
 //Add logic to save auth state to temp storage
 const SignIn = (props) => {
 
 	// const [email , setemail] = useState('');
 	// const [password , setpassword] = useState('');
+	const [error , setError] = useState(null);
+
 	const {navigation} = props;
 
-	const {currentUser, userAccount, signIn, brokerageAccount} = useAuth();
+	const {currentUser, userAccount, signIn, brokerageAccount, signOut} = useAuth();
 	
 	React.useEffect(() => {
 		console.log("Running the useEffect in SignIn");
 		console.log("Whats the brokerage Account");
 		console.log(brokerageAccount);
+		console.log(currentUser);
 
 		if (!!brokerageAccount?.data) {
 			if (brokerageAccount.data.status == AccountStatus.ACTIVE) {
@@ -27,55 +82,123 @@ const SignIn = (props) => {
 
 			//What to do in other status message
 
-		} else if (!!currentUser) {
+		} else if (!!currentUser?.user) {
+			// console.log("~~~~Sign out!!!!");
+			// signOut()
 			console.log("Navigating to Onboard");
 			navigation.navigate('Onboard')
-		}
+		} 
 
 	}, [currentUser, brokerageAccount]);
 
-	console.log("Auth Stack - SignIn");
-	console.log("Current User");
-	console.log(currentUser);
-
-	const onSignIn = async ({email, password}) => {
+	const onSignIn = async (email, password) => {
 		console.log("onSignIn Pressed")
 		try {
-			await signIn({email, password});			
+			await signIn(email, password);			
 		} catch(error) {
+			console.log(error);
+			console.log(error.code);
 		  	if (error.code == "auth/user-not-found") {
-		  		alert("User not registered! Please sign up");
+		  		setError("User not registered! Please sign up");
 		  	}
 
 		  	if (error.code == "auth/wrong-password") {
-		  		alert("Incorrect Password");
+		  		setError("Incorrect Password");
 		  	}
 
 		  	if (error.code == "auth/invalid-email") {
-		  		alert("Invalid email. Please check your email");
+		  		setError("Invalid email. Please check your email");
 		  	}
 
 		  	if (error.code == "auth/user-disabled") {
-		  		alert("Accout has been disabled. Please contact Customer care!");
+		  		setError("Accout has been disabled. Please contact Customer care!");
 		  	}
 
 		  	//My error
 		  	if (error.code == "auth/email-not-verified") {
-		  		alert("Accout has been disabled. Please contact Customer care!");	
+		  		setError("Accout has been disabled. Please contact Customer care!");	
 		  	}
 		}
 	}
 		
 	const signInMsg = "Successfully signed in!";
 
+	const onSubmit = async (values, {validateForm, resetForm}) => {
+		validateForm(values);
+		await onSignIn(values.email, values.password);
+       	resetForm();
+	}
+
+	const formik = useFormik({
+		validationSchema: SigninSchema,
+		initialValues: { email: '', password: '' },
+		validateOnChange: false,
+        validateOnBlur: false,
+		onSubmit: onSubmit
+	});
+
 	return (
-		<AppView title="Sign In" goBack={false}>
-		    {!!!currentUser ? 
-	    		<ConfirmButton title="Sign In" onClick={() => onSignIn({email: "shiv.chawla@yandex.com", password: "Fincript"})} />
-		    : <Text>{signInMsg}</Text>}
-		</AppView>
+		<AppView title="SIGN IN" headerTitleStyle={{color: 'white'}} goBack={false}>
+			<View style={styles.formikContainer}>
+			{error && <Text style={styles.signInError}>{error} </Text>}
+			<SignInForm {...formik} setSignInError={setError} />
+		   </View>
+	   </AppView>
 	);
 }
 
 export default SignIn;
 
+
+{/*<AppView title="Sign In" goBack={false}>
+		    {!!!currentUser ? 
+	    		<ConfirmButton title="Sign In" onClick={() => onSignIn({email: "shiv.chawla@yandex.com", password: "Fincript"})} />
+		    : <Text>{signInMsg}</Text>}
+		</AppView>
+*/}
+
+const styles = StyleSheet.create({
+	formikContainer: {
+		justifyContent: 'center', 
+		textAlign: 'center', 
+		flex:1, 
+		width: '100%',
+	},
+	formContainer: {
+		alignItems: 'center',
+	},
+	textInput: {
+		borderWidth: 1,
+		width: '80%',
+		color: 'black',
+		marginBottom: 20,
+		backgroundColor: 'white',
+		paddingLeft:20
+	},
+	submitButton: {
+		backgroundColor: 'white',
+		padding: 5,
+		paddingLeft: 20,
+		paddingRight: 20
+	},
+	submitButtonText: {
+		fontSize: 16,
+		fontWeight: '600'
+	},
+	errorText: {
+		marginTop: -15,
+		textAlign:'left',
+		width: '80%',
+		marginBottom: 10,
+		color: 'red'
+
+	},
+
+	signInError: {
+		textAlign:'center',
+		// width: '80%',
+		marginBottom: 50,
+		color: 'red'
+	}
+
+});
