@@ -1,15 +1,18 @@
 import React, {useState} from 'react';
 import {ScrollView, Text, StyleSheet} from 'react-native';
 
+import {StyledText} from './styled';
+
 const ShowJson = ({json, full = true}) => {
+
 	return (
-		<ScrollView>
+		<ScrollView contentContainerStyle={{color: 'white' }}>
 			{ full ?
 				Object.keys(json).map((key, index) => {
-					return <Text key={index}>{key} : {JSON.stringify(json[key])}</Text>
+					return <StyledText key={index}>{key} : {JSON.stringify(json[key])}</StyledText>
 				})
 
-			  : <Text>{JSON.stringify(json)}</Text>
+			  : <StyledText>{JSON.stringify(json)}</StyledText>
 			  	
 			}
 		</ScrollView>
@@ -17,6 +20,7 @@ const ShowJson = ({json, full = true}) => {
 }
 
 const styles = StyleSheet.create({
+
 });
 
 export default ShowJson;
