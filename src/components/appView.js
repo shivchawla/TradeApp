@@ -3,14 +3,14 @@ import {ScrollView, View, Text, StyleSheet, Pressable, Image} from 'react-native
 
 import { useNavigation } from '@react-navigation/native';
 
-import {StyledText} from './styled';
+import { StyledText, useTheme } from '../theme';
 
 const backIcon = require("../assets/icon-back-black.png");
 
 const AppHeader = ({title, goBack = true, ...props}) => {
 	const showHeader = title || goBack;
 	const navigation = useNavigation();
-
+	
 	return (
 		<>
 		{showHeader &&
@@ -29,17 +29,21 @@ const AppHeader = ({title, goBack = true, ...props}) => {
 const AppView = ({scroll = true, footer, hasHeader = true, header, ...props}) => {
 
 	const Component = scroll ? ScrollView : View;
+	const theme = useTheme();
+
+	// console.log("Theme");
+	// console.log(theme);
 
 	return (
 		<>
 		{scroll ? 
-			<ScrollView contentContainerStyle={[styles.appContainer, props.appContainerStyle]}>
+			<ScrollView contentContainerStyle={[styles.appContainer, props.appContainerStyle, {backgroundColor: theme.black}]}>
 				{hasHeader || header ? header ? header : <AppHeader {...props}/> : <></>}
 				{props.children}
 				{footer && <View style={[styles.footerContainer, props.footerContainerStyle]}>{footer}</View>}
 			</ScrollView>	
 			:
-			<View style={[styles.appContainer, props.appContainerStyle]}>
+			<View style={[styles.appContainer, props.appContainerStyle, {backgroundColor: theme.black}]}>
 				{hasHeader || header ? header ? header : <AppHeader {...props}/> : <></>}
 				{props.children}
 				{footer && <View style={[styles.footerContainer, props.footerContainerStyle]}>{footer}</View>}

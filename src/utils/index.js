@@ -1,2 +1,3 @@
-export {currentISODate, toISODate, yearStartISODate, dayStartISODate, dayEndISODate, duration} from './date';
-
+export {
+	currentISODate, toISODate, yearStartISODate, 
+	dayStartISODate, dayEndISODate, duration} from './date';

@@ -1,44 +1,44 @@
 const { mapKeys, mapValues } = require("lodash");
 const trade_mapping = {
-  i: "ID",
-  S: "Symbol",
-  x: "Exchange",
-  p: "Price",
-  s: "Size",
-  t: "Timestamp",
-  c: "Conditions",
-  z: "Tape",
+  i: "id",
+  S: "symbol",
+  x: "exchange",
+  p: "price",
+  s: "size",
+  t: "timestamp",
+  c: "conditions",
+  z: "tape",
 };
 
 const quote_mapping = {
-  S: "Symbol",
-  bx: "BidExchange",
-  bp: "BidPrice",
-  bs: "BidSize",
-  ax: "AskExchange",
-  ap: "AskPrice",
-  as: "AskSize",
-  t: "Timestamp",
-  c: "Condition",
-  z: "Tape",
+  S: "symbol",
+  bx: "bidExchange",
+  bp: "bidPrice",
+  bs: "bidSize",
+  ax: "askExchange",
+  ap: "askPrice",
+  as: "askSize",
+  t: "timestamp",
+  c: "condition",
+  z: "tape",
 };
 
 const bar_mapping = {
-  S: "Symbol",
-  o: "OpenPrice",
-  h: "HighPrice",
-  l: "LowPrice",
-  c: "ClosePrice",
-  v: "Volume",
-  t: "Timestamp",
+  S: "symbol",
+  o: "openPrice",
+  h: "highPrice",
+  l: "lowPrice",
+  c: "closePrice",
+  v: "volume",
+  t: "timestamp",
 };
 
 const snapshot_mapping = {
-  latestTrade: "LatestTrade",
-  latestQuote: "LatestQuote",
-  minuteBar: "MinuteBar",
-  dailyBar: "DailyBar",
-  prevDailyBar: "PrevDailyBar",
+  latestTrade: "latestTrade",
+  latestQuote: "latestQuote",
+  minuteBar: "minuteBar",
+  dailyBar: "dailyBar",
+  prevDailyBar: "prevDailyBar",
 };
 
 function aliasObjectKey(data, mapping) {
@@ -61,13 +61,13 @@ function AlpacaBarV2(data) {
 
 function convertSnapshotData(key, data) {
   switch (key) {
-    case "LatestTrade":
+    case "latestTrade":
       return AlpacaTradeV2(data);
-    case "LatestQuote":
+    case "latestQuote":
       return AlpacaQuoteV2(data);
-    case "MinuteBar":
-    case "DailyBar":
-    case "PrevDailyBar":
+    case "minuteBar":
+    case "dailyBar":
+    case "prevDailyBar":
       return AlpacaBarV2(data);
     default:
       return data;

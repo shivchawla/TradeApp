@@ -1,6 +1,6 @@
 import React, {useEffect}from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import {YellowBox} from 'react-native';
+import {LogBox} from 'react-native';
 
 import Router from './src/router';
 
@@ -9,7 +9,7 @@ const App = props => {
   const queryClient = new QueryClient()
 
   useEffect(() => {
-    YellowBox.ignoreWarnings(['Setting a timer']);
+    LogBox.ignoreLogs(['Setting a timer']);
   }, []);
 
   return (

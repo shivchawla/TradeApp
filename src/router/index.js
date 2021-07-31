@@ -8,7 +8,11 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { useAuth, AuthProvider } from '../helper'
+import { useAuth, AuthProvider } from '../helper';
+import { ThemeProvider } from  '../theme';
+
+// import { AppDarkTheme, AppDefaultTheme } from '../theme';
+
 
 import Market from '../screens/market';
 // import ChooseStock from '../screens/order/chooseStock';
@@ -91,16 +95,17 @@ const Routes = () => {
 	// console.log("isErrorBrokerage");
 	// console.log(!isErrorBrokerage);
 
-	const scheme = useColorScheme();
+	// const scheme = useColorScheme();
 	// console.log("Scheme");
 	// console.log(scheme);
+
 
 	return (
 		// <>
 		// {isLoading ? 
 		// 	<Text style={{color: 'white'}}>Loading...</Text>
 		// 	:	
-		<NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
+		<NavigationContainer>
 			<Stack.Navigator screenOptions={{headerShown: false}}>
 				{/*{!!currentUser?.user && !!brokerageAccount && */}
 					<Stack.Screen name="Trading" component={TradingStack} />
@@ -119,9 +124,11 @@ const Routes = () => {
 const Router = (props) => {
 
 	return (
-		<AuthProvider>
-			<Routes/>
-	   </AuthProvider>
+		<ThemeProvider>
+			<AuthProvider>
+				<Routes/>
+		   </AuthProvider>
+	   </ThemeProvider>
    );
 }
 

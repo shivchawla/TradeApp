@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {ScrollView, Text, StyleSheet} from 'react-native';
 
-import {StyledText} from './styled';
+import { StyledText } from '../theme';
 
 const ShowJson = ({json, full = true}) => {
 

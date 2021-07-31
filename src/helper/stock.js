@@ -81,11 +81,6 @@ export function useStockEODData(symbol, params = {}) {
 }
 
 export function useStockHistoricalData(symbol, {start = yearStartISODate(), end = dayEndISODate(), timeframe = '1Day'} = {}) {
-  console.log("useStockHistoricalData");
-  console.log(start);
-  console.log(end);
-  console.log(timeframe);
-
   const query = {start, end, timeframe};
   const {isLoading, error, data} = useQuery(['stockHistorical', {symbol, start, end, timeframe}], () => getHistoricalData(symbol, query))
   return data;
