@@ -14,8 +14,13 @@ export const getClock = async() => {
 } 
 
 export const getStocks = async() => {
-	console.log("Getting Stocks");
+	console.log("Fetching Stocks");
 	return await axios.get('/v1/assets', {params: {status: 'active'}}).then(r => r.data);
+}
+
+export const getAssetData = async (symbol) => {
+	console.log("Fetching Asset Data");
+	return await axios.get(`/v1/assets/${symbol}`).then(r => r.data);	
 }
 
 export const getSnapshot = async(symbol) => {

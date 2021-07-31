@@ -1,71 +1,87 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, Pressable} from 'react-native';
-
-import StockChart from './stockChart'; 
-import { useStockRealtimeData, useStockEODData, useClock } from  '../helper';
-import ShowJson from './showJson';
 import {BarIndicator} from 'react-native-indicators';
 
 
+import StockChart from './stockChart'; 
+import { useStockRealtimeData, useStockEODData, useClock, useAssetData } from  '../helper';
+import ShowJson from './showJson';
+
+import {StyledText} from './styled';
+
+
+
 const StockName = (props) => {
+	// console.log(props);
+
+	const formatName = (name) => {
+		const RSTRING = 'Common Stock';
+		return name.replace('Common Stock', '').trim();
+	}
+
 	return (
 		<View>
-			<Text style={styles.stockSymbol}>{props.symbol}</Text>
-			<Text style={styles.stockName}>{props.name}</Text>
+			<StyledText style={styles.stockSymbol}>{props.symbol}</StyledText>
+			<StyledText style={styles.stockName}>{formatName(props.name)}</StyledText>
 		</View>
 	);
 }
 
-const PriceChange = ({lastPrice}) => {
-	console.log(lastPrice);
+const PriceChange = (props) => {
+	// console.log(...props);
 	return (
-		<ShowJson json={lastPrice} />
+		<ShowJson json={props} />
 	);
 }
 
 const SingleStockRealTime = ({symbol}) => {
-	const symbolData = useStockRealtimeData(symbol);
+	const marketData = useStockRealtimeData(symbol);
 	return (
-		<View>{symbolData && <ShowJson json={symbolData} /> }</View>
+		<View>
+			{marketData && <ShowJson json={marketData} /> }
+		</View>
 	);
 }
 
 const SingleStockEOD = ({symbol}) => {
 	// console.log("SingleStockEOD");
 	// console.log(symbol);
-	const [isLoading, error, data] = useStockEODData(symbol);
-	
+	const {asset} = useAssetData(symbol);
+	// console.log(asset);
+	const {data} = useStockEODData(symbol);
 	// console.log(data);
-	// console.log(isLoading);
-	// console.log(error);
+
+	// React.useEffect(() => { //This is mounted many times
+	// 	console.log("Running Use Effect of SingleStockEOD - ************************");
+	// }, [])
+
+	const isLoading = !!!data || !!!asset;
 
 	return (
 		<View>
 			{isLoading && <BarIndicator color="black" />} 
+			<View style={styles.singleStockRow}>
+				{asset && <StockName {...asset} />}
+				{data && <PriceChange {...data} />}
+			</View>
+
 			{data && <ShowJson json={data} /> }
 		</View>
 	);
 }
 
 const SingleStock = ({symbol, onClick, detail = false}) => {
-	// console.log("Single Stock");
-	// console.log(symbol);
 	const clock = useClock();
-	const [realtime, setRealtime] = useState(false);
 
-	useEffect(() => {
-		console.log("Clock Effect")
-		if (clock && clock.is_open) {
-			setRealtime(true);
-		} else {
-			setRealtime(false);
-		}
-	});
+	React.useEffect(() => { //This is running many times, but only once at upload
+    	console.log("Running Use Effect of SingleStock ----- $$$$$$$$$$$");
+	    console.log(clock);
+  	})
 
 	const PlainView = () => {
 		return (
 			<View style={styles.container}>
-				{realtime ? <SingleStockRealTime {...{symbol}} /> : <SingleStockEOD {...{symbol}} />}
+				{clock?.is_open ? <SingleStockRealTime {...{symbol}} /> : <SingleStockEOD {...{symbol}} />}
 			</View>
 		); 
 	}

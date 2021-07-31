@@ -3,6 +3,8 @@ import {ScrollView, View, Text, StyleSheet, Pressable, Image} from 'react-native
 
 import { useNavigation } from '@react-navigation/native';
 
+import {StyledText} from './styled';
+
 const backIcon = require("../assets/icon-back-black.png");
 
 const AppHeader = ({title, goBack = true, ...props}) => {
@@ -17,7 +19,7 @@ const AppHeader = ({title, goBack = true, ...props}) => {
 					<Pressable style={styles.backIconContainer} onPressOut={() => {typeof goBack === 'function' ? goBack() : navigation.goBack()}}>
 						<Image source={backIcon} resizeMode="contain" style={styles.iconImage}/>
 					</Pressable>}
-				{title && <Text style={[styles.headerTitle, props.headerTitleStyle]}>{title}</Text>}
+				{title && <StyledText style={[styles.headerTitle, props.headerTitleStyle]}>{title}</StyledText>}
 			</View>
 		}
 		</>

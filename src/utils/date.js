@@ -21,4 +21,4 @@ export const dayEndISODate = () => {
 	return d.format();
 }
 
-export const duration = (date, unit = 'milliseconds') => moment.duration(moment.utc().diff(moment.utc(date))).as(unit);
+export const duration = (date, unit = 'milliseconds') => Math.abs(moment.duration(moment.utc().diff(moment.utc(date))).as(unit));

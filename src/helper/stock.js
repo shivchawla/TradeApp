@@ -1,9 +1,9 @@
 // import useWebSocket from 'react-use-websocket';
 // import {wsUrl, apiKey, apiSecret} from './';
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {useQuery} from 'react-query';
 import {useWS} from '../config/webSocket'
-import { getSnapshot, getIntradayData, getHistoricalData, getStocks } from  './api'; 
+import { getSnapshot, getIntradayData, getHistoricalData, getStocks, getAssetData } from  './api'; 
 import { currentISODate, toISODate, yearStartISODate, dayStartISODate, dayEndISODate, duration} from '../utils';
 import { useClock } from './clock';
 
@@ -14,7 +14,7 @@ export function useStockRealtimeData(symbol) {
   const [isSubscribed, setIsSubscribed] = useState(false);
   const {data:dailyData} = useQuery(['stockSnapshot', symbol], () => getSnapshot(symbol))
 
-  useEffect(() => {
+  React.useEffect(() => {
     // console.log("useTickerData - use Effect");
     // console.log("IsAuthenticated ", isAuthenticated);
     // console.log("IsSubscribed ", isSubscribed);
@@ -58,7 +58,7 @@ export function useStockRealtimeData(symbol) {
   }); 
 
   //Use Effect only for cleanup at unmount
-  useEffect(() => {
+  React.useEffect(() => {
     //Cleanup
     return () => {
       if (isAuthenticated && isSubscribed) {
@@ -75,9 +75,9 @@ export function useStockRealtimeData(symbol) {
   return {...stockData, ...dailyData};
 }
 
-export function useStockEODData(symbol) {
-  const {isLoading, error, data} = useQuery(['stockSnapshot', symbol], () => getSnapshot(symbol))
-  return [isLoading, error, data];
+export function useStockEODData(symbol, params = {}) {
+  const {isLoading, error, data, refetch} = useQuery(['stockSnapshot', symbol], () => getSnapshot(symbol), params);
+  return {isLoading, error, data, getData:() => refetch().then(r => r.data)};
 }
 
 export function useStockHistoricalData(symbol, {start = yearStartISODate(), end = dayEndISODate(), timeframe = '1Day'} = {}) {
@@ -99,13 +99,35 @@ export function useStockIntradayData(symbol, {start = dayStartISODate(), end = d
 
 
 export function useStockList() {
-  const clock = useClock();
-  const cacheTime = clock ? duration(clock.next_open) : null;
+  const {next_open} = useClock();
+  const cacheTime = next_open ? duration(next_open) : null;
   const staleTime = cacheTime;
-  const {isError, error, data} = useQuery(['stockList', clock ? clock.next_open : ''], () => clock ? getStocks() : []);
+  const {isError, error, data} = useQuery(['stockList', clock ? clock.next_open : ''], () => clock ? getStocks() : [], {...cacheTime && {cacheTime}, ...staleTime && {staleTime}});
   
   return data; 
 
 }
 
-// {...cacheTime && {cacheTime}, ...staleTime && {staleTime}}
+export function useAssetData(symbol, params = {}) {
+  // const clock = useClock();
+
+  // React.useEffect(() => {
+  //   console.log("Clock Variable changed");
+  //   console.log(clock);
+  // }, [clock])
+
+  // const clock = getClock();
+  // console.log("useAssetData");
+  // console.log("Next Open: ", clock?.next_open);
+
+  // const cacheTime = next_open ? duration(next_open) : null;
+  // const staleTime = cacheTime;
+
+  // console.log("CacheTime ", cacheTime);
+  // console.log("StaleTime ", staleTime);
+
+  const {isLoading, error, data: asset, refetch} = useQuery(['assetData', symbol], () => getAssetData(symbol), params); 
+  // {...cacheTime && {cacheTime}, ...staleTime && {staleTime}});
+  
+  return {asset, getAsset: () => refetch().then(r => r.data)};
+}

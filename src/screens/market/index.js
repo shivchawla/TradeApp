@@ -13,14 +13,17 @@ import {defaultStocks} from '../../config';
 const Market = (props) => {
 
 	const toStockDetail = (symbol) => {
-		console.log("Navigating to Stock Detail");
+		// console.log("Navigating to Stock Detail");
 		const {navigation} = props;
 		navigation.navigate('StockDetail', {symbol});
 	}
 
+	// React.useEffect(() => { //This is running many times, but only once at upload
+ //    	console.log("Running Use Effect of Market ----- $$$$$$$$$$$");
+ //  	})
+
 	return (
-		<AppView hasHeader={false}>
-			<ScreenName name="Market Screen" />
+		<AppView title="Market">
 			{/*{isLoading && <BarIndicator color='black' />}*/}
 			{defaultStocks && defaultStocks.length > 0 &&
 				defaultStocks.map((symbol, index) => {	

@@ -4,8 +4,6 @@ import {Text} from 'react-native';
 
 export const StyledText = ({children, style, ...props}) => {
 	const { colors } = useTheme();
-	console.log(colors);
-
 	return (
 		<Text {...props} style={[style, {color: colors.text}]}>{children}</Text>
 	)

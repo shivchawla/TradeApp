@@ -6,6 +6,7 @@ import { NavigationContainer, DarkTheme, DefaultTheme } from '@react-navigation/
 import { createStackNavigator} from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // import Icon from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { useAuth, AuthProvider } from '../helper'
 
@@ -27,15 +28,27 @@ const Tabs = createBottomTabNavigator();
 // const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
+const marketScreenOptions = {
+  tabBarIcon: ({ color, size }) => (
+    <Ionicons name="stats-chart" color={color} size={size} />
+  ),
+}
+
+const portfolioScreenOptions = {
+  tabBarIcon: ({ color, size }) => (
+    <Ionicons name="pie-chart" color={color} size={size} />
+  ),
+}
+
 const homeTabs = () => {
      return (
-        <Tabs.Navigator>
+        <Tabs.Navigator tabBarOptions={{showLabel: false, activeTintColor:'yellow'}}>
           {/*<Tabs.Screen name="SignIn" component={SignIn} />*/}
-          <Tabs.Screen name="Market" component={Market} />
+          <Tabs.Screen name="Market" component={Market} options={marketScreenOptions}/>
           {/*<Tabs.Screen name="ChooseStock" component={ChooseStock}/>*/}
           {/*<Tabs.Screen name="OrdersTrades" component={OrdersTrades} />*/}
 
-          <Tabs.Screen name="Portfolio" component={Portfolio} />
+          <Tabs.Screen name="Portfolio" component={Portfolio} options={portfolioScreenOptions}/>
         </Tabs.Navigator>
      )
 }
@@ -79,8 +92,8 @@ const Routes = () => {
 	// console.log(!isErrorBrokerage);
 
 	const scheme = useColorScheme();
-	console.log("Scheme");
-	console.log(scheme);
+	// console.log("Scheme");
+	// console.log(scheme);
 
 	return (
 		// <>
