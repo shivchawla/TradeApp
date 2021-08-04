@@ -76,3 +76,16 @@ export const accountParams = {
     "email_address": "jane.doe@example.com"
   }
 };
+
+export const POSITION_FIELDS = {
+  'qty': 'Quantity',
+  'avg_entry_price': 'Avg. Price',
+  'side': 'Direction',
+  'market_value': 'Current Market Value',
+  'cost_basis': 'Total Cost',
+  'unrealized_pl': 'Profit/Loss',
+  // 'unrealized_plpc': 'Profit/Loss Pct',
+  'unrealized_intraday_pl': "Today's Profit/Loss",
+  // 'unrealized_intraday_plpc': "Today's Profit/Loss Pct"
+};
+

@@ -7,10 +7,12 @@ export { Typography } from './typography';
 
 export const DarkTheme = {
         primary: '#FF6624',
-        light: '#ffffff',
+        white: '#ffffff',
         text: '#ffffff',
+        light:'#f2f2f2',
         fldDesc: "#999999",
         border: "#E5E5E5",
+
         grey: '#F6F6F6',
         error: "#E7221B",
         verified: "#72BB53",
@@ -25,7 +27,13 @@ export const DarkTheme = {
         blackFontColor:'#20292f',
         green:'#48b300',
         red:'red',
-        backArrow: 'yellow'
+        backArrow: 'yellow',
+        positionLabel: '#797D7F',
+        positionValue: '#d9d9d9',
+
+        greyP1: '#d9d9d9',
+        greyP2:'#cccccc',
+        greyP3:'#c0c0c0'
 }
 
 export const DefaultTheme = {
