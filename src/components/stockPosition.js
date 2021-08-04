@@ -58,7 +58,6 @@ const positionSummary = (position) => {
 
 }
 
-
 const ShowHideButton = ({showDetail, onToggle}) => {
 	const styles = useStyles();
 	const theme = useTheme();
@@ -94,7 +93,7 @@ const StockPositionHeader = ({position, onToggle, showDetail}) => {
 			<View style={styles.positionSummaryContainer}>
 				{
 					positionSummary(position).map((item, index) => {
-						return <MiniField key={item.key} {...item} style={{...index%2==1 && {marginRight: 0}}} />
+						return <MiniField key={item.field} {...item} style={{...index%2==1 && {marginRight: 0}}} />
 					})
 				}
 			 <ShowHideButton {...{onToggle, showDetail}}/>

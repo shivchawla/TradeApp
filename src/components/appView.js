@@ -13,6 +13,7 @@ const AppHeader = ({title, goBack = true, ...props}) => {
 	const showHeader = title || goBack;
 	const navigation = useNavigation();
 	const theme = useTheme();
+	const styles = useStyles();
 
 	return (
 		<>
@@ -32,21 +33,22 @@ const AppHeader = ({title, goBack = true, ...props}) => {
 const AppView = ({scroll = true, footer, hasHeader = true, header, ...props}) => {
 
 	const Component = scroll ? ScrollView : View;
-	const theme = useTheme();
+	const styles = useStyles();
 
-	// console.log("Theme");
-	// console.log(theme);
+	console.log("AppView: ", scroll);
 
 	return (
 		<>
 		{scroll ? 
-			<ScrollView contentContainerStyle={[styles.appContainer, props.appContainerStyle, {backgroundColor: theme.background}]}>
+			<View style={styles.appContainer}>
 				{hasHeader || header ? header ? header : <AppHeader {...props}/> : <></>}
-				{props.children}
+				<ScrollView contentContainerStyle={[ props.appContainerStyle]}>
+					{props.children}
+				</ScrollView>
 				{footer && <View style={[styles.footerContainer, props.footerContainerStyle]}>{footer}</View>}
-			</ScrollView>	
+			</View>	
 			:
-			<View style={[styles.appContainer, props.appContainerStyle, {backgroundColor: theme.background}]}>
+			<View style={[styles.appContainer, props.appContainerStyle]}>
 				{hasHeader || header ? header ? header : <AppHeader {...props}/> : <></>}
 				{props.children}
 				{footer && <View style={[styles.footerContainer, props.footerContainerStyle]}>{footer}</View>}
@@ -56,39 +58,46 @@ const AppView = ({scroll = true, footer, hasHeader = true, header, ...props}) =>
 	);
 }
 
-const styles = StyleSheet.create({
-	appContainer: { 
-		flex: 1,
-    	alignItems: 'center',
-    	// backgroundColor:'black',
-    },
-	headerContainer: {
-		flexDirection: 'row',
-		width: '100%',
-		alignItems: 'center',
-		justifyContent: 'center',
-		height: 50
-	},
-	backIconContainer: {
-		position: 'absolute',
-		left: 10
-	},
-	footerContainer: {
-	    position: 'absolute',
-	    bottom:20,
-	    width: '90%',
-	    flexDirection:'row',
-	    justifyContent:'space-between',
-	    alignItems:'center',
-	    // textAlign: 'center'
-	},
-	headerTitle:{
-		fontSize: 16,
-		fontWeight: 'bold',
-	},
-	iconImage:{
-		height:40
-	}
-});
+const useStyles = () => {
+	const theme = useTheme();
+
+	const styles = StyleSheet.create({
+		appContainer: { 
+			flex: 1,
+	    	alignItems: 'center',
+	    	backgroundColor: theme.background
+	    },
+		headerContainer: {
+			flexDirection: 'row',
+			width: '100%',
+			alignItems: 'center',
+			justifyContent: 'center',
+			height: 50,
+			backgroundColor: theme.background
+		},
+		backIconContainer: {
+			position: 'absolute',
+			left: 10
+		},
+		footerContainer: {
+		    position: 'absolute',
+		    bottom:20,
+		    width: '90%',
+		    flexDirection:'row',
+		    justifyContent:'space-between',
+		    alignItems:'center',
+		    // textAlign: 'center'
+		},
+		headerTitle:{
+			fontSize: 16,
+			fontWeight: 'bold',
+		},
+		iconImage:{
+			height:40
+		}
+	});
+
+	return styles;
+}
 
 export default AppView;

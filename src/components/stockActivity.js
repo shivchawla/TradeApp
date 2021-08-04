@@ -21,7 +21,7 @@ const ShowTradeHistory = (trades) => <ShowTradeActtivity type="trade" list={trad
 
 const TradeHistoryWithSymbol = ({symbol}) => {
 
-	const [isError, closedOrders] = useOrders({symbol, status: "closed"});
+	const {isError, orders: closedOrders} = useOrders({symbol, status: "closed"});
 	return (
 		<ShowTradeHistory trades={filterTrades(closedOrders)} />
 	)
@@ -45,7 +45,7 @@ const ShowOpenOrders = (orders) => <ShowTradeActivity type="order" list={orders}
 
 const OpenOrdersWithSymbol = ({symbol}) => {
 
-	const [isError, openOrders] = useOrders({symbol, status: "open"});
+	const {isError, orders: openOrders} = useOrders({symbol, status: "open"});
 	return (
 		<ShowTradeHistory trades={filterOrders(openOrders)} />
 	)

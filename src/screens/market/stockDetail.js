@@ -5,6 +5,7 @@ import AppView from '../../components/appView';
 import StockChart from '../../components/stockChart';
 import TradeButtons from '../../components/tradeButtons';
 import StockPosition from '../../components/stockPosition';
+import StockOrders from '../../components/stockOrders';
 import OrderList from '../../components/orderList';
 import StockDetailTop from '../../components/stockDetailTop';
 
@@ -26,7 +27,7 @@ const StockDetail = (props) => {
 			<StockDetailTop {...{symbol}} />
 			<StockChart {...{symbol, size: 'L', timeframe: '5Day'}} style={styles.chartContainer} />
 			<StockPosition {...{symbol}} />
-			<OrderList {...{symbol}} />
+			<StockOrders {...{symbol}} />
 		</AppView>
 	);
 }
