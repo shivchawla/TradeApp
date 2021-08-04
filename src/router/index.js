@@ -9,7 +9,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { useAuth, AuthProvider } from '../helper';
-import { ThemeProvider } from  '../theme';
+import { ThemeProvider, useTheme } from  '../theme';
 
 // import { AppDarkTheme, AppDefaultTheme } from '../theme';
 
@@ -45,8 +45,9 @@ const portfolioScreenOptions = {
 }
 
 const homeTabs = () => {
+		 const theme = useTheme();
      return (
-        <Tabs.Navigator tabBarOptions={{showLabel: false, activeTintColor:'yellow'}}>
+        <Tabs.Navigator tabBarOptions={{showLabel: false, activeTintColor:theme.tabTint, style: {backgroundColor: theme.tabBackground}}}>
           {/*<Tabs.Screen name="SignIn" component={SignIn} />*/}
           <Tabs.Screen name="Market" component={Market} options={marketScreenOptions}/>
           {/*<Tabs.Screen name="ChooseStock" component={ChooseStock}/>*/}

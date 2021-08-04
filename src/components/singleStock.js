@@ -9,6 +9,8 @@ import StockChart from './stockChart';
 import { useStockRealtimeData, useStockEODData, useClock, useAssetData } from  '../helper';
 import ShowJson from './showJson';
 
+import { priceChangeFromSnapshot } from '../utils';
+
 import { StyledText, WP, HP, Typography, AppDarkTheme, AppDefaultTheme } from '../theme';
 
 const StockName = (props) => {
@@ -71,20 +73,13 @@ const SingleStockEOD = ({symbol}) => {
 
 	const isLoading = !!!snapshot || !!!asset;
 
-	const formatPriceChange = ({dailyBar, prevDailyBar}) => {
-		const {closePrice: prevClose} = prevDailyBar;
-		const {closePrice: currentClose} = dailyBar;
-
-		return {price: currentClose, changeValue: (currentClose - prevClose).toFixed(2), changePct: (!!prevClose ? (currentClose/prevClose - 1)*100 : 0).toFixed(2)}
-	}
-
 	return (
 		<View>
 			{isLoading && <BarIndicator color="white" />} 
 			<View style={styles.singleStockRow}>
 				{asset && <StockName {...asset} />}
 				<StockChart {...{symbol, size: "S", timeframe: "5Day"}}/>
-				{snapshot && <PriceChange {...formatPriceChange(snapshot)} />}
+				{snapshot && <PriceChange {...priceChangeFromSnapshot(snapshot)} />}
 			</View>
 
 			{/*{data && <ShowJson json={data} /> }*/}

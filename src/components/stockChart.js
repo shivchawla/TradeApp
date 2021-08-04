@@ -6,29 +6,29 @@ import { useTheme, WP, HP } from '../theme';
 
 import {useStockHistoricalData, useStockIntradayData} from '../helper';
 
-const Chart = ({prices, size}) => {
-	console.log("Chart");
-	console.log(prices);
-	console.log(size);
+const Chart = ({prices, size, style}) => {
+	// console.log("Chart");
+	// console.log(prices);
+	// console.log(size);
 
 	const theme = useTheme();
 
 	const getColor = (prices = []) => {
 		// console.log(theme);
 		const color = prices.slice(-1).pop() > prices[0] ? theme.green : theme.red;
-		console.log(color)
+		// console.log(color)
 		return color;
 	}
 
 	const getSize = (size) => {
 		const style = size == 'S' ? styles.tinyChart : size == 'M' ? styles.mediumChart : styles.bigChart 
-		console.log(style);
-		return {height: HP(9), width: WP(30)}	
+		return style;
+		// return {height: HP(9), width: WP(30)}	
 	}
 
 	return (
 		<LineChart
-            style={getSize(size)}
+            style={[getSize(size), style]}
             data={ prices }
             svg={{ stroke: getColor(prices) }}
             contentInset={ { bottom: 20 } }
@@ -36,7 +36,7 @@ const Chart = ({prices, size}) => {
 	);
 }
 
-const StockChartIntraday = ({symbol, size}) => {
+const StockChartIntraday = ({symbol, size, ...props}) => {
 	const intradayData = useStockIntradayData(symbol);
 
 	return (
@@ -47,7 +47,7 @@ const StockChartIntraday = ({symbol, size}) => {
 	)
 }
 
-const StockChartDaily = ({symbol, size, timeframe}) => {
+const StockChartDaily = ({symbol, timeframe, ...props}) => {
 	// console.log("StockChartDaily");
 	// console.log(symbol);
 	// console.log(size);
@@ -65,18 +65,18 @@ const StockChartDaily = ({symbol, size, timeframe}) => {
 	// <Chart prices={dailyData} {...{size}} />
 
 	return (
-		<Chart prices={formatBars(dailyData)} {...{size}}/>		
+		<Chart prices={formatBars(dailyData)} {...props}/>		
 	)
 }
 
-const StockChart = ({symbol, type, size, timeframe}) => {
+const StockChart = ({type, ...props}) => {
 	return (
 		<>
 	 	{
 		 	type == "intraday" ? 
-		 		<StockChartIntraday {...{symbol, size, timeframe}} />
+		 		<StockChartIntraday {...props} />
 		 	:	
-		 		<StockChartDaily {...{symbol, size, timeframe}} />
+		 		<StockChartDaily {...props} />
  		}
 		</>
 	);
@@ -84,14 +84,13 @@ const StockChart = ({symbol, type, size, timeframe}) => {
 
 const styles = StyleSheet.create({
 	tinyChart: {
-		height: 60,
-		width: 100
+		height: HP(9), width: WP(30)	
 	},
 	mediumChart:{
-
+		height: HP(20), width: WP(50)
 	},
 	bigChart: {
-
+		height: HP(30), width: WP(80)
 	}
 
 });

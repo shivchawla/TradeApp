@@ -3,7 +3,6 @@ import {View, StyleSheet} from 'react-native';
 import {useQuery} from 'react-query';
 import {BarIndicator} from 'react-native-indicators';
 
-
 import AppView from '../../components/appView';
 import SingleStock from '../../components/singleStock';
 import ScreenName from '../../components/screenName';
@@ -23,7 +22,7 @@ const Market = (props) => {
  //  	})
 
 	return (
-		<AppView title="Market">
+		<AppView title="Market" goBack={false}>
 			{/*{isLoading && <BarIndicator color='black' />}*/}
 			{defaultStocks && defaultStocks.length > 0 &&
 				defaultStocks.map((symbol, index) => {	

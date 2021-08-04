@@ -2,15 +2,16 @@ import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 
 import AppView from '../../components/appView';
-import ScreenName from '../../components/screenName';
-import SingleStock from '../../components/singleStock';
+import StockChart from '../../components/stockChart';
 import TradeButtons from '../../components/tradeButtons';
 import StockPosition from '../../components/stockPosition';
 import OrderList from '../../components/orderList';
+import StockDetailTop from '../../components/stockDetailTop';
+
+import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
+
 
 const StockDetail = (props) => {
-	console.log("Stock Detail");
-	console.log(props);
 	const {symbol} = props.route.params;
 	const {navigation} = props;
 	const onBuy = () => {
@@ -22,15 +23,19 @@ const StockDetail = (props) => {
 	}
 
 	return (
-		<AppView footer={<TradeButtons {...{onBuy, onSell}}/>} title="Stock Detail Screen">
-			<OrderList {...{symbol}} />
-			<SingleStock {...{symbol}} detail={true}/>
+		<AppView footer={<TradeButtons {...{onBuy, onSell}}/>} title={symbol}>
+			<StockDetailTop {...{symbol}} />
+			<StockChart {...{symbol, size: 'L', timeframe: '5Day'}} style={styles.chartContainer} />
 			<StockPosition {...{symbol}} />
+			<OrderList {...{symbol}} />
 		</AppView>
 	);
 }
 
 const styles = StyleSheet.create({
+	chartContainer: {
+		paddingTop: HP(5)
+	}
 
 });
 

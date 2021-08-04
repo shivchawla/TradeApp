@@ -1,23 +1,26 @@
 import React, {useState} from 'react';
-import {ScrollView, View, Text, StyleSheet, Pressable, Image} from 'react-native';
+import { ScrollView, View, Text, StyleSheet, Pressable, Image, useColorScheme } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 
-import { StyledText, useTheme } from '../theme';
+import { StyledText, useTheme, WP } from '../theme';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const backIcon = require("../assets/icon-back-black.png");
+// const backIconBlack = require("../assets/icon-back-black.png");
+// const backIconYellow = require("../assets/icon-back-yellow.png");
 
 const AppHeader = ({title, goBack = true, ...props}) => {
 	const showHeader = title || goBack;
 	const navigation = useNavigation();
-	
+	const theme = useTheme();
+
 	return (
 		<>
 		{showHeader &&
 			<View style={[styles.headerContainer, props.headerContainerStyle]}>
 				{goBack && 
 					<Pressable style={styles.backIconContainer} onPressOut={() => {typeof goBack === 'function' ? goBack() : navigation.goBack()}}>
-						<Image source={backIcon} resizeMode="contain" style={styles.iconImage}/>
+						<Ionicons name="chevron-back" color={theme.backArrow} size={WP(7)} />
 					</Pressable>}
 				{title && <StyledText style={[styles.headerTitle, props.headerTitleStyle]}>{title}</StyledText>}
 			</View>
@@ -37,13 +40,13 @@ const AppView = ({scroll = true, footer, hasHeader = true, header, ...props}) =>
 	return (
 		<>
 		{scroll ? 
-			<ScrollView contentContainerStyle={[styles.appContainer, props.appContainerStyle, {backgroundColor: theme.black}]}>
+			<ScrollView contentContainerStyle={[styles.appContainer, props.appContainerStyle, {backgroundColor: theme.background}]}>
 				{hasHeader || header ? header ? header : <AppHeader {...props}/> : <></>}
 				{props.children}
 				{footer && <View style={[styles.footerContainer, props.footerContainerStyle]}>{footer}</View>}
 			</ScrollView>	
 			:
-			<View style={[styles.appContainer, props.appContainerStyle, {backgroundColor: theme.black}]}>
+			<View style={[styles.appContainer, props.appContainerStyle, {backgroundColor: theme.background}]}>
 				{hasHeader || header ? header ? header : <AppHeader {...props}/> : <></>}
 				{props.children}
 				{footer && <View style={[styles.footerContainer, props.footerContainerStyle]}>{footer}</View>}
@@ -81,7 +84,7 @@ const styles = StyleSheet.create({
 	},
 	headerTitle:{
 		fontSize: 16,
-		fontWeight: 'bold'
+		fontWeight: 'bold',
 	},
 	iconImage:{
 		height:40

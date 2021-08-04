@@ -18,11 +18,14 @@ export const DarkTheme = {
         gryBack: "#CDCDCD",
         darkgrey: "#797D7F",
         inActiveTab: "#FEC0A5",
-
+        background: '#1d2127',
+        tabBackground: 'black',
+        tabTint: 'yellow',
         black:'#1d2127',
         blackFontColor:'#20292f',
         green:'#48b300',
         red:'red',
+        backArrow: 'yellow'
 }
 
 export const DefaultTheme = {
