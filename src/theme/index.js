@@ -70,3 +70,8 @@ export const ThemeProvider = ({children}) => {
 };
 
 export const useTheme = () => React.useContext(ThemeContext);
+
+export const getPnLColor = (value) => {        
+        const theme = useTheme();
+        return value > 0 ? theme.green : theme.red;
+}

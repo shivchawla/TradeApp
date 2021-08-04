@@ -28,6 +28,8 @@ const StockName = (props) => {
 		
 	}
 
+	const styles = useStyles();
+
 	return (
 		<View style={styles.stockNameContainer}>
 			<StyledText style={styles.stockSymbol}>{props.symbol}</StyledText>
@@ -42,9 +44,11 @@ const PriceChange = ({price, changeValue, changePct}) => {
 		return chg > 0 ? theme.green : theme.red;
 	}
 
+	const styles = useStyles();
+
 	return (
 		<View style={styles.priceChangeContainer}>
-			<StyledText style={[styles.price, Typography.fourPointFive]}>{price}</StyledText>
+			<StyledText style={[styles.price]}>{price}</StyledText>
 			<StyledText style={[styles.priceChange, {color: getColor(changeValue)}]}>{changeValue} ({changePct}%)</StyledText>
 		</View>
 	);
@@ -66,6 +70,8 @@ const SingleStockEOD = ({symbol}) => {
 	// console.log(asset);
 	const {data: snapshot} = useStockEODData(symbol);
 	// console.log(data);
+
+	const styles = useStyles();
 	
 	// React.useEffect(() => { //This is mounted many times
 	// 	console.log("Running Use Effect of SingleStockEOD - ************************");
@@ -88,6 +94,7 @@ const SingleStockEOD = ({symbol}) => {
 }
 
 const SingleStock = ({symbol, onClick, detail = false}) => {
+	const styles = useStyles();
 	const clock = useClock();
 
 	React.useEffect(() => { //This is running many times, but only once at upload
@@ -121,37 +128,44 @@ const SingleStock = ({symbol, onClick, detail = false}) => {
 }
 
 
-const styles = StyleSheet.create({
-	container: {
-		// flexDirection: 'column',
-		// justifyContent: 'space-between',
-		// alignItems: 'center'
-		width: WP(100)
-	},
-	singleStockRow: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		width: WP(100),
-		padding: WP(3),
-	},
-	stockNameContainer:{
+const useStyles = () => {
+	const theme = useTheme();
 
-	},
-	stockName: {
+	const styles = StyleSheet.create({
+		container: {
+			// flexDirection: 'column',
+			// justifyContent: 'space-between',
+			// alignItems: 'center'
+			width: WP(100)
+		},
+		singleStockRow: {
+			flexDirection: 'row',
+			justifyContent: 'space-between',
+			width: WP(100),
+			padding: WP(3),
+		},
+		stockNameContainer:{
 
-	},
-	stockSymbol:{
+		},
+		stockName: {
 
-	},
-	priceChangeContainer:{
+		},
+		stockSymbol:{
 
-	},
-	price: {
-		textAlign: 'right'
-	},
-	priceChange: {
-		textAlign: 'right'
-	}
-}); 
+		},
+		priceChangeContainer:{
+
+		},
+		price: {
+			fontSize: Typography.fourPointFive,
+			textAlign: 'right'
+		},
+		priceChange: {
+			textAlign: 'right'
+		}
+	}); 
+
+	return styles;	
+}
 
 export default SingleStock;

@@ -10,7 +10,6 @@ import StockDetailTop from '../../components/stockDetailTop';
 
 import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
 
-
 const StockDetail = (props) => {
 	const {symbol} = props.route.params;
 	const {navigation} = props;

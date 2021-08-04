@@ -1,17 +1,15 @@
 import React, {useState} from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 import ShowJson from './showJson';
-import { useTheme, StyledText, Typography, WP, HP }  from '../theme';
-import { POSITION_FIELDS } from '../config';
+import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../theme';
+import { POSITION_FIELDS, POSITION_SUMMARY_FIELDS } from '../config';
 import { useStockPositionData } from '../helper';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const PositionField = ({label, value, changeValue = 0, isPnL = false, right = false}) => {
+	
 	const theme = useTheme();
-
-	const getColor = (value) => {
-		return value > 0 ? theme.green : theme.red;
-	}
 
 	const formatValue = (value) => {
 		var output = value;
@@ -29,41 +27,112 @@ const PositionField = ({label, value, changeValue = 0, isPnL = false, right = fa
 		return value.toUpperCase();
 	}
 
+	const styles = useStyles();
+
 	return (
 		<View style={styles.positionFieldContainer}>
-			<StyledText style={[Typography.four, {color: theme.positionLabel}, styles.positionFieldLabel]}>{label}</StyledText>
-			<StyledText style={[Typography.fourPointFive, {color: theme.positionValue}, styles.positionFieldValue, {...isPnL && {color: getColor(value)}}]}>{formatValue(value)}
-				{!!changeValue && <StyledText style={[Typography.fourPointFive, {color: theme.positionValue}, styles.positionFieldValue, {...isPnL && {color: getColor(value)}}]}> ({(changeValue*100).toFixed(2)}%)</StyledText>}
+			<StyledText style={styles.positionFieldLabel}>{label}</StyledText>
+			<StyledText style={[styles.positionFieldValue, {...isPnL && {color: getPnLColor(value)}}]}>{formatValue(value)}
+				{!!changeValue && <StyledText style={[Typography.fourPointFive, {color: theme.positionValue}, styles.positionFieldValue, {...isPnL && {color: getPnLColor(value)}}]}> ({(changeValue*100).toFixed(2)}%)</StyledText>}
 			</StyledText>
 		</View>
 	);
-} 
+}
+
+const formatPositionToArray = (position, KEYS = []) => {
+	return KEYS.map(key => {
+		return {field: key, value: position[key], changeValue: position[key + 'pc']}
+	});
+}
+
+const positionSummary = (position) => {
+	const SHOW_SUMMARY_KEYS = Object.keys(POSITION_SUMMARY_FIELDS);
+
+	return SHOW_SUMMARY_KEYS.map(key => {
+		if (key == "qty") {
+			return {field: key, label: position["side"].toUpperCase(), value: position[key]};
+		} else {
+			return {field: key, value: position[key], changeValue: position[key + 'pc']};
+		}
+	})
+
+}
+
+
+const ShowHideButton = ({showDetail, onToggle}) => {
+	const styles = useStyles();
+	const theme = useTheme();
+	return(
+		<TouchableOpacity onPress={onToggle} style={styles.showHideButton}>
+			<Ionicons name={showDetail ? "chevron-up" : "chevron-down"} color={theme.backArrow} size={WP(5)} />
+		</TouchableOpacity>
+	)
+}
+
+const StockPositionHeader = ({position, onToggle, showDetail}) => {
+	const SHOW_SUMMARY_KEYS = Object.keys(POSITION_SUMMARY_FIELDS);
+	const styles = useStyles();
+	
+	const MiniField = ({label, field, value, changeValue, style}) => {
+		if (field == "side") {
+			return <></>;
+		}
+
+		return(
+			<View style={[styles.positionSummaryField, style]}>
+				<StyledText style={styles.positionSummaryFieldLabel}>{label || POSITION_SUMMARY_FIELDS[field]}: </StyledText>
+				<StyledText style={[{...field.includes("_pl") && {color: getPnLColor(value)}}]}>{value}
+					{!!changeValue && <StyledText style={{...field.includes("_pl") && {color: getPnLColor(value)}}}> ({(changeValue*100).toFixed(2)}%)</StyledText>}
+				</StyledText>	
+			</View>
+		);
+	}
+
+	return (
+		<View style={styles.positionHeaderContainer}>
+			<StyledText style={styles.positionHeaderTitle}>Your Position</StyledText>
+			<View style={styles.positionSummaryContainer}>
+				{
+					positionSummary(position).map((item, index) => {
+						return <MiniField key={item.key} {...item} style={{...index%2==1 && {marginRight: 0}}} />
+					})
+				}
+			 <ShowHideButton {...{onToggle, showDetail}}/>
+			</View>
+		</View>
+	)
+}
+
+const StockPositionList = (position) => {
+	const SHOW_POSITION_KEYS = Object.keys(POSITION_FIELDS);
+	const styles = useStyles();
+
+	return ( 
+		<View style={styles.positionListContainer}>
+			{ formatPositionToArray(position, SHOW_POSITION_KEYS).map((item, index) => {
+					return <PositionField key={item.field} style={styles.positionFieldContainer} isPnL={item.field.includes("_pl")} {...{label: POSITION_FIELDS[item.field], value: item.value, changeValue: item.changeValue}} />	
+				})
+			}
+		</View>
+	)
+}
 
 const ShowPosition = (position) => <ShowJson json={position || {}} />
 
 const StockPositionWithSymbol = ({symbol}) => {
 	const [isError, position] = useStockPositionData(symbol);
-	// console.log(position);
-	// console.log();
-	const SHOW_POSITION_KEYS = Object.keys(POSITION_FIELDS);
+	const [showDetail, setShow] = useState(true);
 
-	const formatPositionToArray = (position) => {
-		return SHOW_POSITION_KEYS.map(key => {
-			return {key:key, value: position[key], changeValue: position[key + 'pc']}
-		});
-	}
+	const styles = useStyles();
 
 	return (
 		<>
-		{!!position && 
-			<FlatList style={styles.positionContainer}
-				data={formatPositionToArray(position)}
-				numColumns={2}
-				renderItem={({item, index}) => (
-					<PositionField right={index%2} isPnL={item.key.includes("_pl")} {...{label: POSITION_FIELDS[item.key], value: item.value, changeValue: item.changeValue}} />	
-				)}
-			/>
-		}	
+		{!!position &&
+			<View style={styles.positionContainer}>
+				<StockPositionHeader {...{position, showDetail}} onToggle={() => setShow(!showDetail)}/> 
+				{showDetail && <StockPositionList {...position} />}
+			</View>
+		}
 		</>
 	);	
 }
@@ -79,21 +148,68 @@ const StockPosition = ({symbol, position}) => {
 	)	
 }
 
-const styles = StyleSheet.create({
-	positionContainer: {
-		width: '100%',
-	},
-	positionFieldContainer: {
-		width: WP(50),
-		paddingLeft: WP(5),
-		marginBottom: WP(5)
-	},
-	positionFieldLabel: {
-		fontWeight: '400'
-	},
-	positionFieldValue: {
-	}
+const useStyles = () => {
+	const theme = useTheme();
 
-});
+	const styles = StyleSheet.create({
+		positionContainer: {
+			width: '100%',
+			borderTopWidth:1,
+			borderColor: theme.darkgrey,
+			paddingTop: WP(4)
+		},
+		positionListContainer: {
+			width: '100%',
+			flexDirection: 'row',
+			flexWrap: 'wrap',
+		},
+		positionHeaderContainer: {
+			width: '100%',
+			flexDirection: 'row',
+			// marginTop: WP(3),
+			marginBottom: WP(5),
+			justifyContent:'space-between'
+		},
+		showHideButton: {
+			marginRight: WP(2),
+			marginLeft: WP(2), 
+			justifyContent: 'center'
+		},
+		positionHeaderTitle: {
+			fontSize: Typography.five,
+			color: theme.darkgrey,
+			paddingLeft: WP(2),
+		},
+		positionSummaryContainer: {
+			flexDirection: 'row',
+			// paddingRight: WP(2),
+			alignItems: 'center'
+		},
+		positionSummaryField: {
+			marginRight: WP(3),
+			flexDirection: 'row'
+		},
+		positionSummaryFieldLabel: {
+			color: theme.darkgrey
+		},
+		positionFieldContainer: {
+			width: WP(50),
+			paddingLeft: WP(5),
+			marginBottom: WP(5)
+		},
+		positionFieldLabel: {
+			fontWeight: '400',
+			fontSize: Typography.four, 
+			color: theme.positionLabel, 
+		},
+		positionFieldValue: {
+			fontSize: Typography.fourPointFive, 
+			color: theme.positionValue
+		}
+
+	});
+
+	return styles;
+};
 
 export default StockPosition;

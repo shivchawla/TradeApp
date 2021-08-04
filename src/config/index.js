@@ -77,15 +77,17 @@ export const accountParams = {
   }
 };
 
-export const POSITION_FIELDS = {
+export const POSITION_SUMMARY_FIELDS = {
+  // 'side': 'Direction',
   'qty': 'Quantity',
+  'unrealized_pl': 'PnL',
+};
+
+export const POSITION_FIELDS = {
+  
   'avg_entry_price': 'Avg. Price',
-  'side': 'Direction',
   'market_value': 'Current Market Value',
   'cost_basis': 'Total Cost',
-  'unrealized_pl': 'Profit/Loss',
-  // 'unrealized_plpc': 'Profit/Loss Pct',
   'unrealized_intraday_pl': "Today's Profit/Loss",
-  // 'unrealized_intraday_plpc': "Today's Profit/Loss Pct"
 };
 
