@@ -7,8 +7,7 @@ const SingleButton = ({title, onClick, ...props}) => {
 			<Text style={[styles.buttonText,props.buttonTextStyle]}>{title}</Text>
 		</Pressable>
 	);
-}
-	
+}	
 
 const TradeButtons = ({ticker, onBuy, onSell, ...props}) => {
 	

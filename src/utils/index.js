@@ -1,5 +1,6 @@
 export {
-	currentISODate, toISODate, yearStartISODate, NDaysAgoISODate,
+	currentISODate, toISODate, yearStartISODate, 
+	NDaysAgoISODate, NWeeksAgoISODate,
 	dayStartISODate, dayEndISODate, duration,
 	latestDayStartFromCalendar} from './date';
 

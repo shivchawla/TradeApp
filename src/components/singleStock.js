@@ -68,7 +68,7 @@ const SingleStockEOD = ({symbol}) => {
 	// console.log(symbol);
 	const {asset} = useAssetData(symbol);
 	// console.log(asset);
-	const {data: snapshot} = useStockEODData(symbol);
+	const {snapshot} = useStockEODData(symbol);
 	// console.log(data);
 
 	const styles = useStyles();
@@ -97,10 +97,10 @@ const SingleStock = ({symbol, onClick, detail = false}) => {
 	const styles = useStyles();
 	const clock = useClock();
 
-	React.useEffect(() => { //This is running many times, but only once at upload
-    	console.log("Running Use Effect of SingleStock ----- $$$$$$$$$$$");
-	    console.log(clock);
-  	})
+	// React.useEffect(() => { //This is running many times, but only once at upload
+ //    	console.log("Running Use Effect of SingleStock ----- $$$$$$$$$$$");
+	//     console.log(clock);
+ //  	})
 
 	const PlainView = () => {
 		return (

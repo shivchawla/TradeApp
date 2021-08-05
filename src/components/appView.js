@@ -35,7 +35,7 @@ const AppView = ({scroll = true, footer, hasHeader = true, header, ...props}) =>
 	const Component = scroll ? ScrollView : View;
 	const styles = useStyles();
 
-	console.log("AppView: ", scroll);
+	// console.log("AppView: ", scroll);
 
 	return (
 		<>

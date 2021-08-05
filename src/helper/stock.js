@@ -76,20 +76,20 @@ export function useStockRealtimeData(symbol) {
 }
 
 export function useStockEODData(symbol, params = {}) {
-  const {isLoading, error, data, refetch} = useQuery(['stockSnapshot', symbol], () => getSnapshot(symbol), params);
-  return {isLoading, error, data, getData:() => refetch().then(r => r.data)};
+  const {isLoading, error, data: snapshot, refetch} = useQuery(['stockSnapshot', symbol], () => getSnapshot(symbol), params);
+  return {isLoading, snapshot, getSnapshot:() => refetch().then(r => r.data)};
 }
 
-export function useStockHistoricalData(symbol, {start = yearStartISODate(), end = dayEndISODate(), timeframe = '1Day'} = {}) {
+export function useStockHistoricalData(symbol, {start = yearStartISODate(), end = dayEndISODate(), timeframe = '1Day'} = {}, params = {}) {
   const query = {start, end, timeframe};
-  const {isLoading, error, data} = useQuery(['stockHistorical', {symbol, start, end, timeframe}], () => getHistoricalData(symbol, query))
-  return data;
+  const {isLoading, error, data: bars, refetch} = useQuery(['stockHistorical', {symbol, start, end, timeframe}], () => getHistoricalData(symbol, query), params)
+  return {bars, getBars: () => refetch().then(r => r.data)};
 }
 
-export function useStockIntradayData(symbol, {start = dayStartISODate(), end = dayEndISODate(), timeframe = '30Min'} = {}) {
+export function useStockIntradayData(symbol, {start = dayStartISODate(), end = dayEndISODate(), timeframe = '30Min'} = {}, params = {}) {
   const query = {start, end, timeframe};
-  const {isLoading, error, data} = useQuery(['stockIntraday', {symbol, start, end, timeframe}], () => getIntradayData(symbol, query));
-  return data;
+  const {isLoading, error, data: intradayBars, refetech} = useQuery(['stockIntraday', {symbol, start, end, timeframe}], () => getIntradayData(symbol, query), params);
+  return {intradayBars, getIntradayBars:() => refetech().then(r => r.data)};
 }
 
 

@@ -14,9 +14,9 @@ export function useClock(params={}) {
 }
 
 export function useCalendar({start = NDaysAgoISODate(5, "YYYY-MM-DD"), end = currentISODate("YYYY-MM-DD")} = {}, params={}) {
-	console.log("Use Calendar");
-	console.log(start);
-	console.log(end);
+	// console.log("Use Calendar");
+	// console.log(start);
+	// console.log(end);
 
 	const query = {...start && {start}, ...end && {end}};
 	// console.log(query);
@@ -36,8 +36,7 @@ export function useLatestTradingDay() {
 			const clock = await getClock();
 
 			const latest = clock.is_open ? dayStartISODate() : latestDayStartFromCalendar(calendar, clock);
-			console.log("latestTradingDay");
-			console.log(latest);
+			// console.log("setLatestTradingDay ", latest);
 			await setStorageData('latestTradingDay', JSON.stringify({datetime: latest, lastUpdated: clock.timestamp}));
 			
 			setLatestTradingDay(latest);
@@ -54,11 +53,12 @@ export function useLatestTradingDay() {
 				// if (clock.is_open != td?.isOpen) {
 				// 	updateTradingDate();
 				// } else
-				if(duration(lastUpdated) > 6) {
+				if(duration(lastUpdated, 'hours') > 6) {
 					updateTradingDate();
 				} else {
 					//Check last updated time 
 					//What shoudl be the condition
+					// console.log("setLatestTradingDay ", td.datetime);
 					setLatestTradingDay(td.datetime);	
 				}
 

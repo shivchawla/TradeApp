@@ -9,7 +9,7 @@ export const DarkTheme = {
         primary: '#FF6624',
         white: '#ffffff',
         text: '#ffffff',
-        light:'#f2f2f2',
+        light:'#d9d9d9',
         fldDesc: "#999999",
         border: "#E5E5E5",
 

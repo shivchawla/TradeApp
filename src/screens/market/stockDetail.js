@@ -8,6 +8,7 @@ import StockPosition from '../../components/stockPosition';
 import StockOrders from '../../components/stockOrders';
 import OrderList from '../../components/orderList';
 import StockDetailTop from '../../components/stockDetailTop';
+import StockMarketData from '../../components/stockMarketData';
 
 import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
 
@@ -28,6 +29,7 @@ const StockDetail = (props) => {
 			<StockChart {...{symbol, size: 'L', timeframe: '5Day'}} style={styles.chartContainer} />
 			<StockPosition {...{symbol}} />
 			<StockOrders {...{symbol}} />
+			<StockMarketData {...{symbol}} />
 		</AppView>
 	);
 }

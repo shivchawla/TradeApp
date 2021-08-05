@@ -91,3 +91,15 @@ export const POSITION_FIELDS = {
   'unrealized_intraday_pl': "Today's Profit/Loss",
 };
 
+export const MARKET_DATA_FIELDS = {
+  'openPrice': "Open",
+  'highPrice': "High",
+  'lowPrice': "Low",
+  'closePrice': "Prev. Close",
+  "volume": "Today's Volume",
+  "yHigh" : "52W High",
+  "yLow" : "52W Low",
+  "yReturn": "52W Return",
+  'ytdReturn': "YTD Return",
+}
+

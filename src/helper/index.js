@@ -10,4 +10,4 @@ export { AccountStatus } from './enums';
 
 export { useAuth, AuthProvider } from './user';
 
-// export { setStorageData, getStorageData } from './store';
+export { useSymbolActivity } from './store';

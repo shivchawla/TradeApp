@@ -37,12 +37,12 @@ const Chart = ({prices, size, style}) => {
 }
 
 const StockChartIntraday = ({symbol, size, ...props}) => {
-	const intradayData = useStockIntradayData(symbol);
+	const {intradayBars} = useStockIntradayData(symbol);
 
 	return (
 		<>
 		<Text>StockChartIntraday - {symbol} - {size}</Text>
-		<Chart prices={intradayData} {...{size}} />
+		<Chart prices={intradayBars} {...{size}} />
 		</>
 	)
 }
@@ -52,7 +52,7 @@ const StockChartDaily = ({symbol, timeframe, ...props}) => {
 	// console.log(symbol);
 	// console.log(size);
 
-	const dailyData = useStockHistoricalData(symbol, {timeframe});
+	const {bars} = useStockHistoricalData(symbol, {timeframe});
 
 	// console.log(dailyData);
 
@@ -65,7 +65,7 @@ const StockChartDaily = ({symbol, timeframe, ...props}) => {
 	// <Chart prices={dailyData} {...{size}} />
 
 	return (
-		<Chart prices={formatBars(dailyData)} {...props}/>		
+		<Chart prices={formatBars(bars)} {...props}/>		
 	)
 }
 

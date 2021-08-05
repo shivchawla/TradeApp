@@ -18,39 +18,39 @@ export const getCalendar = async(query) => {
 } 
 
 export const getStocks = async() => {
-	console.log("Fetching Stocks");
+	// console.log("Fetching Stocks");
 	return await axios.get('/v1/assets', {params: {status: 'active'}}).then(r => r.data);
 }
 
 export const getAssetData = async (symbol) => {
-	console.log("Fetching Asset Data");
+	// console.log("Fetching Asset Data");
 	return await axios.get(`/v1/assets/${symbol}`).then(r => r.data);	
 }
 
 export const getSnapshot = async(symbol) => {
-	console.log("Fetching Snapshot");
-	console.log(axios.defaults.headers.common['Authorization']);
-	console.log(`${dataUrl}/v2/stocks/${symbol}/snapshot`);
+	// console.log("Fetching Snapshot");
+	// console.log(axios.defaults.headers.common['Authorization']);
+	// console.log(`${dataUrl}/v2/stocks/${symbol}/snapshot`);
 	return await axios.get(`${dataUrl}/v2/stocks/${symbol}/snapshot`).then(r => processSnapshot(r.data));
 }
 
 export const getHistoricalData = async(symbol, params = {}) => {
-	console.log("Fetching Daily Historical");
-	console.log(`${dataUrl}/v2/stocks/${symbol}/bars`);
-	console.log(params);
+	// console.log("Fetching Daily Historical");
+	// console.log(`${dataUrl}/v2/stocks/${symbol}/bars`);
+	// console.log(params);
 	return await axios.get(`${dataUrl}/v2/stocks/${symbol}/bars`, {params}).then(r => processBars(r.data));
 }
 
 export const getIntradayData = async(symbol, params = {}) => {
-	console.log("Fetching Intraday Historical");
-	console.log(`${dataUrl}/v2/stocks/${symbol}/bars`);
-	console.log(params);
+	// console.log("Fetching Intraday Historical");
+	// console.log(`${dataUrl}/v2/stocks/${symbol}/bars`);
+	// console.log(params);
 	return await axios.get(`${dataUrl}/v2/stocks/${symbol}/bars`, {params}).then(r => processBars(r.data));
 }
 
 export const getStockPosition = async(symbol) => {
-	console.log("Fetching Current Stock Position");
-	console.log(`/v1/trading/accounts/${account_id}/positions/${symbol}`);
+	// console.log("Fetching Current Stock Position");
+	// console.log(`/v1/trading/accounts/${account_id}/positions/${symbol}`);
 	return await axios.get(`/v1/trading/accounts/${account_id}/positions/${symbol}`).then(r => r.data);	
 }
 
@@ -60,12 +60,12 @@ export const getStockPortfolio = async () => {
 }
 
 export const getPortfolioHistory = async (params = {}) => {
-	console.log("Fetching Portfolio History");
+	// console.log("Fetching Portfolio History");
 	return await axios.get(`/v1/trading/accounts/${account_id}/account/portfolio/history`, {params}).then(r => r.data)
 }
 
 export const getTradingAccount = async () => {
-	console.log("Fetching User Trading Account");
+	// console.log("Fetching User Trading Account");
 	return await axios.get(`/v1/trading/accounts/${account_id}/account`).then(r => r.data)
 }
 
@@ -94,7 +94,7 @@ export const getOrders = async(params = {}) => {
 
 
 export const getOrder = async(order_id) => {
-	console.log("Get Orders: ", order_id)
+	console.log("Get Order: ", order_id)
 	return await axios.get(`/v1/trading/accounts/${account_id}/orders/${order_id}`).then(r => r.data)	
 }
 

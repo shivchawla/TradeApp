@@ -19,17 +19,17 @@ const SearchStockList = () => {
 
 	// Initial Mount  
 	useEffect(() => {
-		console.log(initialStocks);
+		// console.log(initialStocks);
 		// console.log(stockList.length);
-		console.log((stockList || []).filter(item => initialStocks.includes(item.symbol)));
+		// console.log((stockList || []).filter(item => initialStocks.includes(item.symbol)));
 
 		setStocks((stockList || []).filter(item => initialStocks.includes(item.symbol)))
 	}, [stockList]);
 
 	// Effect on changing keyword
 	useEffect(() => {	
-		console.log("Keyword Use Effect")
-		console.log(keyword);
+		// console.log("Keyword Use Effect")
+		// console.log(keyword);
 
 		if (keyword != '') {
 			const fStocks = (stockList || [])

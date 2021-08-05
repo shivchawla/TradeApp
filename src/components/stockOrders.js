@@ -4,8 +4,9 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import ShowJson from './showJson';
 import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../theme';
 import { OPEN_ORDER_STATUS } from '../config';
-import { useOrders, useLatestTradingDay } from '../helper';
+import { useOrders, useLatestTradingDay, useSymbolActivity } from '../helper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useFocusEffect } from '@react-navigation/native';
 
 const OrderField = ({order}) => {
 	const theme = useTheme();
@@ -68,6 +69,7 @@ const ShowOrders = (orders) => <ShowJson json={orders || {}} />
 
 const StockOrdersWithSymbol = ({symbol}) => {
 	const latestTradingOpen = useLatestTradingDay();
+	const {activity} = useSymbolActivity(symbol)
 	
 	const {getOrders: getOpenOrders} = useOrders({symbol, status: 'open'}, {enabled: false});
 	const {getOrders: getClosedOrders} = useOrders({symbol, status: 'closed', after: latestTradingOpen}, {enabled: false});
@@ -77,22 +79,57 @@ const StockOrdersWithSymbol = ({symbol}) => {
 
 	const styles = useStyles();
 
-	React.useEffect(() => {
-		const fetchOrders = async() => {
+	// const navigation = useNavigation();
+
+	// React.useEffect(() => {
+	// 	const refetchOnFocus = navigation.addListener('focus', () => {
+	// 	    if (refetch) {
+	// 	      refetch();
+	// 	    }
+	// 	});
+
+	// 	return refetchOnFocus;
+	// }, [navigation]); // Run Effect only on changing Nav (to prevent re-renders)
+
+	const fetchOrders = async() => {
+		console.log("Fetch Orders");
+		console.log("latestTradingOpen");
+		console.log(latestTradingOpen);
+		
+		if (!!latestTradingOpen) {
 			const closedOrders = await getClosedOrders();
 			const openOrders = await getOpenOrders();
 			setOrders((openOrders || []).concat(closedOrders || []));
 		}
-		
-		console.log("latestTradingOpen");
-		console.log(latestTradingOpen);
+	}
 
-		if (!!latestTradingOpen) {
+	//This is cool -- run on focus
+	useFocusEffect(
+		React.useCallback(() => {
+			console.log("Stock Orders focused!!!!");
 			fetchOrders();
+		}, [latestTradingOpen, activity])
+	);
 
-		}
+	// React.useEffect(() => {
+	// 	console.log("Stock Orders - Symbol activity changed");
+	// }, [activity])
+
+	// React.useEffect(() => {
+	// 	console.log("Stock Orders - latestTradingOpen changed ", latestTradingOpen);
+	// }, [latestTradingOpen])
+
+
+	// React.useEffect(() => {
+	// 	console.log("Use Effect for StockOrdersWithSymbol")
+	// 	console.log("latestTradingOpen");
+	// 	console.log(latestTradingOpen);
+
+	// 	if (!!latestTradingOpen) {
+	// 		fetchOrders();
+	// 	}
 	
-	}, [latestTradingOpen]);
+	// }, [latestTradingOpen]);
 
 	
 	return (
@@ -168,7 +205,8 @@ const useStyles = () => {
 			flexDirection:'row',
 			width: '100%',
 			paddingLeft: WP(5),
-			marginBottom: WP(5),
+			paddingRight: WP(5),
+			marginBottom: WP(2),
 			justifyContent: 'space-between'
 		},
 		ordersFieldLabel: {
