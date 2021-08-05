@@ -13,6 +13,10 @@ export const getClock = async() => {
 	return await axios.get('/v1/clock').then(r => r.data);
 } 
 
+export const getCalendar = async(query) => {
+	return await axios.get('/v1/calendar',{params: query}).then(r => r.data);
+} 
+
 export const getStocks = async() => {
 	console.log("Fetching Stocks");
 	return await axios.get('/v1/assets', {params: {status: 'active'}}).then(r => r.data);
@@ -85,7 +89,6 @@ export const cancelOrder = async(order_id) => {
 export const getOrders = async(params = {}) => {
 	console.log("Get Pending Orders")
 	console.log("Params ", params);
-
 	return await axios.get(`/v1/trading/accounts/${account_id}/orders`, {params}).then(r => r.data)	
 }
 

@@ -21,5 +21,7 @@ export const getStorageData = async (key) => {
   } catch(e) {
     console.error(e);
   }
+
+  return null;
 }
 

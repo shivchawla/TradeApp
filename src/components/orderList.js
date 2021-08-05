@@ -10,7 +10,7 @@ import { useOrders } from '../helper';
 
 const OrdersList = ({symbol, status, goBack}) => {
 
-	const {isError, orders, refetch} = useOrders({symbol, status});
+	const {isError, orders, refetch} = useOrders({symbol, status}, {enabled: false});
 	
 	const navigation = useNavigation();
 

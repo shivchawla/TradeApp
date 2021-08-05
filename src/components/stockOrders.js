@@ -6,6 +6,7 @@ import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '
 import { OPEN_ORDER_STATUS } from '../config';
 import { useOrders } from '../helper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { dayStartISODate } from '../utils';
 
 const OrderField = ({order}) => {
 	console.log("Order Field")
@@ -70,13 +71,28 @@ const StockOrderList = ({orders}) => {
 const ShowOrders = (orders) => <ShowJson json={orders || {}} />
 
 const StockOrdersWithSymbol = ({symbol}) => {
-	const {isError, orders} = useOrders({symbol, status: 'all'});
+	const latestTradingOpen = useLatestTradingDay();
+	const {orders: openOrders} = useOrders({symbol, status: 'open'});
+	const {getOrders: getClosedOrders} = useOrders({symbol, status: 'closed', after: lastTradingDate}, {enabled: false});
+	
 	const [showDetail, setShow] = useState(true);
+	const [closedOrders, setClosedOrders] = useState(null);
+
 	const styles = useStyles();
 
+	React.useEffect(() => {
+		const fetchClosedOrders = async() => {
+			const orders = await getClosedOrders();
+			setClosedOrders(orders);
+		}
+	}, [latestTradingOpen]);
+
+	const isLoading = !!!openOrders || !!closedOrders; 
+	const orders = (openOrders || []).concat(closedOrders || []);
+	
 	return (
 		<>
-		{!!orders &&
+		{!isLoading &&
 			<View style={styles.ordersContainer}>
 				<StockOrderHeader {...{orders, showDetail}} onToggle={() => setShow(!showDetail)}/> 
 				{showDetail && <StockOrderList {...{orders}} />}
@@ -87,11 +103,12 @@ const StockOrdersWithSymbol = ({symbol}) => {
 }
 
 const StockOrders = ({symbol, orders}) => {
+
 	return (
 		<>
 			{orders ? <ShowOrder json={orders} /> 
 				: symbol ? <StockOrdersWithSymbol {...{symbol}} />
-				: <ShowJson json = {{error: "No Positions found"}} />
+				: <ShowJson json = {{error: "No orders found"}} />
 			}
 		</>
 	)	

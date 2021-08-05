@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
 	stockDetailTopContainer: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		width: '100%',
+		width: WP(100),
 		padding: WP(2)
 	},
 });

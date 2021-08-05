@@ -4,6 +4,8 @@ import {LogBox} from 'react-native';
 
 import Router from './src/router';
 
+LogBox.ignoreAllLogs(true);
+
 const App = props => {
 
   const queryClient = new QueryClient()

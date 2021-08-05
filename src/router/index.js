@@ -10,9 +10,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { useAuth, AuthProvider } from '../helper';
 import { ThemeProvider, useTheme } from  '../theme';
+import { useClock, useCalendar, setStorageData } from '../helper';
+import { dayStartISODate, latestDayStartFromCalendar } from '../utils';
 
 // import { AppDarkTheme, AppDefaultTheme } from '../theme';
-
 
 import Market from '../screens/market';
 // import ChooseStock from '../screens/order/chooseStock';
@@ -70,6 +71,29 @@ const TradingStack = () => {
 const Routes = () => {
 	const {currentUser, userAccount, brokerageAccount, isErrorUser, isErrorAccount, isErrorBrokerage} = useAuth(); 
 	
+	const {calendar} = useCalendar();
+	const {clock} = useClock();
+	const [hasCalendar, setCalendar] = useState(false);
+	
+	React.useEffect(() => {
+		console.log("Updating Calendar - 1")
+		const updateCalendar = async () => {
+			if(!!clock && !!calendar) {
+				console.log("Updating Calendar - 2");
+				console.log(clock);
+				console.log(calendar);
+				const latestTradingDay = clock.is_open ? dayStartISODate() : latestDayStartFromCalendar(calendar, clock);
+				console.log("latestTradingDay");
+				console.log(latestTradingDay);
+				await setStorageData('latestTradingDay', latestTradingDay);
+				setCalendar(true);
+			}
+		}
+
+		return updateCalendar();		
+	}, [clock, calendar]);
+
+	
 	// console.log("Current User");
 	// console.log(currentUser);
 
@@ -81,7 +105,7 @@ const Routes = () => {
 	//But the hook to fetch data are pseudo conditional
 	//Hence we have to wait for one of the steps to fail or till we get Brokerage Data to proceed
 
-	const isLoading = !isErrorUser && !isErrorAccount && !isErrorBrokerage && !!!brokerageAccount?.data;
+	const isLoading = !hasCalendar || (!isErrorUser && !isErrorAccount && !isErrorBrokerage && !!!brokerageAccount?.data);
 
 	// console.log("Is Loading");
 	// console.log(isLoading);

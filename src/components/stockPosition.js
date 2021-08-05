@@ -152,18 +152,18 @@ const useStyles = () => {
 
 	const styles = StyleSheet.create({
 		positionContainer: {
-			width: '100%',
+			width: WP(100),
 			borderTopWidth:1,
 			borderColor: theme.darkgrey,
 			paddingTop: WP(4)
 		},
 		positionListContainer: {
-			width: '100%',
+			width: WP(100),
 			flexDirection: 'row',
 			flexWrap: 'wrap',
 		},
 		positionHeaderContainer: {
-			width: '100%',
+			width: WP(100),
 			flexDirection: 'row',
 			// marginTop: WP(3),
 			marginBottom: WP(5),
