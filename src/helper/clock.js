@@ -2,8 +2,8 @@ import React, {useState} from 'react';
 import { useQuery } from 'react-query';
 import { getClock } from './api';
 import { getCalendar } from './api';
-import { currentISODate, NDaysAgoISODate, dayStartISODate, latestDayStartFromCalendar } from '../utils';
-import { getStorageData } from './store';
+import { currentISODate, NDaysAgoISODate, dayStartISODate, latestDayStartFromCalendar, duration } from '../utils';
+import { setStorageData, getStorageData } from './store';
 
 
 export function useClock(params={}) {
@@ -14,9 +14,9 @@ export function useClock(params={}) {
 }
 
 export function useCalendar({start = NDaysAgoISODate(5, "YYYY-MM-DD"), end = currentISODate("YYYY-MM-DD")} = {}, params={}) {
-	// console.log("Use Calendar");
-	// console.log(start);
-	// console.log(end);
+	console.log("Use Calendar");
+	console.log(start);
+	console.log(end);
 
 	const query = {...start && {start}, ...end && {end}};
 	// console.log(query);
@@ -27,31 +27,47 @@ export function useCalendar({start = NDaysAgoISODate(5, "YYYY-MM-DD"), end = cur
 export function useLatestTradingDay() {
 	const [latestTradingDay, setLatestTradingDay] = useState(null);
 	const { getClock} = useClock({enabled: false});
-	const { getCalendar } = useCalendar(null, {enabled: false});
+	const { getCalendar } = useCalendar({}, {enabled: false});
 
 	React.useEffect(() => {
+
+		const updateTradingDate = async () => {
+			const calendar = await getCalendar();
+			const clock = await getClock();
+
+			const latest = clock.is_open ? dayStartISODate() : latestDayStartFromCalendar(calendar, clock);
+			console.log("latestTradingDay");
+			console.log(latest);
+			await setStorageData('latestTradingDay', JSON.stringify({datetime: latest, lastUpdated: clock.timestamp}));
+			
+			setLatestTradingDay(latest);
+		}
+
 		const fetchTradingDate = async() => {
-			const td = await getStorageData('latestTradingDay')
+			const td = await getStorageData('latestTradingDay');
 			if(!!td?.datetime && !!td?.lastUpdated) {
 
 				const lastUpdated = td?.lastUpdated;
+				// const wasOpen = td?.isOpen;
+				// const clock = await getClock();
 
-				//Check last updated time 
-				//What shoudl be the condition
-				setLatestTradingDay(td.datetime);
+				// if (clock.is_open != td?.isOpen) {
+				// 	updateTradingDate();
+				// } else
+				if(duration(lastUpdated) > 6) {
+					updateTradingDate();
+				} else {
+					//Check last updated time 
+					//What shoudl be the condition
+					setLatestTradingDay(td.datetime);	
+				}
 
 			} else {
-				const calendar = await getCalendar();
-				const clock = await getClock();
-
-				const latest = clock.is_open ? dayStartISODate() : latestDayStartFromCalendar(calendar, clock);
-				console.log("latestTradingDay");
-				console.log(latest);
-				await setStorageData('latestTradingDay', JSON.stringify({datetime: latest, lastUpdated: clock.timestamp});
-				
-				setLatestTradingDay(latest);
+				updateTradingDate();
 			}
 		}
+
+		fetchTradingDate();
 	}, []);
 
 	return latestTradingDay;

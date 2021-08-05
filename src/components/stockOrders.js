@@ -4,14 +4,10 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import ShowJson from './showJson';
 import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../theme';
 import { OPEN_ORDER_STATUS } from '../config';
-import { useOrders } from '../helper';
+import { useOrders, useLatestTradingDay } from '../helper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { dayStartISODate } from '../utils';
 
 const OrderField = ({order}) => {
-	console.log("Order Field")
-	console.log(order);
-
 	const theme = useTheme();
 	const styles = useStyles();
 
@@ -72,27 +68,36 @@ const ShowOrders = (orders) => <ShowJson json={orders || {}} />
 
 const StockOrdersWithSymbol = ({symbol}) => {
 	const latestTradingOpen = useLatestTradingDay();
-	const {orders: openOrders} = useOrders({symbol, status: 'open'});
-	const {getOrders: getClosedOrders} = useOrders({symbol, status: 'closed', after: lastTradingDate}, {enabled: false});
+	
+	const {getOrders: getOpenOrders} = useOrders({symbol, status: 'open'}, {enabled: false});
+	const {getOrders: getClosedOrders} = useOrders({symbol, status: 'closed', after: latestTradingOpen}, {enabled: false});
 	
 	const [showDetail, setShow] = useState(true);
-	const [closedOrders, setClosedOrders] = useState(null);
+	const [orders, setOrders] = useState(null);
 
 	const styles = useStyles();
 
 	React.useEffect(() => {
-		const fetchClosedOrders = async() => {
-			const orders = await getClosedOrders();
-			setClosedOrders(orders);
+		const fetchOrders = async() => {
+			const closedOrders = await getClosedOrders();
+			const openOrders = await getOpenOrders();
+			setOrders((openOrders || []).concat(closedOrders || []));
 		}
+		
+		console.log("latestTradingOpen");
+		console.log(latestTradingOpen);
+
+		if (!!latestTradingOpen) {
+			fetchOrders();
+
+		}
+	
 	}, [latestTradingOpen]);
 
-	const isLoading = !!!openOrders || !!closedOrders; 
-	const orders = (openOrders || []).concat(closedOrders || []);
 	
 	return (
 		<>
-		{!isLoading &&
+		{!!orders && orders.length > 0 &&
 			<View style={styles.ordersContainer}>
 				<StockOrderHeader {...{orders, showDetail}} onToggle={() => setShow(!showDetail)}/> 
 				{showDetail && <StockOrderList {...{orders}} />}

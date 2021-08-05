@@ -1,5 +1,5 @@
 export { getClock, getCalendar, getSnapshot, getHistoricalData, getIntradayData, placeOrder, cancelOrder, getPortfolioHistory, getBrokerageAccount } from './api';
-export { useClock, useCalendar } from './clock';
+export { useClock, useCalendar, useLatestTradingDay } from './clock';
 export { useStockRealtimeData, useStockEODData, useStockIntradayData, useStockHistoricalData, useStockList, useAssetData } from './stock';
 export { useStockPositionData, useStockPortfolioData, usePortfolioHistory } from './portfolio';
 export { usePlaceOrder, useUpdateOrder, useOrders, useCancelOrder, useOrderDetail, filterTrades, filterOpenOrders } from './order';
@@ -10,4 +10,4 @@ export { AccountStatus } from './enums';
 
 export { useAuth, AuthProvider } from './user';
 
-export { setStorageData, getStorageData } from './store';
+// export { setStorageData, getStorageData } from './store';

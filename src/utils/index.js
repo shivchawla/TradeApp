@@ -3,7 +3,6 @@ export {
 	dayStartISODate, dayEndISODate, duration,
 	latestDayStartFromCalendar} from './date';
 
-
 export { priceChangeFromSnapshot } from './format'; 
 
 Number.prototype.countDecimals = function () {

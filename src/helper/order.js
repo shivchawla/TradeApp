@@ -62,12 +62,12 @@ export function useOrderDetail(orderId) {
 
 
 export function useOrders({symbol, status, after}, params = {}) {
-  console.log(`Symbol: ${symbol ? symbol : 'No Symbol provided (ALL)'}`);
-  console.log(`Status: ${status ? status: 'No Status provided (ALL)'}`);
+  // console.log(`Symbol: ${symbol ? symbol : 'No Symbol provided (ALL)'}`);
+  // console.log(`Status: ${status ? status: 'No Status provided (ALL)'}`);
   const query = {...symbol && {symbols: symbol}, ...status && {status}, ...after && {after}};
   // const queryKey = 'getOrders' + (symbol || '') + (status || 'open');
 
   const {isError, data: orders, refetch} = useQuery(['getOrders', query], () => getOrders(query), params);
 
-  return {isError, orders, refetch};
+  return {isError, orders, getOrders: () => refetch().then(r => r.data)};
 }
