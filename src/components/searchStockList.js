@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useMemo} from 'react';
 import {ScrollView, View, Text, StyleSheet, TextInput, FlatList, Pressable} from 'react-native';
 import { debounce } from "lodash";
+import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../theme';
 
 import SingleStock from  './singleStock';
 
@@ -60,15 +61,15 @@ const SearchStockList = () => {
 		// console.log(item);
 		return (
 			<Pressable style={styles.stockContainer} onPressOut={() => toStockDetail(item.symbol)}>
-				<Text style={styles.stockSymbol}>{item.symbol}</Text>
-				<Text style={styles.stockName}>{item.name}</Text>
+				<StyledText style={styles.stockSymbol}>{item.symbol}</StyledText>
+				<StyledText style={styles.stockName}>{item.name}</StyledText>
 			</Pressable>
 		);
 	}
 
 	return (
 		<View>
-			<TextInput style={styles.textInput} onChangeText={changeHandler} type="text" />
+			<StyledTextInput style={styles.textInput} onChangeText={changeHandler} type="text" />
 			<FlatList
 				data={stocks}
 				renderItem={renderItem}

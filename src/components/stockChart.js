@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {LineChart} from 'react-native-svg-charts';
 
-import { useTheme, WP, HP } from '../theme';
+import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../theme';
 
 import {useStockHistoricalData, useStockIntradayData} from '../helper';
 
@@ -41,7 +41,7 @@ const StockChartIntraday = ({symbol, size, ...props}) => {
 
 	return (
 		<>
-		<Text>StockChartIntraday - {symbol} - {size}</Text>
+		<StyledText>StockChartIntraday - {symbol} - {size}</StyledText>
 		<Chart prices={intradayBars} {...{size}} />
 		</>
 	)
@@ -61,7 +61,7 @@ const StockChartDaily = ({symbol, timeframe, ...props}) => {
 	}
 	// console.log("Daily Data");
 	// console.log(dailyData);
-	// <Text>StockChartDaily - {symbol} - {size}</Text>
+	// <StyledText>StockChartDaily - {symbol} - {size}</StyledText>
 	// <Chart prices={dailyData} {...{size}} />
 
 	return (

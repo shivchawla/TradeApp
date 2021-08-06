@@ -105,7 +105,7 @@ const Routes = () => {
 	return (
 		// <>
 		// {isLoading ? 
-		// 	<Text style={{color: 'white'}}>Loading...</Text>
+		// 	<StyledText style={{color: 'white'}}>Loading...</StyledText>
 		// 	:	
 		<NavigationContainer>
 			<Stack.Navigator screenOptions={{headerShown: false}}>

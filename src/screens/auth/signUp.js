@@ -4,7 +4,9 @@ import {View, Text, StyleSheet} from 'react-native';
 import {useAuth} from '../../helper';
 import AppView from '../../components/appView';
 import ConfirmButton from '../../components/confirmButton';
- 
+
+import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../../theme';
+
 const SignUp = (props) => {
 
   // const [email , setemail] = useState('');
@@ -38,7 +40,7 @@ const SignUp = (props) => {
   return (
     <AppView title="Sign Up">
         {!signedUp && <ConfirmButton title="Sign Up" onClick={() => onSignup({email: "shiv.chawla@yandex.com", password: "Fincript"})} />}
-        {signedUp && <Text>{signupMsg}</Text>}
+        {signedUp && <StyledText>{signupMsg}</StyledText>}
     </AppView>
   );
 }

@@ -1,10 +1,23 @@
 import React from 'react';
-import {Text} from 'react-native';
+import { Text, StyleSheet } from 'react-native';
 import { useTheme } from './index'
 
 export const StyledText = ({children, style, ...props}) => {
-	const theme = useTheme();
+	const styles = useStyles();
 	return (
-		<Text {...props} style={[{color: theme.text}, style]}>{children}</Text>
+		<Text {...props} style={[styles.text, style]}>{children}</Text>
 	)
+}
+
+const useStyles = () => {
+	const theme = useTheme();
+
+	const styles = StyleSheet.create({
+		text : {
+			color: theme.text,
+			fontFamily: 'Roboto'
+		}
+	});
+
+	return styles;
 }

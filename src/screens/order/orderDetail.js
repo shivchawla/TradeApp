@@ -4,6 +4,7 @@ import get from 'lodash/get';
 import { useNavigation, StackActions } from '@react-navigation/native'; 
 
 import { useCancelOrder, useOrderDetail } from '../../helper';
+import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../../theme';
 
 import AppView from '../../components/appView';
 import ShowJson from '../../components/showJson'
@@ -11,7 +12,7 @@ import ShowJson from '../../components/showJson'
 const SingleButton = ({title, onClick, ...props}) => {
 	return (
 		<Pressable style={[styles.button, props.buttonStyle]} onPressOut={onClick}>
-			<Text style={[styles.buttonText, props.buttonTextStyle]}>{title}</Text>
+			<StyledText style={[styles.buttonText, props.buttonTextStyle]}>{title}</StyledText>
 		</Pressable>
 	);
 }

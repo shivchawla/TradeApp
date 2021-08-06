@@ -80,8 +80,11 @@ const useStyles = () => {
 		},
 		footerContainer: {
 		    position: 'absolute',
-		    bottom:20,
-		    width: '90%',
+		    bottom:WP(0),
+		    width: WP(100),
+		    padding: WP(2.5),
+		    paddingLeft: WP(5),
+		    paddingRight: WP(5),
 		    flexDirection:'row',
 		    justifyContent:'space-between',
 		    alignItems:'center'

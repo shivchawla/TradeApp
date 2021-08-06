@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, Pressable} from 'react-native';
 
+import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../theme';
+
 const SingleButton = ({title, onClick, ...props}) => {
 	return (
 		<Pressable style={[styles.button, props.buttonStyle]} onPressOut={onClick}>
-			<Text style={[styles.buttonText,props.buttonTextStyle]}>{title}</Text>
+			<StyledText style={[styles.buttonText,props.buttonTextStyle]}>{title}</StyledText>
 		</Pressable>
 	);
 }	

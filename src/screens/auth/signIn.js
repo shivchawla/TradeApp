@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 import AppView from '../../components/appView';
 import ConfirmButton from '../../components/confirmButton';
 
+import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../../theme';
 import { useAuth } from '../../helper';
 
 const SigninSchema = Yup.object().shape({
@@ -28,7 +29,7 @@ const SignInForm = ({ handleChange, handleBlur, handleSubmit, values, errors, to
 
 	return (
 		<View style={styles.formContainer}>
-			<TextInput style={[styles.textInput, styles.emailInput]}
+			<StyledTextInput style={[styles.textInput, styles.emailInput]}
 				type="email"
 				placeholder="Email"
 				placeholderTextColor='black'
@@ -38,8 +39,8 @@ const SignInForm = ({ handleChange, handleBlur, handleSubmit, values, errors, to
 				onSubmitEditing={() => password.current?.focus()}
 				value={values.email}
 			/>
-			{errors.email && touched.email && <Text style={styles.errorText}>{errors.email}</Text>}
-			<TextInput style={[styles.textInput, styles.passwordInput]}
+			{errors.email && touched.email && <StyledText style={styles.errorText}>{errors.email}</StyledText>}
+			<StyledTextInput style={[styles.textInput, styles.passwordInput]}
 				type="password"
 				ref={password}
 				placeholder="Password"
@@ -49,9 +50,9 @@ const SignInForm = ({ handleChange, handleBlur, handleSubmit, values, errors, to
 				onFocus={() => {setErrors({}); setSignInError();}}
 				value={values.password}
 			/>
-			{errors.password && touched.password && <Text style={styles.errorText}>{errors.password}</Text>}
+			{errors.password && touched.password && <StyledText style={styles.errorText}>{errors.password}</StyledText>}
 			<Pressable style={styles.submitButton} onPressOut={handleSubmit}>
-				<Text style={styles.submitButtonText}>SIGN IN</Text> 
+				<StyledText style={styles.submitButtonText}>SIGN IN</StyledText> 
 			</Pressable>
 		</View>
 	)
@@ -140,7 +141,7 @@ const SignIn = (props) => {
 	return (
 		<AppView title="SIGN IN" headerTitleStyle={{color: 'white'}} goBack={false}>
 			<View style={styles.formikContainer}>
-			{error && <Text style={styles.signInError}>{error} </Text>}
+			{error && <StyledText style={styles.signInError}>{error} </StyledText>}
 			<SignInForm {...formik} setSignInError={setError} />
 		   </View>
 	   </AppView>
@@ -153,7 +154,7 @@ export default SignIn;
 {/*<AppView title="Sign In" goBack={false}>
 		    {!!!currentUser ? 
 	    		<ConfirmButton title="Sign In" onClick={() => onSignIn({email: "shiv.chawla@yandex.com", password: "Fincript"})} />
-		    : <Text>{signInMsg}</Text>}
+		    : <StyledText>{signInMsg}</StyledText>}
 		</AppView>
 */}
 

@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
+import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../theme';
+
 const ScreenName = ({name}) => {
   return (
     <View style={styles.nameContainer}>
-      <Text style={styles.screenName}>{name}</Text>
+      <StyledText style={styles.screenName}>{name}</StyledText>
     </View>
   );
 };
