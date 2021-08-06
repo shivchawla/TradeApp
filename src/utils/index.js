@@ -4,7 +4,7 @@ export {
 	dayStartISODate, dayEndISODate, duration,
 	latestDayStartFromCalendar, toTimeZoneDate} from './date';
 
-export { priceChangeFromSnapshot } from './format'; 
+export { priceChangeFromSnapshot, priceChangeFromRealtime } from './format'; 
 
 Number.prototype.countDecimals = function () {
     if(Math.floor(this.valueOf()) === this.valueOf()) return 0;

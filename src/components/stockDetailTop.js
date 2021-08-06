@@ -1,58 +1,61 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 
-import { priceChangeFromSnapshot } from '../utils';
-import { useStockEODData } from  '../helper';
+import { useStockEODData, useStockRealtimeData } from  '../helper';
 import { useTheme, StyledText, Typography, WP, HP }  from '../theme';
 
-const PriceChange = ({price, changeValue, changePct}) => {
-	const theme = useTheme();
-	const getColor = (chg) => {
-		return chg > 0 ? theme.green : theme.red;
-	}
+import TickerDisplay from './tickerDisplay';
 
+const HighLow = ({symbol}) => {
+	const rtData = useStockRealtimeData(symbol);
+	const {snapshot} = useStockEODData(symbol);
+	const hp = snapshot?.dailyBar?.highPrice; 
+	const lp  = snapshot?.dailyBar?.lowPrice;  
+	const cp = rtData?.p;
+
+	const high = !!hp ? !!cp ? Math.max(hp, cp).toFixed(2) : hp.toFixed(2) : '--';
+	const low = !!lp ? !!cp ? Math.min(lp, cp).toFixed(2) : lp.toFixed(2) : '--';
+
+	// console.log("High: ", high);
+	// console.log("Low: ", low);
+
+	const styles = useStyles();
+	
 	return (
 		<View>
-			<StyledText style={[styles.price, Typography.fourPointFive]}>{price}</StyledText>
-			<StyledText style={[styles.priceChange, {color: getColor(changeValue)}]}>{changeValue} ({changePct}%)</StyledText>
-		</View>
-	);
-}
-
-const HighLow = ({high, low}) => {
-	const theme = useTheme();
-	const getColor = (chg) => {
-		return chg > 0 ? theme.green : theme.red;
-	}
-
-	return (
-		<View>
-			<StyledText style={[styles.price, Typography.four]}>High: {high}</StyledText>
-			<StyledText style={[styles.price, Typography.four]}>Low:  {low}</StyledText>
+			<StyledText style={[styles.price]}>High: {high}</StyledText>
+			<StyledText style={[styles.price]}>Low:  {low}</StyledText>
 		</View>
 	);
 }
 
 
 const StockDetailTop = ({symbol}) => {
-	const {data: snapshot} = useStockEODData(symbol);
-	const dailyBar = !!snapshot?.dailyBar && {high : snapshot?.dailyBar?.highPrice, low : snapshot?.dailyBar?.lowPrice};  
-
+	const styles = useStyles();	
+	
 	return (
 		<View style={styles.stockDetailTopContainer}>
-			{snapshot && <PriceChange {...priceChangeFromSnapshot(snapshot)} />}
-			{dailyBar && <HighLow {...dailyBar}/>}
+			<TickerDisplay {...{symbol}} />
+			<HighLow {...{symbol}}/>
 		</View>
 	)
 }
 
-const styles = StyleSheet.create({
-	stockDetailTopContainer: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		width: WP(100),
-		padding: WP(2)
-	},
-});
+const useStyles = () => {
+	const theme = useTheme();
+	const styles = StyleSheet.create({
+		stockDetailTopContainer: {
+			flexDirection: 'row',
+			justifyContent: 'space-between',
+			width: WP(100),
+			padding: WP(2)
+		},
+		price :{
+			fontSize: Typography.four
+		}
+	});
+
+	return styles;
+}
 
 export default StockDetailTop;

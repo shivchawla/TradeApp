@@ -8,9 +8,6 @@ console.log(wsUrl);
 export function useWS() {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  // const [connect, setConnect] = useState(true);
-
   const {
     sendJsonMessage,
     lastJsonMessage,
@@ -30,13 +27,6 @@ export function useWS() {
 
   useEffect(() => {
 
-    // console.log(connectionStatus);
-
-    // if (connectionStatus == 'Closed' && !connect) {
-    //   console.log("Setting Connect: true");
-    //   setConnect(true);
-    // }
-   
     if (connectionStatus != 'Open') {
       return;
     }
@@ -46,8 +36,8 @@ export function useWS() {
 
       var T = data["T"];
       if (data && (T == "success" || T == "error")) {
-        console.log("Last Json Message");
-        console.log(lastJsonMessage);
+        // console.log("Last Json Message");
+        // console.log(lastJsonMessage);
     
         var msg = data["msg"];
         var code = data["code"];
@@ -74,11 +64,18 @@ export function useWS() {
           console.log("Setting Authentication", false)
           setIsAuthenticated(false);
         }
+
+        //On Already authenticated
+        if (T == "error" && code == 403) {
+          console.log(lastJsonMessage);
+          console.log("Setting Authentication", true)
+          setIsAuthenticated(true);
+        }
         
       } 
     }
 
-  })
+  }, []) //Added only on mount
 
   return [isAuthenticated, sendJsonMessage, lastJsonMessage];
 

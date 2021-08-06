@@ -10,16 +10,10 @@ import { useClock } from './clock';
 export function useStockRealtimeData(symbol) {
 
   const [isAuthenticated, sendJsonMessage, lastJsonMessage] = useWS();
-  const [stockData, setStockData] = useState(null);
+  const [rtData, setRealtimeData] = useState(null);
   const [isSubscribed, setIsSubscribed] = useState(false);
-  const {data:dailyData} = useQuery(['stockSnapshot', symbol], () => getSnapshot(symbol))
 
-  React.useEffect(() => {
-    // console.log("useTickerData - use Effect");
-    // console.log("IsAuthenticated ", isAuthenticated);
-    // console.log("IsSubscribed ", isSubscribed);
-    // console.log(lastJsonMessage);
-
+  const subscribe = () => {
     if (isAuthenticated && !isSubscribed) {
       const msg = (lastJsonMessage || []).filter(item => item.T == 'subscription');
       if (msg && msg.length > 0) {
@@ -42,37 +36,39 @@ export function useStockRealtimeData(symbol) {
         sendJsonMessage({"action":"subscribe","trades":[symbol]});
       }
     }
+  }
 
+  const unsubscribe = () => {
+    if (isAuthenticated && isSubscribed) {
+      console.log("Sending unsubscription Message");
+      console.log(JSON.stringify({"action":"unsubscribe","trades":[symbol]}));
+      console.log("Setting isSubscribed: ", false);
+      sendJsonMessage({"action":"unsubscribe","trades":[symbol]});
+      setIsSubscribed(false);
+    }
+  }
+
+  React.useEffect(() => {
     if (!isAuthenticated && isSubscribed) {
       setIsSubscribed(false);
     }
 
     if (isAuthenticated && isSubscribed) {
-      //Filter LastJsonMessage for Ticker
       const msg = (lastJsonMessage || []).filter(item => item.S == symbol).slice(-1)[0];
       if(msg) {
-        setStockData(msg);
+        setRealtimeData(msg);
       }
-    } 
+    }
 
-  }); 
+  }, [isAuthenticated, lastJsonMessage]); 
 
   //Use Effect only for cleanup at unmount
   React.useEffect(() => {
     //Cleanup
-    return () => {
-      if (isAuthenticated && isSubscribed) {
-        console.log("Sending unsubscription Message");
-        console.log(JSON.stringify({"action":"unsubscribe","trades":[symbol]}));
-        console.log("Setting isSubscribed: ", false);
-        sendJsonMessage({"action":"unsubscribe","trades":[symbol]});
-        setIsSubscribed(false);
-      }      
-    }
-
+    return () => unsubscribe();
   }, []);
 
-  return {...stockData, ...dailyData};
+  return {rtData, subscribe};
 }
 
 export function useStockEODData(symbol, params = {}) {

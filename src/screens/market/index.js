@@ -17,11 +17,7 @@ const Market = (props) => {
 		const {navigation} = props;
 		navigation.navigate('StockDetail', {symbol});
 	}
-
-	// React.useEffect(() => { //This is running many times, but only once at upload
- //    	console.log("Running Use Effect of Market ----- $$$$$$$$$$$");
- //  	})
-
+	
 	return (
 		<AppView title="Market" goBack={false}>
 			{/*{isLoading && <BarIndicator color='black' />}*/}
