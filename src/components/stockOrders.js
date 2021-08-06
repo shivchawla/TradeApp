@@ -1,25 +1,30 @@
 import React, {useState} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+
+import { titleCase } from "title-case";
 
 import ShowJson from './showJson';
 import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../theme';
 import { OPEN_ORDER_STATUS } from '../config';
 import { useOrders, useLatestTradingDay, useSymbolActivity } from '../helper';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useFocusEffect } from '@react-navigation/native';
 
 const OrderField = ({order}) => {
 	const theme = useTheme();
 	const styles = useStyles();
+	const navigation = useNavigation();
 
 	return (
-		<View style={styles.orderFieldContainer}>
-			<View style={{flexDirection: 'row'}}>
-				<StyledText style={styles.ordersFieldLabel}>{order.side.toUpperCase()} {order.qty || `USD ` + order.notional}</StyledText>
-				<StyledText style={[styles.ordersFieldLabel, {marginLeft: WP(2)}]}>{order.type.toUpperCase()} {order.type == "limit" ? `@ ` + order.limit_price : ''}</StyledText>
+		<TouchableOpacity onPress={() => navigation.navigate('OrderStatus', {order})}>
+			<View style={styles.orderFieldContainer}>
+				<View style={{flexDirection: 'row'}}>
+					<StyledText style={styles.ordersFieldLabel}>{order.side.toUpperCase()} {order.qty || `USD ` + order.notional}</StyledText>
+					<StyledText style={[styles.ordersFieldLabel, {marginLeft: WP(2)}]}>{order.type.toUpperCase()} {order.type == "limit" ? `@ ` + order.limit_price : ''}</StyledText>
+				</View>
+				<StyledText style={styles.ordersFieldValue}>{titleCase(order.status)}</StyledText>
 			</View>
-			<StyledText style={styles.ordersFieldLabel}>{order.status.toUpperCase()}</StyledText>
-		</View>
+		</TouchableOpacity>
 	);
 }
 
@@ -162,8 +167,8 @@ const useStyles = () => {
 	const styles = StyleSheet.create({
 		ordersContainer: {
 			width: WP(100),
-			borderTopWidth:1,
-			borderColor: theme.darkgrey,
+			borderTopWidth:0.5,
+			borderColor: theme.grey9,
 			paddingTop: WP(4),
 			flex:1,
 		},
@@ -187,6 +192,7 @@ const useStyles = () => {
 		ordersHeaderTitle: {
 			fontSize: Typography.five,
 			color: theme.darkgrey,
+
 			paddingLeft: WP(2),
 		},
 		ordersSummaryContainer: {
@@ -202,21 +208,21 @@ const useStyles = () => {
 			color: theme.darkgrey
 		},
 		orderFieldContainer: {
-			flexDirection:'row',
+			// flexDirection:'row',
 			width: '100%',
 			paddingLeft: WP(5),
 			paddingRight: WP(5),
-			marginBottom: WP(2),
+			marginBottom: WP(7),
 			justifyContent: 'space-between'
 		},
 		ordersFieldLabel: {
 			fontWeight: '400',
 			fontSize: Typography.four, 
-			color: theme.light, 
+			color: theme.light
 		},
 		ordersFieldValue: {
-			fontSize: Typography.fourPointFive, 
-			color: theme.ordersValue
+			fontSize: Typography.four, 
+			color: theme.verydarkgrey
 		}
 
 	});

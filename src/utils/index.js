@@ -2,7 +2,7 @@ export {
 	currentISODate, toISODate, yearStartISODate, 
 	NDaysAgoISODate, NWeeksAgoISODate,
 	dayStartISODate, dayEndISODate, duration,
-	latestDayStartFromCalendar} from './date';
+	latestDayStartFromCalendar, toTimeZoneDate} from './date';
 
 export { priceChangeFromSnapshot } from './format'; 
 

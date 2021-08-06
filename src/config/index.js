@@ -103,3 +103,11 @@ export const MARKET_DATA_FIELDS = {
   'ytdReturn': "YTD Return",
 }
 
+export const ORDER_MORE_FIELDS = {
+  'time_in_force': 'TIF', 
+  'submitted_at': 'Submitted',
+  'canceled_at': 'Canceled',
+  'filled_at': 'Filled',
+  'expired_at': 'Expired'
+}
+

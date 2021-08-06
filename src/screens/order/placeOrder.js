@@ -16,8 +16,6 @@ const PlaceOrder = (props) => {
 	const {addActivity} = useSymbolActivity(symbol);
 
 	const sendOrder = ({symbol, action}) => {
-		console.log(symbol);
-		console.log(action);
 		mutate({symbol, side: action.toLowerCase(), qty: 1, type: 'limit', limit_price: 100}, {
 			onSuccess: (response, input) => {
 				addActivity(symbol, response); 

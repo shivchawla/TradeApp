@@ -8,17 +8,30 @@ export { Typography } from './typography';
 export const DarkTheme = {
         primary: '#FF6624',
         white: '#ffffff',
-        text: '#ffffff',
-        light:'#d9d9d9',
+        text: '#d9d9d9',
         fldDesc: "#999999",
         border: "#E5E5E5",
 
-        grey: '#F6F6F6',
+        light:'#d9d9d9', //one below lightgrey
+        lightgrey:'#cccccc',
+        grey: '#a6a6a6',
+        grey2: '#9a9a9a',
+        grey3: '#8d8d8d',
+        grey4: '#808080',
+        grey5: '#747474',
+        darkgrey: "#797D7F", //same as grey5
+        grey6: '#676767',
+        grey7: '#5a5a5a',
+        verydarkgrey:'#5a5a5a',
+        grey8: '#4d4d4d',
+        grey9: '#414141',
+        grey10: '#343434',
+     
         error: "#E7221B",
         verified: "#72BB53",
         dark: '#000',
         gryBack: "#CDCDCD",
-        darkgrey: "#797D7F",
+        
         inActiveTab: "#FEC0A5",
         background: '#1d2127',
         tabBackground: 'black',

@@ -11,7 +11,8 @@ export const currentISODate = (fmt) => moment.tz(timeZone).utc().format(fmt);
 export const NDaysAgoISODate = (days, fmt) => moment.tz(timeZone).subtract(days, 'days').utc().format(fmt);
 export const NWeeksAgoISODate = (wks, fmt) => moment.tz(timeZone).subtract(wks, 'weeks').utc().format(fmt);
 
-export const toISODate = (date) => moment(d).tz(timeZone).utc(date).format();
+export const toTimeZoneDate = (d, fmt) => moment(d).tz(timeZone).format(fmt);
+export const toISODate = (d, fmt) => moment(d).tz(timeZone).utc().format(fmt);
 export const yearStartISODate = () => moment.tz(timeZone).startOf('year').hour(startHour).minute(startMinute).utc().format();
 export const dayStartISODate = (d) => moment(d).tz(timeZone).hour(startHour).minute(startMinute).second(0).utc().format();
 export const dayEndISODate = (d) => {

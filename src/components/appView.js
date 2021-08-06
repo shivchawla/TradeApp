@@ -9,7 +9,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 // const backIconBlack = require("../assets/icon-back-black.png");
 // const backIconYellow = require("../assets/icon-back-yellow.png");
 
-const AppHeader = ({title, goBack = true, ...props}) => {
+const AppHeader = ({title, goBack = true, headerRight, ...props}) => {
 	const showHeader = title || goBack;
 	const navigation = useNavigation();
 	const theme = useTheme();
@@ -24,6 +24,7 @@ const AppHeader = ({title, goBack = true, ...props}) => {
 						<Ionicons name="chevron-back" color={theme.backArrow} size={WP(7)} />
 					</Pressable>}
 				{title && <StyledText style={[styles.headerTitle, props.headerTitleStyle]}>{title}</StyledText>}
+				{headerRight && <View style={styles.headerRight}>{headerRight}</View>}
 			</View>
 		}
 		</>
@@ -34,8 +35,6 @@ const AppView = ({scroll = true, footer, hasHeader = true, header, ...props}) =>
 
 	const Component = scroll ? ScrollView : View;
 	const styles = useStyles();
-
-	// console.log("AppView: ", scroll);
 
 	return (
 		<>
@@ -85,8 +84,11 @@ const useStyles = () => {
 		    width: '90%',
 		    flexDirection:'row',
 		    justifyContent:'space-between',
-		    alignItems:'center',
-		    // textAlign: 'center'
+		    alignItems:'center'
+		},
+		headerRight: {
+			position: 'absolute',
+			right: 10
 		},
 		headerTitle:{
 			fontSize: 16,
