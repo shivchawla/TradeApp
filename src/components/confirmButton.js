@@ -15,7 +15,7 @@ const ConfirmButton = ({title, onClick, ...props}) => {
 	
 const styles = StyleSheet.create({
 	buttonContainer: {
-	    width: '100%',
+	    width: WP(100),
 	    flexDirection:'row',
 	    justifyContent:'center'
 	},
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
 	    height: 35,
 	    justifyContent:'center',
 	    alignItems:'center',
-	    width:'40%'
+	    width: WP(40)
 	  },
 	buttonText: {
 	    fontFamily: "roboto-700",

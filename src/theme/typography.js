@@ -10,7 +10,7 @@ export const Typography = {
     twoPointFive: WP(2.5),
     two: WP(2),
 
-    weightBold: '700',
-    weight600:'600',
-    weightNormal: '400'
+    bold: '700',
+    semiBold:'600',
+    normal: '400'
 }

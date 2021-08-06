@@ -4,46 +4,59 @@ import {View, Text, StyleSheet, Pressable} from 'react-native';
 import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../theme';
 
 const SingleButton = ({title, onClick, ...props}) => {
+	const styles = useStyles();
+	
 	return (
-		<Pressable style={[styles.button, props.buttonStyle]} onPressOut={onClick}>
+		<Pressable style={[styles.button, props.buttonStyle, title=="BUY" ? styles.buyButton : styles.sellButton ]} onPressOut={onClick}>
 			<StyledText style={[styles.buttonText,props.buttonTextStyle]}>{title}</StyledText>
 		</Pressable>
 	);
 }	
 
 const TradeButtons = ({ticker, onBuy, onSell, ...props}) => {
+	const styles = useStyles();
 	
 	return (
 		<View style={[styles.buttonContainer, props.buttonContainerStyle]}>
-			<SingleButton title="BUY" onClick={onBuy} {...props} />
+			<SingleButton title="BUY" onClick={onBuy} {...props}/>
 			<SingleButton title="SELL" onClick={onSell} {...props} />
 		</View>
-		)
+	)
 }
 
-const styles = StyleSheet.create({
-	buttonContainer: {
-	    // position: 'absolute',
-	    // bottom:20,
-	    // width: '90%',
-	    width: '100%',
-	    flexDirection:'row',
-	    justifyContent:'space-between',
-	    // alignItems:'center'
-	},
-	button: {
-	    backgroundColor:'#FE9901',
-	    height: 35,
-	    justifyContent:'center',
-	    alignItems:'center',
-	    width:'40%'
-	  },
-	buttonText: {
-	    fontFamily: "roboto-700",
-	    color: 'white',
-	    fontSize: 16,
-	    fontWeight:"700"
-	},
-});
+const useStyles = () => {
+
+	const theme = useTheme();
+	
+	const styles = StyleSheet.create({
+		buttonContainer: {
+		    width: '100%',
+		    flexDirection:'row',
+		    justifyContent:'space-between',
+		},
+		button: {
+		    backgroundColor:'#FE9901',
+		    height: 35,
+		    justifyContent:'center',
+		    alignItems:'center',
+		    width:'50%'
+	 	},
+
+	 	buyButton: {
+	 		backgroundColor: theme.green,
+	 	},
+	 	sellButton: {
+	 		backgroundColor: theme.red
+	 	},
+		buttonText: {
+		    fontFamily: "roboto-700",
+		    color: 'white',
+		    fontSize: 16,
+		    fontWeight:"700"
+		},
+	});
+
+	return styles;
+}
 
 export default TradeButtons;
