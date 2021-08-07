@@ -19,7 +19,7 @@ const PriceChange = ({price, changeValue, changePct, ...props}) => {
 	const styles = useStyles();
 
 	return (
-		<View>
+		<View style={[styles.priceChangeContainer, props.style]}>
 			<StyledText style={[styles.price, props.priceStyle]}>{!!price ? price.toFixed(2) : '--'}</StyledText>
 			<StyledText style={[styles.priceChange, props.priceChangeStyle, {color: getColor(changeValue)}]}>{!!changeValue ? changeValue.toFixed(2) : '--'} ({!!changePct ? changePct.toFixed(2)+'%' : '--'})</StyledText>
 		</View>
