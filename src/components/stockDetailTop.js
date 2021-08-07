@@ -7,7 +7,7 @@ import { useTheme, StyledText, Typography, WP, HP }  from '../theme';
 import TickerDisplay from './tickerDisplay';
 
 const HighLow = ({symbol}) => {
-	const rtData = useStockRealtimeData(symbol);
+	const {rtData, susbscribe} = useStockRealtimeData(symbol);
 	const {snapshot} = useStockEODData(symbol);
 	const hp = snapshot?.dailyBar?.highPrice; 
 	const lp  = snapshot?.dailyBar?.lowPrice;  
