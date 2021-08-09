@@ -42,7 +42,7 @@ const QuantitySelector = ({quantity, isNotional, onChangeQuantity, onChangeType}
 }
 
 const OrderTypeSelector = ({orderType, onSelect}) => {
-	const items = [{key: 'market', title: 'MARKET'}, {key: 'limit', title: 'LIMIT'}, {key:'stop', title: 'STOP MARKET'}, {stop: 'stop-limit', title: 'STOP LIMIT'}];
+	const items = [{key: 'market', title: 'MARKET'}, {key: 'limit', title: 'LIMIT'}, {key:'stop', title: 'STOP MARKET'}, {stop: 'stop_limit', title: 'STOP LIMIT'}];
 	const selectedValue = items.find(item => item.key == orderType);
 	return (
 		<HorizontalPickField label="Order Type" {...{items, selectedValue, onSelect}} />
@@ -77,14 +77,33 @@ const PlaceOrder = (props) => {
 	const [quantity, setQuantity] = useState(isNotional ? 100 : 1);
 	const [orderType, setOrderType] = useState('market');
 	const [tif, setTif] = useState('day');
+	const [limitPrice, setLimitPrice] = useState(null);
+	const [stopPrice, setStopPrice] = useState(null);
 
 	const [fullView, setFullView] = useState(false)
 	
 	const [isError, mutate] = usePlaceOrder();
 	const {addActivity} = useSymbolActivity(symbol);
+
+	const navigation = useNavigation();
 	
-	const sendOrder = ({symbol, action}) => {
-		mutate({symbol, side: action.toLowerCase(), qty: 1, type: 'limit', limit_price: 100}, {
+	const processOrderParams = () => {
+		var params = {symbol, side: action.toLowerCase(), type: orderType, time_in_force: tif};
+		
+		//Quantity or Notional
+		params = {...params, ...(isNotional ? {notional: quantity} : {qty: quantity})};
+
+		//Limit price
+		params = {...params, ...((orderType == 'limit' || orderType == 'stop_limit') && {limit_price: limitPrice})};
+
+		//Stop price
+		params = {...params, ...((orderType == 'stop' || orderType == "stop_limit") && {stop_price: stopPrice})};
+		
+		return params;
+	}
+
+	const sendOrder = () => {
+		mutate(processOrderParams(), {
 			onSuccess: (response, input) => {
 				addActivity(symbol, response); 
 				navigation.navigate('OrderStatus', {goBack: () => navigation.navigate('StockDetail', {symbol}), order: response});
@@ -92,6 +111,16 @@ const PlaceOrder = (props) => {
 			onError: (err, input) => console.log(err)
 		});
 	}
+
+	const updateOrderType = (orderType) => {
+		if (orderType == "limit") {
+			setIsNotional(false);
+			setQuantity(1);
+			setLimitPrice();
+		}
+
+		setOrderType(orderType);
+	} 
 
 	const HeaderRight = () => { 
 		const nAction = action == "BUY" ? "SELL" : "BUY";
@@ -103,7 +132,7 @@ const PlaceOrder = (props) => {
 	}
 
 	const Footer = ({title, ...props}) => {
-		return <ConfirmButton {...{title}} onClick={() => sendOrder({symbol, action, ...props})} buttonStyle={[styles.tradeButton, action == "BUY" ? styles.buyButton : styles.sellButton]}/>
+		return <ConfirmButton {...{title}} onClick={sendOrder} buttonStyle={[styles.tradeButton, action == "BUY" ? styles.buyButton : styles.sellButton]}/>
 	}
 
 	const InstructionText = () => {
@@ -126,6 +155,8 @@ const PlaceOrder = (props) => {
 		const switchView = () => {
 			setIsNotional(true);
 			setQuantity(100);
+			setOrderType('market');
+			setTif('day');
 			setFullView(!fullView);
 		}
 
@@ -167,14 +198,14 @@ const PlaceOrder = (props) => {
 					<View style={styles.orderOptionsContainer}>
 						<NotionalSelector {...{isNotional}} onSelect={(v) => setIsNotional(v.key == 'notional')} />
 						<HorizontalInputField label="Quantity" value={quantity} onChange={(v) => setQuantity(v)} textStyle={styles.quantityFullView}/>
-						<OrderTypeSelector {...{orderType}} onSelect={(v) => setOrderType(v.key)} />
+						<OrderTypeSelector {...{orderType}} onSelect={(v) => updateOrderType(v.key)} />
 						{orderType == "limit" && 
 							<HorizontalInputField label="Limit Price" value={limitPrice} onChange={(v) => setLimitPrice(v)} />
 						}
 						{orderType == "stop" && 
 							<HorizontalInputField label="Stop Price" value={stopPrice} onChange={(v) => setStopPrice(v)} />
 						}
-						{orderType == "stop-limit" && 
+						{orderType == "stop_limit" && 
 							<>
 							<HorizontalInputField label="Limit Price" value={limitPrice} onChange={(v) => setLimitPrice(v)} />
 							<HorizontalInputField label="Stop Price" value={stopPrice} onChange={(v) => setStopPrice(v)} />

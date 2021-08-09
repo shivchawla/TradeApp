@@ -41,7 +41,7 @@ const SingleStock = ({symbol, onClick, detail = false}) => {
 			<View style={styles.singleStockRow}>
 				<StockName {...{symbol}} />
 				<StockChart {...{symbol, size: "S", timeframe: "5Day"}}/>
-				<TickerDisplay {...{symbol}} priceStyle={{textAlign: 'right'}} priceChangeStyle={{textAlign: 'right'}} />
+				<TickerDisplay {...{symbol}} priceStyle={{textAlign: 'right'}} priceChangeStyle={{textAlign: 'right'}} unsubscribe={false}/>
 			</View>
 		); 
 	}

@@ -4,7 +4,7 @@ import {View, StyleSheet} from 'react-native';
 import { priceChangeFromSnapshot, priceChangeFromRealtime } from '../utils';
 import { useStockEODData, useStockRealtimeData } from  '../helper';
 import { useTheme, StyledText, Typography, WP, HP }  from '../theme';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 const PriceChange = ({price, changeValue, changePct, ...props}) => {
 	// console.log(price);
@@ -26,16 +26,40 @@ const PriceChange = ({price, changeValue, changePct, ...props}) => {
 	);
 }
 
-const TickerDisplay = ({symbol, ...props}) => {
-	const {rtData, subscribe} = useStockRealtimeData(symbol);
+const TickerDisplay = ({symbol, unsubscribeOnBlur = true, ...props}) => {
+	const {rtData, subscribe, unsubscribe} = useStockRealtimeData(symbol);
 	const {snapshot} = useStockEODData(symbol);
+
+	const navigation = useNavigation();
 
 	useFocusEffect(
 		React.useCallback(() => {
-			return subscribe();
+			console.log("Subscribe on Focus: ", symbol);
+			subscribe();
+
+			// //cleanup -- PROBLEM!!! It's running 
+			// return () => {		
+			// 	if(unsubscribeOnBlur) {	
+			// 		console.log("Subscribe on unfocus");
+			// 		unsubscribe();
+			// 	}
+			// }
+
 		}, [])
 	);
 
+	// React.useEffect(() => {
+	// 	navigation.addListener('focus', () => {
+	// 		console.log("Subscribe on Focus: ", symbol);
+	// 		subscribe();
+	//     });
+	// }, [navigation])
+	
+
+	React.useEffect(() => {
+		console.log(rtData);
+	}, [rtData])
+	
 	return (
 		<>
 		{!!rtData ? 

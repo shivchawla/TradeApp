@@ -7,13 +7,21 @@ import { getSnapshot, getIntradayData, getHistoricalData, getStocks, getAssetDat
 import { currentISODate, toISODate, yearStartISODate, dayStartISODate, dayEndISODate, duration} from '../utils';
 import { useClock } from './clock';
 
-export function useStockRealtimeData(symbol) {
+export function useStockRealtimeData(symbol, {autoSubscribe = true} = {}) {
 
-  const [isAuthenticated, sendJsonMessage, lastJsonMessage] = useWS();
+  const {isAuthenticated, sendJsonMessage, lastJsonMessage} = useWS();
   const [rtData, setRealtimeData] = useState(null);
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [requestSubscription, setRequestSubscription] = useState(autoSubscribe);
 
   const subscribe = () => {
+    
+    setRequestSubscription(true);
+
+    console.log("Subscribing: ", symbol);
+
+  console.log("Current Subscription: ", isSubscribed);
+
     if (isAuthenticated && !isSubscribed) {
       const msg = (lastJsonMessage || []).filter(item => item.T == 'subscription');
       if (msg && msg.length > 0) {
@@ -34,11 +42,17 @@ export function useStockRealtimeData(symbol) {
         console.log("Sending Subscription for ", symbol);
         console.log(JSON.stringify({"action":"subscribe","trades":[symbol]}));
         sendJsonMessage({"action":"subscribe","trades":[symbol]});
+        console.log("Setting Subscription to true");
+        setIsSubscribed(true);
       }
     }
+
   }
 
   const unsubscribe = () => {
+    console.log("Unsubscribing: ", symbol);
+    setRequestSubscription(false);
+
     if (isAuthenticated && isSubscribed) {
       console.log("Sending unsubscription Message");
       console.log(JSON.stringify({"action":"unsubscribe","trades":[symbol]}));
@@ -49,8 +63,23 @@ export function useStockRealtimeData(symbol) {
   }
 
   React.useEffect(() => {
+
+    // console.log("useStockRealtimeData useEffect - [isAuthenticated, lastJsonMessage]: ", symbol);
+    // console.log(isAuthenticated);
+    // console.log(lastJsonMessage);
+
     if (!isAuthenticated && isSubscribed) {
       setIsSubscribed(false);
+    }
+
+    if (isAuthenticated && requestSubscription && !isSubscribed) {
+      console.log("Subscribing")
+      subscribe();
+    }
+
+    if (isAuthenticated && !requestSubscription && isSubscribed) {
+      console.log("Unsubscribing")
+      unsubscribe();
     }
 
     if (isAuthenticated && isSubscribed) {
@@ -62,13 +91,18 @@ export function useStockRealtimeData(symbol) {
 
   }, [isAuthenticated, lastJsonMessage]); 
 
-  //Use Effect only for cleanup at unmount
-  React.useEffect(() => {
-    //Cleanup
-    return () => unsubscribe();
-  }, []);
+  // //Use Effect only for cleanup at unmount
+  // React.useEffect(() => {
+    
 
-  return {rtData, subscribe};
+  //   //Cleanup
+  //   return () => {
+  //     console.log("Use Effect only for cleanup at unmount: ", symbol);
+  //     unsubscribe();
+  //   }
+  // }, []);
+
+  return {rtData, subscribe, unsubscribe};
 }
 
 export function useStockEODData(symbol, params = {}) {

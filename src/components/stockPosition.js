@@ -7,25 +7,25 @@ import { POSITION_FIELDS, POSITION_SUMMARY_FIELDS } from '../config';
 import { useStockPositionData } from '../helper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+const formatValue = (value) => {
+	var output = value;
+
+	try {
+		output = parseFloat(value);
+		var decimals = output.countDecimals();
+		if(decimals == 0) {
+			return value;
+		} else {
+			return output.toFixed(2);
+		}
+	} catch (e) { console.log(e); }
+
+	return value.toUpperCase();
+}
+
 const PositionField = ({label, value, changeValue = 0, isPnL = false, right = false}) => {
 	
 	const theme = useTheme();
-
-	const formatValue = (value) => {
-		var output = value;
-
-		try {
-			output = parseFloat(value);
-			var decimals = output.countDecimals();
-			if(decimals == 0) {
-				return value;
-			} else {
-				return output.toFixed(2);
-			}
-		} catch (e) { console.log(e); }
-
-		return value.toUpperCase();
-	}
 
 	const styles = useStyles();
 
@@ -80,8 +80,8 @@ const StockPositionHeader = ({position, onToggle, showDetail}) => {
 		return(
 			<View style={[styles.positionSummaryField, style]}>
 				<StyledText style={styles.positionSummaryFieldLabel}>{label || POSITION_SUMMARY_FIELDS[field]}: </StyledText>
-				<StyledText style={[{...field.includes("_pl") && {color: getPnLColor(value)}}]}>{value}
-					{!!changeValue && <StyledText style={{...field.includes("_pl") && {color: getPnLColor(value)}}}> ({(changeValue*100).toFixed(2)}%)</StyledText>}
+				<StyledText style={[{...field.includes("_pl") && {color: getPnLColor(value)}}]}>{formatValue(value)}
+					{!!changeValue && <StyledText style={{...field.includes("_pl") && {color: getPnLColor(value)}}}> ({(formatValue(changeValue*100))}%)</StyledText>}
 				</StyledText>	
 			</View>
 		);

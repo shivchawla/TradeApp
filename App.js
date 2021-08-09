@@ -11,7 +11,7 @@ const App = props => {
   const queryClient = new QueryClient()
 
   useEffect(() => {
-    LogBox.ignoreLogs(['Setting a timer']);
+    LogBox.ignoreLogs(['Setting a timer ']);
   }, []);
 
   return (

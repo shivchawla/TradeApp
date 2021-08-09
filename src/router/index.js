@@ -9,7 +9,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { useAuth, AuthProvider } from '../helper';
-import { ThemeProvider, useTheme } from  '../theme';
+import { useTheme, ThemeProvider } from  '../theme';
+
 // import { useClock, useCalendar, setStorageData } from '../helper';
 // import { dayStartISODate, latestDayStartFromCalendar } from '../utils';
 

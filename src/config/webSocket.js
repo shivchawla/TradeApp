@@ -3,7 +3,7 @@ import useWebSocket, {ReadyState} from 'react-use-websocket';
 
 import {wsUrl, apiKey, apiSecret} from './';
 
-console.log(wsUrl);
+// console.log(wsUrl);
 
 export function useWS() {
 
@@ -26,6 +26,9 @@ export function useWS() {
   }[readyState];
 
   useEffect(() => {
+
+    // console.log("Websocket useEffect on Mount")
+    // console.log(lastJsonMessage)
 
     if (connectionStatus != 'Open') {
       return;
@@ -67,16 +70,16 @@ export function useWS() {
 
         //On Already authenticated
         if (T == "error" && code == 403) {
-          console.log(lastJsonMessage);
-          console.log("Setting Authentication", true)
+          // console.log(lastJsonMessage);
+          // console.log("Setting Authentication", true)
           setIsAuthenticated(true);
         }
         
       } 
     }
 
-  }, []) //Added only on mount
+  }) //Added only on mount
 
-  return [isAuthenticated, sendJsonMessage, lastJsonMessage];
+  return {isAuthenticated, sendJsonMessage, lastJsonMessage};
 
 }

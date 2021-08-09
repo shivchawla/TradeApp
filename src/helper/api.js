@@ -28,9 +28,9 @@ export const getAssetData = async (symbol) => {
 }
 
 export const getSnapshot = async(symbol) => {
-	console.log("Fetching Snapshot");
-	console.log(axios.defaults.headers.common['Authorization']);
-	console.log(`${dataUrl}/v2/stocks/${symbol}/snapshot`);
+	// console.log("Fetching Snapshot");
+	// console.log(axios.defaults.headers.common['Authorization']);
+	// console.log(`${dataUrl}/v2/stocks/${symbol}/snapshot`);
 	return await axios.get(`${dataUrl}/v2/stocks/${symbol}/snapshot`).then(r => processSnapshot(r.data));
 }
 
