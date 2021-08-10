@@ -19,6 +19,7 @@
     "@react-navigation/drawer": "^5.12.5",
     "@react-navigation/native": "^5.9.4",
     "@react-navigation/stack": "^5.14.5",
+    "async-mutex": "^0.3.1",
     "axios": "^0.21.1",
     "formik": "^2.2.9",
     "js-base64": "^3.6.1",
@@ -36,6 +37,7 @@
     "react-native-svg-charts": "^5.4.0",
     "react-native-vector-icons": "^8.1.0",
     "react-query": "^3.19.0",
+    "react-use": "^17.2.4",
     "react-use-websocket": "^2.7.1",
     "title-case": "^3.0.3",
     "yup": "^0.32.9"

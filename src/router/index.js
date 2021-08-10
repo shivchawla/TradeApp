@@ -10,6 +10,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { useAuth, AuthProvider } from '../helper';
 import { useTheme, ThemeProvider } from  '../theme';
+import { WebsocketProvider } from  '../helper';
 
 // import { useClock, useCalendar, setStorageData } from '../helper';
 // import { dayStartISODate, latestDayStartFromCalendar } from '../utils';
@@ -127,11 +128,13 @@ const Routes = () => {
 const Router = (props) => {
 
 	return (
-		<ThemeProvider>
-			<AuthProvider>
-				<Routes/>
-		   </AuthProvider>
-	   </ThemeProvider>
+		<WebsocketProvider>
+			<ThemeProvider>
+				<AuthProvider>
+					<Routes/>
+				</AuthProvider>
+			</ThemeProvider>
+		</WebsocketProvider>
    );
 }
 
