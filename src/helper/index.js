@@ -13,3 +13,5 @@ export { useAuth, AuthProvider } from './user';
 export { useSymbolActivity } from './store';
 
 export { useStockRealtimeData, WebsocketProvider } from './stream';
+
+export { setStorageData, getStorageData, removeStorageData } from './store';

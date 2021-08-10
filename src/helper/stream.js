@@ -3,6 +3,7 @@ import useWebSocket, {ReadyState} from 'react-use-websocket';
 import { useDebounce } from 'react-use';
 import { Mutex } from 'async-mutex';
 
+import { setStorageData, getStorageData } from './store';
 import {wsUrl, apiKey, apiSecret} from '../config';
 
 const mutex = new Mutex(); //Use to control access to subscription list
@@ -29,8 +30,8 @@ function useWS() {
 
   useEffect(() => {
 
-    console.log("Websocket useEffect on Mount")
-    console.log(lastJsonMessage)
+    // console.log("Websocket useEffect on Mount")
+    // console.log(lastJsonMessage)
     // console.log(wsUrl);
     // console.log(connectionStatus);
 
@@ -93,33 +94,54 @@ function useWebsocketHelper() {
   const {isAuthenticated, sendJsonMessage, lastJsonMessage: msg} = useWS();
   const [subscriptionList, setList] = useState({});
 
+  const getList = async() => {
+    return await getStorageData('subscriptionList').then(v => v || {}); 
+  }
+
+  const updateList = async(currentList) => {
+    return await setStorageData('subscriptionList', JSON.stringify(currentList)).then(v => v || {}); 
+  }
+
+  const removeSubscription = async(symbol) => {
+    const currentList = await getList();
+    currentList[symbol] = Math.max((currentList?.[symbol] ?? 0) - 1, 0); 
+    await updateList(currentList);
+    
+    return currentList; 
+  }
+
+  const addSubscription = async(symbol) => {
+    const currentList = await getList()
+    currentList[symbol] = Math.max((currentList?.[symbol] ?? 0) + 1, 1); 
+    await updateList(currentList)
+    return currentList
+  }
+
   const subscribe = async(symbol) => {
-    console.log("Subscribing: ", symbol);
     await mutex.runExclusive(async () => {
-      const currentList =  subscriptionList;
-      currentList[symbol] = Math.max((currentList?.symbol ?? 0) + 1, 1); 
-      
       //Subscribe immediately -- Handle  rest 5 seconds later
       if (isAuthenticated) {
         sendJsonMessage({"action":"subscribe","trades":[symbol]});
       }
 
-      setList(currentList);
-    })
+      const currentList = await addSubscription(symbol)
+      setList({...subscriptionList, ...currentList});
+    
+    }).catch(e => {console.log(e); console.log("Error on Subscribe")})
   }
 
   const unsubscribe = async (symbol) => {
-    console.log("Unsubscribing: ", symbol);
+    // console.log("Unsubscribing: ", symbol);
     await mutex.runExclusive(async () => {
-      const currentList =  subscriptionList;
-      currentList[symbol] = Math.max((currentList?.symbol ?? 0) + 1, 1); 
-      setList(currentList);
-    })
+      const currentList = await removeSubscription(symbol);
+      setList({...subscriptionList, ...currentList});
+    }).catch(e => {console.log(e);console.log("Error on Unsubscribe")})
   }
 
   const handleSubscription = () => {
     if (isAuthenticated) {
-      // console.log("Subscribing")
+      console.log(subscriptionList);
+
       const subSymbols = Object.keys(subscriptionList).filter(key => subscriptionList[key] > 0);
       const unsubSymbols = Object.keys(subscriptionList).filter(key => subscriptionList[key] == 0);
 
@@ -148,7 +170,7 @@ function useWebsocketHelper() {
   const [, cancel] = useDebounce(() => {
     console.log("useDebounce")  
     handleSubscription()
-  }, 5000, [subscriptionList]);
+  }, 15000, [subscriptionList]);
   
   return {msg, subscribe, unsubscribe};
 
@@ -169,7 +191,7 @@ export const WebsocketProvider = ({children}) => {
 
 const useStreamData = () => React.useContext(WebsocketContext);
 
-export const useStockRealtimeData = (symbol, {subscribeOnConnect = true} = {}) => {
+export const useStockRealtimeData = (symbol, {subscribeOnConnect = false} = {}) => {
   const {msg, subscribe, unsubscribe} = useStreamData();
   const [rtData, setRealtime] = useState(null);
 
@@ -181,7 +203,7 @@ export const useStockRealtimeData = (symbol, {subscribeOnConnect = true} = {}) =
 
   React.useEffect(() => {
     const symbolMsg = (msg || []).filter(item => item.S == symbol).slice(-1)[0];
-    if(msg) {
+    if(symbolMsg) {
       setRealtime(symbolMsg);
     }
   }, [msg]);

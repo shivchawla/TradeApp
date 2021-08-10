@@ -35,12 +35,12 @@ const TickerDisplay = ({symbol, ...props}) => {
 
 	useFocusEffect(
 		React.useCallback(() => {
-			// console.log("Subscribe on Focus: ", symbol);
-			// subscribe(symbol);
+			console.log("Subscribe on Focus: ", symbol);
+			subscribe(symbol);
 
 			//On unFocus
 			return () => {		
-				console.log("Subscribe on unfocus");
+				console.log("Unsubscribe on unfocus");
 				unsubscribe(symbol);
 			}
 

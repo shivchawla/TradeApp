@@ -26,6 +26,14 @@ export const getStorageData = async (key) => {
   return null;
 }
 
+export const removeStorageData = async (key) => {
+  try {
+    await AsyncStorage.removeItem(key)
+  } catch(e) {
+    console.error(e);
+  }
+}
+
 
 export const useSymbolActivity = (symbol) => {
   const [activity, setActivity] = useState([]);
