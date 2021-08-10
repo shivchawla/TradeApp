@@ -35,7 +35,7 @@ const OrderStatusSummary = ({orderDetail}) => {
 			<View style={styles.qtyContainer}>
 				{!!qty && <StyledText style={styles.qty}>{qty.toUpperCase()} Shares </StyledText>}	
 				{!!notional && <StyledText style={styles.qty}>{notional} USD</StyledText>}
-				{type == "limit" && <StyledText style={styles.qty}>@ {limit_price}</StyledText>}
+				{type == "limit" && <StyledText style={styles.qty}>@ USD {limit_price}</StyledText>}
 			</View>
 			<StyledText style={styles.orderId}>Order# {orderId}</StyledText>		
 		</View>

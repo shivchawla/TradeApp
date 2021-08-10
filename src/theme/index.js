@@ -28,6 +28,7 @@ export const DarkTheme = {
         grey10: '#343434',
      
         error: "#E7221B",
+        success: '#57ff57',
         verified: "#72BB53",
         dark: '#000',
         gryBack: "#CDCDCD",

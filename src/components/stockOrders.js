@@ -15,12 +15,32 @@ const OrderField = ({order}) => {
 	const styles = useStyles();
 	const navigation = useNavigation();
 
+	const getShareQty = (qty) => {
+		return qty ? qty > 1 ? `${qty} Shares` : '1 Share' : '';
+	}
+
+	const getNotional = (notional) => {
+		return notional ? (`USD ` + notional) : '';
+	}
+
+	const getOrderLimitPrice = (order) => {
+		return order.type == "limit" ? '@ USD ' + order.limit_price : '';
+	}
+
+	const displayOrderType = (order) => {
+		return order.type.toUpperCase() + getOrderLimitPrice(order);
+	}
+
+	const displayOrderQuantity = (order) => {
+		return order.side.toUpperCase() + ' ' + (getShareQty(order.qty) || getNotional(order.notional));
+	}
+
 	return (
 		<TouchableOpacity onPress={() => navigation.navigate('OrderStatus', {order})}>
 			<View style={styles.orderFieldContainer}>
 				<View style={{flexDirection: 'row'}}>
-					<StyledText style={styles.ordersFieldLabel}>{order.side.toUpperCase()} {order.qty || `USD ` + order.notional}</StyledText>
-					<StyledText style={[styles.ordersFieldLabel, {marginLeft: WP(2)}]}>{order.type.toUpperCase()} {order.type == "limit" ? `@ ` + order.limit_price : ''}</StyledText>
+					<StyledText style={styles.ordersFieldLabel}>{displayOrderQuantity(order)}</StyledText>
+					<StyledText style={[styles.ordersFieldLabel, {marginLeft: WP(2)}]}>{displayOrderType(order)}</StyledText>
 				</View>
 				<StyledText style={styles.ordersFieldValue}>{titleCase(order.status)}</StyledText>
 			</View>

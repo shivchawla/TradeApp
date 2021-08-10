@@ -2,13 +2,11 @@ import React, {useState} from 'react';
 import {View, StyleSheet, TouchableOpacity, Text, TextInput, Dimensions } from 'react-native';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useNavigation } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
 import Modal from 'react-native-modal';
 
 import AppView from '../../components/appView';
-import ScreenName from '../../components/screenName'
 import ConfirmButton from '../../components/confirmButton';
-import ShowJson from '../../components/showJson';
 import { usePlaceOrder, useSymbolActivity } from '../../helper';
 import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
 
@@ -132,7 +130,7 @@ const PlaceOrder = (props) => {
 	}
 
 	const Footer = ({title, ...props}) => {
-		return <ConfirmButton {...{title}} onClick={sendOrder} buttonStyle={[styles.tradeButton, action == "BUY" ? styles.buyButton : styles.sellButton]}/>
+		return <ConfirmButton swipe={true} {...{title}} onClick={sendOrder} buttonStyle={[styles.tradeButton, action == "BUY" ? styles.buyButton : styles.sellButton]}/>
 	}
 
 	const InstructionText = () => {
@@ -196,7 +194,10 @@ const PlaceOrder = (props) => {
 				<AppView {...{title}} headerRight={<HeaderRight {...{action}}/>} footer={<Footer {...{title, symbol, action}}/>} appContainerStyle={styles.appContainer}>
 					<TickerDisplay {...{symbol}} style={styles.tickerDisplayContainer} priceStyle={styles.priceStyle} priceChangeStyle={styles.priceChangeStyle}/>
 					<View style={styles.orderOptionsContainer}>
-						<NotionalSelector {...{isNotional}} onSelect={(v) => setIsNotional(v.key == 'notional')} />
+						{orderType == "market" 
+							? <NotionalSelector {...{isNotional}} onSelect={(v) => setIsNotional(v.key == 'notional')} />
+							: <HorizontalPickField label="Quantity Type" selectedValue={{key: 'shares', title: 'Shares'}} />
+						}
 						<HorizontalInputField label="Quantity" value={quantity} onChange={(v) => setQuantity(v)} textStyle={styles.quantityFullView}/>
 						<OrderTypeSelector {...{orderType}} onSelect={(v) => updateOrderType(v.key)} />
 						{orderType == "limit" && 
@@ -210,7 +211,6 @@ const PlaceOrder = (props) => {
 							<HorizontalInputField label="Limit Price" value={limitPrice} onChange={(v) => setLimitPrice(v)} />
 							<HorizontalInputField label="Stop Price" value={stopPrice} onChange={(v) => setStopPrice(v)} />
 							</>
-							
 						}
 						<TifSelector {...{tif}} onSelect={(v) => setTif(v.key)} />
 						

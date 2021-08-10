@@ -83,14 +83,12 @@ export const BottomPicker = ({items, selectedValue, onSelect}) => {
 			<View style={styles.bottomPickerOptionsContainer}>
 				<StyledText style={styles.bottomPickerTitle}>Select Value</StyledText>
 				{
-					items.map((item, index) => {
-						if (item.key != selectedValue.key) {
-							return (
-								<TouchableOpacity key={item.key} onPress={() => {onSelect(item); setShow(false)}}> 
-									<StyledText style={styles.pickerItem}>{item.title}</StyledText> 	
-								</TouchableOpacity>
-							)
-						}
+					items.filter(item => item.key != selectedValue.key).map((item, index) => {
+						return (
+							<TouchableOpacity key={item.key} onPress={() => {onSelect(item); setShow(false)}}> 
+								<StyledText style={styles.pickerItem}>{item.title}</StyledText> 	
+							</TouchableOpacity>
+						)
 					})
 				}
 				
@@ -124,9 +122,9 @@ export const TextInputWithIcon = ({value, onChange, ...props}) => {
 					{...props}
 			        style={props.textStyle}
 			        onChangeText={onChange}
-			        value={value}
+			        value={value.toString()}
 			        keyboardType="numeric"
-			        onBlur={() => setEdit(false)}
+			        onSubmitEditing={() => setEdit(false)}
 			        autoFocus={edit}
 		      	/>
 			}
@@ -136,13 +134,18 @@ export const TextInputWithIcon = ({value, onChange, ...props}) => {
 
 export const HorizontalPickField = ({label, selectedValue, items, onSelect}) => {
 	const styles = useStyles();
-	// const [selectedValue, setValue] = useState(propValue)
 
 	return (
-		<View style={styles.horizontalPickField}>
-			<StyledText style={styles.horizontalPickLabel}>{label}</StyledText>
-			<BottomPicker {...{items, selectedValue, onSelect}} />
-		</View>
+		<>
+		{!!selectedValue && 
+			<View style={styles.horizontalPickField}>
+				<StyledText style={styles.horizontalPickLabel}>{label}</StyledText>
+				{onSelect ? <BottomPicker {...{items, selectedValue, onSelect}} />
+					: <StyledText style={styles.horizontalPickLabel}>{selectedValue.title}</StyledText>
+				}
+			</View>
+		}
+		</>
 	)
 }
 
