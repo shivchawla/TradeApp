@@ -1,14 +1,15 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, Pressable} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
-import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../theme';
+import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../../theme';
 
 import SwipeButton from 'jt-swipe-button';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const ConfirmButton = ({title, onClick, swipe = false, cancel = false,  ...props}) => {
+export const ConfirmButton = ({title, onClick, swipe = false, cancel = false,  ...props}) => {
 	const theme = useTheme();
+	const styles = useStyles();
 
 	const proceedIcon = ({size = WP(10), color = theme.success} = {}) => {
 		return <Ionicons name="chevron-forward" {...{color, size}} />
@@ -40,34 +41,39 @@ const ConfirmButton = ({title, onClick, swipe = false, cancel = false,  ...props
           	:
 
 			<View style={[styles.buttonContainer, props.buttonContainerStyle]}>
-				<Pressable style={[styles.button, props.buttonStyle]} onPressOut={onClick}>
+				<TouchableOpacity style={[styles.button, props.buttonStyle]} onPress={onClick}>
 					<StyledText style={[styles.buttonText,props.buttonTextStyle]}>{title}</StyledText>
-				</Pressable>
+				</TouchableOpacity>
 			</View>
 		}
 		</>
 	);
 }
 	
-const styles = StyleSheet.create({
-	buttonContainer: {
-	    width: WP(100),
-	    flexDirection:'row',
-	    justifyContent:'center'
-	},
-	button: {
-	    backgroundColor:'#FE9901',
-	    height: 35,
-	    justifyContent:'center',
-	    alignItems:'center',
-	    width: WP(40)
-	  },
-	buttonText: {
-	    fontFamily: "roboto-700",
-	    color: 'white',
-	    fontSize: 16,
-	    fontWeight:"700"
-	},
-});
+const useStyles = () => {
 
-export default ConfirmButton;
+	const theme = useTheme();
+
+	const styles = StyleSheet.create({
+		buttonContainer: {
+		    width: WP(100),
+		    flexDirection:'row',
+		    justifyContent:'center'
+		},
+		button: {
+		    backgroundColor:'#FE9901',
+		    height: 35,
+		    justifyContent:'center',
+		    alignItems:'center',
+		    width: WP(40)
+		  },
+		buttonText: {
+		    fontFamily: "roboto-700",
+		    color: 'white',
+		    fontSize: 16,
+		    fontWeight:"700"
+		},
+	});
+
+	return styles;
+}

@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import ShowJson from './showJson';
+import { ShowJson } from './common';
 import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../theme';
 import { POSITION_FIELDS, POSITION_SUMMARY_FIELDS } from '../config';
 import { useStockPositionData } from '../helper';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const formatValue = (value) => {
 	var output = value;

@@ -1,8 +1,7 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 
-import AppView from '../../components/appView';
-import ScreenName from '../../components/screenName'
+import {AppView, ScreenName} from '../../components/common';
 
 const Settings = (props) => {
 	const {stocks} = props;

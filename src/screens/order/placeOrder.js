@@ -5,14 +5,14 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import Modal from 'react-native-modal';
 
-import AppView from '../../components/appView';
-import ConfirmButton from '../../components/confirmButton';
+import { AppView, ConfirmButton, 
+	Picker, BottomPicker, HorizontalPickField, 
+	HorizontalInputField, TextInputWithIcon} from '../../components/common';
+	
 import { usePlaceOrder, useSymbolActivity } from '../../helper';
 import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
 
 import TickerDisplay from '../../components/tickerDisplay';
-  
-import { Picker, BottomPicker, HorizontalPickField, HorizontalInputField, TextInputWithIcon } from '../../components/picker'; 
 
 const QuantitySelector = ({quantity, isNotional, onChangeQuantity, onChangeType}) => {
 	const styles = useStyles();

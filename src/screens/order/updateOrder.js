@@ -1,18 +1,13 @@
 import React, {useState} from 'react';
 import {View, StyleSheet, Pressable} from 'react-native';
 
-import get from 'lodash/get';
-
-import AppView from '../../components/appView';
-import ScreenName from '../../components/screenName'
-import ConfirmButton from '../../components/confirmButton';
-import ShowJson from '../../components/showJson';
+import {AppView, ScreenName, ConfirmButton, ShowJson} from '../../components/common';
 import { useUpdateOrder } from '../../helper';
 
 //Preview should be added here
 const UpdateOrder = (props) => {
 
-	const {order, goBack} = get(props, 'route.params', {});
+	const {order, goBack} = props?.route?.params ?? {};
 	
 	const {navigation} = props;
 	const [isError, mutate] = useUpdateOrder();

@@ -3,8 +3,7 @@ import {View, Text, StyleSheet, Pressable, TextInput} from 'react-native';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-import AppView from '../../components/appView';
-import ConfirmButton from '../../components/confirmButton';
+import {AppView, ConfirmButton} from '../../components/common';
 
 import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../../theme';
 import { useAuth } from '../../helper';

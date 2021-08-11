@@ -6,7 +6,6 @@ const Stack = createStackNavigator();
 
 import SignIn from '../screens/auth/signIn';
 import ForgotPassword from '../screens/auth/forgotPassword';
-// import OnboardStack from './onboard';
 import SignUp from '../screens/auth/signUp';
 
 const AuthStack = () => {

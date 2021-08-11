@@ -6,8 +6,7 @@ import { useNavigation, StackActions } from '@react-navigation/native';
 import { useCancelOrder, useOrderDetail } from '../../helper';
 import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../../theme';
 
-import AppView from '../../components/appView';
-import ShowJson from '../../components/showJson'
+import {AppView, ShowJson} from '../../components/common';
 
 const SingleButton = ({title, onClick, ...props}) => {
 	return (

@@ -2,8 +2,7 @@ import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
 import {useAuth} from '../../helper';
-import AppView from '../../components/appView';
-import ConfirmButton from '../../components/confirmButton';
+import {AppView, ConfirmButton} from '../../components/common';
 
 import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../../theme';
 

@@ -11,6 +11,8 @@ export const defaultStocks = ['AAPL', 'TSLA', 'MSFT', 'GOOG', 'QQQ', 'FB'];
 export const COMPLETE_ORDER_STATUS = ['filled', 'partially_filled', 'done_for_day'];
 export const OPEN_ORDER_STATUS = ['new', 'replaced', 'pending_cancel', 'pending_replace', 'partially_filled', 'done_for_day'];
 
+export const AVAILABLE_TO_CANCEL_ORDER_STATUS = ['new', 'pending_new', 'replaced', 'accepted', 'partially_filled', 'done_for_day'];
+
 export const CANCEL_ORDER_STATUS = ['canceled', 'expired'];
 
 export const accountParams = {

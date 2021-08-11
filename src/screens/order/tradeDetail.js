@@ -3,8 +3,7 @@ import {View, StyleSheet, Pressable, Text} from 'react-native';
 import get from 'lodash/get';
 import { useNavigation, StackActions } from '@react-navigation/native'; 
 
-import AppView from '../../components/appView';
-import ShowJson from '../../components/showJson'
+import {AppView, ShowJson} from '../../components/common';
 
 const TradeDetail = (props) => {
 

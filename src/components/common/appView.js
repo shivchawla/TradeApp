@@ -3,11 +3,8 @@ import { ScrollView, View, Text, StyleSheet, Pressable, Image, useColorScheme } 
 
 import { useNavigation } from '@react-navigation/native';
 
-import { StyledText, useTheme, WP } from '../theme';
+import { StyledText, useTheme, WP } from '../../theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
-// const backIconBlack = require("../assets/icon-back-black.png");
-// const backIconYellow = require("../assets/icon-back-yellow.png");
 
 const AppHeader = ({title, goBack = true, headerRight, ...props}) => {
 	const showHeader = title || goBack;
@@ -31,7 +28,7 @@ const AppHeader = ({title, goBack = true, headerRight, ...props}) => {
 	);
 }
 
-const AppView = ({scroll = true, footer, hasHeader = true, header, ...props}) => {
+export const AppView = ({scroll = true, footer, hasHeader = true, header, ...props}) => {
 
 	const Component = scroll ? ScrollView : View;
 	const styles = useStyles();
@@ -101,5 +98,3 @@ const useStyles = () => {
 
 	return styles;
 }
-
-export default AppView;

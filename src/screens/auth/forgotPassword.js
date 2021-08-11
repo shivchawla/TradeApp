@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 
-import ScreenName from '../../components/screenName';
+import {AppView, ScreenName} from '../../components/common';
 
 const ForgotPassword = ({props}) => {
 	return (

@@ -4,9 +4,8 @@ import {View, StyleSheet} from 'react-native';
 import {useQuery} from 'react-query';
 import {BarIndicator} from 'react-native-indicators';
 
-import AppView from '../../components/appView';
+import { AppView, ScreenName } from '../../components/common';
 import SingleStock from '../../components/singleStock';
-import ScreenName from '../../components/screenName';
 
 import {defaultStocks} from '../../config';
 

@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import get from 'lodash/get';
 
-import AppView from '../../components/appView';
+import {AppView} from '../../components/common';
 import OrderList from '../../components/orderList';
 
 //Now this scrren is not updated on routing back - how to update screen

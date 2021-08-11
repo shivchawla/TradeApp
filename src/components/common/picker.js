@@ -4,7 +4,7 @@ import {View, StyleSheet, TouchableOpacity, Dimensions, TextInput } from 'react-
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Modal from 'react-native-modal';
 
-import { useTheme, StyledText, Typography, WP, HP }  from '../theme';
+import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight =

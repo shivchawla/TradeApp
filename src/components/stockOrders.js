@@ -5,7 +5,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 import { titleCase } from "title-case";
 
-import ShowJson from './showJson';
+import { ShowJson } from './common';
 import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../theme';
 import { OPEN_ORDER_STATUS } from '../config';
 import { useOrders, useLatestTradingDay, useSymbolActivity } from '../helper';

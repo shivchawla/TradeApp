@@ -1,16 +1,13 @@
 import React, {useState} from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-// import get from 'lodash/get';
 import { useNavigation } from '@react-navigation/native';
 
 import { titleCase } from "title-case";
 
-import AppView from '../../components/appView';
-import ScreenName from '../../components/screenName';
-import ShowJson from '../../components/showJson';
+import { AppView, ScreenName, ShowJson } from '../../components/common';
 import { useOrderDetail,  } from '../../helper';
 import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
-import { ORDER_MORE_FIELDS } from '../../config';
+import { ORDER_MORE_FIELDS, AVAILABLE_TO_CANCEL_ORDER_STATUS } from '../../config';
 import { toTimeZoneDate } from '../../utils';
 
 const OrderStatusTop = ({orderDetail}) => {
@@ -97,13 +94,13 @@ const OrderStatusButton = ({orderDetail}) => {
 		return navigation.navigate('UpdateOrder', {action: 'cancel', id})
 	}
 
-	const onModify = (id) => {
-		return navigation.navigate('UpdateOrder', {action: 'update', id}) 
-	}
+	// const onModify = (id) => {
+	// 	return navigation.navigate('UpdateOrder', {action: 'update', id}) 
+	// }
 
 	return (
 		<>
-		{status == "new" && 
+		{AVAILABLE_TO_CANCEL_ORDER_STATUS.includes(status) &&
 			<View style={styles.orderButtonContainer}>
 				<OrderButton title="CANCEL" onClick={() => onCancel(id)}/>
 				<OrderButton title="MODIFY" onClick={() => onModify(id)}/>
@@ -133,7 +130,7 @@ const OrderStatus = (props) => {
 
 	React.useEffect(() => {
 		const fetchOrderDetail = async() => {
-			if (!!order && order?.status == "new") {
+			if (order?.status == "new" || order?.type == "market") {
 				const orderDetail = await getOrderDetail();
 				if (!!orderDetail) {
 					setDetail(orderDetail);

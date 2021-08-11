@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
-import ShowJson from './showJson';
+import { ShowJson } from './common';
 import { useOrders } from '../helper';
 
 import { COMPLETE_ORDER_STATUS, OPEN_ORDER_STATUS } from './config'

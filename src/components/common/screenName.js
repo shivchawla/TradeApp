@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
-import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../theme';
+import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../../theme';
 
-const ScreenName = ({name}) => {
+export const ScreenName = ({name}) => {
   return (
     <View style={styles.nameContainer}>
       <StyledText style={styles.screenName}>{name}</StyledText>
@@ -24,5 +24,3 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   }
 });
-
-export default ScreenName;

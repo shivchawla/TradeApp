@@ -1,8 +1,7 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 
-import AppView from '../../components/appView';
-import ConfirmButton from '../../components/confirmButton';
+import {AppView, ConfirmButton} from '../../components/common';
 
 const Disclosure = (props) => {
 

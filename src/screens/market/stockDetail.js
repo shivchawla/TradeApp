@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { View, StyleSheet } from 'react-native';
 
-import AppView from '../../components/appView';
+import {AppView} from '../../components/common';
 import StockChart from '../../components/stockChart';
 import TradeButtons from '../../components/tradeButtons';
 import StockPosition from '../../components/stockPosition';

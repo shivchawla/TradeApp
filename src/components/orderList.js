@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { View, StyleSheet, Pressable, ScrollView } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
-import ShowJson from './showJson';
+import { ShowJson } from './common';
 import { useOrders } from '../helper';
 
 //What's the differene between TradeHistory and this component
