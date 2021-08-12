@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 
 import { priceChangeFromSnapshot, priceChangeFromRealtime } from '../utils';
-import { useStockEODData, useStockRealtimeData } from  '../helper';
+import { useStockEODData, useStockRealtimeData, useClock } from  '../helper';
 import { useTheme, StyledText, Typography, WP, HP }  from '../theme';
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -27,6 +27,7 @@ const PriceChange = ({price, changeValue, changePct, ...props}) => {
 }
 
 const TickerDisplay = ({symbol, ...props}) => {
+	const {getClock} = useClock({enabled: false});
 	const {rtData, subscribe, unsubscribe} = useStockRealtimeData(symbol);
 	const {snapshot} = useStockEODData(symbol);
 
@@ -36,7 +37,7 @@ const TickerDisplay = ({symbol, ...props}) => {
 	useFocusEffect(
 		React.useCallback(() => {
 			console.log("Subscribe on Focus: ", symbol);
-			subscribe(symbol);
+			getClock().then(clock => {if(clock.is_open) {subscribe(symbol)}});
 
 			//On unFocus
 			return () => {		
@@ -46,11 +47,6 @@ const TickerDisplay = ({symbol, ...props}) => {
 
 		}, [])
 	);
-
-	// React.useEffect(() => {
-	// 	console.log("On Changing Rt Data")
-	// 	console.log(rtData);
-	// }, [rtData])
 	
 	return (
 		<>

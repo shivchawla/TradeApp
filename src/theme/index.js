@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {useColorScheme} from 'react-native';
 
 export { WP, HP } from './responsive';
-export { StyledText } from './styled';
+export { StyledText, PaddedView } from './styled';
 export { Typography } from './typography';
 
 export const DarkTheme = {

@@ -65,7 +65,8 @@ export const getPortfolioHistory = async (params = {}) => {
 }
 
 export const getTradingAccount = async () => {
-	// console.log("Fetching User Trading Account");
+	console.log("Fetching User Trading Account");
+	console.log(`/v1/trading/accounts/${account_id}/account`);
 	return await axios.get(`/v1/trading/accounts/${account_id}/account`).then(r => r.data)
 }
 

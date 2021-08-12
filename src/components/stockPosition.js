@@ -2,42 +2,11 @@ import React, {useState} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { ShowJson } from './common';
+import { VerticalField, PnLText } from './common';
 import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../theme';
 import { POSITION_FIELDS, POSITION_SUMMARY_FIELDS } from '../config';
 import { useStockPositionData } from '../helper';
-
-const formatValue = (value) => {
-	var output = value;
-
-	try {
-		output = parseFloat(value);
-		var decimals = output.countDecimals();
-		if(decimals == 0) {
-			return value;
-		} else {
-			return output.toFixed(2);
-		}
-	} catch (e) { console.log(e); }
-
-	return value.toUpperCase();
-}
-
-const PositionField = ({label, value, changeValue = 0, isPnL = false, right = false}) => {
-	
-	const theme = useTheme();
-
-	const styles = useStyles();
-
-	return (
-		<View style={styles.positionFieldContainer}>
-			<StyledText style={styles.positionFieldLabel}>{label}</StyledText>
-			<StyledText style={[styles.positionFieldValue, {...isPnL && {color: getPnLColor(value)}}]}>{formatValue(value)}
-				{!!changeValue && <StyledText style={[Typography.fourPointFive, {color: theme.positionValue}, styles.positionFieldValue, {...isPnL && {color: getPnLColor(value)}}]}> ({(changeValue*100).toFixed(2)}%)</StyledText>}
-			</StyledText>
-		</View>
-	);
-}
+import { formatValue, formatPctValue } from '../utils';
 
 const formatPositionToArray = (position, KEYS = []) => {
 	return KEYS.map(key => {
@@ -80,9 +49,13 @@ const StockPositionHeader = ({position, onToggle, showDetail}) => {
 		return(
 			<View style={[styles.positionSummaryField, style]}>
 				<StyledText style={styles.positionSummaryFieldLabel}>{label || POSITION_SUMMARY_FIELDS[field]}: </StyledText>
-				<StyledText style={[{...field.includes("_pl") && {color: getPnLColor(value)}}]}>{formatValue(value)}
-					{!!changeValue && <StyledText style={{...field.includes("_pl") && {color: getPnLColor(value)}}}> ({(formatValue(changeValue*100))}%)</StyledText>}
-				</StyledText>	
+				{
+					field.includes("_pl") ? 
+					<PnLText {...{value, changeValue}} />
+					: 
+					<StyledText> {formatValue(value)} </StyledText>
+
+				}
 			</View>
 		);
 	}
@@ -109,7 +82,7 @@ const StockPositionList = (position) => {
 	return ( 
 		<View style={styles.positionListContainer}>
 			{ formatPositionToArray(position, SHOW_POSITION_KEYS).map((item, index) => {
-					return <PositionField key={item.field} style={styles.positionFieldContainer} isPnL={item.field.includes("_pl")} {...{label: POSITION_FIELDS[item.field], value: item.value, changeValue: item.changeValue}} />	
+					return <VerticalField key={item.field} style={styles.positionFieldContainer} isPnL={item.field.includes("_pl")} {...{label: POSITION_FIELDS[item.field], value: item.value, changeValue: item.changeValue}} />	
 				})
 			}
 		</View>
@@ -119,7 +92,7 @@ const StockPositionList = (position) => {
 const ShowPosition = (position) => <ShowJson json={position || {}} />
 
 const StockPositionWithSymbol = ({symbol}) => {
-	const [isError, position] = useStockPositionData(symbol);
+	const {isError, position} = useStockPositionData(symbol);
 	const [showDetail, setShow] = useState(true);
 
 	const styles = useStyles();

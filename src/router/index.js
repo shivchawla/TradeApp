@@ -52,11 +52,12 @@ const homeTabs = () => {
      return (
         <Tabs.Navigator tabBarOptions={{showLabel: false, activeTintColor:theme.tabTint, style: {backgroundColor: theme.tabBackground}}}>
           {/*<Tabs.Screen name="SignIn" component={SignIn} />*/}
-          <Tabs.Screen name="Market" component={Market} options={marketScreenOptions}/>
+          
           {/*<Tabs.Screen name="ChooseStock" component={ChooseStock}/>*/}
           {/*<Tabs.Screen name="OrdersTrades" component={OrdersTrades} />*/}
 
           <Tabs.Screen name="Portfolio" component={Portfolio} options={portfolioScreenOptions}/>
+        	<Tabs.Screen name="Market" component={Market} options={marketScreenOptions}/>
         </Tabs.Navigator>
      )
 }

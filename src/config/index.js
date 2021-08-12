@@ -113,3 +113,12 @@ export const ORDER_MORE_FIELDS = {
   'expired_at': 'Expired'
 }
 
+export const ACCOUNT_SUMMARY_FIELDS = {
+  "regt_buying_power": "Reg. Buying Power",
+  "daytrading_buying_power": "Day Buying Power",
+  "cash": "Cash",
+  "portfolio_value": "Portfolio Value",
+  "initial_margin": "Initial Margin",
+  "maintenance_margin": "Maintenance Margin",
+}
+

@@ -38,7 +38,7 @@ export const AppView = ({scroll = true, footer, hasHeader = true, header, ...pro
 		{scroll ? 
 			<View style={styles.appContainer}>
 				{hasHeader || header ? header ? header : <AppHeader {...props}/> : <></>}
-				<ScrollView contentContainerStyle={[ props.appContainerStyle]}>
+				<ScrollView contentContainerStyle={[{width: '100%'}, props.appContainerStyle]}>
 					{props.children}
 				</ScrollView>
 				{footer && <View style={[styles.footerContainer, props.footerContainerStyle]}>{footer}</View>}
@@ -61,7 +61,8 @@ const useStyles = () => {
 		appContainer: { 
 			flex: 1,
 	    	alignItems: 'center',
-	    	backgroundColor: theme.background
+	    	backgroundColor: theme.background,
+	    	width: WP(100)
 	    },
 		headerContainer: {
 			flexDirection: 'row',

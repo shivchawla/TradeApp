@@ -7,14 +7,13 @@ const validateAccountParams = (params) => {
   return true;
 }
 
-
-export function useTradingAccountData() {
+export function useTradingAccountData(params={}) {
   console.log("useTradingAccountData");
-  const {isError, error, data} = useQuery(['tradingAccount'], () => getTradingAccount());
+  const {isError, error, data: tradingAccount, refetch} = useQuery(['tradingAccount'], () => getTradingAccount(), params);
   if (isError) {
     console.log(`ERROR (useTradingAccountData): ${error}`);
   }
-  return [isError, data];  
+  return {isError, tradingAccount, getTradingAccount:() => refetch().then(r => r.data)};  
 }
 
 
@@ -29,7 +28,7 @@ export function useCreateBrokerageAccount() {
 
   });
 
-  return [isError, mutate];
+  return {isError, mutate};
 }
 
 
