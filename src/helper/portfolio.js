@@ -6,10 +6,12 @@ import { getStockPosition, getStockPortfolio, getPortfolioHistory } from  './api
 export function useStockPositionData(symbol, params={}) {
   console.log("useStockPositionData: ", symbol);
   const {isError, error, data: position, refetch} = useQuery(['stockPosition', symbol], () => getStockPosition(symbol), params);
+  
   if (isError) {
     console.log(`ERROR (useStockPositionData): ${error}`);
   }
-  return {isError, position, getPosition: refetch().then(r => r.data)};
+  
+  return {isError, position, getPosition: () => refetch().then(r => r.data)};
 }
 
 export function useStockPortfolioData(params={}) {
@@ -19,7 +21,7 @@ export function useStockPortfolioData(params={}) {
     console.log(`ERROR (useStockPortfolioData): ${error}`);
   }
 
-  return {isError, portfolio, getPortfolio:() => refetch().then(r => r.data)};
+  return {isError, portfolio, getPortfolio: () => refetch().then(r => r.data)};
 }
 
 

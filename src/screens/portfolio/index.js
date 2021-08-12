@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
 import {AppView, PnLText, LineChart, HorizontalScrollMenu, VerticalField} from '../../components/common';
 import TickerDisplay from '../../components/tickerDisplay';
@@ -8,7 +9,6 @@ import * as Theme from '../../theme';
 import { useStockPortfolioData, useTradingAccountData, usePortfolioHistory } from '../../helper';
 
 import {formatValue} from '../../utils';
-
 import {ACCOUNT_SUMMARY_FIELDS} from '../../config';
 
 const {useTheme, WP, StyledText, PaddedView} = Theme;
@@ -30,8 +30,10 @@ const PortfolioDisplay = ({portfolio}) => {
 
 	const DisplayPosition = ({position}) => {
 		const {symbol, qty, side, unrealized_pl} = position;
+		const navigation = useNavigation()
+
 		return (
-			<View style={styles.portfolioDisplayHeader}>
+			<TouchableOpacity style={styles.portfolioDisplayHeader} onPress={() => navigation.navigate('StockDetail', {symbol})}>
 				<View style={styles.symbolQtyContainer}>
 					<StyledText style={styles.symbol}>{symbol}</StyledText>
 					<StyledText style={styles.quantity}>{formatValue(qty)} Shares</StyledText>
@@ -41,7 +43,7 @@ const PortfolioDisplay = ({portfolio}) => {
 					priceChangeStyle={styles.priceChangeStyle}
 					priceStyle={styles.priceStyle}/>
 				<PnLText valueStyle={styles.pnlText} value={unrealized_pl}  />
-			</View>
+			</TouchableOpacity>
 		)
 	}
 
@@ -63,7 +65,6 @@ const Portfolio = (props) => {
 	const {isError: isErrorAccount, tradingAccount} = useTradingAccountData();
 	const {isError: isErrorHistory, portfolioHistory} = usePortfolioHistory();
 
-	console.log(portfolioHistory);
 	const styles = useStyles();
 
 	const getLatestEquity = (history) => {

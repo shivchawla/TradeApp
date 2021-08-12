@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import {Chart} from './common';
+import {LineChart} from './common';
 
 import * as Theme  from '../theme';
 const { useTheme, StyledText} = Theme;
@@ -13,7 +13,7 @@ const StockChartIntraday = ({symbol, size, ...props}) => {
 	return (
 		<>
 		<StyledText>StockChartIntraday - {symbol} - {size}</StyledText>
-		<Chart values={intradayBars} {...{size}} />
+		<LineChart values={intradayBars} {...{size}} />
 		</>
 	)
 }
@@ -36,7 +36,7 @@ const StockChartDaily = ({symbol, timeframe, ...props}) => {
 	// <Chart prices={dailyData} {...{size}} />
 
 	return (
-		<Chart prices={formatBars(bars)} {...props}/>		
+		<LineChart values={formatBars(bars)} {...props}/>		
 	)
 }
 

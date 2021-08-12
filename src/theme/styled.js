@@ -25,7 +25,6 @@ const useStyles = () => {
 		paddedView: {
 			paddingLeft: WP(3),
 			paddingRight: WP(3),
-			justifyContent: 'center',
 			width: '100%'
 		}
 	});

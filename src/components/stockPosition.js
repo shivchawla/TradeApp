@@ -1,12 +1,15 @@
 import React, {useState} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {useFocusEffect} from '@react-navigation/native';
 
 import { VerticalField, PnLText } from './common';
-import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../theme';
+import * as Theme  from '../theme';
 import { POSITION_FIELDS, POSITION_SUMMARY_FIELDS } from '../config';
 import { useStockPositionData } from '../helper';
 import { formatValue, formatPctValue } from '../utils';
+
+const { useTheme, StyledText, PaddedView, Typography, WP, HP } = Theme;
 
 const formatPositionToArray = (position, KEYS = []) => {
 	return KEYS.map(key => {
@@ -80,19 +83,40 @@ const StockPositionList = (position) => {
 	const styles = useStyles();
 
 	return ( 
-		<View style={styles.positionListContainer}>
-			{ formatPositionToArray(position, SHOW_POSITION_KEYS).map((item, index) => {
-					return <VerticalField key={item.field} style={styles.positionFieldContainer} isPnL={item.field.includes("_pl")} {...{label: POSITION_FIELDS[item.field], value: item.value, changeValue: item.changeValue}} />	
+		<PaddedView style={styles.positionListContainer}>
+			{ formatPositionToArray(position, SHOW_POSITION_KEYS).map(({field, value, changeValue}, index) => {
+					return (
+						<VerticalField 
+							key={field} 
+							containerStyle={styles.positionFieldContainer}
+							isPnL={field.includes("_pl")} 
+							label={POSITION_FIELDS[field]}
+							{...{value, changeValue}} 
+						/>
+					)	
 				})
 			}
-		</View>
+		</PaddedView>
 	)
 }
 
 const ShowPosition = (position) => <ShowJson json={position || {}} />
 
 const StockPositionWithSymbol = ({symbol}) => {
-	const {isError, position} = useStockPositionData(symbol);
+	const {isError, getPosition} = useStockPositionData(symbol, {enabled: false});
+	const [position, setPosition] = useState(null);
+		
+	useFocusEffect(
+		React.useCallback(() => {
+			const fetchPosition = async() => {
+				setPosition(await getPosition());
+			}
+
+			return fetchPosition();
+
+		}, [])
+	)
+	
 	const [showDetail, setShow] = useState(true);
 
 	const styles = useStyles();
@@ -110,6 +134,10 @@ const StockPositionWithSymbol = ({symbol}) => {
 }
 
 const StockPosition = ({symbol, position}) => {
+	console.log("StockPosition");
+	console.log(symbol);
+	console.log(position);
+
 	return (
 		<>
 			{position ? <ShowPosition json = {position} /> 
@@ -131,7 +159,6 @@ const useStyles = () => {
 			paddingTop: WP(4)
 		},
 		positionListContainer: {
-			width: WP(100),
 			flexDirection: 'row',
 			flexWrap: 'wrap',
 		},
@@ -154,7 +181,6 @@ const useStyles = () => {
 		},
 		positionSummaryContainer: {
 			flexDirection: 'row',
-			// paddingRight: WP(2),
 			alignItems: 'center'
 		},
 		positionSummaryField: {
@@ -165,9 +191,10 @@ const useStyles = () => {
 			color: theme.darkgrey
 		},
 		positionFieldContainer: {
-			width: WP(50),
-			paddingLeft: WP(5),
-			marginBottom: WP(5)
+			width: '50%',
+			paddingLeft: WP(3),
+			marginBottom: WP(5),
+			textAlign: 'left'
 		},
 		positionFieldLabel: {
 			fontWeight: '400',
@@ -178,7 +205,6 @@ const useStyles = () => {
 			fontSize: Typography.fourPointFive, 
 			color: theme.positionValue
 		}
-
 	});
 
 	return styles;

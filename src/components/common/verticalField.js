@@ -15,7 +15,7 @@ export const VerticalField = ({label, value, changeValue = 0, isPnL = false, ...
 		<View style={[styles.container, props.containerStyle]}>
 			<StyledText style={[styles.label, props.labelStyle]}>{label}</StyledText>
 			{isPnL ? 
-				<PnLText {...{value, changeValue}} {...props} />
+				<PnLText {...{value, changeValue}} {...{valueStyle: props.valueStyle, changeStyle: props.changeStyle}} />
 				:
 				<StyledText style={[styles.value, props.valueStyle]}>{formatValue(value)}
 				</StyledText>

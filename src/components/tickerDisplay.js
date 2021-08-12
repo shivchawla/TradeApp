@@ -27,7 +27,7 @@ const PriceChange = ({price, changeValue, changePct, ...props}) => {
 }
 
 const TickerDisplay = ({symbol, ...props}) => {
-	const {getClock} = useClock({enabled: false});
+	// const {getClock} = useClock({enabled: false});
 	const {rtData, subscribe, unsubscribe} = useStockRealtimeData(symbol);
 	const {snapshot} = useStockEODData(symbol);
 
@@ -37,8 +37,9 @@ const TickerDisplay = ({symbol, ...props}) => {
 	useFocusEffect(
 		React.useCallback(() => {
 			console.log("Subscribe on Focus: ", symbol);
-			getClock().then(clock => {if(clock.is_open) {subscribe(symbol)}});
-
+			// getClock().then(clock => {if(clock?.is_open) {subscribe(symbol)}});
+			subscribe(symbol);
+			
 			//On unFocus
 			return () => {		
 				console.log("Unsubscribe on unfocus");

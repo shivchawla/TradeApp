@@ -13,7 +13,7 @@ export function useTradingAccountData(params={}) {
   if (isError) {
     console.log(`ERROR (useTradingAccountData): ${error}`);
   }
-  return {isError, tradingAccount, getTradingAccount:() => refetch().then(r => r.data)};  
+  return {isError, tradingAccount, getTradingAccount: () => refetch().then(r => r.data)};  
 }
 
 
@@ -34,10 +34,10 @@ export function useCreateBrokerageAccount() {
 
 export function useBrokerageAccountData(params = {}) {
   console.log("useBrokerageAccountData");
-  const {isError, error, data, isLoading} = useQuery(['brokerageAccount'], () => getBrokerageAccount(), params);
+  const {isError, error, data: brokerageAccount, refetch} = useQuery(['brokerageAccount'], () => getBrokerageAccount(), params);
   if (isError) {
     console.log(`ERROR (useBrokerageAccountData): ${error}`);
   }
 
-  return {isError, data};  
+  return {isError, brokerageAccount, getBrokerageAccount: () => refetch().then(r => r.data)};  
 }

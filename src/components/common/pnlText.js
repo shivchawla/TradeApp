@@ -16,7 +16,7 @@ export const PnLText = ({value = 0, changeValue = 0, withBracket = true, isPct =
 	const StyledText = Theme.StyledText;
 
 	const textAlign = props?.valueStyle?.textAlign;
-	const justifyContent = textAlign == 'left' ? 'flex-start' : textAlign == 'center' ? 'center' : 'flex-end'; 
+	const justifyContent = textAlign == 'right' ? 'flex-end' : textAlign == 'center' ? 'center' : 'flex-start'; 
 
 	return (
 		<View style={[styles.pnlTextContainer, props.containerStyle, {justifyContent}]}>
