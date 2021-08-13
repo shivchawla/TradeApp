@@ -2,7 +2,9 @@ import React, {useState} from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-import {AppView, PnLText, LineChart, HorizontalScrollMenu, VerticalField} from '../../components/common';
+import {AppView, AppHeader, PnLText, 
+	LineChart, HorizontalScrollMenu, VerticalField,
+	AccountIcon} from '../../components/common';
 import TickerDisplay from '../../components/tickerDisplay';
 
 import * as Theme from '../../theme';
@@ -77,6 +79,8 @@ const Portfolio = (props) => {
 
 	const PortfolioHeader = () => {
 		return (
+			<>
+			<AppHeader headerLeft={<AccountIcon />} title="Portfolio" goBack={false} />
 			<PaddedView style={styles.portfolioHeader}>
 				<VerticalField label="Total Balance" value={getLatestEquity(portfolioHistory)} />
 				<VerticalField 
@@ -86,6 +90,7 @@ const Portfolio = (props) => {
 					labelStyle={styles.pnlHeaderLabel}
 					valueStyle={styles.pnlHeaderValue}/>
 			</PaddedView>
+			</>
 		)
 	}
 
@@ -126,7 +131,7 @@ const Portfolio = (props) => {
 	return (
 		<>
 		{!loading && 
-			<AppView header={<PortfolioHeader />} title="Portfolio Home Screen">
+			<AppView header={<PortfolioHeader />} title="Portfolio">
 				<HorizontalScrollMenu items={menuItems} />
 				{portfolio && <PortfolioDisplay {...{portfolio}}/>}
 			</AppView>

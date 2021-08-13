@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
-import { ScrollView, View, Text, StyleSheet, Pressable, Image, useColorScheme } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Image, useColorScheme } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 
 import { StyledText, useTheme, WP } from '../../theme';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { GobackIcon } from './navIcons';
 
-const AppHeader = ({title, goBack = true, headerRight, ...props}) => {
+export const AppHeader = ({title, goBack = true, ...props}) => {
 	const showHeader = title || goBack;
 	const navigation = useNavigation();
 	const theme = useTheme();
@@ -16,12 +16,10 @@ const AppHeader = ({title, goBack = true, headerRight, ...props}) => {
 		<>
 		{showHeader &&
 			<View style={[styles.headerContainer, props.headerContainerStyle]}>
-				{goBack && 
-					<Pressable style={styles.backIconContainer} onPressOut={() => {typeof goBack === 'function' ? goBack() : navigation.goBack()}}>
-						<Ionicons name="chevron-back" color={theme.backArrow} size={WP(7)} />
-					</Pressable>}
+				{!!props?.headerLeft && <View style={styles.headerLeft}>{props.headerLeft}</View>}
+				{goBack && <GobackIcon {...{goBack}} />}
 				{title && <StyledText style={[styles.headerTitle, props.headerTitleStyle]}>{title}</StyledText>}
-				{headerRight && <View style={styles.headerRight}>{headerRight}</View>}
+				{!!props?.headerRight && <View style={styles.headerRight}>{props.headerRight}</View>}
 			</View>
 		}
 		</>
@@ -72,10 +70,6 @@ const useStyles = () => {
 			height: 50,
 			backgroundColor: theme.background
 		},
-		backIconContainer: {
-			position: 'absolute',
-			left: 10
-		},
 		footerContainer: {
 		    position: 'absolute',
 		    bottom:WP(0),
@@ -86,7 +80,13 @@ const useStyles = () => {
 		},
 		headerRight: {
 			position: 'absolute',
-			right: 10
+			right: 10,
+			justifyContent: 'center'
+		},
+		headerLeft: {
+			position: 'absolute',
+			left: 10,
+			justifyContent: 'center'
 		},
 		headerTitle:{
 			fontSize: 16,

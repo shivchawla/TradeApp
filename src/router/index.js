@@ -21,7 +21,7 @@ import Market from '../screens/market';
 // import ChooseStock from '../screens/order/chooseStock';
 import OrdersTrades from '../screens/order/ordersTrades';
 import Portfolio from '../screens/portfolio';
-import Settings from '../screens/settings'
+import Settings from '../screens/settings';
 // import SignUp from '../screens/auth/signUp'
 // import SignIn from '../screens/auth/signIn'
 
@@ -66,7 +66,8 @@ const TradingStack = () => {
 	return (
 		<Stack.Navigator screenOptions={{headerShown: false}}>
 			<Stack.Screen name="Home" component={homeTabs} />
-	        {innerScreens(Stack)}
+      {innerScreens(Stack)}
+	    <Stack.Screen name="Settings" component={Settings} />    
 		</Stack.Navigator>
      )
 }
