@@ -9,6 +9,7 @@ export { LineChart } from './linechart';
 export { HorizontalScrollMenu } from './horizontalScrollMenu';
 export { VerticalField } from './verticalField';
 
-export { GobackIcon, AccountIcon, SearchIcon, FavoriteIcon} from './navIcons';
+export { GobackIcon, AccountIcon, SearchIcon, 
+	FavoriteIcon, EditIcon} from './navIcons';
 
 export { TickerDisplay } from './tickerDisplay';

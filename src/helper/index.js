@@ -32,5 +32,5 @@ export { useStockRealtimeData, WebsocketProvider } from './stream';
 
 export { setStorageData, getStorageData, removeStorageData } from './store';
 
-export {useAllWatchList, useWatchList, useCreateWatchList, 
-	useDeleteWatchList, useUpdateWatchList} from './watchlist';
+export {useAllWatchlist, useWatchlist, useCreateWatchlist, 
+	useDeleteWatchlist, useUpdateWatchlist} from './watchlist';

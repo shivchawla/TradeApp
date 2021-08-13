@@ -18,13 +18,13 @@ export const AccountIcon = (props) => {
 	)
 }
 
-export const SearchIcon = (props) => {
+export const SearchIcon = ({onPress, ...props}) => {
 	const theme = useTheme();
 	const styles = useStyles();
 
 	const navigation = useNavigation();
 	return (
-		<TouchableOpacity style={[styles.rightIconContainer, props.containerStyle]} onPress={() => navigation.navigate('SearchStock')}>
+		<TouchableOpacity style={[styles.rightIconContainer, props.containerStyle]} onPress={onPress}>
 			<Ionicons name="search" color={props.iconColor || theme.backArrow} size={props.iconSize || WP(7)} />
 		</TouchableOpacity>
 	)
@@ -44,18 +44,29 @@ export const GobackIcon = ({goBack, ...props}) => {
 }
 
 
-export const FavoriteIcon = ({isFavorite, ...props}) => {
+export const FavoriteIcon = ({isFavorite, onPress, ...props}) => {
 	const theme = useTheme();
 	const styles = useStyles();
 
-	const navigation = useNavigation();
 	return (
-		<TouchableOpacity style={[styles.rightIconContainer, props.containerStyle]} onPress={() => navigation.navigate('AddWatchList')}>
+		<TouchableOpacity style={[styles.rightIconContainer, props.containerStyle]} onPress={onPress}>
 			{isFavorite ? 
 				<Ionicons name="heart" color={props.iconColor || theme.backArrow } size={props.iconSize || WP(7)} />
 				:
 				<Ionicons name="heart-outline" color={props.iconColor || theme.backArrow } size={props.iconSize || WP(7)} />
 			}
+		</TouchableOpacity>
+	)
+}
+
+
+export const EditIcon = ({onPress, ...props}) => {
+	const theme = useTheme();
+	const styles = useStyles();
+
+	return (
+		<TouchableOpacity style={[styles.rightIconContainer, props.containerStyle]} onPress={onPress}>
+			<Ionicons name="create-outline" color={props.iconColor || theme.backArrow } size={props.iconSize || WP(7)} />
 		</TouchableOpacity>
 	)
 }
@@ -70,12 +81,11 @@ const useStyles = () => {
 		leftIconContainer: {
 			position: 'absolute',
 			left: 10,
-			padding:0
 		},
 
 		rightIconContainer: {
 			position: 'absolute',
-			right: 10
+			right: 10,
 		},
 	});
 

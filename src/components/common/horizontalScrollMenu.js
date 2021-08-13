@@ -44,8 +44,8 @@ const useStyles = () => {
 		container: {
 			// alignItems: 'center',
 			justifyContent:'center',
-			borderBottomWidth: 1,
-			borderColor: theme.grey5,
+			// borderBottomWidth: 1,
+			// borderColor: theme.grey5,
 			width:'100%' 
 		},
 		selectContainer: {
