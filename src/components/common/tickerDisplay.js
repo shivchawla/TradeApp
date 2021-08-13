@@ -1,16 +1,12 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 
-import { priceChangeFromSnapshot, priceChangeFromRealtime } from '../utils';
-import { useStockEODData, useStockRealtimeData, useClock } from  '../helper';
-import { useTheme, StyledText, Typography, WP, HP }  from '../theme';
+import { priceChangeFromSnapshot, priceChangeFromRealtime } from '../../utils';
+import { useStockEODData, useStockRealtimeData, useClock } from  '../../helper';
+import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
 import { useFocusEffect } from '@react-navigation/native';
 
 const PriceChange = ({price, changeValue, changePct, ...props}) => {
-	// console.log(price);
-	// console.log(changeValue);
-	// console.log(changePct);
-
 	const theme = useTheme();
 	const getColor = (chg) => {
 		return chg > 0 ? theme.green : theme.red;
@@ -26,19 +22,16 @@ const PriceChange = ({price, changeValue, changePct, ...props}) => {
 	);
 }
 
-const TickerDisplay = ({symbol, ...props}) => {
-	// const {getClock} = useClock({enabled: false});
+export const TickerDisplay = ({symbol, ...props}) => {
+	const {getClock} = useClock({enabled: false});
 	const {rtData, subscribe, unsubscribe} = useStockRealtimeData(symbol);
 	const {snapshot} = useStockEODData(symbol);
-
-	// console.log("Rt Data");
-	// console.log(rtData);
 
 	useFocusEffect(
 		React.useCallback(() => {
 			console.log("Subscribe on Focus: ", symbol);
-			// getClock().then(clock => {if(clock?.is_open) {subscribe(symbol)}});
-			subscribe(symbol);
+			getClock().then(clock => {if(clock?.is_open) {subscribe(symbol)}});
+			// subscribe(symbol);
 			
 			//On unFocus
 			return () => {		
@@ -75,6 +68,3 @@ const useStyles = () => {
 
 	return styles;
 }
-
-
-export default TickerDisplay;

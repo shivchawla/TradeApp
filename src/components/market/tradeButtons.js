@@ -1,19 +1,19 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, Pressable} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
-import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../theme';
+import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
 
 const SingleButton = ({title, onClick, ...props}) => {
 	const styles = useStyles();
 	
 	return (
-		<Pressable style={[styles.button, props.buttonStyle, title=="BUY" ? styles.buyButton : styles.sellButton ]} onPressOut={onClick}>
+		<TouchableOpacity style={[styles.button, props.buttonStyle, title=="BUY" ? styles.buyButton : styles.sellButton ]} onPressOut={onClick}>
 			<StyledText style={[styles.buttonText,props.buttonTextStyle]}>{title}</StyledText>
-		</Pressable>
+		</TouchableOpacity>
 	);
 }	
 
-const TradeButtons = ({ticker, onBuy, onSell, ...props}) => {
+export const TradeButtons = ({ticker, onBuy, onSell, ...props}) => {
 	const styles = useStyles();
 	
 	return (
@@ -58,5 +58,3 @@ const useStyles = () => {
 
 	return styles;
 }
-
-export default TradeButtons;

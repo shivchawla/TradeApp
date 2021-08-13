@@ -3,11 +3,11 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useFocusEffect} from '@react-navigation/native';
 
-import { VerticalField, PnLText } from './common';
-import * as Theme  from '../theme';
-import { POSITION_FIELDS, POSITION_SUMMARY_FIELDS } from '../config';
-import { useStockPositionData } from '../helper';
-import { formatValue, formatPctValue } from '../utils';
+import { VerticalField, PnLText } from '../common';
+import * as Theme  from '../../theme';
+import { POSITION_FIELDS, POSITION_SUMMARY_FIELDS } from '../../config';
+import { useStockPositionData } from '../../helper';
+import { formatValue, formatPctValue } from '../../utils';
 
 const { useTheme, StyledText, PaddedView, Typography, WP, HP } = Theme;
 
@@ -133,10 +133,10 @@ const StockPositionWithSymbol = ({symbol}) => {
 	);	
 }
 
-const StockPosition = ({symbol, position}) => {
-	console.log("StockPosition");
-	console.log(symbol);
-	console.log(position);
+export const StockPosition = ({symbol, position}) => {
+	// console.log("StockPosition");
+	// console.log(symbol);
+	// console.log(position);
 
 	return (
 		<>
@@ -209,5 +209,3 @@ const useStyles = () => {
 
 	return styles;
 };
-
-export default StockPosition;

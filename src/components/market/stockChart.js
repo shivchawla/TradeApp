@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import {LineChart} from './common';
+import {LineChart} from '../common';
 
-import * as Theme  from '../theme';
+import * as Theme  from '../../theme';
 const { useTheme, StyledText} = Theme;
 
-import {useStockHistoricalData, useStockIntradayData} from '../helper';
+import {useStockHistoricalData, useStockIntradayData} from '../../helper';
 
 const StockChartIntraday = ({symbol, size, ...props}) => {
 	const {intradayBars} = useStockIntradayData(symbol);
@@ -40,7 +40,7 @@ const StockChartDaily = ({symbol, timeframe, ...props}) => {
 	)
 }
 
-const StockChart = ({type, ...props}) => {
+export const StockChart = ({type, ...props}) => {
 	return (
 		<>
 	 	{
@@ -52,5 +52,3 @@ const StockChart = ({type, ...props}) => {
 		</>
 	);
 }
-
-export default StockChart;

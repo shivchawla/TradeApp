@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 
-import { useStockEODData, useStockRealtimeData } from  '../helper';
-import { useTheme, StyledText, Typography, WP, HP }  from '../theme';
+import { useStockEODData, useStockRealtimeData } from  '../../helper';
+import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
 
-import TickerDisplay from './tickerDisplay';
+import { TickerDisplay } from '../common';
 
 const HighLow = ({symbol}) => {
 	const {rtData, subscribe} = useStockRealtimeData(symbol);
@@ -29,8 +29,7 @@ const HighLow = ({symbol}) => {
 	);
 }
 
-
-const StockDetailTop = ({symbol}) => {
+export const StockDetailTop = ({symbol}) => {
 	const styles = useStyles();	
 	
 	return (
@@ -58,4 +57,3 @@ const useStyles = () => {
 	return styles;
 }
 
-export default StockDetailTop;

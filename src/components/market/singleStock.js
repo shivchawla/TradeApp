@@ -3,11 +3,11 @@ import { View, Text, StyleSheet } from 'react-native';
 import { BarIndicator } from 'react-native-indicators';
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
-import StockChart from './stockChart'; 
-import { useAssetData } from  '../helper';
-import TickerDisplay from './tickerDisplay';
+import { StockChart } from './stockChart'; 
+import { TickerDisplay } from '../common';
 
-import {useTheme, StyledText, WP, HP, Typography} from '../theme';
+import { useAssetData } from  '../../helper';
+import {useTheme, StyledText, WP,} from '../../theme';
 
 const StockName = ({symbol}) => {
 	const {asset} = useAssetData(symbol);
@@ -33,7 +33,7 @@ const StockName = ({symbol}) => {
 	);
 }
 
-const SingleStock = ({symbol, onClick, detail = false}) => {
+export const SingleStock = ({symbol, onClick, detail = false}) => {
 	const styles = useStyles();
 	
 	const PlainView = () => {
@@ -63,7 +63,6 @@ const SingleStock = ({symbol, onClick, detail = false}) => {
 	);
 }
 
-
 const useStyles = () => {
 	const theme = useTheme();
 
@@ -90,5 +89,3 @@ const useStyles = () => {
 
 	return styles;	
 }
-
-export default SingleStock;

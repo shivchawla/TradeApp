@@ -1,11 +1,10 @@
 
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet} from 'react-native';
-import {useQuery} from 'react-query';
 import {BarIndicator} from 'react-native-indicators';
 
 import { AppView, AccountIcon, SearchIcon} from '../../components/common';
-import SingleStock from '../../components/singleStock';
+import { SingleStock } from '../../components/market';
 import { useTheme } from '../../theme' 
 
 import {defaultStocks} from '../../config';

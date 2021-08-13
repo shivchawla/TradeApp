@@ -1,11 +1,10 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 
-import { NDaysAgoISODate, NWeeksAgoISODate } from '../utils';
-import { useStockEODData, useStockHistoricalData } from  '../helper';
-import { useTheme, StyledText, Typography, WP, HP, getPnLColor }  from '../theme';
-import { MARKET_DATA_FIELDS } from '../config';
-
+import { NDaysAgoISODate, NWeeksAgoISODate } from '../../utils';
+import { useStockEODData, useStockHistoricalData } from  '../../helper';
+import { useTheme, StyledText, Typography, WP, HP, getPnLColor }  from '../../theme';
+import { MARKET_DATA_FIELDS } from '../../config';
 
 const DisplayMarketData = ({data}) => {
 	const styles = useStyles();
@@ -44,7 +43,7 @@ const DisplayMarketData = ({data}) => {
 }
 
 
-const StockMarketData = ({symbol}) => {
+export const StockMarketData = ({symbol}) => {
 	const {snapshot} = useStockEODData(symbol);
 	const {bars: monthlyBars52W} = useStockHistoricalData(symbol, {start:NWeeksAgoISODate(52), timeframe: '31Day'});
 	const {bars: monthlyBarsYtd} = useStockHistoricalData(symbol, {timeframe: '31Day'});
@@ -137,4 +136,3 @@ const useStyles = () => {
 	return styles;
 }
 
-export default StockMarketData;

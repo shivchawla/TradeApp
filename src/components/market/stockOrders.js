@@ -5,10 +5,10 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 import { titleCase } from "title-case";
 
-import { ShowJson } from './common';
-import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../theme';
-import { OPEN_ORDER_STATUS } from '../config';
-import { useOrders, useLatestTradingDay, useSymbolActivity } from '../helper';
+import { ShowJson } from '../common';
+import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../../theme';
+import { OPEN_ORDER_STATUS } from '../../config';
+import { useOrders, useLatestTradingDay, useSymbolActivity } from '../../helper';
 
 const OrderField = ({order}) => {
 	const theme = useTheme();
@@ -169,7 +169,7 @@ const StockOrdersWithSymbol = ({symbol}) => {
 	);	
 }
 
-const StockOrders = ({symbol, orders}) => {
+export const StockOrders = ({symbol, orders}) => {
 
 	return (
 		<>
@@ -250,4 +250,3 @@ const useStyles = () => {
 	return styles;
 };
 
-export default StockOrders;

@@ -1,11 +1,10 @@
-import React, {useState} from 'react';
+ import React, {useState} from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import {AppView, AppHeader, PnLText, 
 	LineChart, HorizontalScrollMenu, VerticalField,
-	AccountIcon} from '../../components/common';
-import TickerDisplay from '../../components/tickerDisplay';
+	AccountIcon, TickerDisplay} from '../../components/common';
 
 import * as Theme from '../../theme';
 import { useStockPortfolioData, useTradingAccountData, usePortfolioHistory } from '../../helper';

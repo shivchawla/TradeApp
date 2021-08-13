@@ -1,22 +1,21 @@
 import React, {useState, useEffect, useMemo} from 'react';
 import {ScrollView, View, Text, StyleSheet, TextInput, FlatList, Pressable} from 'react-native';
 import { debounce } from "lodash";
-import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../theme';
-
-import SingleStock from  './singleStock';
-
-import { useStockList } from '../helper';
-
-import {initialStocks} from '../config'
-
 import {useNavigation} from '@react-navigation/native';
 
-const SearchStockList = () => {
+import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
+import SingleStock from  './singleStock';
+
+import { useStockList } from '../../helper';
+import {initialStocks} from '../../config'
+
+export const SearchStockList = () => {
 
 	const stockList = useStockList();
 	const [stocks, setStocks] = useState([]);
 	const [keyword, setKeyword] = useState('');
 	const navigation = useNavigation();
+	const styles = useStyles();
 
 	// Initial Mount  
 	useEffect(() => {
@@ -80,21 +79,24 @@ const SearchStockList = () => {
 	);
 }
 
-const styles = StyleSheet.create({
-	stockContainer: {
+const useStyles = () => {
+	const theme = useTheme();
 
-	},
-	stockName: {
-		color:'black'
+	const styles = StyleSheet.create({
+		stockContainer: {
 
-	},
-	stockSymbol: {
-		color:'black'
-	},
-	textInput: {
-		textAlign: 'left',
-		color:'black'
-	}
-});
+		},
+		stockName: {
+			color:'black'
+		},
+		stockSymbol: {
+			color:'black'
+		},
+		textInput: {
+			textAlign: 'left',
+			color:'black'
+		}
+	});
 
-export default SearchStockList;
+	return styles;
+}

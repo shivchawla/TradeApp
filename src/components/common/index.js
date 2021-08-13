@@ -10,3 +10,5 @@ export { HorizontalScrollMenu } from './horizontalScrollMenu';
 export { VerticalField } from './verticalField';
 
 export { GobackIcon, AccountIcon, SearchIcon} from './navIcons';
+
+export { TickerDisplay } from './tickerDisplay';

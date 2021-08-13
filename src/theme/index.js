@@ -34,14 +34,14 @@ export const DarkTheme = {
         gryBack: "#CDCDCD",
         
         inActiveTab: "#FEC0A5",
-        background: '#1d2127',
-        tabBackground: 'black',
-        tabTint: 'yellow',
+        background: '#121212' , //'#0b0b0b',
+        tabBackground: '#0e0e0e',
+        tabTint: '#ffea00',
         black:'#1d2127',
         blackFontColor:'#20292f',
         green:'#57ff57',
         red:'#ff5757',
-        backArrow: 'yellow',
+        backArrow: '#ffea00',
         positionLabel: '#797D7F',
         positionValue: '#d9d9d9',
 

@@ -1,68 +1,18 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, TouchableOpacity, Text, TextInput, Dimensions } from 'react-native';
-
+import {View, StyleSheet, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import Modal from 'react-native-modal';
 
 import { AppView, ConfirmButton, 
-	Picker, BottomPicker, HorizontalPickField, 
-	HorizontalInputField, TextInputWithIcon} from '../../components/common';
+	HorizontalPickField, HorizontalInputField,
+	TickerDisplay} from '../../components/common';
+
+import { QuantitySelector, TifSelector, 
+	NotionalSelector, OrderTypeSelector } from '../../components/order'
 	
 import { usePlaceOrder, useSymbolActivity } from '../../helper';
 import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
-
-import TickerDisplay from '../../components/tickerDisplay';
-
-const QuantitySelector = ({quantity, isNotional, onChangeQuantity, onChangeType}) => {
-	const styles = useStyles();
-
-	const items = [{key: 'notional', title: 'USD'}, {key:'shares', title:'Shares'}];
-	const [selectedValue, setValue] = useState(isNotional ? items[0] : items[1]);
-
-	const onSelect = (v) => {
-		setValue(v); 
-		onChangeType(v.key);
-		onChangeQuantity(v.key == 'notional' ? 100 : 1);
-	}
-
-	return (
-		<View style={styles.quantitySelectContainer}>
-			<Picker {...{items, onSelect, selectedValue}} />
-
-			<TextInputWithIcon
-				textStyle={styles.quantity}
-		        onChange={(v) => onChangeQuantity(v)}
-		        value={quantity}
-	      	/>
-		</View>
-	)
-}
-
-const OrderTypeSelector = ({orderType, onSelect}) => {
-	const items = [{key: 'market', title: 'MARKET'}, {key: 'limit', title: 'LIMIT'}, {key:'stop', title: 'STOP MARKET'}, {stop: 'stop_limit', title: 'STOP LIMIT'}];
-	const selectedValue = items.find(item => item.key == orderType);
-	return (
-		<HorizontalPickField label="Order Type" {...{items, selectedValue, onSelect}} />
-	)
-}
-
-const TifSelector = ({tif, onSelect}) => {
-	const items = [{key: 'day', title: 'DAY'}, {key: 'gtc', title: 'GTC'}];
-	const selectedValue = items.find(item => item.key == tif);
-	return (
-		<HorizontalPickField label="Time in Force" {...{items, selectedValue, onSelect}} />
-	)
-}
-
-const NotionalSelector = ({isNotional, onSelect}) => {
-	const items = [{key: 'notional', title: 'USD'}, {key:'shares', title:'Shares'}];
-	const selectedValue = isNotional ? items[0] : items[1]
-	return (
-		<HorizontalPickField label="Quantity Type" {...{items, selectedValue, onSelect}} />
-	)
-}
-
 
 //Preview should be added here
 const PlaceOrder = (props) => {
@@ -223,8 +173,6 @@ const PlaceOrder = (props) => {
 		);
 	}
 
-
-
 	return (
 		<>
 		{fullView ? 
@@ -280,20 +228,7 @@ const useStyles = () => {
 		instructionText: {
 			fontSize: WP(6)
 		},
-		quantitySelectContainer: {
-			alignItems: 'center',
-			justifyContent: 'center',
-			flexDirection: 'row',
-			width: WP(100),
-			marginTop: HP(5)
-		},
 		
-		quantity: {
-			color: theme.grey3,
-			fontSize: WP(15),
-			marginLeft: WP(3),
-			marginRight: WP(1)
-		},
 		quantityFullView: {
 			color: theme.text,
 			fontSize: WP(6),

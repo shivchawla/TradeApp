@@ -2,9 +2,8 @@ import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 
 import {AppView} from '../../components/common';
-import StockPosition from '../../components/stockPosition' 
-import SingleStock from '../../components/singleStock' 
-import { TradeHistory, OpenOrders } from '../../components/stockActivity';
+import { SingleStock, StockPosition, 
+	TradeHistory, OpenOrders } from '../../components/market' 
 
 const PortfolioStock = ({symbol, position}) => {
 

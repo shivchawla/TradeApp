@@ -1,14 +1,9 @@
 import React, {useState} from 'react';
 import { View, StyleSheet } from 'react-native';
 
-import {AppView} from '../../components/common';
-import StockChart from '../../components/stockChart';
-import TradeButtons from '../../components/tradeButtons';
-import StockPosition from '../../components/stockPosition';
-import StockOrders from '../../components/stockOrders';
-import OrderList from '../../components/orderList';
-import StockDetailTop from '../../components/stockDetailTop';
-import StockMarketData from '../../components/stockMarketData';
+import { AppView } from '../../components/common';
+import { StockChart, TradeButtons, StockPosition, 
+	StockOrders, StockDetailTop, StockMarketData } from '../../components/market';
 
 import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
 

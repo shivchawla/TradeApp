@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
-import { ShowJson } from './common';
-import { useOrders } from '../helper';
+import { ShowJson } from '../common';
+import { useOrders } from '../../helper';
 
-import { COMPLETE_ORDER_STATUS, OPEN_ORDER_STATUS } from './config'
+import { COMPLETE_ORDER_STATUS, OPEN_ORDER_STATUS } from '../config'
 
-import { filterTrades, filterOpenOrders } from '../helper';
+import { filterTrades, filterOpenOrders } from '../../helper';
 
 const ShowTradeActivity = ({type, list}) => {
 	return (
@@ -28,18 +28,6 @@ const TradeHistoryWithSymbol = ({symbol}) => {
 
 }
 
-export const TradeHistory = ({symbols, trades}) => {
-	return (
-		<>
-			{
-				trades ? <ShowTradeHistory {...{trades}} /> : 
-				symbol ? <TradeHistoryWithSymbol {...{symbol}} /> :
-				<ShowJson json={{error: "Error in Component"}} />
-			}
-		</>
-	)
-}
-
 const ShowOpenOrders = (orders) => <ShowTradeActivity type="order" list={orders} />
 
 
@@ -50,7 +38,6 @@ const OpenOrdersWithSymbol = ({symbol}) => {
 		<ShowTradeHistory trades={filterOrders(openOrders)} />
 	)
 }
-
 
 export const OpenOrders = ({symbols, orders}) => {
 	return (
@@ -63,6 +50,19 @@ export const OpenOrders = ({symbols, orders}) => {
 		</>
 	)
 }
+
+export const TradeHistory = ({symbols, trades}) => {
+	return (
+		<>
+			{
+				trades ? <ShowTradeHistory {...{trades}} /> : 
+				symbol ? <TradeHistoryWithSymbol {...{symbol}} /> :
+				<ShowJson json={{error: "Error in Component"}} />
+			}
+		</>
+	)
+}
+
 
 const styles = StyleSheet.create({
 
