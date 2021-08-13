@@ -44,6 +44,24 @@ export const GobackIcon = ({goBack, ...props}) => {
 }
 
 
+export const FavoriteIcon = ({isFavorite, ...props}) => {
+	const theme = useTheme();
+	const styles = useStyles();
+
+	const navigation = useNavigation();
+	return (
+		<TouchableOpacity style={[styles.rightIconContainer, props.containerStyle]} onPress={() => navigation.navigate('AddWatchList')}>
+			{isFavorite ? 
+				<Ionicons name="heart" color={props.iconColor || theme.backArrow } size={props.iconSize || WP(7)} />
+				:
+				<Ionicons name="heart-outline" color={props.iconColor || theme.backArrow } size={props.iconSize || WP(7)} />
+			}
+		</TouchableOpacity>
+	)
+}
+
+
+
 const useStyles = () => {
 
 	const theme = useTheme();

@@ -51,3 +51,14 @@ export const formatPctValue = (changeValue) => {
 	return (changeValue*100).toFixed(2) + '%'
 }
 
+
+export const formatName = (name) => {
+	const RSTRING = ['Common Stock', 'Class C Capital Stock', 'Series 1', ',','oration', 'Class A', 'Class B', 'Class C']
+
+	var output = name 
+	RSTRING.forEach(rStr => {
+		output = output.replace(rStr, '').trim();
+	})
+
+	return output
+}

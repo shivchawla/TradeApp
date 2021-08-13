@@ -111,3 +111,44 @@ export const getBrokerageAccount = async(account_id) => {
 	console.log("Get Brokerage Account");
 	return await axios.get(`/v1/accounts/${account_id}`).then(r => r.data)	
 } 
+
+export const getAllWatchlist = async() => {
+	console.log("Get All Watchlists");
+	return await axios.get(`/v1/trading/accounts/${account_id}/watchlists`).then(r => r.data)	
+}
+
+export const getWatchlist = async(watchlist_id) => {
+	console.log("Get Watchlist: ", watchlist_id);
+	return await axios.get(`/v1/trading/accounts/${account_id}/watchlists/${watchlist_id}`).then(r => r.data)	
+}
+
+
+export const createWatchlist = async(watchlistParams) => {
+	console.log("Creating Watchlist");
+	console.log(watchlistParams);
+	return await axios.post(`/v1/trading/accounts/${account_id}/watchlists`, watchlistParams).then(r => r.data)	
+}
+
+
+export const updateWatchlist = async({watchlist_id, watchlistParams}) => {
+	console.log("Creating Watchlist");
+	console.log(watchlistParams);
+	return await axios.put(`/v1/trading/accounts/${account_id}/watchlists/${watchlist_id}`, watchlistParams).then(r => r.data)	
+}
+
+export const addAssetToWatchlist = async({watchlist_id, symbol}) => {
+	console.log("Adding Asset to Watchlist: ", watchlist_id);
+	console.log("Symbol: ", symbol);
+	return await axios.post(`/v1/trading/accounts/${account_id}/watchlists/${watchlist_id}`, symbol).then(r => r.data)	
+}
+
+export const removeAssetToWatchlist = async({watchlist_id, symbol}) => {
+	console.log("Adding Asset to Watchlist: ", watchlist_id);
+	console.log("Symbol: ", symbol);
+	return await axios.delete(`/v1/trading/accounts/${account_id}/watchlists/${watchlist_id}/${symbol}`).then(r => r.data)	
+}
+
+export const deleteWatchlist = async(watchlist_id) => {
+	console.log("Deleting Watchlist: ", watchlist_id);
+	return await axios.delete(`/v1/trading/accounts/${account_id}/watchlists/${watchlist_id}`, symbol).then(r => r.data)	
+}

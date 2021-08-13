@@ -20,7 +20,7 @@ const Market = (props) => {
 	const theme = useTheme();
 	
 	return (
-		<AppView headerLeft={<AccountIcon />} headerRight={<SearchIcon iconColor={theme.grey3}/>} 
+		<AppView headerLeft={<AccountIcon />} headerRight={<SearchIcon onPress/>} 
 			title="Market" 
 			goBack={false}>
 			

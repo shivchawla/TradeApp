@@ -10,13 +10,14 @@ import ChooseStock from '../screens/order/chooseStock';
 // import PendingOrders from '../screens/order/pendingOrders';
 import OrdersTrades from '../screens/order/ordersTrades';
 import StockDetail from '../screens/market/stockDetail';
-import PortfolioStock from '../screens/portfolio/portfolioStock';
+import SearchStock from '../screens/market/searchStock';
 
 //Where to show canceled orders?
 
 const innerScreens = (Stack) => {
   return [
       <Stack.Screen key="StockDetail" name="StockDetail" component={StockDetail} />,
+      <Stack.Screen key="SearchStock" name="SearchStock" component={SearchStock} />,
       <Stack.Screen key="ChooseStock" name="ChooseStock" component={ChooseStock} />,
       <Stack.Screen key="PlaceOrder" name="PlaceOrder" component={PlaceOrder} />,
       <Stack.Screen key="UpdateOrder" name="UpdateOrder" component={UpdateOrder} /> ,
@@ -24,7 +25,6 @@ const innerScreens = (Stack) => {
       <Stack.Screen key="OrderDetail" name="OrderDetail" component={OrderDetail} />,
       <Stack.Screen key="TradeDetail" name="TradeDetail" component={TradeDetail} />,
       <Stack.Screen key="OrdersTrades" name="OrdersTrades" component={OrdersTrades} />,
-      <Stack.Screen key="PortfolioStock" name="PortfolioStock" component={PortfolioStock} />
   ];
 };
 

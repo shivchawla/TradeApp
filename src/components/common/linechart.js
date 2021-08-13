@@ -8,8 +8,8 @@ const { useTheme, WP, HP } = Theme;
 export const LineChart = ({values, size, style}) => {
 	const theme = useTheme();
 
-	console.log("LineChart");
-	console.log(values);
+	// console.log("LineChart");
+	// console.log(values);
 
 	const getColor = (values = []) => {
 		const color = values.slice(-1).pop() > values[0] ? theme.green : theme.red;

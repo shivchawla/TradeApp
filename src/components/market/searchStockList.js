@@ -1,20 +1,23 @@
 import React, {useState, useEffect, useMemo} from 'react';
-import {ScrollView, View, Text, StyleSheet, TextInput, FlatList, Pressable} from 'react-native';
+import {ScrollView, View, StyleSheet, TextInput, FlatList, TouchableOpacity} from 'react-native';
 import { debounce } from "lodash";
 import {useNavigation} from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
+import { useTheme, StyledText, PaddedView, Typography, WP, HP }  from '../../theme';
 import SingleStock from  './singleStock';
 
 import { useStockList } from '../../helper';
-import {initialStocks} from '../../config'
+import { initialStocks } from '../../config'
+import { formatName } from '../../utils';
 
 export const SearchStockList = () => {
 
-	const stockList = useStockList();
+	const {stockList, getStockList} = useStockList();
 	const [stocks, setStocks] = useState([]);
 	const [keyword, setKeyword] = useState('');
 	const navigation = useNavigation();
+	const theme = useTheme();
 	const styles = useStyles();
 
 	// Initial Mount  
@@ -59,23 +62,26 @@ export const SearchStockList = () => {
 	renderItem = ({item}) => {
 		// console.log(item);
 		return (
-			<Pressable style={styles.stockContainer} onPressOut={() => toStockDetail(item.symbol)}>
-				<StyledText style={styles.stockSymbol}>{item.symbol}</StyledText>
-				<StyledText style={styles.stockName}>{item.name}</StyledText>
-			</Pressable>
+			<TouchableOpacity style={styles.stockContainer} onPress={() => toStockDetail(item.symbol)}>
+				<View>
+					<StyledText style={styles.stockSymbol}>{item.symbol}</StyledText>
+					<StyledText style={styles.stockName}>{formatName(item.name)}</StyledText>
+				</View>
+				<Ionicons name="chevron-forward" color={theme.backArrow } size={WP(7)} />
+			</TouchableOpacity>
 		);
 	}
 
 	return (
-		<View>
-			<StyledTextInput style={styles.textInput} onChangeText={changeHandler} type="text" />
-			<FlatList
+		<PaddedView style={styles.listContainer}>
+			<TextInput placeholder="Search Stocks" style={styles.textInput} onChangeText={changeHandler} type="text" />
+			<FlatList style
 				data={stocks}
 				renderItem={renderItem}
 				keyExtractor={item => item.id}
 			/>
 
-		</View>
+		</PaddedView>
 	);
 }
 
@@ -83,18 +89,28 @@ const useStyles = () => {
 	const theme = useTheme();
 
 	const styles = StyleSheet.create({
+		listContainer: {
+			width: WP(100),
+		},
 		stockContainer: {
-
+			marginTop: WP(5),
+			flexDirection: 'row',
+			justifyContent: 'space-between'
 		},
 		stockName: {
-			color:'black'
+			color: theme.text
 		},
 		stockSymbol: {
-			color:'black'
+			color: theme.text
 		},
 		textInput: {
 			textAlign: 'left',
-			color:'black'
+			color:theme.text,
+			borderWidth: 1, 
+			borderColor: theme.text,
+			padding: WP(1),
+			paddingLeft: WP(4),
+			marginBottom: WP(2)
 		}
 	});
 

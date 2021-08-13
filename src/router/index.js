@@ -55,9 +55,9 @@ const homeTabs = () => {
           
           {/*<Tabs.Screen name="ChooseStock" component={ChooseStock}/>*/}
           {/*<Tabs.Screen name="OrdersTrades" component={OrdersTrades} />*/}
-
-          <Tabs.Screen name="Portfolio" component={Portfolio} options={portfolioScreenOptions}/>
         	<Tabs.Screen name="Market" component={Market} options={marketScreenOptions}/>
+          
+          <Tabs.Screen name="Portfolio" component={Portfolio} options={portfolioScreenOptions}/>
         </Tabs.Navigator>
      )
 }

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { View, StyleSheet } from 'react-native';
 
-import { AppView } from '../../components/common';
+import { AppView, FavoriteIcon } from '../../components/common';
 import { StockChart, TradeButtons, StockPosition, 
 	StockOrders, StockDetailTop, StockMarketData } from '../../components/market';
 
@@ -21,7 +21,7 @@ const StockDetail = (props) => {
 	const styles = useStyles();
 
 	return (
-		<AppView footer={<TradeButtons {...{onBuy, onSell}} />} title={symbol} footerContainerStyle={styles.footer}>
+		<AppView headerRight={<FavoriteIcon />} footer={<TradeButtons {...{onBuy, onSell}} />} title={symbol} footerContainerStyle={styles.footer}>
 			<StockDetailTop {...{symbol}} />
 			<StockChart {...{symbol, size: 'L', timeframe: '5Day'}} style={styles.chartContainer} />
 			<StockPosition {...{symbol}} />

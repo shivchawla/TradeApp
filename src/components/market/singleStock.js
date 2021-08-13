@@ -9,19 +9,10 @@ import { TickerDisplay } from '../common';
 import { useAssetData } from  '../../helper';
 import {useTheme, StyledText, WP,} from '../../theme';
 
+import {formatName} from '../../utils';
+
 const StockName = ({symbol}) => {
 	const {asset} = useAssetData(symbol);
-
-	const formatName = (name) => {
-		const RSTRING = ['Common Stock', 'Class C Capital Stock', 'Series 1', ',','oration', 'Class A', 'Class B', 'Class C']
-
-		var output = name 
-		RSTRING.forEach(rStr => {
-			output = output.replace(rStr, '').trim();
-		})
-
-		return output
-	}
 
 	const styles = useStyles();
 

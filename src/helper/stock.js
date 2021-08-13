@@ -25,14 +25,15 @@ export function useStockIntradayData(symbol, {start = dayStartISODate(), end = d
 }
 
 
-export function useStockList() {
-  const {next_open} = useClock();
-  const cacheTime = next_open ? duration(next_open) : null;
+export function useStockList(params={}) {
+  const {clock, getClock} = useClock();
+  console.log("useStockList");
+  console.log(clock);
+  const cacheTime = !!clock?.next_open ? duration(clock.next_open) : null;
   const staleTime = cacheTime;
-  const {isError, error, data} = useQuery(['stockList', clock ? clock.next_open : ''], () => clock ? getStocks() : [], {...cacheTime && {cacheTime}, ...staleTime && {staleTime}});
-  
-  return data; 
+  const {isError, error, data: stockList, refetch} = useQuery(['stockList', clock?.next_open ?? ''], () => clock ? getStocks() : [], {...params, ...cacheTime && {cacheTime}, ...staleTime && {staleTime}});
 
+  return {isError, stockList, getStockList: () => refetch().then(r => r.data)}; 
 }
 
 export function useAssetData(symbol, params = {}) {

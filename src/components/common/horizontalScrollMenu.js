@@ -15,7 +15,7 @@ export const HorizontalScrollMenu = ({items, isPadded = true, ...props}) => {
 
 	const MenuButton = ({index, label, onPress}) => {
 		return (
-			<TouchableOpacity {...{onPress}} style={[styles.menuButton, props.menuButtonStyle, {...(index == selectedIndex) && {borderColor: 'yellow', padding: WP(8), borderWidth: 2}}]}>
+			<TouchableOpacity {...{onPress}} style={[styles.menuButton, props.menuButtonStyle, {...(index == selectedIndex) && {borderColor: theme.selectedBorder, padding: WP(8), borderWidth: 2}}]}>
 				<StyledText style={[styles.menuButtonText, props.menuButtonTextStyle]}>{label}</StyledText>
 			</TouchableOpacity>
 		)
