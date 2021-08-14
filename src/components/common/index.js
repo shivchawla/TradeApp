@@ -10,6 +10,7 @@ export { HorizontalScrollMenu } from './horizontalScrollMenu';
 export { VerticalField } from './verticalField';
 
 export { GobackIcon, AccountIcon, SearchIcon, 
-	FavoriteIcon, EditIcon} from './navIcons';
+	FavoriteIcon, EditIcon, AddIcon} from './navIcons';
 
 export { TickerDisplay } from './tickerDisplay';
+export { StockName } from './stockName';

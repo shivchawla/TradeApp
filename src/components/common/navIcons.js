@@ -72,6 +72,18 @@ export const EditIcon = ({onPress, ...props}) => {
 }
 
 
+export const AddIcon = ({onPress, ...props}) => {
+	const theme = useTheme();
+	const styles = useStyles();
+
+	return (
+		<TouchableOpacity style={[styles.rightIconContainer, props.containerStyle]} onPress={onPress}>
+			<Ionicons name="add" color={props.iconColor || theme.backArrow } size={props.iconSize || WP(7)} />
+		</TouchableOpacity>
+	)
+}
+
+
 
 const useStyles = () => {
 

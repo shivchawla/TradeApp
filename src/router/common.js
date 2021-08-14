@@ -12,8 +12,9 @@ import OrdersTrades from '../screens/order/ordersTrades';
 import StockDetail from '../screens/market/stockDetail';
 import SearchStock from '../screens/market/searchStock';
 
-import AddWatchlist from '../screens/market/addWatchlist';
-import ManageWatchlist from '../screens/market/manageWatchlist';
+import AddWatchlist from '../screens/watchlist/addWatchlist';
+import ManageWatchlist from '../screens/watchlist/manageWatchlist';
+import EditWatchlist from '../screens/watchlist/editWatchlist';
 
 //Where to show canceled orders?
 
@@ -21,8 +22,11 @@ const innerScreens = (Stack) => {
   return [
       <Stack.Screen key="StockDetail" name="StockDetail" component={StockDetail} />,
       <Stack.Screen key="SearchStock" name="SearchStock" component={SearchStock} />,
+      
       <Stack.Screen key="AddWatchlist" name="AddWatchlist" component={AddWatchlist} />,
       <Stack.Screen key="ManageWatchlist" name="ManageWatchlist" component={ManageWatchlist} />,
+      <Stack.Screen key="EditWatchlist" name="EditWatchlist" component={EditWatchlist} />,
+      
       <Stack.Screen key="ChooseStock" name="ChooseStock" component={ChooseStock} />,
       <Stack.Screen key="PlaceOrder" name="PlaceOrder" component={PlaceOrder} />,
       <Stack.Screen key="UpdateOrder" name="UpdateOrder" component={UpdateOrder} /> ,

@@ -4,25 +4,12 @@ import { BarIndicator } from 'react-native-indicators';
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
 import { StockChart } from './stockChart'; 
-import { TickerDisplay } from '../common';
+import { TickerDisplay, StockName } from '../common';
 
 import { useAssetData } from  '../../helper';
 import {useTheme, StyledText, WP,} from '../../theme';
 
 import {formatName} from '../../utils';
-
-const StockName = ({symbol}) => {
-	const {asset} = useAssetData(symbol);
-
-	const styles = useStyles();
-
-	return (
-		<View style={styles.stockNameContainer}>
-			<StyledText style={styles.stockSymbol}>{!!asset ? asset.symbol : '---'}</StyledText>
-			<StyledText style={styles.stockName}>{!!asset ? formatName(asset.name): '---'}</StyledText>
-		</View>
-	);
-}
 
 export const SingleStock = ({symbol, onClick, detail = false}) => {
 	const styles = useStyles();
@@ -63,15 +50,6 @@ const useStyles = () => {
 			justifyContent: 'space-between',
 			width: WP(100),
 			padding: WP(3),
-		},
-		stockNameContainer:{
-
-		},
-		stockName: {
-
-		},
-		stockSymbol:{
-
 		},
 		priceChangeContainer:{
 

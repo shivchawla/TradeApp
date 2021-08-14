@@ -5,7 +5,7 @@ import {useNavigation} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { useTheme, StyledText, PaddedView, Typography, WP, HP }  from '../../theme';
-import SingleStock from  './singleStock';
+import { SingleStock, StockName } from  './';
 
 import { useStockList } from '../../helper';
 import { initialStocks } from '../../config'
@@ -59,14 +59,10 @@ export const SearchStockList = () => {
 		navigation.navigate('StockDetail', {symbol});
 	}
 
-	renderItem = ({item}) => {
-		// console.log(item);
+	renderItem = ({item: stock}) => {
 		return (
-			<TouchableOpacity style={styles.stockContainer} onPress={() => toStockDetail(item.symbol)}>
-				<View>
-					<StyledText style={styles.stockSymbol}>{item.symbol}</StyledText>
-					<StyledText style={styles.stockName}>{formatName(item.name)}</StyledText>
-				</View>
+			<TouchableOpacity style={styles.stockContainer} onPress={() => toStockDetail(stock.symbol)}>
+				<StockName {...{stock}} />
 				<Ionicons name="chevron-forward" color={theme.backArrow } size={WP(7)} />
 			</TouchableOpacity>
 		);
@@ -96,12 +92,6 @@ const useStyles = () => {
 			marginTop: WP(5),
 			flexDirection: 'row',
 			justifyContent: 'space-between'
-		},
-		stockName: {
-			color: theme.text
-		},
-		stockSymbol: {
-			color: theme.text
 		},
 		textInput: {
 			textAlign: 'left',

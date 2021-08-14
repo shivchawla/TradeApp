@@ -4,7 +4,7 @@ import {View, StyleSheet} from 'react-native';
 import {BarIndicator} from 'react-native-indicators';
 import { useNavigation } from '@react-navigation/native';
 
-import { AppView, AccountIcon, SearchIcon, HorizontalScrollMenu, EditIcon} from '../../components/common';
+import { AppView, AccountIcon, SearchIcon, HorizontalScrollMenu, AddIcon} from '../../components/common';
 import { SingleStock } from '../../components/market';
 import { useTheme, WP } from '../../theme' 
 
@@ -87,7 +87,7 @@ const Market = (props) => {
 			{!!watchlists && 
 				<View style={styles.watchlistContainer}>
 					<SelectWatchlist {...{watchlists}} selectContainerStyle={{width: WP(80)}}/>
-					<EditIcon containerStyle={{top:10}} onPress={() => navigation.navigate('ManageWatchlist') }/>
+					<AddIcon containerStyle={{top:10}} onPress={() => navigation.navigate('ManageWatchlist') }/>
 				</View>
 			}
 
