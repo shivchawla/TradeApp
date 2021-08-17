@@ -9,7 +9,7 @@ import { POSITION_FIELDS, POSITION_SUMMARY_FIELDS } from '../../config';
 import { useStockPositionData } from '../../helper';
 import { formatValue, formatPctValue } from '../../utils';
 
-const { useTheme, StyledText, PaddedView, Typography, WP, HP } = Theme;
+const { useTheme, StyledText, Typography, WP, HP } = Theme;
 
 const formatPositionToArray = (position, KEYS = []) => {
 	return KEYS.map(key => {
@@ -83,7 +83,7 @@ const StockPositionList = (position) => {
 	const styles = useStyles();
 
 	return ( 
-		<PaddedView style={styles.positionListContainer}>
+		<View style={styles.positionListContainer}>
 			{ formatPositionToArray(position, SHOW_POSITION_KEYS).map(({field, value, changeValue}, index) => {
 					return (
 						<VerticalField 
@@ -96,7 +96,7 @@ const StockPositionList = (position) => {
 					)	
 				})
 			}
-		</PaddedView>
+		</View>
 	)
 }
 

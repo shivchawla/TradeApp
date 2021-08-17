@@ -18,6 +18,19 @@ export const AccountIcon = (props) => {
 	)
 }
 
+export const CloseIcon = ({onPress, ...props}) => {
+	const theme = useTheme();
+	const styles = useStyles();
+
+	const navigation = useNavigation();
+
+	return (
+		<TouchableOpacity style={[styles.leftIconContainer, props.containerStyle]} onPress={onPress}>
+			<Ionicons name="close" color={props.iconColor || theme.backArrow} size={props.iconSize || WP(7)} />
+		</TouchableOpacity>
+	)
+}
+
 export const SearchIcon = ({onPress, ...props}) => {
 	const theme = useTheme();
 	const styles = useStyles();
@@ -84,20 +97,19 @@ export const AddIcon = ({onPress, ...props}) => {
 }
 
 
-
 const useStyles = () => {
 
 	const theme = useTheme();
 	
 	const styles = StyleSheet.create({
 		leftIconContainer: {
-			position: 'absolute',
-			left: 10,
+		// 	position: 'absolute',
+		// 	left: 10,
 		},
 
 		rightIconContainer: {
-			position: 'absolute',
-			right: 10,
+		// 	position: 'absolute',
+		// 	right: 10,
 		},
 	});
 

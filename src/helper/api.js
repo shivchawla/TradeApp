@@ -18,7 +18,7 @@ export const getCalendar = async(query) => {
 } 
 
 export const getStocks = async() => {
-	// console.log("Fetching Stocks");
+	console.log("Fetching Stocks");
 	return await axios.get('/v1/assets', {params: {status: 'active'}}).then(r => r.data);
 }
 

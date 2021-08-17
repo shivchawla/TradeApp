@@ -23,9 +23,11 @@ const useStyles = () => {
 			fontFamily: 'Roboto'
 		},
 		paddedView: {
-			paddingLeft: WP(3),
-			paddingRight: WP(3),
-			width: '100%'
+			// paddingLeft: WP(3),
+			// paddingRight: WP(3),
+			width: '100%',
+			justifyContent: 'center',
+			alignItems: 'center'
 		}
 	});
 

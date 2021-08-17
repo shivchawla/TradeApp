@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {View, StyleSheet, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
-import Modal from 'react-native-modal';
 
 import { AppView, ConfirmButton, 
 	HorizontalPickField, HorizontalInputField,

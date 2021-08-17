@@ -75,7 +75,7 @@ export const BottomPicker = ({items, selectedValue, onSelect}) => {
 
 		<Modal 
 			deviceWidth={deviceWidth}
-      		deviceHeight={deviceHeight}
+  		deviceHeight={deviceHeight}
 			animationType="slide" 
 			isVisible={show} 
 			onBackdropPress={() => setShow(false)}

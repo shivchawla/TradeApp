@@ -5,7 +5,7 @@ import {AppView, PnLText, LineChart} from './';
 
 import * as Theme from '../../theme';
 
-const {useTheme, WP, StyledText, PaddedView} = Theme;
+const {useTheme, WP, StyledText} = Theme;
 
 export const HorizontalScrollMenu = ({items, isPadded = true, ...props}) => {
 	const styles = useStyles();
@@ -23,16 +23,15 @@ export const HorizontalScrollMenu = ({items, isPadded = true, ...props}) => {
 
 	const Component = items[selectedIndex].component;
 
-	const OuterContainer = isPadded ? PaddedView : View;
 	return (
-		<OuterContainer style={[styles.container, props.containerStyle]}>	
+		<View style={[styles.container, props.containerStyle]}>	
 			<View style={[styles.selectContainer, props.selectContainerStyle]}>
 				{items.map(({label, key}, index) => {
 					return (<MenuButton {...{key, label, index}} onPress={() => {console.log("Pressed: ", index); setIndex(index);}} />);
 				})}
 			</View>
 			<Component />
-		</OuterContainer>
+		</View>
 	)
 }
 
@@ -42,11 +41,8 @@ const useStyles = () => {
 	
 	const styles = StyleSheet.create({
 		container: {
-			// alignItems: 'center',
+			// alignItems: 'center', //???? - this pushes content outside visibility 
 			justifyContent:'center',
-			// borderBottomWidth: 1,
-			// borderColor: theme.grey5,
-			width:'100%' 
 		},
 		selectContainer: {
 			flexDirection: 'row',

@@ -12,7 +12,7 @@ import { useStockPortfolioData, useTradingAccountData, usePortfolioHistory } fro
 import {formatValue} from '../../utils';
 import {ACCOUNT_SUMMARY_FIELDS} from '../../config';
 
-const {useTheme, WP, StyledText, PaddedView} = Theme;
+const {useTheme, WP, StyledText} = Theme;
 
 const PortfolioDisplay = ({portfolio}) => {
 
@@ -49,14 +49,14 @@ const PortfolioDisplay = ({portfolio}) => {
 	}
 
 	return (
-		<PaddedView style= {styles.portfolioDisplayContainer}>
+		<View style= {styles.portfolioDisplayContainer}>
 			<StyledText style={styles.portfolioDisplayTitle}>POSITIONS</StyledText>
 			<PortfolioDisplayHeader />
 			{portfolio.map((item, index) => {
 				return <DisplayPosition key={index} position={item} />
 			})
 			}
-		</PaddedView>
+		</View>
 
 	)
 }
@@ -80,7 +80,7 @@ const Portfolio = (props) => {
 		return (
 			<>
 			<AppHeader headerLeft={<AccountIcon />} title="Portfolio" goBack={false} />
-			<PaddedView style={styles.portfolioHeader}>
+			<View style={styles.portfolioHeader}>
 				<VerticalField label="Total Balance" value={getLatestEquity(portfolioHistory)} />
 				<VerticalField 
 					label="Change (1M)" 
@@ -88,7 +88,7 @@ const Portfolio = (props) => {
 					isPnL={true} 
 					labelStyle={styles.pnlHeaderLabel}
 					valueStyle={styles.pnlHeaderValue}/>
-			</PaddedView>
+			</View>
 			</>
 		)
 	}

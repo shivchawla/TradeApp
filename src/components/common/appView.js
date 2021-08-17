@@ -1,10 +1,32 @@
 import React, {useState} from 'react';
-import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Image, useColorScheme } from 'react-native';
+import { SafeAreaView, ScrollView, View, StyleSheet, TouchableOpacity,} from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { useNavigation } from '@react-navigation/native';
+import { BarIndicator } from 'react-native-indicators';
 
 import { StyledText, useTheme, WP } from '../../theme';
 import { GobackIcon } from './navIcons';
+
+export const RightHeaderButton = ({title="", icon="", onPress, ...props}) => {
+	const styles = useStyles();
+	const theme = useTheme();
+	return (
+		<>
+		{title != "" &&	
+			<TouchableOpacity style={[styles.tinyButton, props.style]} onPress={onPress}>
+				<StyledText style={styles.tinyButtonText}>{title}</StyledText>
+			</TouchableOpacity>
+		}
+
+		{icon != "" &&	
+			<TouchableOpacity style={[styles.iconButton, props.style]} onPress={onPress}>
+				<Ionicons name={icon} color={theme.backArrow} size={WP(7)} />
+			</TouchableOpacity>
+		}
+		</>
+	)
+}
 
 export const AppHeader = ({title, goBack = true, ...props}) => {
 	const showHeader = title || goBack;
@@ -17,7 +39,7 @@ export const AppHeader = ({title, goBack = true, ...props}) => {
 		{showHeader &&
 			<View style={[styles.headerContainer, props.headerContainerStyle]}>
 				{!!props?.headerLeft && <View style={styles.headerLeft}>{props.headerLeft}</View>}
-				{goBack && <GobackIcon {...{goBack}} />}
+				{goBack && <View style={styles.headerLeft}><GobackIcon {...{goBack}} /></View>}
 				{title && <StyledText style={[styles.headerTitle, props.headerTitleStyle]}>{title}</StyledText>}
 				{!!props?.headerRight && <View style={styles.headerRight}>{props.headerRight}</View>}
 			</View>
@@ -26,17 +48,19 @@ export const AppHeader = ({title, goBack = true, ...props}) => {
 	);
 }
 
-export const AppView = ({scroll = true, footer, hasHeader = true, header, ...props}) => {
+export const AppView = ({scroll = true, footer, hasHeader = true, header, isLoading = false, ...props}) => {
 
 	const Component = scroll ? ScrollView : View;
 	const styles = useStyles();
 
 	return (
 		<>
-		{scroll ? 
-			<View style={styles.appContainer}>
+		{isLoading ? 
+			<BarIndicator color="white" /> : 
+		scroll ? 
+			<View style={styles.scrollAppContainer}>
 				{hasHeader || header ? header ? header : <AppHeader {...props}/> : <></>}
-				<ScrollView contentContainerStyle={[{width: '100%'}, props.appContainerStyle]}>
+				<ScrollView contentContainerStyle={styles.scrollView}>
 					{props.children}
 				</ScrollView>
 				{footer && <View style={[styles.footerContainer, props.footerContainerStyle]}>{footer}</View>}
@@ -56,15 +80,31 @@ const useStyles = () => {
 	const theme = useTheme();
 
 	const styles = StyleSheet.create({
+		scrollAppContainer: { 
+			flex: 1,
+	    	alignItems: 'center',
+	    	width: WP(100),
+	    	backgroundColor: theme.background,
+	    },
+	    scrollView: {
+	    	backgroundColor: theme.background,
+	    	flex:1,
+	    	width: WP(100),
+	    	paddingLeft:WP(3),
+	    	paddingRight:WP(3)
+	    },
 		appContainer: { 
 			flex: 1,
 	    	alignItems: 'center',
+	    	justifyContent: 'center',
+	    	width: WP(100),
+	    	paddingLeft:WP(3),
+	    	paddingRight:WP(3),
 	    	backgroundColor: theme.background,
-	    	width: WP(100)
 	    },
 		headerContainer: {
 			flexDirection: 'row',
-			width: '100%',
+			width: WP(100),
 			alignItems: 'center',
 			justifyContent: 'center',
 			height: 50,
@@ -94,6 +134,15 @@ const useStyles = () => {
 		},
 		iconImage:{
 			height:40
+		},
+		tinyButton: {
+			padding: WP(0.5),
+			paddingLeft: WP(2.5),
+			paddingRight: WP(2.5),
+		},
+		tinyButtonText: {
+			color: theme.backArrow,
+			fontWeight: '700'
 		}
 	});
 

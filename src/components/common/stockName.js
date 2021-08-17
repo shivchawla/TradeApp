@@ -1,21 +1,23 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {useTheme, StyledText} from '../../theme'
 
 import {formatName} from '../../utils';
 import { useAssetData } from  '../../helper';
 
-export const StockName = ({symbol, stock}) => {
+export const StockName = ({symbol, stock, ...props}) => {
 	const styles = useStyles();
 	const {getAsset} = useAssetData(symbol, {enabled: false});
 	const [asset, setAsset] = useState(null);
 
 	React.useEffect(() => {
 		const fetchAsset = async() => {
-			if (!!stock) {
-				setAsset(Stock)
-			} else {
-				setAsset(await getAsset(symbol));
+			if (!!!asset) {
+				if (!!stock) {
+					setAsset(stock)
+				} else {
+					setAsset(await getAsset(symbol));
+				}
 			}
 		}
 
@@ -24,7 +26,7 @@ export const StockName = ({symbol, stock}) => {
 	}, []);
 
 	return (
-		<View style={styles.stockNameContainer}>
+		<View style={[styles.stockNameContainer, props.containerStyle]}>
 			<StyledText style={styles.stockSymbol}>{!!asset ? asset.symbol : '---'}</StyledText>
 			<StyledText style={styles.stockName}>{!!asset ? formatName(asset.name): '---'}</StyledText>
 		</View>

@@ -1,7 +1,6 @@
 
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet} from 'react-native';
-import {BarIndicator} from 'react-native-indicators';
 import { useNavigation } from '@react-navigation/native';
 
 import { AppView, AccountIcon, SearchIcon, HorizontalScrollMenu, AddIcon} from '../../components/common';
@@ -13,16 +12,21 @@ import { useAllWatchlist, useCreateWatchlist, useWatchlist, useDeletewatchlist }
 
 const ShowWatchlist = ({watchlistId}) => {
 
+	const navigation = useNavigation();
 	const {watchlist} = useWatchlist(watchlistId);
 
+	const toStockDetail = (symbol) => {
+		navigation.navigate('StockDetail', {symbol});
+	}
+
 	return (
-		<>
+		<View style={{marginTop: WP(5)}}>
 		{watchlist && watchlist.assets.length > 0 &&
 			watchlist.assets.map(({symbol}, index) => {	
 				return <SingleStock key={symbol} {...{symbol}} onClick={() => toStockDetail(symbol)}/>
 			})
 		}
-		</>
+		</View>
 	)
 }
 
@@ -43,7 +47,10 @@ const Market = (props) => {
 	const {createWatchlist} = useCreateWatchlist();
 	
 	const [watchlists, setWatchlists] = useState(null);
-		
+
+	const theme = useTheme();
+	const navigation = useNavigation();
+	
 	React.useEffect(() => {
 
 		const manageWatchlists = async() => {
@@ -69,16 +76,6 @@ const Market = (props) => {
 
 	}, []);
 
-	const toStockDetail = (symbol) => {
-		// console.log("Navigating to Stock Detail");
-		const {navigation} = props;
-		navigation.navigate('StockDetail', {symbol});
-	}
-
-	const theme = useTheme();
-
-	const navigation = useNavigation();
-	
 	return (
 		<AppView headerLeft={<AccountIcon />} headerRight={<SearchIcon onPress/>} 
 			title="Market" 
@@ -87,7 +84,7 @@ const Market = (props) => {
 			{!!watchlists && 
 				<View style={styles.watchlistContainer}>
 					<SelectWatchlist {...{watchlists}} selectContainerStyle={{width: WP(80)}}/>
-					<AddIcon containerStyle={{top:10}} onPress={() => navigation.navigate('ManageWatchlist') }/>
+					<AddIcon containerStyle={{position:'absolute', right: 0, top: 10}} onPress={() => navigation.navigate('ManageWatchlist') }/>
 				</View>
 			}
 
@@ -97,8 +94,8 @@ const Market = (props) => {
 
 const styles = StyleSheet.create({
 	watchlistContainer: {
-		width: WP(100),
-		alignItems: 'center'
+		width: '100%',
+		justifyContent: 'center',
 	}
 });
 

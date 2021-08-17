@@ -4,14 +4,14 @@ import { debounce } from "lodash";
 import {useNavigation} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { useTheme, StyledText, PaddedView, Typography, WP, HP }  from '../../theme';
+import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
 import { SingleStock, StockName } from  './';
 
 import { useStockList } from '../../helper';
 import { initialStocks } from '../../config'
 import { formatName } from '../../utils';
 
-export const SearchStockList = () => {
+export const SearchStockList = ({showItem}) => {
 
 	const {stockList, getStockList} = useStockList();
 	const [stocks, setStocks] = useState([]);
@@ -19,6 +19,10 @@ export const SearchStockList = () => {
 	const navigation = useNavigation();
 	const theme = useTheme();
 	const styles = useStyles();
+
+	//TODO: Fetch all stocks at market open
+	//Search locally instead of API call
+	//Thus, no change on typing keyword
 
 	// Initial Mount  
 	useEffect(() => {
@@ -42,7 +46,7 @@ export const SearchStockList = () => {
 			setStocks(fStocks);
 		} else {
 			// console.log(initialStocks);
-			console.log((stockList || []).length);
+			// console.log((stockList || []).length);
 			// console.log((stockList || []).filter(item => initialStocks.includes(item.symbol)));
 
 			setStocks((stockList || []).filter(item => initialStocks.includes(item.symbol)));		}
@@ -54,7 +58,6 @@ export const SearchStockList = () => {
 
 	const debouncedChangeHandler = useMemo(() => debounce(changeHandler, 300), []);
 	
-
 	const toStockDetail = (symbol) => {
 		navigation.navigate('StockDetail', {symbol});
 	}
@@ -69,15 +72,15 @@ export const SearchStockList = () => {
 	}
 
 	return (
-		<PaddedView style={styles.listContainer}>
+		<View style={styles.listContainer}>
 			<TextInput placeholder="Search Stocks" style={styles.textInput} onChangeText={changeHandler} type="text" />
 			<FlatList style
 				data={stocks}
-				renderItem={renderItem}
+				renderItem={showItem ? showItem : renderItem}
 				keyExtractor={item => item.id}
 			/>
 
-		</PaddedView>
+		</View>
 	);
 }
 
@@ -86,7 +89,9 @@ const useStyles = () => {
 
 	const styles = StyleSheet.create({
 		listContainer: {
-			width: WP(100),
+			// width: WP(100),
+			width: '100%',
+			// alignItems: 'center'
 		},
 		stockContainer: {
 			marginTop: WP(5),
@@ -100,7 +105,8 @@ const useStyles = () => {
 			borderColor: theme.text,
 			padding: WP(1),
 			paddingLeft: WP(4),
-			marginBottom: WP(2)
+			marginBottom: WP(10),
+			width: '100%'
 		}
 	});
 

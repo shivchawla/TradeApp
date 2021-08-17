@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { BarIndicator } from 'react-native-indicators';
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
 import { StockChart } from './stockChart'; 
@@ -48,8 +47,8 @@ const useStyles = () => {
 		singleStockRow: {
 			flexDirection: 'row',
 			justifyContent: 'space-between',
-			width: WP(100),
-			padding: WP(3),
+			width: '100%',
+			alignItems: 'center'
 		},
 		priceChangeContainer:{
 
