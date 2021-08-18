@@ -77,7 +77,7 @@ const Market = (props) => {
 	}, []);
 
 	return (
-		<AppView headerLeft={<AccountIcon />} headerRight={<SearchIcon onPress/>} 
+		<AppView headerLeft={<AccountIcon />} headerRight={<SearchIcon onPress={() => navigation.navigate("SearchStock")}/>} 
 			title="Market" 
 			goBack={false}>
 

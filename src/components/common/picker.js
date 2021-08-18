@@ -113,17 +113,17 @@ export const TextInputWithIcon = ({value, onChange, ...props}) => {
 			{!edit ? 
 				<>
 					<StyledText style={props.textStyle}>{value}</StyledText>
-					<TouchableOpacity  onPress={() => setEdit(!edit)}>
-			      		<Ionicons name="pencil" color={props.iconColor || theme.grey3} size={props.iconsSize || WP(6)} />
-		      		</TouchableOpacity>
-	      		</>
+					<TouchableOpacity  style={props.iconContainerStyle} onPress={() => setEdit(!edit)}>
+	      		<Ionicons name="pencil" color={props.iconColor || theme.grey3} size={props.iconSize || WP(6)} />
+      		</TouchableOpacity>
+    		</>
 			:
 				<TextInput
 					{...props}
 			        style={props.textStyle}
 			        onChangeText={onChange}
 			        value={value.toString()}
-			        keyboardType="numeric"
+			        keyboardType={props.keyboardType || "numeric"}
 			        onSubmitEditing={() => setEdit(false)}
 			        autoFocus={edit}
 		      	/>

@@ -14,3 +14,4 @@ export { GobackIcon, AccountIcon, SearchIcon,
 
 export { TickerDisplay } from './tickerDisplay';
 export { StockName } from './stockName';
+export { TouchRadio} from './touchRadio';

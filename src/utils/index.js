@@ -38,3 +38,24 @@ export const deviceHeight =
         'REAL_WINDOW_HEIGHT',
       );
 
+
+
+export const generateName = (names = [], keyword = 'Random') => {
+	var found = false;
+	var count = names.length || 1;
+
+	console.log("Generate Name");
+	console.log(names);
+
+	const newName = () => {
+		return keyword + '-' + count;
+	}
+
+	while(!found) {
+		nName = newName();
+		found = !names.includes(nName);
+		count++;
+	}
+
+	return nName;	
+}

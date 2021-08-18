@@ -96,7 +96,6 @@ const useStyles = () => {
 		appContainer: { 
 			flex: 1,
 	    	alignItems: 'center',
-	    	justifyContent: 'center',
 	    	width: WP(100),
 	    	paddingLeft:WP(3),
 	    	paddingRight:WP(3),
@@ -108,7 +107,9 @@ const useStyles = () => {
 			alignItems: 'center',
 			justifyContent: 'center',
 			height: 50,
-			backgroundColor: theme.background
+			backgroundColor: theme.background,
+			// position: 'absolute',
+			// top:0
 		},
 		footerContainer: {
 		    position: 'absolute',

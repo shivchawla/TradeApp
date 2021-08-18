@@ -1,24 +1,21 @@
 import React, {useState, useEffect, useMemo} from 'react';
 import {ScrollView, View, StyleSheet, TextInput, FlatList, TouchableOpacity} from 'react-native';
-import { debounce } from "lodash";
 import {useNavigation} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
-import { SingleStock, StockName } from  './';
+import { StockName } from '../common';
+import { SingleStock} from  './';
 
 import { useStockList } from '../../helper';
 import { initialStocks } from '../../config'
-import { formatName } from '../../utils';
+import { formatName, removeArray, diffArray } from '../../utils';
 
-export const SearchStockList = ({showItem}) => {
+const useStockSearch = () => {
 
 	const {stockList, getStockList} = useStockList();
 	const [stocks, setStocks] = useState([]);
 	const [keyword, setKeyword] = useState('');
-	const navigation = useNavigation();
-	const theme = useTheme();
-	const styles = useStyles();
 
 	//TODO: Fetch all stocks at market open
 	//Search locally instead of API call
@@ -38,7 +35,7 @@ export const SearchStockList = ({showItem}) => {
 		// console.log("Keyword Use Effect")
 		// console.log(keyword);
 
-		if (keyword != '') {
+		if (keyword && keyword != '') {
 			const fStocks = (stockList || [])
 				.filter(stock => stock.symbol.toLowerCase().indexOf(keyword.toLowerCase()) != -1)
 				.sort((a, b) => a < b ? 1 : -1)
@@ -52,17 +49,43 @@ export const SearchStockList = ({showItem}) => {
 			setStocks((stockList || []).filter(item => initialStocks.includes(item.symbol)));		}
 	}, [keyword]);
 
+	return {stocks, setKeyword};
+		
+}
+
+const SearchStockBasic = ({renderItem}) => {
+	const theme = useTheme();
+	const styles = useStyles();
+
+	const {stocks, setKeyword} = useStockSearch()
+	
+	//Add useDebounce from react-use
 	const changeHandler = (text) => {
 	    setKeyword(text);
   	};
-
-	const debouncedChangeHandler = useMemo(() => debounce(changeHandler, 300), []);
 	
+	return (
+		<View style={styles.listContainer}>
+			<TextInput placeholder="Search Stocks" style={styles.textInput} onChangeText={changeHandler} type="text" />
+			<FlatList 
+				data={stocks}
+				renderItem={renderItem}
+				keyExtractor={item => item.id}
+			/>
+		</View>
+	);
+} 
+
+export const SearchStockList = () => {
+	const theme = useTheme();
+	const styles = useStyles();
+
+	const navigation = useNavigation();
 	const toStockDetail = (symbol) => {
 		navigation.navigate('StockDetail', {symbol});
 	}
 
-	renderItem = ({item: stock}) => {
+	const renderItem = ({item: stock}) => {
 		return (
 			<TouchableOpacity style={styles.stockContainer} onPress={() => toStockDetail(stock.symbol)}>
 				<StockName {...{stock}} />
@@ -71,27 +94,53 @@ export const SearchStockList = ({showItem}) => {
 		);
 	}
 
-	return (
-		<View style={styles.listContainer}>
-			<TextInput placeholder="Search Stocks" style={styles.textInput} onChangeText={changeHandler} type="text" />
-			<FlatList style
-				data={stocks}
-				renderItem={showItem ? showItem : renderItem}
-				keyExtractor={item => item.id}
-			/>
-
-		</View>
-	);
+	return <SearchStockBasic {...{renderItem}} />;
 }
+
+
+export const SearchStockWatchlist = React.forwardRef(({initialStocks}, ref) => {
+	const theme = useTheme();
+	const styles = useStyles();
+
+	const [selectedStocks, setSelected] = useState(initialStocks ?? []);
+
+	const toggleSelected = (stock) => {
+		if (selectedStocks.map(item => item.symbol).includes(stock.symbol)) {
+			//Remove
+			setSelected(removeArray(selectedStocks, stock, 'symbol'))
+		} else {
+			setSelected(selectedStocks.concat(stock));
+		}	
+	}
+
+	const renderItem = ({item: stock}) => {
+		return (
+			<View style={styles.watchlistItemContainer}>
+				<TouchableOpacity onPress={() => toggleSelected(stock)}>
+					<View style={styles.stockSelector} >
+						{selectedStocks.map(item => item.symbol).includes(stock.symbol) ?
+							<Ionicons name="heart" color={theme.backArrow } size={WP(7)} /> :
+							<Ionicons name="heart-outline" color={theme.backArrow } size={WP(7)} />
+						}
+						<StockName {...{stock}} containerStyle={{marginLeft: WP(5)}}/>
+					</View>
+				</TouchableOpacity>
+			</View>
+		);
+	}
+
+	//Added this to get list of selected stocks in parent component
+    React.useImperativeHandle(ref, () => ({getSelectedStocks: () => selectedStocks}), [selectedStocks]);
+
+	return <SearchStockBasic {...{renderItem}} />;
+})
 
 const useStyles = () => {
 	const theme = useTheme();
 
 	const styles = StyleSheet.create({
 		listContainer: {
-			// width: WP(100),
 			width: '100%',
-			// alignItems: 'center'
 		},
 		stockContainer: {
 			marginTop: WP(5),
@@ -107,7 +156,17 @@ const useStyles = () => {
 			paddingLeft: WP(4),
 			marginBottom: WP(10),
 			width: '100%'
-		}
+		},
+		watchlistItemContainer: {
+			flexDirection: 'row',
+			marginBottom: WP(3),
+			alignItems: 'center',
+		},
+		stockSelector: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			width: '100%',
+		},
 	});
 
 	return styles;

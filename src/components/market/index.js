@@ -1,4 +1,4 @@
-export { SearchStockList } from './searchStockList';
+export { SearchStockList, SearchStockWatchlist } from './searchStockList';
 export { SingleStock } from './singleStock';
 export { OpenOrders, TradeHistory } from './stockActivity';
 export { StockChart } from './stockChart';

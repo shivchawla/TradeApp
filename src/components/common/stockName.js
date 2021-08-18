@@ -6,11 +6,13 @@ import {formatName} from '../../utils';
 import { useAssetData } from  '../../helper';
 
 export const StockName = ({symbol, stock, ...props}) => {
+
 	const styles = useStyles();
 	const {getAsset} = useAssetData(symbol, {enabled: false});
 	const [asset, setAsset] = useState(null);
 
 	React.useEffect(() => {
+
 		const fetchAsset = async() => {
 			if (!!!asset) {
 				if (!!stock) {
@@ -26,7 +28,7 @@ export const StockName = ({symbol, stock, ...props}) => {
 	}, []);
 
 	return (
-		<View style={[styles.stockNameContainer, props.containerStyle]}>
+		<View style={[styles.stockNameContainer, props?.containerStyle]}>
 			<StyledText style={styles.stockSymbol}>{!!asset ? asset.symbol : '---'}</StyledText>
 			<StyledText style={styles.stockName}>{!!asset ? formatName(asset.name): '---'}</StyledText>
 		</View>

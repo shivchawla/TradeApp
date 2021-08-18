@@ -4,26 +4,11 @@ import DraggableFlatList, {RenderItemParams} from "react-native-draggable-flatli
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Modal from 'react-native-modal';
 
-import { AppView, StockName, RightHeaderButton, ConfirmButton, CloseIcon } from '../../components/common';
-import { SearchStockList } from '../../components/market';
-import { useWatchlist, useDeletewatchlist } from '../../helper';
+import { AppView, StockName, RightHeaderButton, ConfirmButton, CloseIcon, TouchRadio } from '../../components/common';
+import { SearchStockWatchlist } from '../../components/market';
+import { useWatchlist, useDeletewatchlist, useUpdateWatchlist } from '../../helper';
 import {useTheme, WP, StyledText} from '../../theme';
 import { diffArray, removeArray, deviceWidth, deviceHeight } from '../../utils'
-
-
-const TouchRadio = ({selected, onToggle}) => {
-	const theme = useTheme();
-	return (
-		<TouchableOpacity onPress={onToggle} >
-			{selected ?
-				<Ionicons name="radio-button-on" color={theme.backArrow } size={WP(5)} />
-				:
-				<Ionicons name="radio-button-off" color={theme.backArrow } size={WP(5)} />
-			}
-			</TouchableOpacity>
-	)
-} 
-
 
 const WatchlistItem = ({stock, onSelectionChanged}) => {
 	const theme = useTheme();
@@ -50,11 +35,22 @@ const EditWatchlist = (props) => {
 	const theme = useTheme();
 	  
 	const {watchlistId} = props.route.params;
-	const {watchlist} = useWatchlist(watchlistId);
+	const {getWatchlist} = useWatchlist(watchlistId, {enabled: false});
+	const [watchlist, setWatchlist] = useState(null);
 	const [assets, setAssets] = useState([]);
 	const [selectedRows, setRows] = useState([]);
 	const [showFooter, setShowFooter] = useState(false);
 	const [isModalVisible, setModalVisible] = useState(false);
+	const {updateWatchlist} = useUpdateWatchlist();
+
+	const watchlistRef = React.useRef();
+
+	React.useEffect(() => {
+		const fetchWatchlist = async() => {
+			setWatchlist(await getWatchlist());
+		}
+		fetchWatchlist();
+	}, [])
 
 	React.useEffect(() => {
 		setAssets(watchlist?.assets);
@@ -72,7 +68,7 @@ const EditWatchlist = (props) => {
 			setShowFooter(false);
 		}
 
-	}, [assets]);
+	}, [watchlist, assets]);
 
 	const updateSelection = (stock, selected) => {
 		if (selected) {
@@ -83,7 +79,14 @@ const EditWatchlist = (props) => {
 	}
 
 	const saveList = () => {
+		updateWatchlist({watchlistId: watchlist.id, watchlistParams: {name: watchlist.name, symbols: assets.map(item => item.symbol)}},
+			{
+				onSuccess: (response, input) => {
+					setWatchlist(response);
+				},
 
+				onError: (err, input) => {console.log(err); console.log(input)}
+			});
 	}
 
 	const deleteList = () => {
@@ -93,15 +96,11 @@ const EditWatchlist = (props) => {
 		}
 	}
 
-	const toggleWatchlist = (stock) => {
-
-		if (assets.map(item => item.symbol).includes(stock.symbol)) {
-			//Remove
-			setAssets(removeArray(assets, stock, 'symbol'))
-		} else {
-			setAssets(assets.concat(stock));
-		}
+	const handleClose = () => {
+		setAssets(watchlistRef?.current?.getSelectedStocks() ?? assets);
+		setModalVisible(false);
 	}
+
 
 	const HeaderRight = () => {
 		if (selectedRows.length > 0) {
@@ -114,43 +113,38 @@ const EditWatchlist = (props) => {
 	const FooterButton = () => {
 		return (
 			<>
-			{showFooter && <ConfirmButton buttonStyle={{width: '100%'}} title="SAVE" onPress={saveList}/>}
+			{showFooter && <ConfirmButton buttonStyle={{width: '100%'}} title="SAVE" onClick={saveList}/>}
 			</>
 		)
 	}
 
-	const showItem = ({item: stock}) => {
+	const ZeroAssetCount = () => {
 		return (
-			<View style={styles.watchlistItemContainer}>
-				<TouchableOpacity onPress={() => toggleWatchlist(stock)}>
-					<View style={styles.stockSelector} >
-							{assets.map(item => item.symbol).includes(stock.symbol) ?
-								<Ionicons name="heart" color={theme.backArrow } size={WP(7)} /> :
-								<Ionicons name="heart-outline" color={theme.backArrow } size={WP(7)} />
-							}
-						<StockName {...{stock}} containerStyle={styles.stockNameContainer}/>
-					</View>
+			<View style={styles.noAssetsContainer}>
+				<StyledText style={styles.noAssetTitle}>No Symbols found</StyledText>
+				<TouchableOpacity style={styles.noAssetButton} onPress={() => setModalVisible(true)} >
+					<StyledText style={styles.noAssetButtonText}>ADD STOCKS</StyledText>
 				</TouchableOpacity>
 			</View>
-		);
+		) 
 	}
 
+   //TODO:   
+	    //Improve this - by passing intial list of assets
+	    //And re-render only once by not updating assets everytime
+
 	return (
-		<AppView isLoading={!!!watchlist} title={watchlist?.name} 
+		<AppView scroll={false} isLoading={!!!assets} title={watchlist?.name ?? "HOPE"} 
 			headerRight={<HeaderRight />} footer={<FooterButton />} >
-			<DraggableFlatList
+			{!!assets && assets.length > 0 ? <DraggableFlatList
 			  	style={styles.draggableList}
 		        data={assets ?? []}
 		        renderItem={({item, index}) => <WatchlistItem stock={item} onSelectionChanged={(selected) => updateSelection(item, selected)}/>}
 		        keyExtractor={(item, index) => `draggable-item-${item.symbol}`}
-		        onDragEnd={({ data }) => setData(data)}
 		      />
-
-
-		    //TODO:   
-		    //Improve this - by passing intial list of assets
-		    //And re-render only once by not updating assets everytime
-
+		  	:
+		    <ZeroAssetCount /> 
+		 	}
 			<Modal 
 				animationType="slide" 
 				backdropOpacity={1.0}
@@ -160,9 +154,9 @@ const EditWatchlist = (props) => {
 				<View style={{flex:1, justfyContent: 'center', alignItems: 'center'}}>
 					<View style={styles.searchStockHeader}>
 						<StyledText style={styles.headerTitle}>Search Stocks</StyledText>
-						<CloseIcon onPress={() => setModalVisible(false)} containerStyle={{position: 'absolute', right: 0}}/>
+						<CloseIcon onPress={handleClose} containerStyle={{position: 'absolute', right: 0}}/>
 					</View>
-					<SearchStockList {...{showItem}} />
+					<SearchStockWatchlist ref={watchlistRef} initialStocks={assets}/>
 				</View>
 			</Modal>
 
@@ -227,7 +221,27 @@ const useStyles = () => {
 			textAlign: 'center',
 			fontSize: WP(4.5),
 			color: theme.backArrow
+		},
+		noAssetsContainer: {
+			flex:1,
+			justifyContent: 'center',
+			alignItems: 'center'
+		},
+		noAssetTitle: {
+			fontSize: WP(5)
+		},
+		noAssetButton: {
+			backgroundColor: theme.backArrow,
+			padding: WP(1),
+			paddingLeft: WP(3),
+			paddingRight: WP(3),
+			marginTop: WP(4)
+		},
+		noAssetButtonText: {
+			fontSize: WP(4),
+			color: theme.dark
 		}
+
 	});
 
 	return styles;	
