@@ -4,6 +4,8 @@ import DraggableFlatList, {RenderItemParams} from "react-native-draggable-flatli
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Modal from 'react-native-modal';
 
+import { useFocusEffect } from '@react-navigation/native';
+
 import { AppView, StockName, RightHeaderButton, ConfirmButton, CloseIcon, TouchRadio } from '../../components/common';
 import { SearchStockWatchlist } from '../../components/market';
 import { useWatchlist, useDeletewatchlist, useUpdateWatchlist } from '../../helper';
@@ -36,8 +38,8 @@ const EditWatchlist = (props) => {
 	const theme = useTheme();
 	  
 	const {watchlistId} = props.route.params;
-	const {getWatchlist} = useWatchlist(watchlistId, {enabled: false});
-	const [watchlist, setWatchlist] = useState(null);
+	const {watchlist, getWatchlist} = useWatchlist(watchlistId);
+	// const [watchlist, setWatchlist] = useState(null);
 	const [assets, setAssets] = useState([]);
 	const [selectedRows, setRows] = useState([]);
 	const [showFooter, setShowFooter] = useState(false);
@@ -46,12 +48,12 @@ const EditWatchlist = (props) => {
 
 	const watchlistRef = React.useRef();
 
-	React.useEffect(() => {
-		const fetchWatchlist = async() => {
-			setWatchlist(await getWatchlist());
-		}
-		fetchWatchlist();
-	}, [])
+	useFocusEffect(
+		React.useCallback(() => {
+			console.log("Wtchlist focus effect");
+			getWatchlist();
+		}, [])
+	);
 
 	React.useEffect(() => {
 		setAssets(watchlist?.assets);
@@ -87,7 +89,7 @@ const EditWatchlist = (props) => {
 		updateWatchlist({watchlistId: watchlist.id, watchlistParams: {name: watchlist.name, symbols: selectedStocks.map(item => item.symbol)}},
 			{
 				onSuccess: (response, input) => {
-					setWatchlist(response);
+					getWatchlist();
 				},
 
 				onError: (err, input) => {console.log(err); console.log(input)}
@@ -136,7 +138,7 @@ const EditWatchlist = (props) => {
    //TODO:   
 	    //Improve this - by passing intial list of assets
 	    //And re-render only once by not updating assets everytime
-
+	//Check the flicker!!
 	return (
 		<AppView scroll={false} isLoading={!!!assets} title={watchlist?.name ?? "HOPE"} 
 			headerRight={<HeaderRight />} footer={<FooterButton />} >

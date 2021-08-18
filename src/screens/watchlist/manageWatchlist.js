@@ -18,7 +18,7 @@ const WatchlistEdit = ({watchlist, onSelectionChanged}) => {
 
 	useFocusEffect(
 		React.useCallback(() => {
-			console.log("Setting TouchRadio to unselect");
+			// console.log("Setting TouchRadio to unselect");
 			setSelect(false);
 		}, [navigation])
 	);
@@ -45,26 +45,21 @@ const ManageWatchlist = (props) => {
 	const styles = useStyles();
 	const navigation = useNavigation();
 	
-	const {isError, getAllWatchlist} = useAllWatchlist();
-	const [watchlists, setWatchlists] = useState([]);
+	const {isError, watchlists, getAllWatchlist} = useAllWatchlist();
 
 	const [selectedWatchlists, setSelected] = useState([]);
 	const {deleteWatchlist} = useDeleteWatchlist();
 
-	
-	const fetchWatchlist = async() => {
-		await getAllWatchlist().then(watchlists => setWatchlists(watchlists));
-		setSelected([])
-	}
-
 	useFocusEffect(
 		React.useCallback(() => {
-			fetchWatchlist();
+			getAllWatchlist();
+
+			//Blur Effect -- BUT doesn't work as expected....still flashing!!
+			return () => setSelected([]);
 		}, [])
 	);
-	
+
 	const updateSelection = (watchlist, selected) => {
-		console.log("Update Selection: ", watchlist.id)
 		if (selected) {
 			setSelected(selectedWatchlists.concat(watchlist.id));
 		} else {
@@ -95,8 +90,6 @@ const ManageWatchlist = (props) => {
 	}
 
 	const HeaderRight = () => {
-		console.log("Render HeaderRight");
-		console.log(selectedWatchlists)
 		if (selectedWatchlists.length > 0) {
 			return <RightHeaderButton icon="trash-bin-sharp" onPress={deleteSelected} />
 		} else {
@@ -109,7 +102,7 @@ const ManageWatchlist = (props) => {
 			<DraggableFlatList
 				style={styles.draggableList}
 				data={watchlists}
-				renderItem={({item, index}) => <WatchlistEdit watchlist={item} onSelectionChanged={(selected) => updateSelection(item, selected)}/>}
+				renderItem={({item, index}) => <WatchlistEdit watchlist={item} onSelectionChanged={(selected) => updateSelection(item, selected)} />}
 				keyExtractor={(item, index) => `draggable-item-${item.id}`}
 				onDragEnd={({ data }) => setData(data)}
 			/>
