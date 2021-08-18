@@ -15,7 +15,7 @@ export const HorizontalScrollMenu = ({items, isPadded = true, ...props}) => {
 
 	const MenuButton = ({index, label, onPress}) => {
 		return (
-			<TouchableOpacity {...{onPress}} style={[styles.menuButton, props.menuButtonStyle, {...(index == selectedIndex) && {borderColor: theme.selectedBorder, padding: WP(8), borderWidth: 2}}]}>
+			<TouchableOpacity {...{onPress}} style={[styles.menuButton, props.menuButtonStyle, {...(index == selectedIndex) && {borderColor: theme.selectedBorder, padding: WP(8), borderWidth: 2, ...props?.selectedMenuStyle ?? {}}}]}>
 				<StyledText style={[styles.menuButtonText, props.menuButtonTextStyle]}>{label}</StyledText>
 			</TouchableOpacity>
 		)
@@ -27,7 +27,7 @@ export const HorizontalScrollMenu = ({items, isPadded = true, ...props}) => {
 		<View style={[styles.container, props.containerStyle]}>	
 			<View style={[styles.selectContainer, props.selectContainerStyle]}>
 				{items.map(({label, key}, index) => {
-					return (<MenuButton {...{key, label, index}} onPress={() => {console.log("Pressed: ", index); setIndex(index);}} />);
+					return (<MenuButton {...{key, label, index}} onPress={() => setIndex(index)} />);
 				})}
 			</View>
 			<Component />

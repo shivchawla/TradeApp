@@ -36,7 +36,11 @@ const SelectWatchlist = ({watchlists}) => {
 	})
 
 	return (
-		<HorizontalScrollMenu {...{items}}/>
+		<HorizontalScrollMenu {...{items}} 
+			selectContainerStyle={styles.selectContainer} 
+			menuButtonStyle={styles.menuButton}
+			selectedMenuStyle={{padding: WP(3)}}
+		/>
 	) 
 }
 
@@ -83,7 +87,7 @@ const Market = (props) => {
 
 			{!!watchlists && 
 				<View style={styles.watchlistContainer}>
-					<SelectWatchlist {...{watchlists}} selectContainerStyle={{width: WP(80)}}/>
+					<SelectWatchlist {...{watchlists}}/>
 					<AddIcon containerStyle={{position:'absolute', right: 0, top: 10}} onPress={() => navigation.navigate('ManageWatchlist') }/>
 				</View>
 			}
@@ -96,7 +100,16 @@ const styles = StyleSheet.create({
 	watchlistContainer: {
 		width: '100%',
 		justifyContent: 'center',
+	},
+	selectContainer: {
+		width: WP(80),
+		justifyContent: 'flex-start'
+	},
+	menuButton: {
+		marginRight: WP(5),
+		padding:WP(1)
 	}
+
 });
 
 export default Market;
