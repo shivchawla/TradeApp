@@ -4,8 +4,7 @@ import {useNavigation} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
-import { StockName } from '../common';
-import { SingleStock} from  './';
+import { StockName, ConfirmButton, SingleStock } from '../common';
 
 import { useStockList } from '../../helper';
 import { initialStocks } from '../../config'
@@ -98,11 +97,12 @@ export const SearchStockList = () => {
 }
 
 
-export const SearchStockWatchlist = React.forwardRef(({initialStocks}, ref) => {
+export const SearchStockWatchlist = React.forwardRef(({initialStocks, onSave}, ref) => {
 	const theme = useTheme();
 	const styles = useStyles();
 
 	const [selectedStocks, setSelected] = useState(initialStocks ?? []);
+	const [showFooter, setShowFooter] = useState(false);
 
 	const toggleSelected = (stock) => {
 		if (selectedStocks.map(item => item.symbol).includes(stock.symbol)) {
@@ -111,6 +111,28 @@ export const SearchStockWatchlist = React.forwardRef(({initialStocks}, ref) => {
 		} else {
 			setSelected(selectedStocks.concat(stock));
 		}	
+	}
+
+	React.useEffect(() => {
+		const oSymbols = (initialStocks ?? []).map(item => item.symbol);
+		const nSymbols = (selectedStocks || []).map(item => item.symbol)
+
+		const extraSymbols = diffArray(oSymbols, nSymbols);
+
+		if(!!selectedStocks && extraSymbols.length > 0) {
+			setShowFooter(true);
+		} else {
+			setShowFooter(false);
+		}
+
+	}, [selectedStocks]);
+
+	const FooterButton = () => {
+		return (
+			<>
+			{showFooter && <ConfirmButton buttonStyle={{width: '100%',position: 'absolute', bottom: 0}} title="SAVE" onClick={onSave}/>}
+			</>
+		)
 	}
 
 	const renderItem = ({item: stock}) => {
@@ -132,7 +154,13 @@ export const SearchStockWatchlist = React.forwardRef(({initialStocks}, ref) => {
 	//Added this to get list of selected stocks in parent component
     React.useImperativeHandle(ref, () => ({getSelectedStocks: () => selectedStocks}), [selectedStocks]);
 
-	return <SearchStockBasic {...{renderItem}} />;
+	return (
+		<View style={{width: '100%', flex:1, alignItems: 'center'}}>
+			<SearchStockBasic {...{renderItem}} />
+			<FooterButton />
+		</View>
+	)
+
 })
 
 const useStyles = () => {
@@ -141,6 +169,7 @@ const useStyles = () => {
 	const styles = StyleSheet.create({
 		listContainer: {
 			width: '100%',
+			flex: 1
 		},
 		stockContainer: {
 			marginTop: WP(5),

@@ -10,6 +10,7 @@ import { useWatchlist, useDeletewatchlist, useUpdateWatchlist } from '../../help
 import {useTheme, WP, StyledText} from '../../theme';
 import { diffArray, removeArray, deviceWidth, deviceHeight } from '../../utils'
 
+
 const WatchlistItem = ({stock, onSelectionChanged}) => {
 	const theme = useTheme();
 	const styles = useStyles();
@@ -79,7 +80,11 @@ const EditWatchlist = (props) => {
 	}
 
 	const saveList = () => {
-		updateWatchlist({watchlistId: watchlist.id, watchlistParams: {name: watchlist.name, symbols: assets.map(item => item.symbol)}},
+		const selectedStocks = watchlistRef?.current?.getSelectedStocks() ?? assets;
+
+		setModalVisible(false);
+
+		updateWatchlist({watchlistId: watchlist.id, watchlistParams: {name: watchlist.name, symbols: selectedStocks.map(item => item.symbol)}},
 			{
 				onSuccess: (response, input) => {
 					setWatchlist(response);
@@ -97,7 +102,6 @@ const EditWatchlist = (props) => {
 	}
 
 	const handleClose = () => {
-		setAssets(watchlistRef?.current?.getSelectedStocks() ?? assets);
 		setModalVisible(false);
 	}
 
@@ -156,7 +160,7 @@ const EditWatchlist = (props) => {
 						<StyledText style={styles.headerTitle}>Search Stocks</StyledText>
 						<CloseIcon onPress={handleClose} containerStyle={{position: 'absolute', right: 0}}/>
 					</View>
-					<SearchStockWatchlist ref={watchlistRef} initialStocks={assets}/>
+					<SearchStockWatchlist ref={watchlistRef} initialStocks={assets} onSave={saveList}/>
 				</View>
 			</Modal>
 

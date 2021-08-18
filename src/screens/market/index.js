@@ -80,15 +80,23 @@ const Market = (props) => {
 
 	}, []);
 
+	const HeaderRight = () => {
+		return (
+			<View style={{flexDirection: 'row'}}>
+				<SearchIcon onPress={() => navigation.navigate("SearchStock")} />
+				<AddIcon containerStyle={{marginLeft: WP(4)}} onPress={() => navigation.navigate('ManageWatchlist') }/>	
+			</View>
+		)
+	}	
+
 	return (
-		<AppView headerLeft={<AccountIcon />} headerRight={<SearchIcon onPress={() => navigation.navigate("SearchStock")}/>} 
+		<AppView headerLeft={<AccountIcon />} headerRight={<HeaderRight />}
 			title="Market" 
 			goBack={false}>
 
 			{!!watchlists && 
 				<View style={styles.watchlistContainer}>
 					<SelectWatchlist {...{watchlists}}/>
-					<AddIcon containerStyle={{position:'absolute', right: 0, top: 10}} onPress={() => navigation.navigate('ManageWatchlist') }/>
 				</View>
 			}
 
@@ -102,7 +110,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	selectContainer: {
-		width: WP(80),
+		width: WP(95),
 		justifyContent: 'flex-start'
 	},
 	menuButton: {
