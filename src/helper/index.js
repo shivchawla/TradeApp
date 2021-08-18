@@ -30,7 +30,8 @@ export { useSymbolActivity } from './store';
 
 export { useStockRealtimeData, WebsocketProvider } from './stream';
 
-export { setStorageData, getStorageData, removeStorageData } from './store';
+export { setStorageData, getStorageData, removeStorageData, 
+	setWatchlistOrder, getWatchlistOrder } from './store';
 
 export {useAllWatchlist, useWatchlist, useCreateWatchlist, 
 	useDeleteWatchlist, useUpdateWatchlist} from './watchlist';

@@ -60,5 +60,10 @@ export const formatName = (name) => {
 		output = output.replace(rStr, '').trim();
 	})
 
-	return output
+	if (output.length > 15) {
+		return output.substring(0,12) + '...'	
+	}
+
+	return output;
+	
 }

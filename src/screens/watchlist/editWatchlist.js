@@ -13,7 +13,7 @@ import {useTheme, WP, StyledText} from '../../theme';
 import { diffArray, removeArray, deviceWidth, deviceHeight } from '../../utils'
 
 
-const WatchlistItem = ({stock, onSelectionChanged}) => {
+const WatchlistItem = ({stock, onSelectionChanged, onDrag}) => {
 	const theme = useTheme();
 	const styles = useStyles();
 	const [selected, setSelect] = useState(null);
@@ -28,7 +28,9 @@ const WatchlistItem = ({stock, onSelectionChanged}) => {
 				<TouchRadio {...{selected}} onToggle={() => setSelect(!selected)}/>
 				<StockName {...{stock}} containerStyle={styles.stockNameContainer}/>
 			</TouchableOpacity>
-			<Ionicons name="swap-vertical" color={theme.backArrow } size={WP(7)} />
+			<TouchableOpacity onLongPress={onDrag} >
+				<Ionicons name="menu" color={theme.backArrow} size={WP(7)}/>
+			</TouchableOpacity>
 		</View>
 	)
 }
@@ -96,6 +98,19 @@ const EditWatchlist = (props) => {
 			});
 	}
 
+	const handleDragEnd = (data) => {
+		setAssets(data);
+		
+		updateWatchlist({watchlistId: watchlist.id, watchlistParams: {name: watchlist.name, symbols: data.map(item => item.symbol)}},
+			{
+				onSuccess: (response, input) => {
+					getWatchlist();
+				},
+
+				onError: (err, input) => {console.log(err); console.log(input)}
+			});	
+	}
+
 	const deleteList = () => {
 		if (selectedRows.length > 0) {
 			setAssets(assets.filter(item => !selectedRows.map(item => item.symbol).includes(item.symbol)));
@@ -145,8 +160,9 @@ const EditWatchlist = (props) => {
 			{!!assets && assets.length > 0 ? <DraggableFlatList
 			  	style={styles.draggableList}
 		        data={assets ?? []}
-		        renderItem={({item, index}) => <WatchlistItem stock={item} onSelectionChanged={(selected) => updateSelection(item, selected)}/>}
+		        renderItem={({item, index, drag}) => <WatchlistItem stock={item} onSelectionChanged={(selected) => updateSelection(item, selected)} onDrag={drag}/>}
 		        keyExtractor={(item, index) => `draggable-item-${item.symbol}`}
+		        onDragEnd={({ data }) => handleDragEnd(data)}
 		      />
 		  	:
 		    <ZeroAssetCount /> 
@@ -179,13 +195,14 @@ const useStyles = () => {
 		},
 		watchlistItemContainer: {
 			flexDirection: 'row',
-			marginBottom: WP(3),
+			marginBottom: WP(5),
 			alignItems: 'center',
+			width: '100%',
+			justifyContent: 'space-between'
 		},
 		stockSelector: {
 			flexDirection: 'row',
 			alignItems: 'center',
-			width: '100%',
 		},
 		stockNameContainer: {
 			marginLeft: WP(3)

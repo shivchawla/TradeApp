@@ -1,14 +1,14 @@
 
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 import { AppView, AccountIcon, SearchIcon, HorizontalScrollMenu, AddIcon} from '../../components/common';
 import { SingleStock } from '../../components/market';
 import { useTheme, WP } from '../../theme' 
 
 import {defaultStocks} from '../../config';
-import { useAllWatchlist, useCreateWatchlist, useWatchlist, useDeletewatchlist } from '../../helper';
+import { useAllWatchlist, useCreateWatchlist, useWatchlist, useDeletewatchlist, getWatchlistOrder } from '../../helper';
 
 const ShowWatchlist = ({watchlistId}) => {
 
@@ -47,38 +47,46 @@ const SelectWatchlist = ({watchlists}) => {
 
 const Market = (props) => {
 
-	const {isError, getAllWatchlist} = useAllWatchlist({enabled: false});
+	const {isError, getAllWatchlist} = useAllWatchlist();
 	const {createWatchlist} = useCreateWatchlist();
 	
 	const [watchlists, setWatchlists] = useState(null);
 
 	const theme = useTheme();
 	const navigation = useNavigation();
+
+	useFocusEffect(
+		React.useCallback(() => {
+			manageWatchlists();
+		}, [])
+	);
 	
-	React.useEffect(() => {
-
-		const manageWatchlists = async() => {
-
-			const watchlists = await getAllWatchlist();
-
-			if (!!!watchlists || watchlists.length == 0) {
-				createWatchlist({name: "Default", symbols: defaultStocks}, {
-					onSuccess: (response, input) => {
-						console.log("Success Creating watchlist");
-						console.log(response);
-
-						setWatchlists([response]); 
-					},
-					onError: (err, input) => console.log(err)
-				});
+	const updateWatchlistOrder = async(wls) => {
+		if (wls) {
+			const orderedNames = await getWatchlistOrder();
+			if (orderedNames ) {
+				return orderedNames.map(name => wls.find(item => item.name == name));
 			} else {
-				setWatchlists(watchlists);
+				return wls;
 			}
 		}
+	}
 
-		manageWatchlists();
+	const manageWatchlists = async() => {
+		const watchlists = await getAllWatchlist();
 
-	}, []);
+		if (!!!watchlists || watchlists.length == 0) {
+			createWatchlist({name: "Default", symbols: defaultStocks}, {
+				onSuccess: (response, input) => {
+					setOrderedWatchlists([response]); 
+				},
+				onError: (err, input) => console.log(err)
+			});
+		} else {
+			const ordered = await updateWatchlistOrder(watchlists);
+			setWatchlists(ordered);
+		}
+	}
 
 	const HeaderRight = () => {
 		return (
@@ -110,7 +118,6 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	selectContainer: {
-		width: WP(95),
 		justifyContent: 'flex-start'
 	},
 	menuButton: {

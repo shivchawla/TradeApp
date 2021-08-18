@@ -68,3 +68,12 @@ export const useSymbolActivity = (symbol) => {
 
   return {activity, addActivity};
 }
+
+export const getWatchlistOrder = async() => {
+   return await getStorageData("watchlistOrder");
+}
+
+
+export const setWatchlistOrder = async(watchlists) => {
+  return await setStorageData("watchlistOrder", JSON.stringify(watchlists));
+}

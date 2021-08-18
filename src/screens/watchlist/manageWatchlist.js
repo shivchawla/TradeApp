@@ -6,11 +6,11 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { AppView, RightHeaderButton, EditIcon, ConfirmButton, TouchRadio} from '../../components/common';
-import { useAllWatchlist, useDeleteWatchlist } from '../../helper';
+import { useAllWatchlist, useDeleteWatchlist, getWatchlistOrder, setWatchlistOrder } from '../../helper';
 
 import {useTheme, WP, StyledText} from '../../theme';
 
-const WatchlistEdit = ({watchlist, onSelectionChanged}) => {
+const WatchlistEdit = ({watchlist, onSelectionChanged, onDrag}) => {
 	const styles = useStyles();
 	const theme = useTheme();
 	const navigation = useNavigation();
@@ -35,7 +35,9 @@ const WatchlistEdit = ({watchlist, onSelectionChanged}) => {
 			</TouchableOpacity>
 			<View style={styles.iconContainer}>
 				<EditIcon containerStyle={{marginRight: WP(3)}} onPress={() => navigation.navigate('EditWatchlist', {watchlistId: watchlist.id})} />
-				<Ionicons name="menu" color={theme.backArrow} size={WP(7)}/>
+				<TouchableOpacity onLongPress={onDrag} >
+					<Ionicons name="menu" color={theme.backArrow} size={WP(7)}/>
+				</TouchableOpacity>
 			</View>
 		</View>
 	)
@@ -46,6 +48,7 @@ const ManageWatchlist = (props) => {
 	const navigation = useNavigation();
 	
 	const {isError, watchlists, getAllWatchlist} = useAllWatchlist();
+	const [orderedWatchlists, setOrderedWatchlist] = useState(null);
 
 	const [selectedWatchlists, setSelected] = useState([]);
 	const {deleteWatchlist} = useDeleteWatchlist();
@@ -58,6 +61,21 @@ const ManageWatchlist = (props) => {
 			return () => setSelected([]);
 		}, [])
 	);
+
+	const updateWatchlistOrder = async() => {
+		if (watchlists) {
+			const orderedNames = await getWatchlistOrder();
+			if (orderedNames ) {
+				setOrderedWatchlist(orderedNames.map(name => watchlists.find(item => item.name == name)));
+			} else {
+				setOrderedWatchlist(watchlists);
+			}
+		}
+	}
+
+	React.useEffect(() => {
+		updateWatchlistOrder();
+	}, [watchlists])
 
 	const updateSelection = (watchlist, selected) => {
 		if (selected) {
@@ -97,14 +115,19 @@ const ManageWatchlist = (props) => {
 		}
 	}
 
+	const handleDragEnd = async(data) => {
+		await setWatchlistOrder(data.map(item => item.name))
+		updateWatchlistOrder()
+	}
+
 	return (
 		<AppView title="Manage Watchlists" scroll={false} headerRight={<HeaderRight />}>
 			<DraggableFlatList
 				style={styles.draggableList}
-				data={watchlists}
-				renderItem={({item, index}) => <WatchlistEdit watchlist={item} onSelectionChanged={(selected) => updateSelection(item, selected)} />}
+				data={orderedWatchlists || []}
+				renderItem={({item, index, drag}) => <WatchlistEdit watchlist={item} onSelectionChanged={(selected) => updateSelection(item, selected)} onDrag={drag}/>}
 				keyExtractor={(item, index) => `draggable-item-${item.id}`}
-				onDragEnd={({ data }) => setData(data)}
+				onDragEnd={({ data }) => handleDragEnd(data)}
 			/>
 		</AppView>
 	);

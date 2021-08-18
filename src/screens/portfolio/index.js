@@ -131,7 +131,7 @@ const Portfolio = (props) => {
 		<>
 		{!loading && 
 			<AppView header={<PortfolioHeader />} title="Portfolio">
-				<HorizontalScrollMenu items={menuItems} />
+				<HorizontalScrollMenu items={menuItems} scroll={false}/>
 				{portfolio && <PortfolioDisplay {...{portfolio}}/>}
 			</AppView>
 		}

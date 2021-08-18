@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
 
 import {AppView, PnLText, LineChart} from './';
 
@@ -7,7 +7,7 @@ import * as Theme from '../../theme';
 
 const {useTheme, WP, StyledText} = Theme;
 
-export const HorizontalScrollMenu = ({items, isPadded = true, ...props}) => {
+export const HorizontalScrollMenu = ({items, isPadded = true, scroll = true, ...props }) => {
 	const styles = useStyles();
 	const theme = useTheme();
 	
@@ -25,11 +25,19 @@ export const HorizontalScrollMenu = ({items, isPadded = true, ...props}) => {
 
 	return (
 		<View style={[styles.container, props.containerStyle]}>	
-			<View style={[styles.selectContainer, props.selectContainerStyle]}>
-				{items.map(({label, key}, index) => {
-					return (<MenuButton {...{key, label, index}} onPress={() => setIndex(index)} />);
-				})}
-			</View>
+			{scroll ? 
+				<ScrollView horizontal={true} contentContainerStyle={[styles.selectContainer, props.selectContainerStyle]}>
+					{items.map(({label, key}, index) => {
+						return (<MenuButton {...{key, label, index}} onPress={() => setIndex(index)} />);
+					})}
+				</ScrollView>
+			:
+				<View style={[styles.selectContainerView, props.selectContainerStyle]}>
+					{items.map(({label, key}, index) => {
+						return (<MenuButton {...{key, label, index}} onPress={() => setIndex(index)} />);
+					})}
+				</View>
+			}
 			<Component />
 		</View>
 	)
@@ -50,7 +58,15 @@ const useStyles = () => {
 			marginBottom: WP(3),
 			justifyContent: 'space-between',
 			alignItems: 'center',
-			width: '100%'
+			// width: '100%'
+		},
+		selectContainerView: {
+			flexDirection: 'row',
+			marginTop: WP(3),
+			marginBottom: WP(3),
+			justifyContent: 'space-between',
+			alignItems: 'center',
+			width: '100%'	
 		},
 		menuButton: {
 			paddingTop: WP(1),
