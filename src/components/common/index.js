@@ -15,3 +15,5 @@ export { GobackIcon, AccountIcon, SearchIcon,
 export { TickerDisplay } from './tickerDisplay';
 export { StockName } from './stockName';
 export { TouchRadio} from './touchRadio';
+export { QuickAction } from './quickAction';
+export { CustomTabBar } from './customTabBar';

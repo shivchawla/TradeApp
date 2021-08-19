@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, {useState} from 'react';
-import {useColorScheme} from 'react-native';
+import {useColorScheme, TouchableOpacity, View, Text} from 'react-native';
 import { enableScreens } from 'react-native-screens';
 import { NavigationContainer, DarkTheme, DefaultTheme } from '@react-navigation/native';
 import { createStackNavigator} from '@react-navigation/stack';
@@ -12,10 +12,7 @@ import { useAuth, AuthProvider } from '../helper';
 import { useTheme, ThemeProvider } from  '../theme';
 import { WebsocketProvider } from  '../helper';
 
-// import { useClock, useCalendar, setStorageData } from '../helper';
-// import { dayStartISODate, latestDayStartFromCalendar } from '../utils';
-
-// import { AppDarkTheme, AppDefaultTheme } from '../theme';
+import { CustomTabBar } from '../components/common';
 
 import Market from '../screens/market';
 // import ChooseStock from '../screens/order/chooseStock';
@@ -35,31 +32,26 @@ const Tabs = createBottomTabNavigator();
 // const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
-const marketScreenOptions = {
-  tabBarIcon: ({ color, size }) => (
-    <Ionicons name="stats-chart" color={color} size={size} />
-  ),
-}
-
-const portfolioScreenOptions = {
-  tabBarIcon: ({ color, size }) => (
-    <Ionicons name="pie-chart" color={color} size={size} />
-  ),
-}
-
 const homeTabs = () => {
-		 const theme = useTheme();
-     return (
-        <Tabs.Navigator tabBarOptions={{showLabel: false, activeTintColor:theme.tabTint, style: {backgroundColor: theme.tabBackground}}}>
-          {/*<Tabs.Screen name="SignIn" component={SignIn} />*/}
-          
-          {/*<Tabs.Screen name="ChooseStock" component={ChooseStock}/>*/}
-          {/*<Tabs.Screen name="OrdersTrades" component={OrdersTrades} />*/}
-        	<Tabs.Screen name="Market" component={Market} options={marketScreenOptions}/>
-          
-          <Tabs.Screen name="Portfolio" component={Portfolio} options={portfolioScreenOptions}/>
-        </Tabs.Navigator>
-     )
+		const theme = useTheme();
+		const tabBarOptions = {
+			showLabel: false, 
+			activeTintColor:theme.tabTint, 
+			style: {
+				backgroundColor: theme.tabBackground,
+			}};
+
+		return (
+		  <Tabs.Navigator {...{tabBarOptions}} tabBar={props => <CustomTabBar {...props} />}>
+		    {/*<Tabs.Screen name="SignIn" component={SignIn} />*/}
+		    
+		    {/*<Tabs.Screen name="ChooseStock" component={ChooseStock}/>*/}
+		    {/*<Tabs.Screen name="OrdersTrades" component={OrdersTrades} />*/}
+		  	<Tabs.Screen name="Market" component={Market} />
+		    
+		    <Tabs.Screen name="Portfolio" component={Portfolio} />
+		  </Tabs.Navigator>
+		)
 }
 
 const TradingStack = () => {
