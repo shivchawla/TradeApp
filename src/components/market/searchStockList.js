@@ -75,7 +75,7 @@ const SearchStockBasic = ({renderItem}) => {
 	);
 } 
 
-export const SearchStockList = () => {
+export const SearchStockList = ({onPressToOrder = false}) => {
 	const theme = useTheme();
 	const styles = useStyles();
 
@@ -84,9 +84,16 @@ export const SearchStockList = () => {
 		navigation.navigate('StockDetail', {symbol});
 	}
 
+	const toOrder = (symbol) => {
+		navigation.navigate('PlaceOrder', {symbol});
+	}
+
 	const renderItem = ({item: stock}) => {
+
+		const onPress = onPressToOrder ? () => toOrder(stock.symbol) :  () => toStockDetail(stock.symbol)
+		
 		return (
-			<TouchableOpacity style={styles.stockContainer} onPress={() => toStockDetail(stock.symbol)}>
+			<TouchableOpacity style={styles.stockContainer} onPress={onPress}>
 				<StockName {...{stock}} />
 				<Ionicons name="chevron-forward" color={theme.backArrow } size={WP(7)} />
 			</TouchableOpacity>

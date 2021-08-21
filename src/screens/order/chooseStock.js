@@ -7,7 +7,7 @@ import { SearchStockList } from '../../components/market';
 const ChooseStock = (props) => {
 	return (
 		<AppView title="Choose Stock" scroll={false}>
-			<SearchStockList />
+			<SearchStockList onPressToOrder={true}/>
 		</AppView>
 	);
 }

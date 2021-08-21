@@ -7,15 +7,35 @@ import { CloseIcon } from './navIcons';
 import { useTheme, WP, HP, StyledText } from '../../theme';
 import { deviceWidth, deviceHeight } from '../../utils';
 
-const CustomModal = ({isVisible, onHide}) => {
+const CustomModal = ({isVisible, onHide, navigation}) => {
+  const styles = useStyles();
+  const theme = useTheme();
+
+  const CustomAction = ({title, description, onPress}) => {
+      return (
+        <TouchableOpacity style={styles.customAction} onPress={onPress}>
+            <StyledText style={styles.title}>{title}</StyledText>
+            <StyledText style={styles.description}>{description}</StyledText>
+        </TouchableOpacity>
+      )
+  }
+
   return (
       <Modal 
         animationType="slide" 
-        backdropOpacity={1.0}
+        backdropOpacity={0.7}
+        onBackdropPress={onHide}
+        style={styles.modal}
         {...{isVisible, deviceWidth, deviceHeight}}>
-        <View style={{justfyContent: 'center', alignItems: 'center', height: HP(40)}}>
-          <CloseIcon onPress={onHide} />
-          <StyledText>QUICK ACTION</StyledText>
+        <View style={styles.modalContent}>
+          <View style={styles.modalContentHeader}>
+            <CloseIcon onPress={onHide} iconColor={theme.dark}/>
+          </View>
+
+          <CustomAction title="TRADE" description="Buy/Sell stock" onPress={() => navigation.navigate("ChooseStock", {onPressToOrder: true})} />
+          <CustomAction title="PENDING ORDERS" description="View Pending Orders" onPress={() => navigation.navigate("")} />
+          <CustomAction title="NOTIFICATIONS" description="View Notifications" onPress={() => navigation.navigate("")} />
+
         </View>
       </Modal>
   )
@@ -66,6 +86,7 @@ export const CustomTabBar = ({ state, descriptors, navigation }) => {
 
         return (
           <TouchableOpacity
+            key={route.key}
             accessibilityRole="button"
             accessibilityState={isFocused ? { selected: true } : {}}
             accessibilityLabel={options.tabBarAccessibilityLabel}
@@ -84,13 +105,10 @@ export const CustomTabBar = ({ state, descriptors, navigation }) => {
       <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.quickActionButton}>
           <Ionicons style={{zIndex:3}} name="menu" color={theme.backArrow} size={WP(7)}/>
       </TouchableOpacity>
-    
-      <CustomModal isVisible={isModalVisible} onHide={() => setModalVisible(false)} />
+
+      <CustomModal isVisible={isModalVisible} onHide={() => setModalVisible(false)} {...{navigation}} />
 
     </View>
-
-
-
 
   );
 }
@@ -111,6 +129,33 @@ const useStyles = () => {
     quickActionButton: {
       position: 'absolute',
       left: (deviceWidth - 25)/2,
+    },
+    modal: {
+      justifyContent: 'flex-end',
+      margin: 0,
+      width: WP(100)
+    },
+    modalContent: {
+      // justifyContent: 'center', 
+      // alignItems: 'center', 
+      height: HP(40),
+      backgroundColor: theme.backArrow,
+      width: WP(100)
+    },
+    modalContentHeader: {
+      margin: WP(5),
+      position: 'absolute',
+      right: 0,
+      zIndex:2
+    },
+    customAction: {
+      margin: WP(5),
+    },
+    title: {
+      color: theme.dark
+    },
+    description: {
+      color: theme.dark 
     }
 
   });

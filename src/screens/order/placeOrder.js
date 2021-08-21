@@ -19,7 +19,7 @@ const PlaceOrder = (props) => {
 	const theme = useTheme();
 
 	const {symbol, action: propAction} = props.route.params;
-	const [action, setAction] = useState(propAction);
+	const [action, setAction] = useState(propAction || "BUY");
 	const [isNotional, setIsNotional] = useState(true)
 	const [quantity, setQuantity] = useState(isNotional ? 100 : 1);
 	const [orderType, setOrderType] = useState('market');
