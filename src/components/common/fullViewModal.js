@@ -39,7 +39,7 @@ const useStyles = () => {
 		},
 		modalContent: {
 			flex:1, 
-			justifyContent: 'center', 
+			// justifyContent: 'center', 
 			alignItems: 'center',
 			height: '100%'
 		},
