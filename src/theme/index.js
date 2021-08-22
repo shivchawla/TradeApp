@@ -3,12 +3,13 @@ import {useColorScheme} from 'react-native';
 
 export { WP, HP } from './responsive';
 export { StyledText, View } from './styled';
-export { Typography } from './typography';
+export { Typography, defaultIconSize } from './typography';
 
 export const DarkTheme = {
         primary: '#FF6624',
         white: '#ffffff',
         text: '#d9d9d9',
+        shadedText: '#747474',
         fldDesc: "#999999",
         border: "#E5E5E5",
 
@@ -32,6 +33,8 @@ export const DarkTheme = {
         verified: "#72BB53",
         dark: '#000',
         gryBack: "#CDCDCD",
+
+        selectedColor: '#000000',
         
         inActiveTab: "#FEC0A5",
         background: '#0d1a26' ,
@@ -43,6 +46,7 @@ export const DarkTheme = {
         green:'#57ff57',
         red:'#ff5757',
         backArrow: '#ffac33',
+        icon: '#ffac33',
         positionLabel: '#797D7F',
         positionValue: '#d9d9d9',
 

@@ -15,7 +15,7 @@ import { WebsocketProvider } from  '../helper';
 import { CustomTabBar } from '../components/common';
 
 import Market from '../screens/market';
-// import ChooseStock from '../screens/order/chooseStock';
+import History from '../screens/history';
 import OrdersTrades from '../screens/order/ordersTrades';
 import Portfolio from '../screens/portfolio';
 import Settings from '../screens/settings';
@@ -47,7 +47,8 @@ const homeTabs = () => {
 		    
 		    {/*<Tabs.Screen name="ChooseStock" component={ChooseStock}/>*/}
 		    {/*<Tabs.Screen name="OrdersTrades" component={OrdersTrades} />*/}
-		  	<Tabs.Screen name="Market" component={Market} />
+		  	{/*<Tabs.Screen name="Market" component={Market} />*/}
+		  	<Tabs.Screen name="History" component={History} />
 		    
 		    <Tabs.Screen name="Portfolio" component={Portfolio} />
 		  </Tabs.Navigator>
