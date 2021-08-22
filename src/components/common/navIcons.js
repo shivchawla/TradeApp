@@ -3,98 +3,77 @@ import { StyleSheet, TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import {useTheme, WP} from '../../theme';
+import {useTheme, WP, defaultIconSize} from '../../theme';
+
+const IconButton = ({name, onPress,  ...props}) => {
+	const {theme, styles} = useStyles();
+
+	return (
+		<TouchableOpacity style={props.containerStyle} onPress={onPress}>
+			<Ionicons name={name} color={props.iconColor || theme.icon} size={props.iconSize || defaultIconSize} />
+		</TouchableOpacity>
+	)
+}
 
 export const AccountIcon = (props) => {
-	const theme = useTheme();
-	const styles = useStyles();
-
 	const navigation = useNavigation();
 
 	return (
-		<TouchableOpacity style={[styles.leftIconContainer, props.containerStyle]} onPress={() => navigation.navigate('Settings')}>
-			<Ionicons name="person-circle" color={props.iconColor || theme.backArrow} size={props.iconSize || WP(7)} />
-		</TouchableOpacity>
+		<IconButton {...props} name="person-circle" onPress={() => navigation.navigate('Settings')} />
 	)
 }
 
 export const CloseIcon = ({onPress, ...props}) => {
-	const theme = useTheme();
-	const styles = useStyles();
-
-	const navigation = useNavigation();
-
 	return (
-		<TouchableOpacity style={[styles.leftIconContainer, props.containerStyle]} onPress={onPress}>
-			<Ionicons name="close" color={props.iconColor || theme.backArrow} size={props.iconSize || WP(7)} />
-		</TouchableOpacity>
+		<IconButton {...props} name="close" onPress={onPress} />
 	)
 }
 
 export const SearchIcon = ({onPress, ...props}) => {
-	const theme = useTheme();
-	const styles = useStyles();
-
-	const navigation = useNavigation();
 	return (
-		<TouchableOpacity style={[styles.rightIconContainer, props.containerStyle]} onPress={onPress}>
-			<Ionicons name="search" color={props.iconColor || theme.backArrow} size={props.iconSize || WP(7)} />
-		</TouchableOpacity>
+		<IconButton {...props} name="search" onPress={onPress} />
 	)
 }
-
 
 export const GobackIcon = ({goBack, ...props}) => {
-	const theme = useTheme();
-	const styles = useStyles();
-
 	const navigation = useNavigation();
+
 	return (
-		<TouchableOpacity style={[styles.leftIconContainer, props.containerStyle]} onPress={() => {typeof goBack === 'function' ? goBack() : navigation.goBack()}}>
-			<Ionicons name="chevron-back" color={props.iconColor || theme.backArrow } size={props.iconSize || WP(7)} />
-		</TouchableOpacity>
+		<IconButton {...props} name="chevron-back" onPress={() => {typeof goBack === 'function' ? goBack() : navigation.goBack()}} />
 	)
 }
-
 
 export const FavoriteIcon = ({isFavorite, onPress, ...props}) => {
-	const theme = useTheme();
-	const styles = useStyles();
-
 	return (
-		<TouchableOpacity style={[styles.rightIconContainer, props.containerStyle]} onPress={onPress}>
-			{isFavorite ? 
-				<Ionicons name="heart" color={props.iconColor || theme.backArrow } size={props.iconSize || WP(7)} />
-				:
-				<Ionicons name="heart-outline" color={props.iconColor || theme.backArrow } size={props.iconSize || WP(7)} />
-			}
-		</TouchableOpacity>
+		<IconButton {...props} name={isFavorite ? "heart" : "heart-outline"} onPress={onPress} />
 	)
 }
 
-
 export const EditIcon = ({onPress, ...props}) => {
-	const theme = useTheme();
-	const styles = useStyles();
 
 	return (
-		<TouchableOpacity style={[styles.rightIconContainer, props.containerStyle]} onPress={onPress}>
-			<Ionicons name="create-outline" color={props.iconColor || theme.backArrow } size={props.iconSize || WP(7)} />
-		</TouchableOpacity>
+		<IconButton {...props} name="create-outline" onPress={onPress} />
 	)
 }
 
 
 export const AddIcon = ({onPress, ...props}) => {
-	const theme = useTheme();
-	const styles = useStyles();
-
 	return (
-		<TouchableOpacity style={[styles.rightIconContainer, props.containerStyle]} onPress={onPress}>
-			<Ionicons name="add" color={props.iconColor || theme.backArrow } size={props.iconSize || WP(7)} />
-		</TouchableOpacity>
+		<IconButton {...props} name="add" onPress={onPress} />
 	)
 }
+
+export const CalendarIcon = ({onPress, ...props}) => {
+	return (
+		<IconButton {...props} name="calendar-sharp" onPress={onPress} />
+	)
+}
+
+export const DeleteIcon = ({onPress, ...props}) => {
+	return (
+		<IconButton {...props} name="trash-bin-sharp" onPress={onPress} />
+	)
+} 
 
 
 const useStyles = () => {
@@ -102,16 +81,7 @@ const useStyles = () => {
 	const theme = useTheme();
 	
 	const styles = StyleSheet.create({
-		leftIconContainer: {
-		// 	position: 'absolute',
-		// 	left: 10,
-		},
-
-		rightIconContainer: {
-		// 	position: 'absolute',
-		// 	right: 10,
-		},
 	});
 
-	return styles;
+	return {theme, styles};
 } 

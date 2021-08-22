@@ -139,7 +139,7 @@ const useStyles = () => {
       // justifyContent: 'center', 
       // alignItems: 'center', 
       height: HP(40),
-      backgroundColor: theme.backArrow,
+      backgroundColor: theme.grey10,
       width: WP(100)
     },
     modalContentHeader: {
@@ -152,10 +152,10 @@ const useStyles = () => {
       margin: WP(5),
     },
     title: {
-      color: theme.dark
+      color: theme.light
     },
     description: {
-      color: theme.dark 
+      color: theme.light
     }
 
   });

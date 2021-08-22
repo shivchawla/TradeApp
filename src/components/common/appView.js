@@ -5,28 +5,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { BarIndicator } from 'react-native-indicators';
 
-import { StyledText, useTheme, WP } from '../../theme';
+import { StyledText, useTheme, WP, defaultIconSize } from '../../theme';
 import { GobackIcon } from './navIcons';
-
-export const RightHeaderButton = ({title="", icon="", onPress, ...props}) => {
-	const styles = useStyles();
-	const theme = useTheme();
-	return (
-		<>
-		{title != "" &&	
-			<TouchableOpacity style={[styles.tinyButton, props.style]} onPress={onPress}>
-				<StyledText style={styles.tinyButtonText}>{title}</StyledText>
-			</TouchableOpacity>
-		}
-
-		{icon != "" &&	
-			<TouchableOpacity style={[styles.iconButton, props.style]} onPress={onPress}>
-				<Ionicons name={icon} color={theme.backArrow} size={WP(7)} />
-			</TouchableOpacity>
-		}
-		</>
-	)
-}
 
 export const AppHeader = ({title, goBack = true, ...props}) => {
 	const showHeader = title || goBack;
@@ -132,18 +112,6 @@ const useStyles = () => {
 		headerTitle:{
 			fontSize: 16,
 			fontWeight: 'bold',
-		},
-		iconImage:{
-			height:40
-		},
-		tinyButton: {
-			padding: WP(0.5),
-			paddingLeft: WP(2.5),
-			paddingRight: WP(2.5),
-		},
-		tinyButtonText: {
-			color: theme.backArrow,
-			fontWeight: '700'
 		}
 	});
 

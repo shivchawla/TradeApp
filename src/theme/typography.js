@@ -14,3 +14,6 @@ export const Typography = {
     semiBold:'600',
     normal: '400'
 }
+
+export const defaultIconSize = WP(7);
+

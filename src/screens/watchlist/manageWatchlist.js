@@ -5,7 +5,8 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { AppView, RightHeaderButton, EditIcon, ConfirmButton, TouchRadio} from '../../components/common';
+import { AppView, TinyTextButton, EditIcon, 
+	ConfirmButton, TouchRadio, DeleteIcon} from '../../components/common';
 import { useAllWatchlist, useDeleteWatchlist, getWatchlistOrder, setWatchlistOrder } from '../../helper';
 
 import {useTheme, WP, StyledText} from '../../theme';
@@ -109,9 +110,9 @@ const ManageWatchlist = (props) => {
 
 	const HeaderRight = () => {
 		if (selectedWatchlists.length > 0) {
-			return <RightHeaderButton icon="trash-bin-sharp" onPress={deleteSelected} />
+			return <DeleteIcon onPress={deleteSelected} />
 		} else {
-			return <RightHeaderButton title="NEW" onPress={() => navigation.navigate('AddWatchlist', {watchlists})}/>
+			return <TinyTextButton title="NEW" onPress={() => navigation.navigate('AddWatchlist', {watchlists})}/>
 		}
 	}
 

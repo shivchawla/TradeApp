@@ -2,8 +2,7 @@ import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-import { AppView, RightHeaderButton, 
-	TextInputWithIcon} from '../../components/common';
+import { AppView, TextInputWithIcon, TinyTextButton} from '../../components/common';
 import { generateName } from '../../utils';
 import { useTheme, StyledText, WP } from '../../theme';
 import { useCreateWatchlist } from '../../helper';
@@ -38,7 +37,7 @@ const AddWatchlist = (props) => {
 		const navigation = useNavigation();
 
 		return (
-			<RightHeaderButton title="CREATE" onPress={createList}/>
+			<TinyTextButton title="CREATE" onPress={createList}/>
 		)
 	}
 

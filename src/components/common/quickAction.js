@@ -16,7 +16,7 @@ export const QuickAction = () => {
 				backdropOpacity={1.0}
 				isVisible={isModalVisible} 
 				{...{deviceWidth, deviceHeight}}>
-				<View style={{flex:1, justfyContent: 'center', alignItems: 'center'}}>
+				<View style={{flex:1, justifyContent: 'center', alignItems: 'center'}}>
 					<StyledText>QUICK ACTION</StyledText>
 				</View>
 			</Modal>

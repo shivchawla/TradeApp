@@ -6,7 +6,8 @@ import Modal from 'react-native-modal';
 
 import { useFocusEffect } from '@react-navigation/native';
 
-import { AppView, StockName, RightHeaderButton, ConfirmButton, CloseIcon, TouchRadio } from '../../components/common';
+import { AppView, StockName, ConfirmButton, 
+	CloseIcon, DeleteIcon, SearchIcon, TouchRadio } from '../../components/common';
 import { SearchStockWatchlist } from '../../components/market';
 import { useWatchlist, useDeletewatchlist, useUpdateWatchlist } from '../../helper';
 import {useTheme, WP, StyledText} from '../../theme';
@@ -125,9 +126,9 @@ const EditWatchlist = (props) => {
 
 	const HeaderRight = () => {
 		if (selectedRows.length > 0) {
-			return <RightHeaderButton icon="trash-bin-sharp" onPress={deleteList} />
+			return <DeleteIcon onPress={deleteList} />
 		} else {
-			return <RightHeaderButton icon="search" onPress={() => setModalVisible(true)} />
+			return <SearchIcon onPress={() => setModalVisible(true)} />
 		}
 	}
 
@@ -173,7 +174,7 @@ const EditWatchlist = (props) => {
 				isVisible={isModalVisible} 
 				style={styles.modal}
 				{...{deviceWidth, deviceHeight}}>
-				<View style={{flex:1, justfyContent: 'center', alignItems: 'center'}}>
+				<View style={{flex:1, justifyContent: 'center', alignItems: 'center'}}>
 					<View style={styles.searchStockHeader}>
 						<StyledText style={styles.headerTitle}>Search Stocks</StyledText>
 						<CloseIcon onPress={handleClose} containerStyle={{position: 'absolute', right: 0}}/>
