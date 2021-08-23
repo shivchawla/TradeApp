@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import { ScrollView, View, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { AppView, CalendarIcon, FullViewModal, DisplayOrderInList, 
 	DateRangePicker, VerticalField, ConfirmButton, HorizontalButtonGroup } from '../../components/common';
@@ -14,12 +13,12 @@ const HorizontalFieldSelection = ({onSelect}) => {
 	const {styles} = useStyles();
 	const items = {'all': 'All', 'orders': 'Orders', 'dividends': 'Dividends'};
 	return <HorizontalButtonGroup 
-				initialValue={0}
-				{...{items, onSelect}} 
-				buttonStyle={styles.fieldSelectionButton}
-				buttonTextStyle={styles.fieldSelectionButtonText}
-				selectedButtonStyle={styles.selectedFieldButton} 
-			/>
+		initialValue={0}
+		{...{items, onSelect}} 
+		buttonStyle={styles.fieldSelectionButton}
+		buttonTextStyle={styles.fieldSelectionButtonText}
+		selectedButtonStyle={styles.selectedFieldButton} 
+	/>
 }
 
 const HorizontalPeriodSelection = ({onSelect}) => {
@@ -33,13 +32,13 @@ const HorizontalPeriodSelection = ({onSelect}) => {
 	})
 
 	return <HorizontalButtonGroup
-				initialValue={null} 
-				scroll={true}
-				{...{items, onSelect}} 
-				buttonStyle={styles.periodSelectionButton}
-				buttonTextStyle={styles.periodSelectionButtonText}
-				selectedButtonStyle={styles.selectedPeriodButton} 
-			/>
+		initialValue={null} 
+		scroll={true}
+		{...{items, onSelect}} 
+		buttonStyle={styles.periodSelectionButton}
+		buttonTextStyle={styles.periodSelectionButtonText}
+		selectedButtonStyle={styles.selectedPeriodButton} 
+	/>
 }
 
 const ShowHistoryItem = ({item}) => {

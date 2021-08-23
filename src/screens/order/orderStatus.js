@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { titleCase } from "title-case";
 
-import { AppView, ScreenName, ShowJson } from '../../components/common';
+import { AppView, ShowJson } from '../../components/common';
 import { useOrderDetail,  } from '../../helper';
 import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
 import { ORDER_MORE_FIELDS, AVAILABLE_TO_CANCEL_ORDER_STATUS } from '../../config';

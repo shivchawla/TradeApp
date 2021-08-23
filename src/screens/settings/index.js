@@ -1,14 +1,13 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 
-import {AppView, ScreenName} from '../../components/common';
+import {AppView} from '../../components/common';
 
 const Settings = (props) => {
 	const {stocks} = props;
 
 	return (
-		<AppView>
-			<ScreenName name="Settings Main Screen" />
+		<AppView title="Settings Main Screen">
 		</AppView>
 	);
 }

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View, StyleSheet, Pressable} from 'react-native';
 
-import {AppView, ScreenName, ConfirmButton, ShowJson} from '../../components/common';
+import {AppView, ConfirmButton, ShowJson} from '../../components/common';
 import { useUpdateOrder } from '../../helper';
 
 //Preview should be added here

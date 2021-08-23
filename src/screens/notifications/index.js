@@ -1,13 +1,12 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 
-import { AppView, ScreenName } from '../../components/common';
+import { AppView } from '../../components/common';
 
 const Notifications = (props) => {
 
 	return (
-		<AppView>
-			<ScreenName name="Completed Orders Screen" />
+		<AppView title="Notifications Screen">
 		</AppView>
 	);
 }

@@ -1,12 +1,11 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 
-import {AppView, ScreenName} from '../../components/common';
+import {AppView} from '../../components/common';
 
 const ForgotPassword = ({props}) => {
 	return (
-		<AppView>
-			<ScreenName name="Choose Stock Screen" />
+		<AppView title="Forgot Password">
 		</AppView>
 	);
 }

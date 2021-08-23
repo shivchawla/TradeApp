@@ -33,7 +33,7 @@ const CustomModal = ({isVisible, onHide, navigation}) => {
           </View>
 
           <CustomAction title="TRADE" description="Buy/Sell stock" onPress={() => navigation.navigate("ChooseStock", {onPressToOrder: true})} />
-          <CustomAction title="PENDING ORDERS" description="View Pending Orders" onPress={() => navigation.navigate("")} />
+          <CustomAction title="PENDING ORDERS" description="View Pending Orders" onPress={() => navigation.navigate("History", {field: 'orders'})} />
           <CustomAction title="NOTIFICATIONS" description="View Notifications" onPress={() => navigation.navigate("")} />
 
         </View>

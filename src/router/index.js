@@ -47,8 +47,8 @@ const homeTabs = () => {
 		    
 		    {/*<Tabs.Screen name="ChooseStock" component={ChooseStock}/>*/}
 		    {/*<Tabs.Screen name="OrdersTrades" component={OrdersTrades} />*/}
-		  	{/*<Tabs.Screen name="Market" component={Market} />*/}
-		  	<Tabs.Screen name="History" component={History} />
+		  	<Tabs.Screen name="Market" component={Market} />
+		  	{/*<Tabs.Screen name="History" component={History} />*/}
 		    
 		    <Tabs.Screen name="Portfolio" component={Portfolio} />
 		  </Tabs.Navigator>
