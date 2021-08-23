@@ -11,7 +11,7 @@ export { VerticalField } from './verticalField';
 
 export { GobackIcon, AccountIcon, SearchIcon, 
 	FavoriteIcon, EditIcon, AddIcon,
-	DeleteIcon, CloseIcon, CalendarIcon} from './navIcons';
+	DeleteIcon, CloseIcon, CalendarIcon, ShowHideButton} from './iconButtons';
 
 export { TinyTextButton } from './tinyTextButton';
 
@@ -22,3 +22,5 @@ export { QuickAction } from './quickAction';
 export { CustomTabBar } from './customTabBar';
 export { FullViewModal } from './fullViewModal';
 export { DateRangePicker } from './dateRangePicker'
+export { HorizontalButtonGroup } from './horizontalButtonGroup';
+export { DisplayOrderInList } from './displayOrder';

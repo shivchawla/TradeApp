@@ -70,6 +70,18 @@ export const getTradingAccount = async () => {
 	return await axios.get(`/v1/trading/accounts/${account_id}/account`).then(r => r.data)
 }
 
+export const getAccountActivity = async ({activity_type = null, date = '', until = '', after = ''} = {}) => {
+	console.log("Fetching Account Activity");
+	const url = '/v1/accounts/activities' + (!!activity_type ? `/${activity_type}` : '');
+	console.log(url);
+
+	var params = {account_id, ...date!='' && {date}, ...until!='' && {until}, ...after!='' && {after}};
+	console.log("Params");
+	console.log(params);
+
+	return await axios.get(url, {params}).then(r => r.data)
+}
+
 export const placeOrder = async(request) => {
 	console.log("Placing Order");
 	console.log(request);

@@ -3,7 +3,7 @@ import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Modal from 'react-native-modal';
 
-import { CloseIcon } from './navIcons';
+import { CloseIcon } from './iconButtons';
 import { useTheme, WP, HP, StyledText } from '../../theme';
 import { deviceWidth, deviceHeight } from '../../utils';
 

@@ -20,7 +20,7 @@ export { usePlaceOrder, useUpdateOrder,
 		filterOpenOrders } from './order';
 
 export { useCreateBrokerageAccount, useTradingAccountData, 
-		useBrokerageAccountData } from './account';
+		useBrokerageAccountData, useAccountActivity } from './account';
 
 export { AccountStatus } from './enums';
 
@@ -35,3 +35,4 @@ export { setStorageData, getStorageData, removeStorageData,
 
 export {useAllWatchlist, useWatchlist, useCreateWatchlist, 
 	useDeleteWatchlist, useUpdateWatchlist} from './watchlist';
+

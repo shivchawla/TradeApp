@@ -5,59 +5,11 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 import { titleCase } from "title-case";
 
-import { ShowJson } from '../common';
+import { ShowJson, DisplayOrderInList, ShowHideButton } from '../common';
 import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../../theme';
 import { OPEN_ORDER_STATUS } from '../../config';
 import { useOrders, useLatestTradingDay, useSymbolActivity } from '../../helper';
 
-const OrderField = ({order}) => {
-	const theme = useTheme();
-	const styles = useStyles();
-	const navigation = useNavigation();
-
-	const getShareQty = (qty) => {
-		return qty ? qty > 1 ? `${qty} Shares` : '1 Share' : '';
-	}
-
-	const getNotional = (notional) => {
-		return notional ? (`USD ` + notional) : '';
-	}
-
-	const getOrderLimitPrice = (order) => {
-		return order.type == "limit" ? '@ USD ' + order.limit_price : '';
-	}
-
-	const displayOrderType = (order) => {
-		return order.type.toUpperCase() + getOrderLimitPrice(order);
-	}
-
-	const displayOrderQuantity = (order) => {
-		return order.side.toUpperCase() + ' ' + (getShareQty(order.qty) || getNotional(order.notional));
-	}
-
-	return (
-		<TouchableOpacity onPress={() => navigation.navigate('OrderStatus', {order})}>
-			<View style={styles.orderFieldContainer}>
-				<View style={{flexDirection: 'row'}}>
-					<StyledText style={styles.ordersFieldLabel}>{displayOrderQuantity(order)}</StyledText>
-					<StyledText style={[styles.ordersFieldLabel, {marginLeft: WP(2)}]}>{displayOrderType(order)}</StyledText>
-				</View>
-				<StyledText style={styles.ordersFieldValue}>{titleCase(order.status)}</StyledText>
-			</View>
-		</TouchableOpacity>
-	);
-}
-
-
-const ShowHideButton = ({showDetail, onToggle}) => {
-	const styles = useStyles();
-	const theme = useTheme();
-	return(
-		<TouchableOpacity onPress={onToggle} style={styles.showHideButton}>
-			<Ionicons name={showDetail ? "chevron-up" : "chevron-down"} color={theme.backArrow} size={WP(5)} />
-		</TouchableOpacity>
-	)
-}
 
 const StockOrderHeader = ({orders, onToggle, showDetail}) => {
 	const styles = useStyles();
@@ -71,7 +23,7 @@ const StockOrderHeader = ({orders, onToggle, showDetail}) => {
 			<StyledText style={styles.ordersHeaderTitle}>Your Orders</StyledText>
 			<View style={styles.ordersSummaryContainer}>
 				<StyledText style={styles.ordersCount}>{countOpenOrders(orders)}/{orders.length}</StyledText>	
-			 	<ShowHideButton {...{onToggle, showDetail}}/>
+			 	<ShowHideButton {...{onToggle, showDetail}} containerStyle={styles.showHideButton} iconSize={WP(5)}/>
 			</View>
 		</View>
 	)
@@ -83,7 +35,7 @@ const StockOrderList = ({orders}) => {
 	return ( 
 		<View style={styles.orderListContainer}>
 			{ orders.map((order, index) => {
-					return <OrderField key={index} {...{order}} />	
+					return <DisplayOrderInList key={index} {...{order}} />	
 				})
 			}
 		</View>

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useQuery, useMutation} from 'react-query';
-import { getBrokerageAccount, getTradingAccount, createBrokerageAccount } from  './api'; 
+import { getBrokerageAccount, getTradingAccount, createBrokerageAccount, getAccountActivity } from  './api'; 
 
 //Write a order key validation function
 const validateAccountParams = (params) => {
@@ -40,4 +40,18 @@ export function useBrokerageAccountData(params = {}) {
   }
 
   return {isError, brokerageAccount, getBrokerageAccount: () => refetch().then(r => r.data)};  
+}
+
+
+export function useAccountActivity({activity_type = null, date = '', until = '', after = ''} = {}, params = {}) {
+  console.log("useAccountActivity");
+  const queryKey = ['accountActivity', activity_type, date, until, after].filter(item => item && item != '' );
+  console.log(queryKey);
+  
+  const {isError, error, data: accountActivity, refetch} = useQuery(queryKey, () => getAccountActivity({activity_type, date, until, after}), params);
+  if (isError) {
+    console.log(`ERROR (useAccountActivity): ${error}`);
+  }
+
+  return {isError, accountActivity, getAccountActivity: () => refetch().then(r => r.data)};
 }

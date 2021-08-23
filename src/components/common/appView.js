@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { BarIndicator } from 'react-native-indicators';
 
 import { StyledText, useTheme, WP, defaultIconSize } from '../../theme';
-import { GobackIcon } from './navIcons';
+import { GobackIcon } from './iconButtons';
 
 export const AppHeader = ({title, goBack = true, ...props}) => {
 	const showHeader = title || goBack;
@@ -48,7 +48,9 @@ export const AppView = ({scroll = true, footer, hasHeader = true, header, isLoad
 			:
 			<View style={[styles.appContainer, props.appContainerStyle]}>
 				{hasHeader || header ? header ? header : <AppHeader {...props}/> : <></>}
-				{props.children}
+				<View style={styles.staticView}>
+					{props.children}
+				</View>
 				{footer && <View style={[styles.footerContainer, props.footerContainerStyle]}>{footer}</View>}
 			</View>
 		}
@@ -62,7 +64,7 @@ const useStyles = () => {
 	const styles = StyleSheet.create({
 		scrollAppContainer: { 
 			flex: 1,
-	    	alignItems: 'center',
+	    	// alignItems: 'center',
 	    	width: WP(100),
 	    	backgroundColor: theme.background,
 	    },
@@ -75,21 +77,23 @@ const useStyles = () => {
 	    },
 		appContainer: { 
 			flex: 1,
-	    	alignItems: 'center',
+	    	// alignItems: 'center', 
 	    	width: WP(100),
+	    	backgroundColor: theme.background,
+	    },
+	    staticView: {
+	    	flex:1,
 	    	paddingLeft:WP(3),
 	    	paddingRight:WP(3),
 	    	backgroundColor: theme.background,
 	    },
 		headerContainer: {
 			flexDirection: 'row',
-			width: WP(100),
+			width: '100%',
 			alignItems: 'center',
 			justifyContent: 'center',
 			height: 50,
 			backgroundColor: theme.background,
-			// position: 'absolute',
-			// top:0
 		},
 		footerContainer: {
 		    position: 'absolute',

@@ -5,7 +5,7 @@ import Modal from 'react-native-modal';
 import {deviceHeight, deviceWidth} from '../../utils';
 import {useTheme, WP, StyledText} from '../../theme'; 
 
-import {CloseIcon} from './navIcons';
+import {CloseIcon} from './iconButtons';
 
 export const FullViewModal = ({isVisible = false, onClose, title, ...props}) => {
 	

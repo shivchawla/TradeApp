@@ -75,6 +75,13 @@ export const DeleteIcon = ({onPress, ...props}) => {
 	)
 } 
 
+export const ShowHideButton = ({showDetail, onToggle, ...props}) => {
+	return(
+		<IconButton {...props} name={showDetail ? "chevron-up" : "chevron-down"} onPress={onToggle} />
+	)
+}
+
+
 
 const useStyles = () => {
 

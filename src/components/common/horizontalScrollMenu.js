@@ -26,7 +26,7 @@ export const HorizontalScrollMenu = ({items, isPadded = true, scroll = true, ...
 	return (
 		<View style={[styles.container, props.containerStyle]}>	
 			{scroll ? 
-				<ScrollView horizontal={true} contentContainerStyle={[styles.selectContainer, props.selectContainerStyle]}>
+				<ScrollView horizontal={true} showsHorizontalScrollIndicator={false} contentContainerStyle={[styles.selectContainer, props.selectContainerStyle]}>
 					{items.map(({label, key}, index) => {
 						return (<MenuButton {...{key, label, index}} onPress={() => setIndex(index)} />);
 					})}
