@@ -27,7 +27,7 @@ export const LineChart = ({values, size, style}) => {
 	            style={[getSize(size), style]}
 	            data={ values }
 	            svg={{ stroke: getColor(values) }}
-	            contentInset={ { bottom: 20 } }
+	            contentInset={ { bottom: 0 } }
 	        />
         </View>
 	);
@@ -39,7 +39,8 @@ const styles = StyleSheet.create({
 		// justifyContent:'center',
 	},
 	tinyChart: {
-		height: HP(9), width: WP(30)	
+		height: HP(6), width: WP(20), 
+		// borderWidth:1, borderColor: 'white'	
 	},
 	mediumChart:{
 		height: HP(20), width: WP(50)

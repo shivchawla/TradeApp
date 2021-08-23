@@ -6,7 +6,7 @@ import { StockChart } from './stockChart';
 import { TickerDisplay, StockName } from '../common';
 
 import { useAssetData } from  '../../helper';
-import {useTheme, StyledText, WP,} from '../../theme';
+import {useTheme, StyledText, WP} from '../../theme';
 
 import {formatName} from '../../utils';
 
@@ -16,9 +16,9 @@ export const SingleStock = ({symbol, onClick, detail = false}) => {
 	const PlainView = () => {
 		return (
 			<View style={styles.singleStockRow}>
-				<StockName {...{symbol}} />
+				<StockName {...{symbol}} containerStyle={{width: WP(30)}}/>
 				<StockChart {...{symbol, size: "S", timeframe: "5Day"}}/>
-				<TickerDisplay {...{symbol}} priceStyle={{textAlign: 'right'}} priceChangeStyle={{textAlign: 'right'}} />
+				<TickerDisplay {...{symbol}} style={{width: WP(30)}} priceStyle={{textAlign: 'right'}} priceChangeStyle={{textAlign: 'right'}} />
 			</View>
 		); 
 	}
@@ -48,7 +48,8 @@ const useStyles = () => {
 			flexDirection: 'row',
 			justifyContent: 'space-between',
 			width: '100%',
-			alignItems: 'center'
+			alignItems: 'center',
+			marginTop: WP(5)
 		},
 		priceChangeContainer:{
 
