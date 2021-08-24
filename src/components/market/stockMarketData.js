@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 
+import { Collapsible } from  '../../components/common';
 import { NDaysAgoISODate, NWeeksAgoISODate } from '../../utils';
 import { useStockEODData, useStockHistoricalData } from  '../../helper';
 import { useTheme, StyledText, Typography, WP, HP, getPnLColor }  from '../../theme';
@@ -20,7 +21,6 @@ const DisplayMarketData = ({data}) => {
 
 	return (
 		<View style={styles.marketDataContainer}>
-			<StyledText style={styles.marketDataTitle}>Market Data</StyledText>
 			<View style={styles.marketDataFieldsContainer}>
 				<View style={styles.marketDataFieldsColumn}>
 
@@ -82,7 +82,14 @@ export const StockMarketData = ({symbol}) => {
 
 	return (
 		<>
-		{!isLoading && <DisplayMarketData data={combineData(snapshot, monthlyBars52W, monthlyBarsYtd)} />}
+		{!isLoading && 
+			<Collapsible
+				title="MARKET DATA"
+				content={
+					<DisplayMarketData 
+						data={combineData(snapshot, monthlyBars52W, monthlyBarsYtd)} />}
+			/>
+		}
 		</>
 	)
 }
@@ -93,12 +100,8 @@ const useStyles = () => {
 
 	const styles = StyleSheet.create({
 		marketDataContainer: {
-			// flexDirection: 'row',
-			// justifyContent: 'space-between',
-			width: WP(100),
+			width: '100%',
 			paddingTop: WP(2),
-			borderColor: theme.darkgrey,
-			borderTopWidth: 1,
 		},
 		marketDataTitle: {
 			fontSize: Typography.five,
@@ -106,15 +109,12 @@ const useStyles = () => {
 			paddingLeft: WP(2),
 		},
 		marketDataFieldsContainer: {
-			flex: 1,
 			flexDirection: 'row',
-			marginTop: WP(5)
 		},
-
 		marketDataFieldsColumn: {
-			width: WP(50),
+			width: '50%',
 			paddingLeft: WP(2),
-			paddingRight: WP(2),			
+			paddingRight: WP(2),
 		},
 		marketDataFieldContainer: {
 			flex:1,

@@ -17,7 +17,7 @@ import { useStockPortfolioData, useTradingAccountData,
 import {formatValue} from '../../utils';
 import {ACCOUNT_SUMMARY_FIELDS} from '../../config';
 
-const {useTheme, WP, StyledText} = Theme;
+const {useTheme, WP, HP, StyledText} = Theme;
 
 const HorizontalField = ({label, value, isPnL=false, ...props}) => {
 	const {theme, styles} = useStyles();
@@ -60,7 +60,7 @@ const Portfolio = (props) => {
 
 	const PortfolioHeader = () => {
 		const navigation = useNavigation();
-		
+
 		return (
 			<>
 			<AppHeader headerLeft={<AccountIcon />} headerRight={<SearchIcon onPress={() => navigation.navigate("SearchStock")} iconColor={theme.greyIcon}/>} title="Portfolio" goBack={false} />
@@ -116,11 +116,37 @@ const Portfolio = (props) => {
 
 	return (
 		<AppView loading={loading} header={<PortfolioHeader />} title="Portfolio">
-			{tradingAccount && <Collapsible title="ACCOUNT SUMMARY" content={<AccountSummary />} containerStyle={{marginTop: WP(10)}}/>}
-			<Collapsible title="PERFORMANCE" content={<PnLGraph />}  show={false}/>
-			{portfolio && <Collapsible title="POSITIONS" content={<PortfolioDisplay {...{portfolio, orders}}/>} />}
-			{(orders && orders.length > 0) && <Collapsible title="PENDING ORDERS" content={<DisplayOrderList {...{orders}}/>} />}
-			{(relevantActivity && relevantActivity.length > 0) && <Collapsible title="RECENT ACTIVITY" content={<DisplayActivityList activityList={relevantActivity}/>} />}
+			{tradingAccount && 
+				<Collapsible 
+					title="ACCOUNT SUMMARY" 
+					content={<AccountSummary />} 
+					containerStyle={{}}
+				/>
+			}
+
+			<Collapsible 
+				title="PERFORMANCE" 
+				content={<PnLGraph />}  
+				show={false}
+			/>
+			{portfolio && 
+				<Collapsible 
+					title="POSITIONS" 
+					containerStyle={{paddingLeft: WP(2)}}
+					content={<PortfolioDisplay {...{portfolio, orders}}/>} 
+				/>
+			}
+			{(orders && orders.length > 0) && 
+				<Collapsible title="PENDING ORDERS" 
+					content={<DisplayOrderList {...{orders}}/>} 
+				/>
+			}
+			{(relevantActivity && relevantActivity.length > 0) && 
+				<Collapsible 
+					title="RECENT ACTIVITY" 
+					content={<DisplayActivityList activityList={relevantActivity}/>} 
+				/>
+			}
 		</AppView>
 	);
 }

@@ -46,7 +46,7 @@ const useStyles = () => {
 		stockDetailTopContainer: {
 			flexDirection: 'row',
 			justifyContent: 'space-between',
-			width: WP(100),
+			width: '100%',
 			padding: WP(2)
 		},
 		price :{

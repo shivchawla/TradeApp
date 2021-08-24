@@ -35,8 +35,7 @@ export const LineChart = ({values, size, style}) => {
 
 const styles = StyleSheet.create({
 	chartContainer: {
-		// alignItems: 'center',
-		// justifyContent:'center',
+		alignItems: 'center',
 	},
 	tinyChart: {
 		height: HP(6), width: WP(20), 

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useFocusEffect} from '@react-navigation/native';
 
-import { VerticalField, PnLText } from '../common';
+import { VerticalField, PnLText, Collapsible } from '../common';
 import * as Theme  from '../../theme';
 import { POSITION_FIELDS, POSITION_SUMMARY_FIELDS } from '../../config';
 import { useStockPositionData } from '../../helper';
@@ -30,19 +30,9 @@ const positionSummary = (position) => {
 
 }
 
-const ShowHideButton = ({showDetail, onToggle}) => {
-	const styles = useStyles();
-	const theme = useTheme();
-	return(
-		<TouchableOpacity onPress={onToggle} style={styles.showHideButton}>
-			<Ionicons name={showDetail ? "chevron-up" : "chevron-down"} color={theme.backArrow} size={WP(5)} />
-		</TouchableOpacity>
-	)
-}
-
-const StockPositionHeader = ({position, onToggle, showDetail}) => {
+export const StockPositionHeader = ({position}) => {
 	const SHOW_SUMMARY_KEYS = Object.keys(POSITION_SUMMARY_FIELDS);
-	const styles = useStyles();
+	const {theme, styles} = useStyles();
 	
 	const MiniField = ({label, field, value, changeValue, style}) => {
 		if (field == "side") {
@@ -65,14 +55,12 @@ const StockPositionHeader = ({position, onToggle, showDetail}) => {
 
 	return (
 		<View style={styles.positionHeaderContainer}>
-			<StyledText style={styles.positionHeaderTitle}>Your Position</StyledText>
 			<View style={styles.positionSummaryContainer}>
 				{
 					positionSummary(position).map((item, index) => {
 						return <MiniField key={item.field} {...item} style={{...index%2==1 && {marginRight: 0}}} />
 					})
 				}
-			 <ShowHideButton {...{onToggle, showDetail}}/>
 			</View>
 		</View>
 	)
@@ -80,7 +68,7 @@ const StockPositionHeader = ({position, onToggle, showDetail}) => {
 
 const StockPositionList = (position) => {
 	const SHOW_POSITION_KEYS = Object.keys(POSITION_FIELDS);
-	const styles = useStyles();
+	const {theme, styles} = useStyles();
 
 	return ( 
 		<View style={styles.positionListContainer}>
@@ -100,9 +88,22 @@ const StockPositionList = (position) => {
 	)
 }
 
-const ShowPosition = (position) => <ShowJson json={position || {}} />
+const ShowPosition = ({position}) => {
+	return (
+		<>{
+			!!position && 
+			<Collapsible 
+				title="YOUR POSITION"
+				summary={<StockPositionHeader {...{position}} />}
+				content={<StockPositionList {...position} />}
+			/>
+		}
+		</>
+	)	
+}
 
 const StockPositionWithSymbol = ({symbol}) => {
+	const {theme, styles} = useStyles();
 	const {isError, getPosition} = useStockPositionData(symbol, {enabled: false});
 	const [position, setPosition] = useState(null);
 		
@@ -117,20 +118,8 @@ const StockPositionWithSymbol = ({symbol}) => {
 		}, [])
 	)
 	
-	const [showDetail, setShow] = useState(true);
-
-	const styles = useStyles();
-
-	return (
-		<>
-		{!!position &&
-			<View style={styles.positionContainer}>
-				<StockPositionHeader {...{position, showDetail}} onToggle={() => setShow(!showDetail)}/> 
-				{showDetail && <StockPositionList {...position} />}
-			</View>
-		}
-		</>
-	);	
+	return <ShowPosition {...{position}} />
+	
 }
 
 export const StockPosition = ({symbol, position}) => {
@@ -140,7 +129,7 @@ export const StockPosition = ({symbol, position}) => {
 
 	return (
 		<>
-			{position ? <ShowPosition json = {position} /> 
+			{position ? <ShowPosition {...{position}} /> 
 				: symbol ? <StockPositionWithSymbol {...{symbol}} />
 				: <ShowJson json = {{error: "No Positions found"}} />
 			}
@@ -153,9 +142,7 @@ const useStyles = () => {
 
 	const styles = StyleSheet.create({
 		positionContainer: {
-			width: WP(100),
-			borderTopWidth:1,
-			borderColor: theme.darkgrey,
+			width: '100%',
 			paddingTop: WP(4)
 		},
 		positionListContainer: {
@@ -163,9 +150,7 @@ const useStyles = () => {
 			flexWrap: 'wrap',
 		},
 		positionHeaderContainer: {
-			width: WP(100),
 			flexDirection: 'row',
-			// marginTop: WP(3),
 			marginBottom: WP(5),
 			justifyContent:'space-between'
 		},
@@ -207,5 +192,5 @@ const useStyles = () => {
 		}
 	});
 
-	return styles;
+	return {theme, styles};
 };
