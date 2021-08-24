@@ -7,19 +7,20 @@ import { formatValue} from '../../utils';
 
 const { useTheme, StyledText, WP, Typography} = Theme;
 
-export const VerticalField = ({label, value, changeValue = 0, isPnL = false, ...props}) => {
+export const VerticalField = ({label, value, changeValue = 0, isPnL = false, labelTop = true, valuePrefix = '', ...props}) => {
 	
 	const styles = useStyles();
 
 	return (
 		<View style={[styles.container, props.containerStyle]}>
-			<StyledText style={[styles.label, props.labelStyle]}>{label}</StyledText>
+			{labelTop && <StyledText style={[styles.label, props.labelStyle]}>{label}</StyledText>}
 			{isPnL ? 
 				<PnLText {...{value, changeValue}} {...{valueStyle: props.valueStyle, changeStyle: props.changeStyle}} />
 				:
-				<StyledText style={[styles.value, props.valueStyle]}>{formatValue(value)}
+				<StyledText style={[styles.value, props.valueStyle]}>{valuePrefix + formatValue(value)}
 				</StyledText>
 			}
+			{!labelTop && <StyledText style={[styles.label, props.labelStyle]}>{label}</StyledText>}
 		</View>
 	);
 }

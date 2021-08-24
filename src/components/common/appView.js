@@ -11,8 +11,7 @@ import { GobackIcon } from './iconButtons';
 export const AppHeader = ({title, goBack = true, ...props}) => {
 	const showHeader = title || goBack;
 	const navigation = useNavigation();
-	const theme = useTheme();
-	const styles = useStyles();
+	const {theme, styles} = useStyles();
 
 	return (
 		<>
@@ -31,7 +30,7 @@ export const AppHeader = ({title, goBack = true, ...props}) => {
 export const AppView = ({scroll = true, footer, hasHeader = true, header, isLoading = false, ...props}) => {
 
 	const Component = scroll ? ScrollView : View;
-	const styles = useStyles();
+	const {theme, styles} = useStyles();
 
 	return (
 		<>
@@ -40,7 +39,7 @@ export const AppView = ({scroll = true, footer, hasHeader = true, header, isLoad
 		scroll ? 
 			<View style={styles.scrollAppContainer}>
 				{hasHeader || header ? header ? header : <AppHeader {...props}/> : <></>}
-				<ScrollView contentContainerStyle={styles.scrollView}>
+				<ScrollView contentContainerStyle={styles.scrollView} showsVerticalScrollIndicator={false}>
 					{props.children}
 				</ScrollView>
 				{footer && <View style={[styles.footerContainer, props.footerContainerStyle]}>{footer}</View>}
@@ -70,7 +69,6 @@ const useStyles = () => {
 	    },
 	    scrollView: {
 	    	backgroundColor: theme.background,
-	    	flex:1,
 	    	width: WP(100),
 	    	paddingLeft:WP(3),
 	    	paddingRight:WP(3)
@@ -119,5 +117,5 @@ const useStyles = () => {
 		}
 	});
 
-	return styles;
+	return {theme, styles};
 }

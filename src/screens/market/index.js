@@ -31,6 +31,9 @@ const ShowWatchlist = ({watchlistId}) => {
 }
 
 const SelectWatchlist = ({watchlists}) => {
+
+	const {styles} = useStyles();
+
 	const items = watchlists.map(item => {
 		return {key: item.id, label: item.name, component: () => <ShowWatchlist {...{watchlistId: item.id}}/>}
 	})
@@ -52,7 +55,8 @@ const Market = (props) => {
 	
 	const [watchlists, setWatchlists] = useState(null);
 
-	const theme = useTheme();
+	const {theme, styles} = useStyles();
+
 	const navigation = useNavigation();
 
 	useFocusEffect(
@@ -91,8 +95,8 @@ const Market = (props) => {
 	const HeaderRight = () => {
 		return (
 			<View style={{flexDirection: 'row'}}>
-				<SearchIcon onPress={() => navigation.navigate("SearchStock")} />
-				<AddIcon containerStyle={{marginLeft: WP(4)}} onPress={() => navigation.navigate('ManageWatchlist') }/>	
+				<SearchIcon onPress={() => navigation.navigate("SearchStock")} iconColor={theme.greyIcon}/>
+				<AddIcon containerStyle={{marginLeft: WP(4)}} onPress={() => navigation.navigate('ManageWatchlist') } iconColor={theme.greyIcon}/>	
 			</View>
 		)
 	}	
@@ -112,19 +116,25 @@ const Market = (props) => {
 	);
 }
 
-const styles = StyleSheet.create({
-	watchlistContainer: {
-		width: '100%',
-		justifyContent: 'center',
-	},
-	selectContainer: {
-		justifyContent: 'flex-start'
-	},
-	menuButton: {
-		marginRight: WP(5),
-		padding:WP(1)
-	}
+const useStyles = () => {
+	const theme = useTheme();
 
-});
+	const styles = StyleSheet.create({
+		watchlistContainer: {
+			width: '100%',
+			justifyContent: 'center',
+		},
+		selectContainer: {
+			justifyContent: 'flex-start'
+		},
+		menuButton: {
+			marginRight: WP(5),
+			padding:WP(1)
+		}
+
+	});
+
+	return {theme, styles};
+}
 
 export default Market;

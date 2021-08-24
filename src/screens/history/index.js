@@ -1,12 +1,13 @@
 import React, {useState} from 'react';
 import { ScrollView, View, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 
-import { AppView, CalendarIcon, FullViewModal, DisplayOrderInList, 
+import { AppView, CalendarIcon, FullViewModal, 
 	DateRangePicker, VerticalField, ConfirmButton, HorizontalButtonGroup } from '../../components/common';
+
+import { DisplayActivityList } from '../../components/activity';
+
 import { useTheme, WP, HP, StyledText} from '../../theme';
-
 import {currentISODate, NWeeksAgoISODate, NDaysAgoISODate, toISODate} from  '../../utils';
-
 import { useAccountActivity, useOrders } from '../../helper'
 
 const HorizontalFieldSelection = ({onSelect}) => {
@@ -39,14 +40,6 @@ const HorizontalPeriodSelection = ({onSelect}) => {
 		buttonTextStyle={styles.periodSelectionButtonText}
 		selectedButtonStyle={styles.selectedPeriodButton} 
 	/>
-}
-
-const ShowHistoryItem = ({item}) => {
-	if(item.type == 'order') {
-		return <DisplayOrderInList order={item}/>
-	} else {
-		return <></>
-	}
 }
 
 const ZeroActivityCount = ({start, end}) => {
@@ -95,14 +88,12 @@ const ShowHistory = ({field, start, end}) => {
 	return (
 		<View style={{flex:1}}>
 			{(!!allActivities && allActivities.length > 0) ? 
-				<FlatList
+				<DisplayActivityList
 					style={styles.activityFlatList} 
-				  	showsVerticalScrollIndicator={false}
-					data={allActivities}
-					keyExtractor={(item) => item.id}
-					renderItem={({item, index}) => <ShowHistoryItem {...{item}} />}
+					activitList={allActivities}
 				/>
-				: <ZeroActivityCount {...{start, end}}/>
+				: 
+				<ZeroActivityCount {...{start, end}}/>
 			}
 
 

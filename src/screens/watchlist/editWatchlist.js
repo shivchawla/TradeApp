@@ -6,9 +6,9 @@ import Modal from 'react-native-modal';
 
 import { useFocusEffect } from '@react-navigation/native';
 
-import { AppView, StockName, ConfirmButton, 
-	CloseIcon, DeleteIcon, SearchIcon, TouchRadio } from '../../components/common';
-import { SearchStockWatchlist } from '../../components/market';
+import { AppView, ConfirmButton, TouchRadio,
+	CloseIcon, DeleteIcon, SearchIcon } from '../../components/common';
+import { SearchStockWatchlist, StockName } from '../../components/market';
 import { useWatchlist, useDeletewatchlist, useUpdateWatchlist } from '../../helper';
 import {useTheme, WP, StyledText} from '../../theme';
 import { diffArray, removeArray, deviceWidth, deviceHeight } from '../../utils'

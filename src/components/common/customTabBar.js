@@ -60,7 +60,7 @@ export const CustomTabBar = ({ state, descriptors, navigation }) => {
             ? options.title
             : route.name;
 
-        const icon = index == 0 ? "stats-chart" : "pie-chart";
+        const icon = route.name == "Market" ? "stats-chart" : "pie-chart";
             
         const isFocused = state.index === index;
 
@@ -96,7 +96,7 @@ export const CustomTabBar = ({ state, descriptors, navigation }) => {
             style={{ flex: 1, alignItems: 'center', ...(index%2 == 0) ? {marginRight: WP(20)} : {marginLeft: WP(20)}}}
           >
         
-            <Ionicons name={icon} color={isFocused ? theme.backArrow : theme.light} size={WP(7)} />
+            <Ionicons name={icon} color={isFocused ? theme.light : theme.grey7} size={WP(7)} />
 
           </TouchableOpacity>
         );

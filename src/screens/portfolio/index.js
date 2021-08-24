@@ -3,70 +3,70 @@ import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import {AppView, AppHeader, PnLText, 
-	LineChart, HorizontalScrollMenu, VerticalField,
-	AccountIcon, TickerDisplay} from '../../components/common';
+	LineChart, VerticalField,
+	AccountIcon, SearchIcon, ShowHideButton } from '../../components/common';
+
+import { PortfolioDisplay } from '../../components/portfolio';
+import { DisplayOrderList } from '../../components/order';
+import { DisplayActivityList } from '../../components/activity';
 
 import * as Theme from '../../theme';
-import { useStockPortfolioData, useTradingAccountData, usePortfolioHistory } from '../../helper';
+import { useStockPortfolioData, useTradingAccountData, 
+	usePortfolioHistory, useOrders, useAccountActivity } from '../../helper';
 
 import {formatValue} from '../../utils';
 import {ACCOUNT_SUMMARY_FIELDS} from '../../config';
 
 const {useTheme, WP, StyledText} = Theme;
 
-const PortfolioDisplay = ({portfolio}) => {
-
-	const theme = useTheme();
-	const styles = useStyles();
-
-	const PortfolioDisplayHeader = () => {
-		return (
-			<View style={styles.portfolioDisplayHeader}>
-				<StyledText style={{width: WP(25), textAlign: 'left'}}>Symbol</StyledText>
-				<StyledText style={{borderLeftWidth:1,borderRightWidth:1, borderColor: theme.grey5, width: WP(50), textAlign: 'center'}}>Last Price</StyledText>
-				<StyledText style={{width: WP(25), textAlign:'center'}}>PnL</StyledText>
-			</View>
-		)
-	}
-
-	const DisplayPosition = ({position}) => {
-		const {symbol, qty, side, unrealized_pl} = position;
-		const navigation = useNavigation()
-
-		return (
-			<TouchableOpacity style={styles.portfolioDisplayHeader} onPress={() => navigation.navigate('StockDetail', {symbol})}>
-				<View style={styles.symbolQtyContainer}>
-					<StyledText style={styles.symbol}>{symbol}</StyledText>
-					<StyledText style={styles.quantity}>{formatValue(qty)} Shares</StyledText>
-				</View>
-				<TickerDisplay {...{symbol}} 
-					style={styles.tickerDisplayContainer} 
-					priceChangeStyle={styles.priceChangeStyle}
-					priceStyle={styles.priceStyle}/>
-				<PnLText valueStyle={styles.pnlText} value={unrealized_pl}  />
-			</TouchableOpacity>
-		)
-	}
+const HorizontalField = ({label, value, isPnL=false, ...props}) => {
+	const {theme, styles} = useStyles();
 
 	return (
-		<View style= {styles.portfolioDisplayContainer}>
-			<StyledText style={styles.portfolioDisplayTitle}>POSITIONS</StyledText>
-			<PortfolioDisplayHeader />
-			{portfolio.map((item, index) => {
-				return <DisplayPosition key={index} position={item} />
-			})
+		<View style={{flexDirection: 'row'}}>
+			<StyledText style={styles.pnlHeaderLabel}>{label}: </StyledText>
+			{isPnL ? 
+				<PnLText {...{value}} {...{valueStyle: styles.pnlHeaderValue}} />
+				: <StyledText style={styles.pnlHeaderValue}>{value}</StyledText>
 			}
 		</View>
+	)
+}
 
+const PortfolioContentView = ({title, content, show = true, ...props}) => {
+	const {theme, styles} = useStyles();
+	const [showDetail, setShow] = useState(show);
+
+	return (
+		<View style={[styles.outerContentContainer, props.containerStyle]}>
+			<View style={styles.contentHeader}>
+				<TouchableOpacity onPress={() => setShow(!showDetail)}>
+					<StyledText style={styles.contentTitle}>{title}</StyledText>
+				</TouchableOpacity>
+				<ShowHideButton containerStyle={styles.contentToggleIcon} {...{showDetail}} onToggle={() => setShow(!showDetail)} />
+			</View>
+			{showDetail && <View style={styles.contentContainer}>{content}</View>}
+		</View>
 	)
 }
 
 const Portfolio = (props) => {
-	const {isError: isErrorPortfolio, portfolio} = useStockPortfolioData(); 
-	const {isError: isErrorAccount, tradingAccount} = useTradingAccountData();
-	const {isError: isErrorHistory, portfolioHistory} = usePortfolioHistory();
+	const {portfolio} = useStockPortfolioData(); 
+	const {tradingAccount} = useTradingAccountData();
+	const {portfolioHistory} = usePortfolioHistory();
+	const {orders} = useOrders({status: 'open'});
+	const {accountActivity, getAccountActivity } = useAccountActivity()
+	
+	const [relevantActivity, setActivity] = useState(null);
 
-	const styles = useStyles();
+	React.useEffect(() => {
+		if (!!accountActivity) {
+			setActivity(accountActivity.filter(item => !!item.type && (item.type == "fill" || item.type.includes("div"))));
+			// setActivity(accountActivity);
+		}
+	}, [accountActivity])
+
+	const {theme, styles} = useStyles();
 
 	const getLatestEquity = (history) => {
 		return (history?.equity || []).slice(-1)[0];
@@ -79,15 +79,27 @@ const Portfolio = (props) => {
 	const PortfolioHeader = () => {
 		return (
 			<>
-			<AppHeader headerLeft={<AccountIcon />} title="Portfolio" goBack={false} />
+			<AppHeader headerLeft={<AccountIcon />} headerRight={<SearchIcon onPress={() => navigation.navigate("SearchStock")} iconColor={theme.greyIcon}/>} title="Portfolio" goBack={false} />
 			<View style={styles.portfolioHeader}>
-				<VerticalField label="Total Balance" value={getLatestEquity(portfolioHistory)} />
 				<VerticalField 
-					label="Change (1M)" 
-					value={getPnL(portfolioHistory)} 
-					isPnL={true} 
-					labelStyle={styles.pnlHeaderLabel}
-					valueStyle={styles.pnlHeaderValue}/>
+					label="Total Balance" 
+					labelTop={false} 
+					value={getLatestEquity(portfolioHistory)} 
+					valuePrefix='$ '
+					valueStyle={{fontSize: WP(6), fontWeight: '700'}}
+				/>
+				<View>
+					<HorizontalField
+						label="Chg. (1M)"
+						value={formatValue(getPnL(portfolioHistory))}
+						isPnL={true}
+					/>
+					<HorizontalField
+						label="Chg. (1D)"
+						value={formatValue(getPnL(portfolioHistory))}
+						isPnL={true}
+					/> 
+				</View>
 			</View>
 			</>
 		)
@@ -95,10 +107,6 @@ const Portfolio = (props) => {
 
 	const PnLGraph = () => {
 		return <LineChart values={portfolioHistory?.equity || []} /> 	
-	}
-
-	const PortfolioPie = () => {
-		return <StyledText>Portfolio Pie</StyledText>;	
 	}
 
 	const AccountSummary = () => {
@@ -119,23 +127,17 @@ const Portfolio = (props) => {
 		)	
 	}
 
-	const menuItems = [
-		{key:'pnl', label:'PNL', component: PnLGraph},
-		{key:'portfolio', label:'PORTFOLIO', component: PortfolioPie},
-		{key:'account', label:'ACCOUNT', component: AccountSummary},
-	];
 
-	const loading = !!!portfolio || !!!tradingAccount || !!!portfolioHistory
+	const loading = !!!portfolioHistory;
 
 	return (
-		<>
-		{!loading && 
-			<AppView header={<PortfolioHeader />} title="Portfolio">
-				<HorizontalScrollMenu items={menuItems} scroll={false}/>
-				{portfolio && <PortfolioDisplay {...{portfolio}}/>}
-			</AppView>
-		}
-		</>
+		<AppView loading={loading} header={<PortfolioHeader />} title="Portfolio">
+			{tradingAccount && <PortfolioContentView title="ACCOUNT SUMMARY" content={<AccountSummary />} containerStyle={{marginTop: WP(10)}}/>}
+			<PortfolioContentView title="PERFORMANCE" content={<PnLGraph />}  show={false}/>
+			{portfolio && <PortfolioContentView title="POSITIONS" content={<PortfolioDisplay {...{portfolio, orders}}/>} />}
+			{(orders && orders.length > 0) && <PortfolioContentView title="PENDING ORDERS" content={<DisplayOrderList {...{orders}}/>} />}
+			{(relevantActivity && relevantActivity.length > 0) && <PortfolioContentView title="RECENT ACTIVITY" content={<DisplayActivityList activityList={relevantActivity}/>} />}
+		</AppView>
 	);
 }
 
@@ -146,9 +148,9 @@ const useStyles = () => {
 		portfolioHeader: {
 			flexDirection: 'row',
 			justifyContent: 'space-between',
-			borderBottomWidth:1,
-			borderColor: theme.grey5,
-			paddingBottom: WP(2),
+			// borderBottomWidth:1,
+			// borderColor: theme.grey5,
+			padding: WP(2),
 			paddingTop: WP(2),
 			width: '100%'
 		},
@@ -170,49 +172,40 @@ const useStyles = () => {
 			width: '50%',
 			padding: WP(3),
 		},
-		portfolioDisplayContainer: {
-			width: '100%',	
+		outerContentContainer: {
+			borderTopWidth:1,
+			borderColor: theme.grey9,
+			marginTop: WP(5),
+			marginBottom: WP(5),
+			width: WP(100) 
 		},
-		portfolioDisplayTitle: {
-			marginTop: WP(3),
-			fontSize: WP(4.5)
+		contentContainer: {
+			marginTop: WP(5),
+			paddingLeft: WP(2), 
+			paddingRight: WP(2) 
 		},
-		portfolioDisplayHeader: {
+		contentHeader: {
+			marginTop: -11,
 			flexDirection: 'row',
-			width: '100%',
-			marginTop: WP(5)
+			justifyContent: 'space-between'		
 		},
-		symbolQtyContainer: {
-			width: WP(25), 
+		contentTitle: {
+			backgroundColor: theme.background,
+			paddingRight: WP(2),
+			color: theme.grey3,
+			fontWeight: '700',
+			fontSize: WP(3.5)
 		},
-		symbol: {
-			fontSize: WP(4)
-		},
-		quantity: {
-			fontSize: WP(3.5),
-			color: theme.grey5
-		},
-		pnlText: {
-			width: WP(25), 
-			textAlign:'center'
-		},
-		tickerDisplayContainer: {
-			width: WP(50), 
-			// alignItems: 'center',
-			flexDirection: 'row',
-			justifyContent: 'center'
-		},
-		priceChangeStyle: {
-			// textAlign: 'center',
-			marginLeft: WP(2),
-			fontSize: WP(4)
-		},
-		priceStyle: {
-			fontSize: WP(4)
+		contentToggleIcon: {
+			backgroundColor: theme.background,
+			paddingRight: WP(4),
+			paddingLeft: WP(2),
+			marginTop: WP(-1),
 		}
+		
 	});
 
-	return styles;
+	return {theme, styles};
 }
 
 export default Portfolio;

@@ -4,7 +4,9 @@ import {useNavigation} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
-import { StockName, ConfirmButton, SingleStock } from '../common';
+import { ConfirmButton } from '../common';
+
+import { StockName, SingleStock } from './';
 
 import { useStockList } from '../../helper';
 import { initialStocks } from '../../config'

@@ -14,11 +14,8 @@ export { GobackIcon, AccountIcon, SearchIcon,
 
 export { TinyTextButton } from './tinyTextButton';
 
-export { TickerDisplay } from './tickerDisplay';
-export { StockName } from './stockName';
 export { TouchRadio} from './touchRadio';
 export { CustomTabBar } from './customTabBar';
 export { FullViewModal } from './fullViewModal';
 export { DateRangePicker } from './dateRangePicker'
 export { HorizontalButtonGroup } from './horizontalButtonGroup';
-export { DisplayOrderInList } from './displayOrder';

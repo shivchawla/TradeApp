@@ -4,7 +4,7 @@ import {View, StyleSheet} from 'react-native';
 import { useStockEODData, useStockRealtimeData } from  '../../helper';
 import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
 
-import { TickerDisplay } from '../common';
+import { TickerDisplay } from './';
 
 const HighLow = ({symbol}) => {
 	const {rtData, subscribe} = useStockRealtimeData(symbol);

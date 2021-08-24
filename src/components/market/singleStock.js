@@ -2,8 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
-import { StockChart } from './stockChart'; 
-import { TickerDisplay, StockName } from '../common';
+import { StockChart, TickerDisplay, StockName } from './'; 
 
 import { useAssetData } from  '../../helper';
 import {useTheme, StyledText, WP} from '../../theme';

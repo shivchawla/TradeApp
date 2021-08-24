@@ -12,7 +12,7 @@ import { useOrders, useLatestTradingDay, useSymbolActivity } from '../../helper'
 
 
 const StockOrderHeader = ({orders, onToggle, showDetail}) => {
-	const styles = useStyles();
+	const {theme, styles} = useStyles();
 	
 	const countOpenOrders = (orders) => {
 		return orders.filter(item => OPEN_ORDER_STATUS.includes(item.status)).length
@@ -30,7 +30,7 @@ const StockOrderHeader = ({orders, onToggle, showDetail}) => {
 }
 
 const StockOrderList = ({orders}) => {
-	const styles = useStyles();
+	const {theme, styles} = useStyles();
 
 	return ( 
 		<View style={styles.orderListContainer}>
@@ -42,7 +42,21 @@ const StockOrderList = ({orders}) => {
 	)
 }
 
-const ShowOrders = (orders) => <ShowJson json={orders || {}} />
+const ShowOrders = ({orders}) => {
+	const [showDetail, setShow] = useState(true);
+	const {theme, styles} = useStyles();
+	
+	return (
+		<>
+		{!!orders && orders.length > 0 &&
+			<View style={styles.ordersContainer}>
+				<StockOrderHeader {...{orders, showDetail}} onToggle={() => setShow(!showDetail)}/> 
+				{showDetail && <StockOrderList {...{orders}} />}
+			</View>
+		}
+		</>
+	)
+}
 
 const StockOrdersWithSymbol = ({symbol}) => {
 	const latestTradingOpen = useLatestTradingDay();
@@ -51,10 +65,9 @@ const StockOrdersWithSymbol = ({symbol}) => {
 	const {getOrders: getOpenOrders} = useOrders({symbol, status: 'open'}, {enabled: false});
 	const {getOrders: getClosedOrders} = useOrders({symbol, status: 'closed', after: latestTradingOpen}, {enabled: false});
 	
-	const [showDetail, setShow] = useState(true);
 	const [orders, setOrders] = useState(null);
 
-	const styles = useStyles();
+	const {theme, styles} = useStyles();
 
 	// const navigation = useNavigation();
 
@@ -110,24 +123,17 @@ const StockOrdersWithSymbol = ({symbol}) => {
 
 	
 	return (
-		<>
-		{!!orders && orders.length > 0 &&
-			<View style={styles.ordersContainer}>
-				<StockOrderHeader {...{orders, showDetail}} onToggle={() => setShow(!showDetail)}/> 
-				{showDetail && <StockOrderList {...{orders}} />}
-			</View>
-		}
-		</>
-	);	
+		<ShowOrders {...{orders}} />
+	)
 }
 
 export const StockOrders = ({symbol, orders}) => {
 
 	return (
 		<>
-			{orders ? <ShowOrder json={orders} /> 
+			{orders ? <ShowOrders {...{orders}} /> 
 				: symbol ? <StockOrdersWithSymbol {...{symbol}} />
-				: <ShowJson json = {{error: "No orders found"}} />
+				: <></>
 			}
 		</>
 	)	
@@ -199,6 +205,6 @@ const useStyles = () => {
 
 	});
 
-	return styles;
+	return {theme, styles};
 };
 

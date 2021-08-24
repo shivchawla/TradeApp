@@ -4,8 +4,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 
 import { AppView, ConfirmButton, 
-	HorizontalPickField, HorizontalInputField,
-	TickerDisplay} from '../../components/common';
+	HorizontalPickField, HorizontalInputField,} from '../../components/common';
+
+import { TickerDisplay } from '../../components/market';
 
 import { QuantitySelector, TifSelector, 
 	NotionalSelector, OrderTypeSelector } from '../../components/order'

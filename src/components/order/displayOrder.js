@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import { titleCase } from "title-case";
 
 import { ShowJson } from '../common';
-import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../../theme';
+import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
 
-export const DisplayOrderInList = ({order}) => {
+export const DisplayOrder = ({order}) => {
 	const {theme, styles} = useStyles();
 	const navigation = useNavigation();
 
@@ -44,6 +44,18 @@ export const DisplayOrderInList = ({order}) => {
 	);
 }
 
+export const DisplayOrderList = ({orders, ...props}) => {
+	const {theme, styles} = useStyles();
+
+	return (
+		<View style={[styles.orderList, props.containerStyle]}>
+			{orders && orders.map((order, index) => {
+				return <DisplayOrder key={item.id} order={item} />
+			})}
+		</View>
+	)
+}
+
 
 const useStyles = () => {
 	const theme = useTheme();
@@ -64,6 +76,9 @@ const useStyles = () => {
 		value: {
 			fontSize: Typography.four, 
 			color: theme.verydarkgrey
+		},
+		orderList: {
+			flex:1,
 		}
 
 	});
