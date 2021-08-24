@@ -6,7 +6,6 @@ import { ShowJson } from '../common';
 import { useTheme } from '../../theme';
 
 export const DisplayActivity = ({activity}) => {
-	console.log(activity);
 	return <ShowJson full={false} json={activity} />
 }
 

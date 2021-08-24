@@ -19,3 +19,4 @@ export { CustomTabBar } from './customTabBar';
 export { FullViewModal } from './fullViewModal';
 export { DateRangePicker } from './dateRangePicker'
 export { HorizontalButtonGroup } from './horizontalButtonGroup';
+export { Collapsible } from './collapsible';
