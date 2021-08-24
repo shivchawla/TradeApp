@@ -28,7 +28,7 @@ export const PortfolioDisplay = ({portfolio, orders = []}) => {
 		const {symbol, qty, side, unrealized_pl} = position;
 		const navigation = useNavigation()
 
-		const hasActiveOrder = orders.findIndex(item => item.symbol == symbol);
+		const hasActiveOrder = orders.findIndex(item => item.symbol == symbol) != -1;
 
 		return (
 			<TouchableOpacity style={styles.portfolioDisplayHeader} onPress={() => navigation.navigate('StockDetail', {symbol})}>
