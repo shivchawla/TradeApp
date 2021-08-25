@@ -7,8 +7,9 @@ import { titleCase } from "title-case";
 
 import { ShowJson, Clickable } from '../common';
 import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
+import { CANCEL_ORDER_STATUS } from '../../config';
 
-export const DisplayOrder = ({order, showSymbol = false, showIcon = false, showOrderType = true, pastTense = false,  ...props}) => {
+export const DisplayOrder = ({order, showSymbol = false, showIcon = false, showOrderType = true, showStatus = true, pastTense = false,  ...props}) => {
 	const {theme, styles} = useStyles();
 	const navigation = useNavigation();
 
@@ -29,24 +30,41 @@ export const DisplayOrder = ({order, showSymbol = false, showIcon = false, showO
 	}
 
 	const getOrderSide = (order) => {
-		return order.side == "buy" ? pastTense ? 'BOUGHT' : 'BUY' : pastTense ? 'SOLD' : 'SELL'; 
+		const side = order.side.toUpperCase();
+
+		if (pastTense && !CANCEL_ORDER_STATUS.includes(order.status)) {
+			return side == "BUY" ? 'BOUGHT' : 'SOLD'
+		} 
+
+		return side;
 	}
 
 	const displayOrderQuantity = (order) => {
 		return getOrderSide(order) + ' ' + (getShareQty(order.qty) || getNotional(order.notional));
 	}
 
+	const isCanceled = CANCEL_ORDER_STATUS.includes(order.status);
+
 	return (
-		<Clickable style={styles.outerContainer} onPress={() => navigation.navigate('OrderStatus', {order})}>
-			<View style={styles.container}>
-				{showSymbol && <StyledText style={[styles.symbol, props.symbolStyle]}>{order.symbol}</StyledText>}
-				<View style={{flexDirection: 'row'}}>
-					<StyledText style={[styles.description, props.descriptionStyle]}>{displayOrderQuantity(order)}</StyledText>
-					{showOrderType && <StyledText style={[styles.description, {marginLeft: WP(2)}, props.descriptionStyle]}>{displayOrderType(order)}</StyledText>}
+		<Clickable style={styles.container} onPress={() => navigation.navigate('OrderStatus', {order})}>
+			
+			{showSymbol &&
+				<View style={styles.symbolContainer}>
+					<StyledText style={[styles.symbol, props.symbolStyle]}>{order.symbol}</StyledText>
 				</View>
-				<StyledText style={styles.value}>{titleCase(order.status)}</StyledText>
+			}
+
+			<View style={styles.descriptionContainer}>
+				<View style={{flexDirection: 'row', alignItems: 'center'}}> 
+					<StyledText style={[styles.description, props.descriptionStyle]}>{displayOrderQuantity(order)}</StyledText>
+					{showOrderType && <StyledText style={[styles.description, {marginLeft:WP(2)}, props.descriptionStyle]}>{displayOrderType(order)}</StyledText>}
+				</View>
+				<View style={{flexDirection: 'row', alignItems: 'center'}}>
+					{showStatus && <StyledText style={[styles.status, {marginRight: WP(2)}, {...isCanceled && {color: theme.grey8}}]}>{titleCase(order.status)}</StyledText>}
+					{showIcon && <Ionicons name="chevron-forward" color={theme.grey5} size={WP(4)} />}
+				</View>
 			</View>
-			{showIcon && <Ionicons name="chevron-forward" color={theme.grey5} size={WP(4)} />}
+			
 		</Clickable>
 	);
 }
@@ -68,27 +86,30 @@ const useStyles = () => {
 	const theme = useTheme();
 
 	const styles = StyleSheet.create({
-		outerContainer :{
-			flexDirection: 'row', 
-			justifyContent: 'space-between', 
+		container :{
 			width: '100%', 
-			paddingRight: WP(5),
+			paddingRight: WP(2),
 			paddingLeft: WP(2),
 			alignItems: 'center',
-			marginBottom: HP(1)
+			marginBottom: HP(2),
 		},
-		container: {
-			width: '100%',
+		symbolContainer: {
+			flexDirection: 'row', 
+			width:'100%', 
+			justifyContent: 'space-between'
+		},
+		descriptionContainer: {
+			flexDirection: 'row', 
+			width: '100%', 
 			justifyContent: 'space-between'
 		},
 		description: {
 			fontWeight: '400',
-			fontSize: Typography.four, 
-			color: theme.light
+			color: theme.grey5
 		},
-		value: {
-			fontSize: Typography.four, 
-			color: theme.verydarkgrey
+		status: {
+			fontSize: WP(3.5), 
+			color: theme.grey5,
 		},
 		orderList: {
 			flex:1,

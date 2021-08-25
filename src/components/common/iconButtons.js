@@ -5,11 +5,11 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {useTheme, WP, defaultIconSize} from '../../theme';
 
-const IconButton = ({name, onPress,  ...props}) => {
+const IconButton = ({name, onPress, opacity=0.8,  ...props}) => {
 	const {theme, styles} = useStyles();
 
 	return (
-		<TouchableOpacity style={props.containerStyle} onPress={onPress}>
+		<TouchableOpacity activeOpacity={opacity} style={props.containerStyle} onPress={onPress}>
 			<Ionicons name={name} color={props.iconColor || theme.icon} size={props.iconSize || defaultIconSize} />
 		</TouchableOpacity>
 	)
@@ -77,7 +77,7 @@ export const DeleteIcon = ({onPress, ...props}) => {
 
 export const ShowHideButton = ({showDetail, onToggle, ...props}) => {
 	return(
-		<IconButton {...props} name={showDetail ? "chevron-up" : "chevron-down"} onPress={onToggle} />
+		<IconButton opacity={1.0} {...props} name={showDetail ? "chevron-up" : "chevron-down"} onPress={onToggle} />
 	)
 }
 

@@ -5,13 +5,13 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 import { titleCase } from "title-case";
 
-import { ShowJson, DisplayOrderInList, ShowHideButton } from '../common';
+import { ShowJson, Collapsible  } from '../common';
+import { DisplayOrder } from '../order';
 import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../../theme';
 import { OPEN_ORDER_STATUS } from '../../config';
 import { useOrders, useLatestTradingDay, useSymbolActivity } from '../../helper';
 
-
-const StockOrderHeader = ({orders, onToggle, showDetail}) => {
+const StockOrderHeader = ({orders}) => {
 	const {theme, styles} = useStyles();
 	
 	const countOpenOrders = (orders) => {
@@ -20,10 +20,8 @@ const StockOrderHeader = ({orders, onToggle, showDetail}) => {
 
 	return (
 		<View style={styles.ordersHeaderContainer}>
-			<StyledText style={styles.ordersHeaderTitle}>Your Orders</StyledText>
 			<View style={styles.ordersSummaryContainer}>
 				<StyledText style={styles.ordersCount}>{countOpenOrders(orders)}/{orders.length}</StyledText>	
-			 	<ShowHideButton {...{onToggle, showDetail}} containerStyle={styles.showHideButton} iconSize={WP(5)}/>
 			</View>
 		</View>
 	)
@@ -35,7 +33,7 @@ const StockOrderList = ({orders}) => {
 	return ( 
 		<View style={styles.orderListContainer}>
 			{ orders.map((order, index) => {
-					return <DisplayOrderInList key={index} {...{order}} />	
+					return <DisplayOrder key={index} {...{order}} showSymbol={true} showIcon={true} />	
 				})
 			}
 		</View>
@@ -43,15 +41,13 @@ const StockOrderList = ({orders}) => {
 }
 
 const ShowOrders = ({orders}) => {
-	const [showDetail, setShow] = useState(true);
 	const {theme, styles} = useStyles();
 	
 	return (
 		<>
 		{!!orders && orders.length > 0 &&
 			<View style={styles.ordersContainer}>
-				<StockOrderHeader {...{orders, showDetail}} onToggle={() => setShow(!showDetail)}/> 
-				{showDetail && <StockOrderList {...{orders}} />}
+				<StockOrderList {...{orders}} />
 			</View>
 		}
 		</>
@@ -123,9 +119,19 @@ const StockOrdersWithSymbol = ({symbol}) => {
 
 	
 	return (
-		<ShowOrders {...{orders}} />
+		<>
+		{!!orders && orders.length > 0 &&
+		<Collapsible		
+			title="YOUR ORDERS"
+			content={<ShowOrders {...{orders}} />}
+			summary={<StockOrderHeader {...{orders}} />}
+			summaryInline={true}
+		/>
+		}
+		</>
 	)
 }
+
 
 export const StockOrders = ({symbol, orders}) => {
 
@@ -144,23 +150,25 @@ const useStyles = () => {
 
 	const styles = StyleSheet.create({
 		ordersContainer: {
-			width: WP(100),
-			borderTopWidth:0.5,
-			borderColor: theme.grey9,
+			width: '100%',
 			paddingTop: WP(4),
-			flex:1,
+			// flex:1,
 		},
 		orderListContainer: {
-			width: WP(100),
-			flexDirection: 'column',
-			flex: 1
+			// width: '100%',
+			// flexDirection: 'column',
+			// flex: 1
+			// justifyContent: 'center',
+			// alignItems: 'center'
 		},
 		ordersHeaderContainer: {
-			width: WP(100),
+			width: '100%',
 			flexDirection: 'row',
 			// marginTop: WP(3),
 			marginBottom: WP(5),
-			justifyContent:'space-between'
+			justifyContent:'space-between',
+			paddingLeft: WP(1),
+			backgroundColor: theme.background
 		},
 		showHideButton: {
 			marginRight: WP(2),

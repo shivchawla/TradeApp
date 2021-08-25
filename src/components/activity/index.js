@@ -9,7 +9,6 @@ import { useTheme, WP, HP } from '../../theme';
 
 export const DisplayActivity = ({activity}) => {
 	const {theme, styles} = useStyles();
-	console.log(activity);
 	const activityType =  activity?.activity_type;
 	if (activityType == "ORDER") {
 		return <DisplayOrder 
