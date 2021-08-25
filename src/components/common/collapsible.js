@@ -4,7 +4,7 @@ import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import {ShowHideButton} from './';
 import {useTheme, StyledText, WP, HP} from '../../theme';
 
-export const Collapsible = ({title, content, summary=null, show = true, ...props}) => {
+export const Collapsible = ({title, content, summary=null, endButton=null, show = true, ...props}) => {
 	const {theme, styles} = useStyles();
 	const [showDetail, setShow] = useState(show);
 
@@ -12,7 +12,7 @@ export const Collapsible = ({title, content, summary=null, show = true, ...props
 		<>
 		<View style={styles.headerContainer}>
 			<View style={styles.contentHeader}>
-				<TouchableOpacity onPress={() => setShow(!showDetail)}>
+				<TouchableOpacity activeOpacity={1} onPress={() => setShow(!showDetail)}>
 					<StyledText style={styles.contentTitle}>{title}</StyledText>
 				</TouchableOpacity>
 				<ShowHideButton iconColor={theme.grey3} containerStyle={styles.contentToggleIcon} {...{showDetail}} onToggle={() => setShow(!showDetail)} />
@@ -21,6 +21,7 @@ export const Collapsible = ({title, content, summary=null, show = true, ...props
 		<View style={[styles.contentContainer, props.containerStyle]}>
 			{summary && <View style={styles.summaryContainer}>{summary}</View>}
 			{showDetail && <View style={styles.detailContainer}>{content}</View>}
+			{showDetail && endButton && <View style={styles.endButtonContainer}>{endButton}</View>}
 		</View>
 		</>
 	)
@@ -59,12 +60,18 @@ const useStyles = () => {
 			backgroundColor: theme.background,
 			paddingRight: WP(4),
 			paddingLeft: WP(2),
+			// paddingTop: WP(2),
 			marginTop: WP(-1),
 		},
 		summaryContainer: {
 			alignItems: 'flex-start',
 			justifyContent: 'center',
 			paddingLeft: WP(3)
+		},
+		endButtonContainer: {
+			flexDirection: 'row',
+			justifyContent: 'center',
+			marginBottom: HP(5)
 		}
 	});
 

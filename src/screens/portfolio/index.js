@@ -4,7 +4,7 @@ import {useNavigation} from '@react-navigation/native';
 
 import {AppView, AppHeader, PnLText, 
 	LineChart, VerticalField,
-	AccountIcon, SearchIcon, Collapsible } from '../../components/common';
+	AccountIcon, SearchIcon, Collapsible, Clickable } from '../../components/common';
 
 import { PortfolioDisplay } from '../../components/portfolio';
 import { DisplayOrderList } from '../../components/order';
@@ -33,22 +33,34 @@ const HorizontalField = ({label, value, isPnL=false, ...props}) => {
 	)
 }
 
+const ShowMoreButton = ({onPress}) => {
+	const {theme, styles} = useStyles();
+	return (
+		<Clickable onPress={onPress}>
+			<StyledText style={styles.showMoreText}>SHOW MORE</StyledText>
+		</Clickable>
+	)
+}
+
 const Portfolio = (props) => {
+	const navigation = useNavigation();
+	const {theme, styles} = useStyles();
+
 	const {portfolio} = useStockPortfolioData(); 
 	const {tradingAccount} = useTradingAccountData();
 	const {portfolioHistory} = usePortfolioHistory();
-	const {orders} = useOrders({status: 'open'});
-	const {accountActivity, getAccountActivity } = useAccountActivity();
+	const {orders} = useOrders({status: 'all', limit: 10});
+	const {accountActivity, getAccountActivity } = useAccountActivity({activity_type: 'DIV', limit: 10});
 	
 	const [relevantActivity, setActivity] = useState(null);
 
 	React.useEffect(() => {
-		if (!!accountActivity) {
-			setActivity(accountActivity.filter(item => !!item.type && (item.type == "fill" || item.type.includes("div"))));
+		if (!!accountActivity && !!orders) {
+			var allExceptNewOrders = orders.filter(item => item.status != "new").map(item => {return {...item, activity_type: 'ORDER'}});
+			setActivity([...accountActivity, ...allExceptNewOrders].slice(0, 10));
 		}
-	}, [accountActivity])
+	}, [accountActivity, orders])
 
-	const {theme, styles} = useStyles();
 
 	const getLatestEquity = (history) => {
 		return (history?.equity || []).slice(-1)[0];
@@ -58,9 +70,8 @@ const Portfolio = (props) => {
 		return (history?.profit_loss || []).slice(-1)[0];
 	}
 
-	const PortfolioHeader = () => {
-		const navigation = useNavigation();
 
+	const PortfolioHeader = () => {
 		return (
 			<>
 			<AppHeader headerLeft={<AccountIcon />} headerRight={<SearchIcon onPress={() => navigation.navigate("SearchStock")} iconColor={theme.greyIcon}/>} title="Portfolio" goBack={false} />
@@ -114,6 +125,8 @@ const Portfolio = (props) => {
 
 	const loading = !!!portfolioHistory;
 
+	const pendingOrders = orders && orders.filter(item => item.status == "new");
+
 	return (
 		<AppView loading={loading} header={<PortfolioHeader />} title="Portfolio">
 			{tradingAccount && 
@@ -123,7 +136,6 @@ const Portfolio = (props) => {
 					containerStyle={{}}
 				/>
 			}
-
 			<Collapsible 
 				title="PERFORMANCE" 
 				content={<PnLGraph />}  
@@ -136,15 +148,16 @@ const Portfolio = (props) => {
 					content={<PortfolioDisplay {...{portfolio, orders}}/>} 
 				/>
 			}
-			{(orders && orders.length > 0) && 
+			{(pendingOrders && pendingOrders.length > 0) && 
 				<Collapsible title="PENDING ORDERS" 
-					content={<DisplayOrderList {...{orders}}/>} 
+					content={<DisplayOrderList orders={pendingOrders}/>} 
 				/>
 			}
 			{(relevantActivity && relevantActivity.length > 0) && 
 				<Collapsible 
 					title="RECENT ACTIVITY" 
-					content={<DisplayActivityList activityList={relevantActivity}/>} 
+					content={<DisplayActivityList activityList={relevantActivity}/>}
+					endButton={<ShowMoreButton onPress={() => navigation.navigate('History')} />} 
 				/>
 			}
 		</AppView>
@@ -181,6 +194,9 @@ const useStyles = () => {
 		accountSummaryField: {
 			width: '50%',
 			padding: WP(3),
+		},
+		showMoreText: {
+			color: theme.backArrow
 		}
 	});
 

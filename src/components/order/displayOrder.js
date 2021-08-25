@@ -1,13 +1,14 @@
 import React, {useState} from 'react';
 import { View, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { titleCase } from "title-case";
 
-import { ShowJson } from '../common';
+import { ShowJson, Clickable } from '../common';
 import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
 
-export const DisplayOrder = ({order}) => {
+export const DisplayOrder = ({order, showSymbol = false, showIcon = false, showOrderType = true, pastTense = false,  ...props}) => {
 	const {theme, styles} = useStyles();
 	const navigation = useNavigation();
 
@@ -27,20 +28,26 @@ export const DisplayOrder = ({order}) => {
 		return order.type.toUpperCase() + getOrderLimitPrice(order);
 	}
 
+	const getOrderSide = (order) => {
+		return order.side == "buy" ? pastTense ? 'BOUGHT' : 'BUY' : pastTense ? 'SOLD' : 'SELL'; 
+	}
+
 	const displayOrderQuantity = (order) => {
-		return order.side.toUpperCase() + ' ' + (getShareQty(order.qty) || getNotional(order.notional));
+		return getOrderSide(order) + ' ' + (getShareQty(order.qty) || getNotional(order.notional));
 	}
 
 	return (
-		<TouchableOpacity onPress={() => navigation.navigate('OrderStatus', {order})}>
+		<Clickable style={styles.outerContainer} onPress={() => navigation.navigate('OrderStatus', {order})}>
 			<View style={styles.container}>
+				{showSymbol && <StyledText style={[styles.symbol, props.symbolStyle]}>{order.symbol}</StyledText>}
 				<View style={{flexDirection: 'row'}}>
-					<StyledText style={styles.label}>{displayOrderQuantity(order)}</StyledText>
-					<StyledText style={[styles.label, {marginLeft: WP(2)}]}>{displayOrderType(order)}</StyledText>
+					<StyledText style={[styles.description, props.descriptionStyle]}>{displayOrderQuantity(order)}</StyledText>
+					{showOrderType && <StyledText style={[styles.description, {marginLeft: WP(2)}, props.descriptionStyle]}>{displayOrderType(order)}</StyledText>}
 				</View>
 				<StyledText style={styles.value}>{titleCase(order.status)}</StyledText>
 			</View>
-		</TouchableOpacity>
+			{showIcon && <Ionicons name="chevron-forward" color={theme.grey5} size={WP(4)} />}
+		</Clickable>
 	);
 }
 
@@ -61,14 +68,20 @@ const useStyles = () => {
 	const theme = useTheme();
 
 	const styles = StyleSheet.create({
+		outerContainer :{
+			flexDirection: 'row', 
+			justifyContent: 'space-between', 
+			width: '100%', 
+			paddingRight: WP(5),
+			paddingLeft: WP(2),
+			alignItems: 'center',
+			marginBottom: HP(1)
+		},
 		container: {
 			width: '100%',
-			paddingLeft: WP(2),
-			paddingRight: WP(2),
-			marginBottom: WP(7),
 			justifyContent: 'space-between'
 		},
-		label: {
+		description: {
 			fontWeight: '400',
 			fontSize: Typography.four, 
 			color: theme.light
@@ -79,6 +92,9 @@ const useStyles = () => {
 		},
 		orderList: {
 			flex:1,
+		},
+		symbol :{
+			fontSize: WP(4.5)
 		}
 
 	});

@@ -43,7 +43,7 @@ export function useBrokerageAccountData(params = {}) {
 }
 
 
-export function useAccountActivity({activity_type = null, date = '', until = '', after = ''} = {}, params = {}) {
+export function useAccountActivity({activity_type = null, date = '', until = '', after = '', limit = 10} = {}, params = {}) {
   console.log("useAccountActivity");
   const queryKey = ['accountActivity', activity_type, date, until, after].filter(item => item && item != '' );
   console.log(queryKey);

@@ -1,4 +1,4 @@
-import {apiUrl, apiKey, apiSecret, dataUrl} from '../config';
+import {apiUrl, apiKey, apiSecret, dataUrl, newsUrl} from '../config';
 import axios from 'axios';
 import { Base64 } from 'js-base64';
 import {processBars, processSnapshot} from './process'
@@ -163,4 +163,12 @@ export const removeAssetToWatchlist = async(watchlist_id, symbol) => {
 export const deleteWatchlist = async(watchlist_id) => {
 	console.log("Deleting Watchlist: ", watchlist_id);
 	return await axios.delete(`/v1/trading/accounts/${account_id}/watchlists/${watchlist_id}`).then(r => r.data)	
+}
+
+
+export const getSeekingAlphaNews = async (symbol) => {
+	console.log("Getting News from Seeking Alpha");
+	console.log(symbols);
+
+	return await axios.get(`${newsUrl}/${symbol}/news}`).then(r => r.data);
 }
