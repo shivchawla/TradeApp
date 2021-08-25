@@ -29,7 +29,7 @@ export const DisplayActivityList = ({activityList, ...props}) => {
 	return (
 		<View style={[styles.activityList, props.containerStyle]}>
 			{activityList && activityList.map((item, index) => {
-				return <DisplayActivity key={item.key} activity={item} />	
+				return <DisplayActivity key={item.id} activity={item} />	
 			})}
 		</View>
 	)

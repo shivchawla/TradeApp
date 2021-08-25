@@ -99,6 +99,12 @@ export const cancelOrder = async(order_id) => {
 	return await axios.delete(`/v1/trading/accounts/${account_id}/orders/${order_id}`).then(r => r.data)
 }
 
+export const cancelAllOrders = async() => {
+	console.log("Canceling All Order: ");
+	return await axios.delete(`/v1/trading/accounts/${account_id}/orders`).then(r => r.data)
+}
+
+
 export const getOrders = async(params = {}) => {
 	console.log("Get Pending Orders")
 	console.log("Params ", params);

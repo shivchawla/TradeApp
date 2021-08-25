@@ -25,16 +25,16 @@ export const ConfirmButton = ({title, onClick, swipe = false, cancel = false,  .
 			<SwipeButton 
 				containerStyles={{borderRadius: 20, width: WP(95), borderWidth:0}}
             	height={50}
-            	onSwipeSuccess={() => onClick()}
+            	onSwipeSuccess={onClick}
             	swipeSuccessThreshold={100}
             	railBackgroundColor={theme.dark}
-            	railBorderColor={theme.success}
-            	railFillBorderColor={theme.success}
+            	railBorderColor={cancel ? theme.error : theme.success}
+            	railFillBorderColor={cancel ? theme.error : theme.success}
             	railStyles={{borderWidth:0, backgroundColor: theme.success, color: theme.text}}
             	titleColor={theme.text}
             	screenReaderEnabled={true}
             	thumbIconComponent={cancel ? cancelIcon : proceedIcon}
-        	    thumbIconBorderColor={theme.success}
+        	    thumbIconBorderColor={cancel ? theme.error : theme.success}
         	    title={title}
           	/> 
 

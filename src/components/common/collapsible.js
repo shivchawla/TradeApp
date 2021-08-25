@@ -29,7 +29,7 @@ export const Collapsible = ({title, content, summary = null, summaryInline = fal
 		<View style={[styles.contentContainer, props.containerStyle]}>
 			{(summary && !summaryInline) && <View style={styles.summaryContainer}>{summary}</View>}
 			{showDetail && <View style={styles.detailContainer}>{content}</View>}
-			{showDetail && endButton && <View style={styles.endButtonContainer}>{endButton}</View>}
+			{showDetail && endButton && <View style={[styles.endButtonContainer, props.buttonContainerStyle]}>{endButton}</View>}
 		</View>
 		</>
 	)

@@ -6,6 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { PnLText } from '../common';
 import { TickerDisplay } from '../market';
 import { formatValue } from '../../utils';
+import { OPEN_ORDER_STATUS } from '../../config';
 
 import * as Theme from '../../theme';
 const {useTheme, WP, StyledText} = Theme;
@@ -28,7 +29,7 @@ export const PortfolioDisplay = ({portfolio, orders = []}) => {
 		const {symbol, qty, side, unrealized_pl} = position;
 		const navigation = useNavigation()
 
-		const hasActiveOrder = orders.findIndex(item => item.symbol == symbol) != -1;
+		const hasActiveOrder = orders.findIndex(item => item.symbol == symbol && OPEN_ORDER_STATUS.includes(item.status)) != -1;
 
 		return (
 			<TouchableOpacity style={styles.portfolioDisplayHeader} onPress={() => navigation.navigate('StockDetail', {symbol})}>

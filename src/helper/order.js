@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { useQuery, useMutation} from 'react-query';
-import { placeOrder, getOrders, getOrder, cancelOrder, updateOrder } from  './api'; 
+import { placeOrder, getOrders, getOrder, cancelOrder, cancelAllOrders, updateOrder } from  './api'; 
 
 import { COMPLETE_ORDER_STATUS, OPEN_ORDER_STATUS } from '../config'
 
@@ -51,7 +51,12 @@ export function useUpdateOrder() {
 
 export function useCancelOrder() {
   const {isError, mutate} = useMutation(orderId => cancelOrder(orderId));
-  return {isError, mutate};
+  return {isError, cancelOrder: (orderId, callbackParams) => mutate(orderId, callbackParams)};
+}
+
+export function useCancelAllOrders() {
+  const {isError, mutate} = useMutation(() => cancelAllOrders());
+  return {isError, cancelAllOrders: (callbackParams) => mutate(null, callbackParams)};
 }
 
 

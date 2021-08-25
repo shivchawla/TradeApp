@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { titleCase } from "title-case";
 
-import { AppView, ShowJson } from '../../components/common';
+import { AppView, ConfirmButton } from '../../components/common';
 import { useOrderDetail,  } from '../../helper';
 import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
 import { ORDER_MORE_FIELDS, AVAILABLE_TO_CANCEL_ORDER_STATUS } from '../../config';
@@ -79,9 +79,7 @@ const OrderButton = ({title, onClick}) => {
 	const styles = useStyles();
 	
 	return (
-		<TouchableOpacity onPress={onClick} style={styles.button}>
-			<StyledText>{title}</StyledText>
-		</TouchableOpacity>
+		<ConfirmButton {...{title, onClick}} swipe={true} cancel={true}/>
 	)
 }
 
@@ -94,17 +92,10 @@ const OrderStatusButton = ({orderDetail}) => {
 		return navigation.navigate('UpdateOrder', {action: 'cancel', id})
 	}
 
-	// const onModify = (id) => {
-	// 	return navigation.navigate('UpdateOrder', {action: 'update', id}) 
-	// }
-
 	return (
 		<>
 		{AVAILABLE_TO_CANCEL_ORDER_STATUS.includes(status) &&
-			<View style={styles.orderButtonContainer}>
-				<OrderButton title="CANCEL" onClick={() => onCancel(id)}/>
-				<OrderButton title="MODIFY" onClick={() => onModify(id)}/>
-			</View>
+			<OrderButton title="CANCEL" onClick={() => onCancel(id)}/>
 		}
 		</>
 	)
@@ -150,11 +141,10 @@ const OrderStatus = (props) => {
 	return (
 		<>
 		{!!orderDetail &&
-			<AppView goBack={goBack || true} headerRight={<HeaderRight {...{symbol}}/>}>
+			<AppView goBack={goBack || true} headerRight={<HeaderRight {...{symbol}}/>} footer={<OrderStatusButton {...{orderDetail}} />}>
 				<OrderStatusTop {...{orderDetail}} />
 				<OrderStatusSummary {...{orderDetail}} />
 				<OrderStatusMore {...{orderDetail}} />
-				<OrderStatusButton {...{orderDetail}} />
 			</AppView>
 		}
 		</>
@@ -220,12 +210,12 @@ const useStyles = () => {
 			width: WP(35),
 			textAlign: 'right'
 		},
-		orderButtonContainer: {
-
-		},
 		viewSymbol: {
 			fontSize: Typography.four,
 			color: theme.green
+		},
+		orderButton :{
+			width: '100%'
 		}
 	});
 

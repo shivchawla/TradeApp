@@ -74,7 +74,7 @@ export const DisplayOrderList = ({orders, ...props}) => {
 
 	return (
 		<View style={[styles.orderList, props.containerStyle]}>
-			{orders && orders.map((order, index) => {
+			{orders && orders.map((item, index) => {
 				return <DisplayOrder key={item.id} order={item} />
 			})}
 		</View>

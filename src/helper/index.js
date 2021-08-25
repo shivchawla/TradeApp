@@ -17,7 +17,7 @@ export { useStockPositionData, useStockPortfolioData,
 export { usePlaceOrder, useUpdateOrder, 
 		useOrders, useCancelOrder, 
 		useOrderDetail, filterTrades, 
-		filterOpenOrders } from './order';
+		filterOpenOrders, useCancelAllOrders } from './order';
 
 export { useCreateBrokerageAccount, useTradingAccountData, 
 		useBrokerageAccountData, useAccountActivity } from './account';

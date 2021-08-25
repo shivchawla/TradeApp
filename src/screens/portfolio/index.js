@@ -1,6 +1,6 @@
  import React, {useState} from 'react';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import { View, StyleSheet, TouchableOpacity} from 'react-native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 import {AppView, AppHeader, PnLText, 
 	LineChart, VerticalField,
@@ -12,7 +12,7 @@ import { DisplayActivityList } from '../../components/activity';
 
 import * as Theme from '../../theme';
 import { useStockPortfolioData, useTradingAccountData, 
-	usePortfolioHistory, useOrders, useAccountActivity } from '../../helper';
+	usePortfolioHistory, useOrders, useCancelAllOrders, useAccountActivity } from '../../helper';
 
 import {formatValue} from '../../utils';
 import {ACCOUNT_SUMMARY_FIELDS} from '../../config';
@@ -42,16 +42,26 @@ const ShowMoreButton = ({onPress}) => {
 	)
 }
 
+const CancelOrderButton = ({onPress}) => {
+	const {theme, styles} = useStyles();
+	return (
+		<Clickable onPress={onPress}>
+			<StyledText style={styles.cancelOrderText}>CANCEL ALL</StyledText>
+		</Clickable>
+	)
+}
+
 const Portfolio = (props) => {
 	const navigation = useNavigation();
 	const {theme, styles} = useStyles();
 
-	const {portfolio} = useStockPortfolioData(); 
-	const {tradingAccount} = useTradingAccountData();
-	const {portfolioHistory} = usePortfolioHistory();
-	const {orders} = useOrders({status: 'all', limit: 10});
+	const {portfolio, getPortfolio} = useStockPortfolioData(); 
+	const {tradingAccount, getTradingAccount} = useTradingAccountData();
+	const {portfolioHistory, getPortfolioHistory} = usePortfolioHistory();
+	const {orders, getOrders} = useOrders({status: 'all', limit: 10});
 	const {accountActivity, getAccountActivity } = useAccountActivity({activity_type: 'DIV', limit: 10});
 	
+	const {cancelAllOrders} = useCancelAllOrders();
 	const [relevantActivity, setActivity] = useState(null);
 
 	React.useEffect(() => {
@@ -59,8 +69,25 @@ const Portfolio = (props) => {
 			var allExceptNewOrders = orders.filter(item => item.status != "new").map(item => {return {...item, activity_type: 'ORDER'}});
 			setActivity([...accountActivity, ...allExceptNewOrders].slice(0, 10));
 		}
-	}, [accountActivity, orders])
+	}, [accountActivity, orders]);
 
+
+	useFocusEffect(
+		React.useCallback(() => {
+			getPortfolio();
+			getTradingAccount();
+			getPortfolioHistory();
+			getOrders();
+			getAccountActivity();
+		}, [])
+	);
+
+	const cancelOrders = () => {
+		cancelAllOrders({
+			onSuccess: (response, input) => getOrders(),
+			onError: (err, input) => console.log(err)
+		})
+	}
 
 	const getLatestEquity = (history) => {
 		return (history?.equity || []).slice(-1)[0];
@@ -150,7 +177,10 @@ const Portfolio = (props) => {
 			}
 			{(pendingOrders && pendingOrders.length > 0) && 
 				<Collapsible title="PENDING ORDERS" 
-					content={<DisplayOrderList orders={pendingOrders}/>} 
+					containerStyle={{marginTop: HP(2)}}
+					content={<DisplayOrderList orders={pendingOrders}/>}
+					endButton={<CancelOrderButton onPress={cancelOrders}/>}
+					buttonContainerStyle={{justifyContent: 'flex-end', marginBottom: HP(2)}} 
 				/>
 			}
 			{(relevantActivity && relevantActivity.length > 0) && 
@@ -197,6 +227,9 @@ const useStyles = () => {
 		},
 		showMoreText: {
 			color: theme.backArrow
+		},
+		cancelOrderText: {
+			color: theme.red
 		}
 	});
 
