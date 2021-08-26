@@ -17,11 +17,12 @@ import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
 //Preview should be added here
 const PlaceOrder = (props) => {
 	const {theme, styles} = useStyles();
-
-	const {symbol, action: propAction} = props.route.params;
+	const navigation = useNavigation();
+	
+	const {symbol, action: propAction, fractionable = true} = props.route.params;
 	const [action, setAction] = useState(propAction || "BUY");
-	const [isNotional, setIsNotional] = useState(true)
-	const [quantity, setQuantity] = useState(isNotional ? 100 : 1);
+	const [isNotional, setIsNotional] = useState(fractionable)
+	const [quantity, setQuantity] = useState(isNotional && fractionable ? 100 : 1);
 	const [orderType, setOrderType] = useState('market');
 	const [tif, setTif] = useState('day');
 	const [limitPrice, setLimitPrice] = useState(null);
@@ -34,8 +35,6 @@ const PlaceOrder = (props) => {
 	const [isError, mutate] = usePlaceOrder();
 	const {addActivity} = useSymbolActivity(symbol);
 
-	const navigation = useNavigation();
-	
 	const processOrderParams = () => {
 		var params = {symbol, side: action.toLowerCase(), type: orderType, time_in_force: tif};
 		
@@ -111,8 +110,8 @@ const PlaceOrder = (props) => {
 		const text = fullView ? "Switch to quick trade" : "Show more options";
 
 		const switchView = () => {
-			setIsNotional(true);
-			setQuantity(100);
+			setIsNotional(fractionable);
+			setQuantity(fractionable ? 100 : 1);
 			setOrderType('market');
 			setTif('day');
 			setFullView(!fullView);
@@ -134,7 +133,8 @@ const PlaceOrder = (props) => {
 				<AppView {...{title}} headerRight={<HeaderRight />} footer={<Footer {...{title}}/>} appContainerStyle={styles.appContainer}>
 					<TickerDisplay {...{symbol}} style={styles.tickerDisplayContainer} priceStyle={styles.priceStyle} priceChangeStyle={styles.priceChangeStyle}/>
 					<InstructionText />
-					<QuantitySelector {...{isNotional, quantity}} 
+					<QuantitySelector {...{isNotional, quantity}}
+						notionalAllowed={fractionable} 
 						onChangeQuantity={(qty) => setQuantity(qty)} 
 						onChangeType={(v) => setIsNotional(v == 'notional')}
 					/>
@@ -162,7 +162,7 @@ const PlaceOrder = (props) => {
 				<AppView {...{title}} headerRight={<HeaderRight {...{action}}/>} footer={<Footer {...{title, symbol, action}}/>} appContainerStyle={styles.appContainer}>
 					<TickerDisplay {...{symbol}} style={styles.tickerDisplayContainer} priceStyle={styles.priceStyle} priceChangeStyle={styles.priceChangeStyle}/>
 					<View style={styles.orderOptionsContainer}>
-						{orderType == "market" 
+						{orderType == "market" && fractionable 
 							? <NotionalSelector {...{isNotional}} onSelect={(v) => setIsNotional(v.key == 'notional')} />
 							: <HorizontalPickField label="Quantity Type" selectedValue={{key: 'shares', title: 'Shares'}} />
 						}

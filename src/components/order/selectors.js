@@ -3,13 +3,14 @@ import {View, StyleSheet } from 'react-native';
 
 import { Picker, HorizontalPickField, TextInputWithIcon } from '../../components/common';
 	
-import { useTheme, Typography, WP, HP }  from '../../theme';
+import { useTheme, Typography, WP, HP, StyledText }  from '../../theme';
 
-export const QuantitySelector = ({quantity, isNotional, onChangeQuantity, onChangeType}) => {
+export const QuantitySelector = ({quantity, isNotional, onChangeQuantity, onChangeType, notionalAllowed = true}) => {
 	const {theme, styles} = useStyles();
 
 	const items = [{key: 'notional', title: 'USD'}, {key:'shares', title:'Shares'}];
-	const [selectedValue, setValue] = useState(isNotional ? items[0] : items[1]);
+	
+	const [selectedValue, setValue] = useState(isNotional && notionalAllowed ? items[0] : items[1]);
 
 	const onSelect = (v) => {
 		setValue(v); 
@@ -19,7 +20,10 @@ export const QuantitySelector = ({quantity, isNotional, onChangeQuantity, onChan
 
 	return (
 		<View style={styles.quantitySelectContainer}>
-			<Picker {...{items, onSelect, selectedValue}} />
+			{notionalAllowed ? 
+				<Picker {...{items, onSelect, selectedValue}} />
+				: <StyledText style={styles.selectedValue}>{selectedValue.title}</StyledText>
+			} 
 
 			<TextInputWithIcon
 				textStyle={styles.quantity}
@@ -72,6 +76,10 @@ const useStyles = () => {
 			fontSize: WP(15),
 			marginLeft: WP(3),
 			marginRight: WP(1)
+		},
+		selectedValue: {
+			fontSize: WP(6),
+			marginRight: WP(2)
 		},
 	})
 

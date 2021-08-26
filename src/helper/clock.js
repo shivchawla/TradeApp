@@ -75,18 +75,13 @@ export function useCalendar({start = NDaysAgoISODate(5, "YYYY-MM-DD"), end = cur
 // 	return latestTradingDay;
 // }
 
-
+//WHICH LOGIC IS BETTER (above or this one) 
 export function useLatestTradingDay() {
 	const [latestDay, setLatestDay] = useState(null);
 
 	React.useEffect(() => {
 		const handleLogic = async() => {
-				const isStale = await isCalendarStale();
-
-				if(isStale) {
-					await setupTradingDays();
-				}
-				
+				await setupTradingDays();
 				const latestDay = await getLatestTradingDay();
 				setLatestDay(toISODate(latestDay.date + " " + latestDay.open));
 		}
@@ -137,7 +132,7 @@ export const isCalendarStale = async() => {
 	console.log(nextTradingDay);
 	console.log(latestTradingDay);
 
-	if(!nextTradingDay) {
+	if(!nextTradingDay || !latestTradingDay) {
 		console.log("YES ITS STALE");
 		return true;
 	}
@@ -146,7 +141,9 @@ export const isCalendarStale = async() => {
 
 	//NOW check is current datetime is after nextTradingDay Open
 	const dayOpen = toTimeZoneDate(nextTradingDay.date + " " + nextTradingDay.open);
-	var cond = durationBetweenDates(dayOpen, currentDate) > 0;
+	//CAN THIS THREShOLD BE CHANGED  from ZERO TO LET'S say SESSION OPEN
+	//TO PREVENT switching right at market open ??? 
+	var cond = durationBetweenDates(dayOpen, currentDate) > 0; 
 
 	if (cond) {
 		console.log("YES ITS STALE");

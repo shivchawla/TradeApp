@@ -6,16 +6,20 @@ import { StockChart, TradeButtons, StockPosition,
 	StockOrders, StockDetailTop, StockMarketData } from '../../components/market';
 
 import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
+import { useAssetData } from  '../../helper';
 
 const StockDetail = (props) => {
 	const {symbol} = props.route.params;
 	const {navigation} = props;
+
+	const {asset} = useAssetData(symbol);
+
 	const onBuy = () => {
-		navigation.navigate('PlaceOrder', {symbol, action: "BUY"});
+		navigation.navigate('PlaceOrder', {symbol, action: "BUY", fractionable: asset?.fractionable});
 	}
 
 	const onSell = () => {
-		navigation.navigate('PlaceOrder', {symbol, action: "SELL"});		
+		navigation.navigate('PlaceOrder', {symbol, action: "SELL", fractionable: asset?.fractionable});		
 	}
 
 	const styles = useStyles();
