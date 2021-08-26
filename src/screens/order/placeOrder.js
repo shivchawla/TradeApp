@@ -3,7 +3,7 @@ import {View, StyleSheet, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 
-import { AppView, ConfirmButton, 
+import { AppView, ConfirmButton, AlertBox,
 	HorizontalPickField, HorizontalInputField,} from '../../components/common';
 
 import { TickerDisplay } from '../../components/market';
@@ -11,13 +11,12 @@ import { TickerDisplay } from '../../components/market';
 import { QuantitySelector, TifSelector, 
 	NotionalSelector, OrderTypeSelector } from '../../components/order'
 	
-import { usePlaceOrder, useSymbolActivity } from '../../helper';
+import { usePlaceOrder, useSymbolActivity, isMarketOpen } from '../../helper';
 import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
 
 //Preview should be added here
 const PlaceOrder = (props) => {
-	const styles = useStyles();
-	const theme = useTheme();
+	const {theme, styles} = useStyles();
 
 	const {symbol, action: propAction} = props.route.params;
 	const [action, setAction] = useState(propAction || "BUY");
@@ -29,6 +28,8 @@ const PlaceOrder = (props) => {
 	const [stopPrice, setStopPrice] = useState(null);
 
 	const [fullView, setFullView] = useState(false)
+
+	const [showAlert, setAlert] = useState(false);
 	
 	const [isError, mutate] = usePlaceOrder();
 	const {addActivity} = useSymbolActivity(symbol);
@@ -80,7 +81,16 @@ const PlaceOrder = (props) => {
 	}
 
 	const Footer = ({title, ...props}) => {
-		return <ConfirmButton swipe={true} {...{title}} onClick={sendOrder} buttonStyle={[styles.tradeButton, action == "BUY" ? styles.buyButton : styles.sellButton]}/>
+		const onConfirmOrder = async() => {
+			if (await isMarketOpen()) {
+				return sendOrder();
+			} else {
+				console.log("Will Show Alert Now");
+				setAlert(true);
+			}
+		}
+
+		return <ConfirmButton swipe={true} {...{title}} onClick={onConfirmOrder} buttonStyle={[styles.tradeButton, action == "BUY" ? styles.buyButton : styles.sellButton]}/>
 	}
 
 	const InstructionText = () => {
@@ -129,6 +139,14 @@ const PlaceOrder = (props) => {
 						onChangeType={(v) => setIsNotional(v == 'notional')}
 					/>
 					<SwitchView />
+
+					<AlertBox 
+						title={"MESSAGE"} 
+						message={"After market hour message"} 
+						onCancel={() => setAlert(false)} 
+						onConfirm={() => {setAlert(false); sendOrder()}} 
+						show={showAlert} 
+					/> 
 				</AppView>
 			}
 			</>
@@ -167,6 +185,8 @@ const PlaceOrder = (props) => {
 					</View>	
 
 					<SwitchView />
+
+					<AlertBox title="MESSAGE" message="After market hour message" onCancel={() => setAlert(false)} onConfirm={() => {setAlert(false); sendOrder()}} show={showAlert}/> 
 				</AppView>
 			}
 			</>
@@ -252,7 +272,7 @@ const useStyles = () => {
 		
 	});
 
-	return styles;
+	return {theme, styles};
 }
 
 export default PlaceOrder; 

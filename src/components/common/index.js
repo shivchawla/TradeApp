@@ -21,3 +21,4 @@ export { DateRangePicker } from './dateRangePicker'
 export { HorizontalButtonGroup } from './horizontalButtonGroup';
 export { Collapsible } from './collapsible';
 export { Clickable, ClickableView } from './clickableContainer';
+export { AlertBox } from './alertBox';
