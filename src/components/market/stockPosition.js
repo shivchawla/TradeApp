@@ -113,7 +113,7 @@ const StockPositionWithSymbol = ({symbol}) => {
 				setPosition(await getPosition());
 			}
 
-			return fetchPosition();
+			fetchPosition();
 
 		}, [])
 	)

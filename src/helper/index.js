@@ -7,7 +7,9 @@
 // 		updateWatchlist, addAssetToWatchlist, 
 // 		removeAssetToWatchlist, deleteWatchlist } from './api';
 
-export { useClock, useCalendar, useLatestTradingDay } from './clock';
+export { useClock, useCalendar, useLatestTradingDay,
+		isMarketOpen, getLatestTradingDay, getNextTradingDay  } from './clock';
+		
 export { useStockEODData, useStockIntradayData, 
 		useStockHistoricalData, useStockList, 
 		useAssetData } from './stock';
@@ -36,3 +38,4 @@ export { setStorageData, getStorageData, removeStorageData,
 export {useAllWatchlist, useWatchlist, useCreateWatchlist, 
 	useDeleteWatchlist, useUpdateWatchlist} from './watchlist';
 
+export { useAppStartup } from './app';

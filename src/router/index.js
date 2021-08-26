@@ -8,7 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { useAuth, AuthProvider } from '../helper';
+import { AuthProvider, useAppStartup } from '../helper';
 import { useTheme, ThemeProvider } from  '../theme';
 import { WebsocketProvider } from  '../helper';
 
@@ -44,13 +44,13 @@ const homeTabs = () => {
 		return (
 		  <Tabs.Navigator {...{tabBarOptions}} tabBar={props => <CustomTabBar {...props} />}>
 		    {/*<Tabs.Screen name="SignIn" component={SignIn} />*/}
+		    <Tabs.Screen name="Portfolio" component={Portfolio} />
 		    
 		    {/*<Tabs.Screen name="ChooseStock" component={ChooseStock}/>*/}
 		    {/*<Tabs.Screen name="OrdersTrades" component={OrdersTrades} />*/}
 		  	<Tabs.Screen name="Market" component={Market} />
 		  	{/*<Tabs.Screen name="History" component={History} />*/}
 		    
-		    <Tabs.Screen name="Portfolio" component={Portfolio} />
 		  </Tabs.Navigator>
 		)
 }
@@ -66,8 +66,9 @@ const TradingStack = () => {
 }
 
 const Routes = () => {
-	const {currentUser, userAccount, brokerageAccount, isErrorUser, isErrorAccount, isErrorBrokerage} = useAuth(); 
 	
+	const isLoading = useAppStartup();
+
 	// console.log("Current User");
 	// console.log(currentUser);
 
@@ -79,8 +80,7 @@ const Routes = () => {
 	//But the hook to fetch data are pseudo conditional
 	//Hence we have to wait for one of the steps to fail or till we get Brokerage Data to proceed
 
-	const isLoading = !isErrorUser && !isErrorAccount && !isErrorBrokerage && !!!brokerageAccount?.data;
-
+	
 	// console.log("Is Loading");
 	// console.log(isLoading);
 

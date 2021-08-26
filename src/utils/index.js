@@ -2,9 +2,9 @@ import { Dimensions } from 'react-native';
 
 export {
 	currentISODate, toISODate, yearStartISODate, 
-	NDaysAgoISODate, NWeeksAgoISODate,
+	NDaysAgoISODate, NWeeksAgoISODate, NDaysAfterISODate, NWeeksAfterISODate,
 	dayStartISODate, dayEndISODate, duration,
-	latestDayStartFromCalendar, toTimeZoneDate} from './date';
+	latestDayStartFromCalendar, toTimeZoneDate, currentTimeZoneDate, durationBetweenDates} from './date';
 
 export { priceChangeFromSnapshot, priceChangeFromRealtime, 
 	formatValue, formatPctValue, formatName } from './format'; 
