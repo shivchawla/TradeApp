@@ -55,69 +55,40 @@ const ShowOrders = ({orders}) => {
 }
 
 const StockOrdersWithSymbol = ({symbol}) => {
+	const {theme, styles} = useStyles();
+
 	const latestTradingOpen = useLatestTradingDay();
 	const {activity} = useSymbolActivity(symbol)
 	
-	const {getOrders: getOpenOrders} = useOrders({symbol, status: 'open'}, {enabled: false});
-	const {getOrders: getClosedOrders} = useOrders({symbol, status: 'closed', after: latestTradingOpen}, {enabled: false});
+	const {orders: openOrders, getOrders: getOpenOrders} = useOrders({symbol, status: 'open'});
+	const {orders: closedOrders, getOrders: getClosedOrders} = useOrders({symbol, status: 'closed', after: latestTradingOpen}, {enabled: !!latestTradingOpen});
 	
-	const [orders, setOrders] = useState(null);
-
-	const {theme, styles} = useStyles();
-
-	// const navigation = useNavigation();
-
-	// React.useEffect(() => {
-	// 	const refetchOnFocus = navigation.addListener('focus', () => {
-	// 	    if (refetch) {
-	// 	      refetch();
-	// 	    }
-	// 	});
-
-	// 	return refetchOnFocus;
-	// }, [navigation]); // Run Effect only on changing Nav (to prevent re-renders)
-
-	const fetchOrders = async() => {
-		console.log("Fetch Orders");
-		console.log("latestTradingOpen");
-		console.log(latestTradingOpen);
+	const fetchOrders = () => {
+		// console.log("Fetch Orders");
+		// console.log("latestTradingOpen");
+		// console.log(latestTradingOpen);
 		
 		if (!!latestTradingOpen) {
-			const closedOrders = await getClosedOrders();
-			const openOrders = await getOpenOrders();
-			setOrders((openOrders || []).concat(closedOrders || []));
+			getClosedOrders();
+			getOpenOrders();
 		}
 	}
 
-	//This is cool -- run on focus
 	useFocusEffect(
 		React.useCallback(() => {
-			console.log("Stock Orders focused!!!!");
+			// console.log("Stock Orders focused!!!!");
 			fetchOrders();
 		}, [latestTradingOpen, activity])
 	);
 
-	// React.useEffect(() => {
-	// 	console.log("Stock Orders - Symbol activity changed");
-	// }, [activity])
 
-	// React.useEffect(() => {
-	// 	console.log("Stock Orders - latestTradingOpen changed ", latestTradingOpen);
-	// }, [latestTradingOpen])
+	// console.log("OpenOrders");
+	// console.log(openOrders);
+	// console.log("closedOrders");
+	// console.log(closedOrders);
+	const orders = (openOrders || []).concat(closedOrders || []);
 
-
-	// React.useEffect(() => {
-	// 	console.log("Use Effect for StockOrdersWithSymbol")
-	// 	console.log("latestTradingOpen");
-	// 	console.log(latestTradingOpen);
-
-	// 	if (!!latestTradingOpen) {
-	// 		fetchOrders();
-	// 	}
-	
-	// }, [latestTradingOpen]);
-
-	
+	// console.log("Re-render STOCK ORDERS");
 	return (
 		<>
 		{!!orders && orders.length > 0 &&
