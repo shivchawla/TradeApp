@@ -35,10 +35,17 @@ const StockDetail = (props) => {
 			<Collapsible 
 				title="PRICE CHART" 
 				containerStyle={{marginBottom: HP(3)}}
-				content={<StockChart {...{symbol, size: 'L', timeframe: '5Day'}} style={styles.chartContainer} />}
+				content={
+					<StockChart 
+						{...{symbol, size: 'L'}} 
+						style={styles.chartContainer}
+						hasSelector={true} 
+					/>
+				}
+
 			/>
 			<StockMarketData {...{symbol}} />
-			
+
 			<StockPosition {...{symbol}} />
 			<StockOrders {...{symbol}} />
 			<StockNews {...{symbol}} />

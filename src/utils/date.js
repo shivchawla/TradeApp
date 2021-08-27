@@ -10,12 +10,15 @@ const endMinute = 0;
 export const currentISODate = (fmt) => moment.tz(timeZone).utc().format(fmt);
 export const NDaysAgoISODate = (days, fmt) => moment.tz(timeZone).subtract(days, 'days').utc().format(fmt);
 export const NWeeksAgoISODate = (wks, fmt) => moment.tz(timeZone).subtract(wks, 'weeks').utc().format(fmt);
+export const NMonthsAgoISODate = (wks, fmt) => moment.tz(timeZone).subtract(wks, 'months').utc().format(fmt);
+export const NYearsAgoISODate = (wks, fmt) => moment.tz(timeZone).subtract(wks, 'years').utc().format(fmt);
+
 export const NDaysAfterISODate = (days, fmt) => moment.tz(timeZone).add(days, 'days').utc().format(fmt);
 export const NWeeksAfterISODate = (wks, fmt) => moment.tz(timeZone).add(wks, 'weeks').utc().format(fmt);
 
 export const currentTimeZoneDate = (fmt) => moment.tz(timeZone).format(fmt);
-export const toTimeZoneDate = (d, fmt) => moment(d).tz(timeZone).format(fmt);
-export const toISODate = (d, fmt) => moment(d).tz(timeZone).utc().format(fmt);
+export const toTimeZoneDate = (d, fmt) => moment.tz(d, timeZone).format(fmt);
+export const toISODate = (d, fmt) => moment.tz(d, timeZone).utc().format(fmt);
 export const yearStartISODate = () => moment.tz(timeZone).startOf('year').hour(startHour).minute(startMinute).utc().format();
 
 

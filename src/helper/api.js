@@ -35,16 +35,9 @@ export const getSnapshot = async(symbol) => {
 }
 
 export const getHistoricalData = async(symbol, params = {}) => {
-	// console.log("Fetching Daily Historical");
-	// console.log(`${dataUrl}/v2/stocks/${symbol}/bars`);
-	// console.log(params);
-	return await axios.get(`${dataUrl}/v2/stocks/${symbol}/bars`, {params}).then(r => processBars(r.data));
-}
-
-export const getIntradayData = async(symbol, params = {}) => {
-	// console.log("Fetching Intraday Historical");
-	// console.log(`${dataUrl}/v2/stocks/${symbol}/bars`);
-	// console.log(params);
+	console.log("Fetching Daily Historical");
+	console.log(`${dataUrl}/v2/stocks/${symbol}/bars`);
+	console.log(params);
 	return await axios.get(`${dataUrl}/v2/stocks/${symbol}/bars`, {params}).then(r => processBars(r.data));
 }
 

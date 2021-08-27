@@ -3,7 +3,7 @@
 import React, {useState} from 'react';
 import {useQuery} from 'react-query';
 import {useWS} from '../config/webSocket'
-import { getSnapshot, getIntradayData, getHistoricalData, getStocks, getAssetData, getSeekingAlphaNews } from  './api'; 
+import { getSnapshot, getHistoricalData, getStocks, getAssetData, getSeekingAlphaNews } from  './api'; 
 import { currentISODate, toISODate, yearStartISODate, dayStartISODate, dayEndISODate, duration} from '../utils';
 import { useClock } from './clock';
 
@@ -14,14 +14,20 @@ export function useStockEODData(symbol, params = {}) {
 
 export function useStockHistoricalData(symbol, {start = yearStartISODate(), end = dayEndISODate(), timeframe = '1Day'} = {}, params = {}) {
   const query = {start, end, timeframe};
+  console.log("Final Query");
+  console.log(query);
+
   const {isLoading, error, data: bars, refetch} = useQuery(['stockHistorical', {symbol, start, end, timeframe}], () => getHistoricalData(symbol, query), params)
   return {bars, getBars: () => refetch().then(r => r.data)};
 }
 
 export function useStockIntradayData(symbol, {start = dayStartISODate(), end = dayEndISODate(), timeframe = '30Min'} = {}, params = {}) {
   const query = {start, end, timeframe};
-  const {isLoading, error, data: intradayBars, refetech} = useQuery(['stockIntraday', {symbol, start, end, timeframe}], () => getIntradayData(symbol, query), params);
-  return {intradayBars, getIntradayBars:() => refetech().then(r => r.data)};
+  console.log("Final Query - StockIntraday");
+  console.log(query);
+
+  const {isLoading, error, data: intradayBars, refetch} = useQuery(['stockIntraday', {symbol, start, end, timeframe}], () => getHistoricalData(symbol, query), params);
+  return {intradayBars, getIntradayBars:() => refetch().then(r => r.data)};
 }
 
 
@@ -66,6 +72,6 @@ export function useStockNews(symbol, params={}) {
     console.log("[ERROR] UseStockNews");
     console.log(error);
   }
-  
+
   return {news, getNews: () => refetch().then(r => r.data)};
 }

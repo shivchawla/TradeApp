@@ -140,7 +140,16 @@ export const isCalendarStale = async() => {
   const currentDate = await currentTimeZoneDate();
 
 	//NOW check is current datetime is after nextTradingDay Open
-	const dayOpen = toTimeZoneDate(nextTradingDay.date + " " + nextTradingDay.open);
+
+	var session_open = nextTradingDay.open;
+	try {
+		const str = nextTradingDay.session_open;
+		session_open = str.replace(str.substring(0,2), str.substring(0,2)+":");
+	} catch(e) {
+		console.log(e);
+	}
+	
+	const dayOpen = toTimeZoneDate(nextTradingDay.date + " " + session_open);
 	//CAN THIS THREShOLD BE CHANGED  from ZERO TO LET'S say SESSION OPEN
 	//TO PREVENT switching right at market open ??? 
 	var cond = durationBetweenDates(dayOpen, currentDate) > 0; 
