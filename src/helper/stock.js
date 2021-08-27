@@ -3,7 +3,7 @@
 import React, {useState} from 'react';
 import {useQuery} from 'react-query';
 import {useWS} from '../config/webSocket'
-import { getSnapshot, getIntradayData, getHistoricalData, getStocks, getAssetData } from  './api'; 
+import { getSnapshot, getIntradayData, getHistoricalData, getStocks, getAssetData, getSeekingAlphaNews } from  './api'; 
 import { currentISODate, toISODate, yearStartISODate, dayStartISODate, dayEndISODate, duration} from '../utils';
 import { useClock } from './clock';
 
@@ -58,4 +58,14 @@ export function useAssetData(symbol, params = {}) {
   // {...cacheTime && {cacheTime}, ...staleTime && {staleTime}});
   
   return {asset, getAsset: () => refetch().then(r => r.data)};
+}
+
+export function useStockNews(symbol, params={}) {
+  const {isLoading, isError, error, data: news, refetch} = useQuery(['stockNews', symbol], () => getSeekingAlphaNews(symbol), params); 
+  if(isError) {
+    console.log("[ERROR] UseStockNews");
+    console.log(error);
+  }
+  
+  return {news, getNews: () => refetch().then(r => r.data)};
 }

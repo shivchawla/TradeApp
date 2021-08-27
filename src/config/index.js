@@ -4,6 +4,8 @@ export const apiSecret="BxizAIrVC5Q9hLwsgmninuL5pzCBhafofX7ZchXy";
 
 export const dataUrl = 'https://data.sandbox.alpaca.markets';
 export const wsUrl = 'wss://stream.data.sandbox.alpaca.markets/v2/iex';
+export const newsApiUrl = 'https://seekingalpha.com/api/v3/symbols'; 
+export const newsUrl = 'https://seekingalpha.com'; 
 
 export const initialStocks = ['AAPL', 'TSLA', 'MSFT', 'GOOG', 'FB', 'QQQ', 'SPY'];
 export const defaultStocks = ['AAPL', 'TSLA', 'MSFT', 'GOOG', 'QQQ', 'FB'];

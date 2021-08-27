@@ -9,10 +9,10 @@
 
 export { useClock, useCalendar, useLatestTradingDay,
 		isMarketOpen, getLatestTradingDay, getNextTradingDay  } from './clock';
-		
+
 export { useStockEODData, useStockIntradayData, 
 		useStockHistoricalData, useStockList, 
-		useAssetData } from './stock';
+		useAssetData, useStockNews } from './stock';
 
 export { useStockPositionData, useStockPortfolioData, 
 		usePortfolioHistory } from './portfolio';

@@ -32,6 +32,9 @@ export const AppView = ({scroll = true, footer, hasHeader = true, header, isLoad
 	const Component = scroll ? ScrollView : View;
 	const {theme, styles} = useStyles();
 
+	//Check for ZERO padding
+	const hasPadding = (props?.padding ?? '') !== '';
+	
 	return (
 		<>
 		{isLoading ? 
@@ -39,7 +42,7 @@ export const AppView = ({scroll = true, footer, hasHeader = true, header, isLoad
 		scroll ? 
 			<View style={styles.scrollAppContainer}>
 				{hasHeader || header ? header ? header : <AppHeader {...props}/> : <></>}
-				<ScrollView contentContainerStyle={styles.scrollView} showsVerticalScrollIndicator={false}>
+				<ScrollView contentContainerStyle={[styles.scrollView, {...hasPadding && {paddingLeft: WP(props.padding), paddingRight: WP(props.padding)}}]} showsVerticalScrollIndicator={false}>
 					{props.children}
 				</ScrollView>
 				{footer && <View style={[styles.footerContainer, props.footerContainerStyle]}>{footer}</View>}
@@ -47,7 +50,7 @@ export const AppView = ({scroll = true, footer, hasHeader = true, header, isLoad
 			:
 			<View style={[styles.appContainer, props.appContainerStyle]}>
 				{hasHeader || header ? header ? header : <AppHeader {...props}/> : <></>}
-				<View style={styles.staticView}>
+				<View style={[styles.staticView, {...hasPadding && {paddingLeft: WP(props.padding), paddingRight: WP(props.padding)}}]}>
 					{props.children}
 				</View>
 				{footer && <View style={[styles.footerContainer, props.footerContainerStyle]}>{footer}</View>}

@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 
 import { AppView, FavoriteIcon, Collapsible } from '../../components/common';
 import { StockChart, TradeButtons, StockPosition, 
-	StockOrders, StockDetailTop, StockMarketData } from '../../components/market';
+	StockOrders, StockDetailTop, StockMarketData, StockNews } from '../../components/market';
 
 import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
 import { useAssetData } from  '../../helper';
@@ -37,10 +37,11 @@ const StockDetail = (props) => {
 				containerStyle={{marginBottom: HP(3)}}
 				content={<StockChart {...{symbol, size: 'L', timeframe: '5Day'}} style={styles.chartContainer} />}
 			/>
-
+			<StockMarketData {...{symbol}} />
+			
 			<StockPosition {...{symbol}} />
 			<StockOrders {...{symbol}} />
-			<StockMarketData {...{symbol}} />
+			<StockNews {...{symbol}} />
 
 			<View style={styles.empty}></View>
 		</AppView>

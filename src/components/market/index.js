@@ -9,3 +9,4 @@ export { StockPosition } from './stockPosition';
 export { TradeButtons } from './tradeButtons';
 export { TickerDisplay } from './tickerDisplay';
 export { StockName } from './stockName';
+export { StockNews } from './stockNews';
