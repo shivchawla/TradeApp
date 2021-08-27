@@ -39,7 +39,8 @@ const StockDetail = (props) => {
 					<StockChart 
 						{...{symbol, size: 'L'}} 
 						style={styles.chartContainer}
-						hasSelector={true} 
+						hasSelector={true}
+						hasTooltip={true} 
 					/>
 				}
 

@@ -135,22 +135,18 @@ const StockChartIntraday = ({symbol, ...props}) => {
 	}, [query])
 
 	return (
-		<LineChart values={intradayBars} {...props} />	
+		<LineChart data={intradayBars} {...props} />	
 	)
 }
 
-const RangeSelector = ({onSelect}) => {
+const RangeSelector = ({items, onSelect, selectedIndex}) => {
 	const {theme, styles} = useStyles();
-
-	const [selectedIndex, setIndex] = useState(4);
-	
-	const items = ['1D', '5D', '1M', '3M', 'YTD', '1Y', '5Y'];
 
 	return (
 		<View style={styles.rangeSelector}>
 			{items.map((item, index) => {
 				return (
-					<TouchableOpacity style={{...index==selectedIndex && styles.selectedRange}} activeOpacity={1.0} onPress={() => {setIndex(index); onSelect(item)}}>
+					<TouchableOpacity key={item} style={{...index==selectedIndex && styles.selectedRange}} activeOpacity={1.0} onPress={() => onSelect(index)}>
 						<StyledText style={styles.rangeText}>{item}</StyledText>
 					</TouchableOpacity>
 				)
@@ -271,31 +267,32 @@ const StockChartDaily = ({symbol, timeRange, ...props}) => {
 	// console.log(query);
 
 	return (
-		<LineChart values={dailyBars} {...props}/>		
+		<LineChart data={dailyBars} {...props}/>		
 	)
 }
 
 export const StockChart = ({type, hasSelector = false, ...props}) => {
 
-	const [timeRange, setTimeRange] = useState('YTD')
-
+	const items = ['1D', '5D', '1M', '3M', 'YTD', '1Y', '5Y'];
+	const [selectedIndex, setIndex] = useState(4);
+	
 	const onRangeSelect = (v) => {
 		// console.log("*****************************************")
 		// console.log("*****************************************")
 		// console.log("On Range Select");
 		// console.log(v);
-		setTimeRange(v);
+		setIndex(v);
 	}
 
 	return (
 		<>
 	 	{
-		 	type == "intraday" || timeRange == '1D' ? 
+		 	type == "intraday" || items[selectedIndex] == '1D' ? 
 		 		<StockChartIntraday {...props} />
 		 	:	
-		 		<StockChartDaily {...props} { ...{timeRange}} />
+		 		<StockChartDaily {...props} timeRange={items[selectedIndex]} />
  		}
- 		{hasSelector && <RangeSelector onSelect={onRangeSelect}/>}
+ 		{hasSelector && <RangeSelector {...{items, selectedIndex}} onSelect={onRangeSelect}/>}
 		</>
 	);
 }
