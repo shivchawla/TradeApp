@@ -39,6 +39,7 @@
     "react-native-svg": "^12.1.1",
     "react-native-svg-charts": "^5.4.0",
     "react-native-vector-icons": "^8.1.0",
+    "react-native-webview": "^11.13.0",
     "react-query": "^3.19.0",
     "react-use": "^17.2.4",
     "react-use-websocket": "^2.7.1",

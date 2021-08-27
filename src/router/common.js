@@ -11,6 +11,7 @@ import ChooseStock from '../screens/order/chooseStock';
 import OrdersTrades from '../screens/order/ordersTrades';
 import StockDetail from '../screens/market/stockDetail';
 import SearchStock from '../screens/market/searchStock';
+import ViewNews from '../screens/market/viewNews';
 
 import AddWatchlist from '../screens/watchlist/addWatchlist';
 import ManageWatchlist from '../screens/watchlist/manageWatchlist';
@@ -23,6 +24,7 @@ const innerScreens = (Stack) => {
   return [
       <Stack.Screen key="StockDetail" name="StockDetail" component={StockDetail} />,
       <Stack.Screen key="SearchStock" name="SearchStock" component={SearchStock} />,
+      <Stack.Screen key="ViewNews" name="ViewNews" component={ViewNews} />,
       
       <Stack.Screen key="AddWatchlist" name="AddWatchlist" component={AddWatchlist} />,
       <Stack.Screen key="ManageWatchlist" name="ManageWatchlist" component={ManageWatchlist} />,
