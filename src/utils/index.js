@@ -5,7 +5,8 @@ export {
 	NDaysAgoISODate, NWeeksAgoISODate, NMonthsAgoISODate, NYearsAgoISODate, 
 	NDaysAfterISODate, NWeeksAfterISODate,
 	dayStartISODate, dayEndISODate, duration,
-	latestDayStartFromCalendar, toTimeZoneDate, currentTimeZoneDate, durationBetweenDates} from './date';
+	latestDayStartFromCalendar, toTimeZoneDate, 
+	currentTimeZoneDate, durationBetweenDates, getRoundedCurrentTime} from './date';
 
 export { priceChangeFromSnapshot, priceChangeFromRealtime, 
 	formatValue, formatPctValue, formatName } from './format'; 

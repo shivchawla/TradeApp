@@ -5,17 +5,17 @@ import {LineChart} from '../common';
 import * as Theme  from '../../theme';
 const { useTheme, StyledText, WP, HP} = Theme;
 
-import {NDaysAgoISODate, NWeeksAgoISODate, 
+import {NDaysAgoISODate, NWeeksAgoISODate, yearStartISODate,
 	NMonthsAgoISODate, NYearsAgoISODate, 
-	currentISODate, toISODate, durationBetweenDates} from '../../utils'
+	currentISODate, toISODate, durationBetweenDates, getRoundedCurrentTime} from '../../utils'
 
 import {useStockHistoricalData, useStockIntradayData, 
-	useCalendar, isMarketOpen, getLatestTradingDay} from '../../helper';
+	useCalendar, isMarketOpen, getLatestTradingDay, } from '../../helper';
 
 
 //Special function to filter 5 day 30Min Bars 
 //Because some bars lie outside the RTH (that needs to be filtered out)
-const format5DayBars = (bars, calendar) => {
+const filterTradingBars = (bars, calendar) => {
 
 	// console.log("Calendar");
 	// console.log(calendar);
@@ -36,13 +36,12 @@ const format5DayBars = (bars, calendar) => {
 	// console.log("Trading Bars")
 	// console.log(tradingBars);
 
-	//13*5 because There are 13 - 30Min intervals in RTH (and 5 days)
-	var fBars = [].concat.apply([], tradingBars).slice(-5*13);
+	return [].concat.apply([], tradingBars)
 
 	// console.log("Final Bars")
 	// console.log(fBars);
 
-	return fBars;
+	// return fBars;
 
 }
 
@@ -61,7 +60,7 @@ const StockChartIntraday = ({symbol, ...props}) => {
 			const start = toISODate(latestTradingDay.date + " " + latestTradingDay.open);
 
 			if (marketOpen) {
-				const duration = durationBetweenDates( currentISODate(), end, 'hours');
+				const duration = durationBetweenDates( currentISODate() , end, 'hours');
 
 				console.log(latestTradingDay);
 				console.log(end);
@@ -70,11 +69,13 @@ const StockChartIntraday = ({symbol, ...props}) => {
 				//Now we know ho wmany milliseconds are left;
 				// 5.5
 				if (duration > 0 && duration > 4) {
-					setQuery({start, end, timeframe: '1Min'})
+					setQuery({start, end: getRoundedCurrentTime('1Min'), timeframe: '1Min'})
 				} else if (duration > 0 && duration > 2) {
-					setQuery({start, end, timeframe: '2Min'})
+					// console.log("Get Rounded Current Time")
+					// console.log(getRoundedCurrentTime('2Min'))
+					setQuery({start, end : getRoundedCurrentTime('2Min'), timeframe: '2Min'})
 				} else if( duration > 0) {
-					setQuery({start, end, timeframe: '5Min'})
+					setQuery({start, end: getRoundedCurrentTime('5Min'), timeframe: '5Min'})
 				}
 
 			} else {
@@ -87,7 +88,7 @@ const StockChartIntraday = ({symbol, ...props}) => {
 
 	React.useEffect(() => {
 
-		console.log("Running timeframe changed Effect - Intraday");
+		// console.log("Running timeframe changed Effect - Intraday");
 
 		const fwdFill = (bars, ct) => {
 			var fmtBars = (bars || []).map(item => item.closePrice);
@@ -101,30 +102,31 @@ const StockChartIntraday = ({symbol, ...props}) => {
 
 		if (query?.timeframe) {
 			getIntradayBars().then(bars => {
+				// console.log(bars);
 
-				console.log(bars);
+				const fBars = bars ?? [];
 
-				var len = bars.length;
+				var len = fBars.length;
 
 				switch(query?.timeframe) {
 					case '1Min':
-					setBars(fwdFill(bars, 6.5*60 - len));
+					setBars(fwdFill(fBars, 6.5*60 - len));
 					break;
 
 					case '2Min':	
-					setBars(fwdFill(bars, 6.5*30 - len));
+					setBars(fwdFill(fBars, 6.5*30 - len));
 					break;
 
 					case '5Min':	
-					setBars(fwdFill(bars, 6.5*12 - len));
+					setBars(fwdFill(fBars, 6.5*12 - len));
 					break;
 
 					case '10Min':	
-					setBars(fwdFill(bars, 6.5*6 - len));
+					setBars(fwdFill(fBars, 6.5*6 - len));
 					break;
 
 					case '15Min':	
-					setBars(fwdFill(bars, 6.5*4 - len));
+					setBars(fwdFill(fBars, 6.5*4 - len));
 					break;
 				}
 			});
@@ -159,48 +161,103 @@ const RangeSelector = ({onSelect}) => {
 }
 
 const StockChartDaily = ({symbol, timeRange, ...props}) => {
-	const [query, setQuery] = useState({});
+	const [query, setQuery] = useState(null);
 	const [dailyBars, setBars] = useState([])
 
-	//needs modification
-	//If market is open, **END** is end of last trading day and not current trading date;
-	//Also in case of YTD, timeframe can vary depending on duration from start of the year
+	//Needs modification - NO MODIFICATION IS NEEDED FOR 1
+	//1. If market is open, **END** is end of last trading day and not current trading date;
+	//2. Also in case of YTD, timeframe can vary depending on duration from start of the year
 	
 	React.useEffect(() => {
-		switch(timeRange) {
-			case '5D':
-				setQuery({start: NDaysAgoISODate(8), timeframe: '30Min'}); 
-				break;
-			case '1M':
-				setQuery({start: NMonthsAgoISODate(1), timeframe: '1Day'}); 
-				break;
-			case '3M': 
-				setQuery({start: NMonthsAgoISODate(3), timeframe: '1Day'});
-				break;
-			case 'YTD': 
-				setQuery({}); //default
-				break;
-			case '1Y': 
-				setQuery({start: NYearsAgoISODate(1), timeframe: '5Day'}); 
-				break
-			case '5Y':
-				setQuery({start: NYearsAgoISODate(5), timeframe: '30Day'});
-				break;  
+		const ytdQuery = async() => {
+			if (timeRange == 'YTD') {
+				const latestTradingDay = await getLatestTradingDay();
+				const start = toISODate(latestTradingDay.date + " " + latestTradingDay.open);
+				const yStart = yearStartISODate();
+
+				const current = currentISODate();
+
+				// console.log("Setting Up YTD Query");
+
+				const durationMonths = durationBetweenDates( yStart, current, 'months');
+				// console.log("durationMonths: ", durationMonths);
+
+				if (durationMonths > 9) {
+					return {start: yStart, timeframe: '5Day'};
+				}
+
+				// const durationWeeks = durationBetweenDates( yStart, current, 'weeks');
+				const durationDays = durationBetweenDates( yStart, current,  'days');
+				// console.log("durationDays: ", durationDays);
+
+				if (durationDays > 7) {
+					return {start: yStart, timeframe: '1Day'};
+				}
+
+				const durationHours = durationBetweenDates( yStart, current, 'hours');
+			
+				// console.log("durationHours: ", durationHours);
+				// console.log("durationWeeks: ", durationWeeks);
+				
+				if (durationHours < 2) {
+					return {start: yStart, end: getRoundedCurrentTime('1Min'), timeframe: '1Min'};
+				} else if (durationHours < 4) {
+					return {start: yStart, end: getRoundedCurrentTime('2Min'), timeframe: '2Min'};
+				} else if (durationHours < 24) {
+					return {start: yStart, end: getRoundedCurrentTime('5Min'), timeframe: '5Min'};
+				} else {
+					return {start: yStart, end: getRoundedCurrentTime('30Min'), timeframe: '30Min'};
+				} 
+			}
+
 		}
+
+		const manageQuery = async() => {
+			// console.log("Manage Query: ", timeRange);
+
+			switch(timeRange) {
+				case '5D':
+					setQuery({start: NDaysAgoISODate(8), timeframe: '30Min'}); 
+					break;
+				case '1M':
+					setQuery({start: NMonthsAgoISODate(1), timeframe: '1Day'}); 
+					break;
+				case '3M': 
+					setQuery({start: NMonthsAgoISODate(3), timeframe: '1Day'});
+					break;
+				case 'YTD':
+					setQuery(await ytdQuery()); //default
+					break;
+				case '1Y': 
+					setQuery({start: NYearsAgoISODate(1), timeframe: '5Day'}); 
+					break
+				case '5Y':
+					setQuery({start: NYearsAgoISODate(5), timeframe: '30Day'});
+					break;  
+			}
+		}
+
+		manageQuery();
 	}, [timeRange])
 
-	const {getBars} = useStockHistoricalData(symbol, query, {enabled: false});
+	const {getBars} = useStockHistoricalData(symbol, query || {}, {enabled: false});
 
 	//Calendar is just used of 5D timeRange
-	const {getCalendar} = useCalendar(query, {enabled: false});
+	const {getCalendar} = useCalendar(query || {}, {enabled: false});
 
 	React.useEffect(() => {
 		const manageBars = async() => {
 			if (query) {
 				var bars = await getBars();
-				if (timeRange == '5D') {
+				if (timeRange == '5D' || query?.timeframe == '30Min') {
 					const calendar = await getCalendar();
-					bars = format5DayBars(bars, calendar);
+					bars = (filterTradingBars(bars, calendar) || [])
+
+					if (timeRange == '5D') {
+						//13*5 because There are 13 - 30Min intervals in RTH (and 5 days)
+						bars = bars.slice(-5*13);
+					}
+
 				}
 		
 				setBars((bars || []).map(item => item.closePrice));
@@ -210,7 +267,9 @@ const StockChartDaily = ({symbol, timeRange, ...props}) => {
 		manageBars();
 	}, [query]);
 
-	
+	// console.log("Final Query");
+	// console.log(query);
+
 	return (
 		<LineChart values={dailyBars} {...props}/>		
 	)
@@ -218,7 +277,7 @@ const StockChartDaily = ({symbol, timeRange, ...props}) => {
 
 export const StockChart = ({type, hasSelector = false, ...props}) => {
 
-	const [timeRange, setTimeRange] = useState(null)
+	const [timeRange, setTimeRange] = useState('YTD')
 
 	const onRangeSelect = (v) => {
 		// console.log("*****************************************")

@@ -55,3 +55,22 @@ export const latestDayStartFromCalendar = (calendar, clock) => {
 
 	return startDt.format();		
 }
+
+
+//TRICKY as in FREE PLAN, only data is delayed by 15min
+export const getRoundedCurrentTime = (round, fmt) => {
+	if (round == '1Min') {
+		return moment.tz(timeZone).subtract(15, 'minutes').startOf('minute').utc().format(fmt)
+	} else if (round == '2Min') {
+		const t = moment.tz(timeZone).subtract(15, 'minutes').startOf('minute');
+		if (t.minute() % 2 != 0) {
+			return t.subtract(1, 'minutes').utc().format(fmt)
+		}	
+	} else if (round == '5Min') {
+		const t = moment.tz(timeZone).subtract(15, 'minutes').startOf('minute');
+		const extraMinutes = t.minute() % 5;  
+		if (extraMinutes != 0) {
+			return t.subtract(extraMinutes, 'minutes').utc().format(fmt)
+		}	
+	}
+}

@@ -14,8 +14,8 @@ export function useStockEODData(symbol, params = {}) {
 
 export function useStockHistoricalData(symbol, {start = yearStartISODate(), end = dayEndISODate(), timeframe = '1Day'} = {}, params = {}) {
   const query = {start, end, timeframe};
-  console.log("Final Query");
-  console.log(query);
+  // console.log("Final Query");
+  // console.log(query);
 
   const {isLoading, error, data: bars, refetch} = useQuery(['stockHistorical', {symbol, start, end, timeframe}], () => getHistoricalData(symbol, query), params)
   return {bars, getBars: () => refetch().then(r => r.data)};
@@ -23,8 +23,8 @@ export function useStockHistoricalData(symbol, {start = yearStartISODate(), end 
 
 export function useStockIntradayData(symbol, {start = dayStartISODate(), end = dayEndISODate(), timeframe = '30Min'} = {}, params = {}) {
   const query = {start, end, timeframe};
-  console.log("Final Query - StockIntraday");
-  console.log(query);
+  // console.log("Final Query - StockIntraday");
+  // console.log(query);
 
   const {isLoading, error, data: intradayBars, refetch} = useQuery(['stockIntraday', {symbol, start, end, timeframe}], () => getHistoricalData(symbol, query), params);
   return {intradayBars, getIntradayBars:() => refetch().then(r => r.data)};

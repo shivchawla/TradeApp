@@ -12,7 +12,8 @@ export const LineChart = ({values, size, style}) => {
 	// console.log(values);
 
 	const getColor = (values = []) => {
-		const color = values.slice(-1).pop() > values[0] ? theme.green : theme.red;
+		const filteredValues = values.filter(item => item);// Remove the NULL
+		const color = filteredValues.slice(-1).pop() > filteredValues[0] ? theme.green : theme.red;
 		return color;
 	}
 
