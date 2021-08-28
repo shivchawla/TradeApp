@@ -1,21 +1,22 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {LineChart as SVGLineChart} from 'react-native-svg-charts';
-import { Circle, G, Line, Rect, Text } from 'react-native-svg'
+import {Line} from 'react-native-svg';
 import {useDebounce, useThrottle, useThrottleFn} from 'react-use';
 
 
 import * as Theme  from '../../theme';
 const { useTheme, WP, HP, StyledText } = Theme;
 
-export const LineChart = ({data, size, style, hasTooltip = false}) => {
-	const theme = useTheme();
+export const LineChart = ({data, size, style, hasTooltip = false, base = null, baseline= false}) => {
+	const {theme, styles} = useStyles();
+	
 	const [locationX, setX] = useState(null);
 	const [trigger, setTrigger] = useState(false);	
 
 	const getColor = (values = []) => {
 		const filteredValues = values.filter(item => item);// Remove the NULL
-		const color = filteredValues.slice(-1).pop() > filteredValues[0] ? theme.green : theme.red;
+		const color = filteredValues.slice(-1).pop() > (base || filteredValues[0]) ? theme.green : theme.red;
 		return color;
 	}
 
@@ -30,7 +31,7 @@ export const LineChart = ({data, size, style, hasTooltip = false}) => {
 
     const VerticalLine = ({ x, width }) => (
         <Line
-            key={ 'zero-axis' }
+            key={ 'moving-axis' }
             y1={ '0%' }
             y2={ '100%' }
             x1={ width ? x(Math.floor(locationX*data.length/width)) : x(0)}
@@ -41,10 +42,32 @@ export const LineChart = ({data, size, style, hasTooltip = false}) => {
         />
     )
 
+    const HorizontalLine = ({ y, height }) => {
+
+    	var minValue = Math.min(...data);
+		var maxValue = Math.max(...data);
+    	var first = (base || data[0]);
+    	var firstPct = 100 - (first - minValue)*100/(maxValue - minValue);
+
+    	return (
+	        <Line
+	            key={ 'zero-x-axis' }
+	            x1={ '0%' }
+	            x2={ '100%' }
+	            y1={ `${firstPct}%`}
+	            y2={ `${firstPct}%`}
+	            stroke={ theme.grey8 }
+	            strokeDasharray={ [ 4, 8 ] }
+	            strokeWidth={ 1 }
+	        />
+	    )
+    }
+
+
   	const PriceText = ({x, y, width}) => {
-  		const value = width ? data[Math.floor(locationX*data.length/width)] : '--';
+  		const value = width ? data[Math.min(data.length, Math.floor(locationX*data.length/width))].toFixed(2) : '--';
   		const changeValue = data?.[0] ? '(' + ((value/data[0] - 1)*100).toFixed(2)+'%)'  : '--'
-  		const color = value != '--' ? value >= data[0] ? theme.green : theme.red : theme.text;
+  		const color = value != '--' ? value >= (base || data[0]) ? theme.green : theme.red : theme.text;
   		return (
   			<View style={styles.priceTextContainer}>
   				<StyledText style={[styles.priceText, {color}]}>{value}</StyledText>
@@ -67,6 +90,7 @@ export const LineChart = ({data, size, style, hasTooltip = false}) => {
 	            contentInset={ { bottom: 0 } }
 	           
 	        >
+	        {baseline && <HorizontalLine />}
 	        {hasTooltip && trigger && <VerticalLine />}
 	        {hasTooltip && trigger && <PriceText />}
 	        </SVGLineChart>
@@ -74,29 +98,35 @@ export const LineChart = ({data, size, style, hasTooltip = false}) => {
 	);
 }
 
-const styles = StyleSheet.create({
-	chartContainer: {
-		// alignItems: 'center',
-		// justifyContent: 'center',
-		width: '90%',
-		alignSelf: 'center'
-	},
-	tinyChart: {
-		height: HP(6), width: WP(20), 
-	},
-	mediumChart:{
-		height: HP(20), width: WP(50)
-	},
-	bigChart: {
-		height: HP(30), width: '100%',
+const useStyles = () => {
+	const theme = useTheme();
 
-	},
-	priceTextContainer: {
-		position: 'absolute',
-		top: HP(-4),
-		flexDirection: 'row'
-	},
-	priceText: {
-		fontSize: WP(5)
-	}
-});
+	const styles = StyleSheet.create({
+		chartContainer: {
+			// alignItems: 'center',
+			// justifyContent: 'center',
+			width: '90%',
+			alignSelf: 'center'
+		},
+		tinyChart: {
+			height: HP(6), width: WP(20), 
+		},
+		mediumChart:{
+			height: HP(20), width: WP(50)
+		},
+		bigChart: {
+			height: HP(30), width: '100%',
+
+		},
+		priceTextContainer: {
+			position: 'absolute',
+			top: HP(-4),
+			flexDirection: 'row'
+		},
+		priceText: {
+			fontSize: WP(5)
+		}
+	});
+
+	return {styles, theme};
+}

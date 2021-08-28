@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import {LineChart} from '../common';
+import {LineChart, RangeSelector} from '../common';
 
 import * as Theme  from '../../theme';
 const { useTheme, StyledText, WP, HP} = Theme;
@@ -11,7 +11,6 @@ import {NDaysAgoISODate, NWeeksAgoISODate, yearStartISODate,
 
 import {useStockHistoricalData, useStockIntradayData, 
 	useCalendar, isMarketOpen, getLatestTradingDay, } from '../../helper';
-
 
 //Special function to filter 5 day 30Min Bars 
 //Because some bars lie outside the RTH (that needs to be filtered out)
@@ -139,22 +138,6 @@ const StockChartIntraday = ({symbol, ...props}) => {
 	)
 }
 
-const RangeSelector = ({items, onSelect, selectedIndex}) => {
-	const {theme, styles} = useStyles();
-
-	return (
-		<View style={styles.rangeSelector}>
-			{items.map((item, index) => {
-				return (
-					<TouchableOpacity key={item} style={{...index==selectedIndex && styles.selectedRange}} activeOpacity={1.0} onPress={() => onSelect(index)}>
-						<StyledText style={styles.rangeText}>{item}</StyledText>
-					</TouchableOpacity>
-				)
-			})}
-		</View>
-
-	) 
-}
 
 const StockChartDaily = ({symbol, timeRange, ...props}) => {
 	const [query, setQuery] = useState(null);

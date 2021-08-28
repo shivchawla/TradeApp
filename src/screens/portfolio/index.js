@@ -6,7 +6,7 @@ import {AppView, AppHeader, PnLText,
 	LineChart, VerticalField,
 	AccountIcon, SearchIcon, Collapsible, Clickable } from '../../components/common';
 
-import { PortfolioDisplay } from '../../components/portfolio';
+import { PortfolioDisplay, PnLGraph	 } from '../../components/portfolio';
 import { DisplayOrderList } from '../../components/order';
 import { DisplayActivityList } from '../../components/activity';
 
@@ -127,10 +127,6 @@ const Portfolio = (props) => {
 		)
 	}
 
-	const PnLGraph = () => {
-		return <LineChart values={portfolioHistory?.equity || []} /> 	
-	}
-
 	const AccountSummary = () => {
 		return (
 			<View style={styles.accountSummaryContainer}>
@@ -156,6 +152,12 @@ const Portfolio = (props) => {
 
 	return (
 		<AppView loading={loading} header={<PortfolioHeader />} title="Portfolio">
+			<Collapsible 
+				title="PERFORMANCE" 
+				content={<PnLGraph />}  
+				show={true}
+			/>
+			
 			{tradingAccount && 
 				<Collapsible 
 					title="ACCOUNT SUMMARY" 
@@ -163,11 +165,7 @@ const Portfolio = (props) => {
 					containerStyle={{}}
 				/>
 			}
-			<Collapsible 
-				title="PERFORMANCE" 
-				content={<PnLGraph />}  
-				show={false}
-			/>
+			
 			{portfolio && 
 				<Collapsible 
 					title="POSITIONS" 

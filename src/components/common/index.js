@@ -22,3 +22,4 @@ export { HorizontalButtonGroup } from './horizontalButtonGroup';
 export { Collapsible } from './collapsible';
 export { Clickable, ClickableView } from './clickableContainer';
 export { AlertBox } from './alertBox';
+export { RangeSelector } from './rangeSelector';

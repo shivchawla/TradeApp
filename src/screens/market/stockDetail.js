@@ -41,6 +41,7 @@ const StockDetail = (props) => {
 						style={styles.chartContainer}
 						hasSelector={true}
 						hasTooltip={true} 
+						baseline={true}
 					/>
 				}
 
