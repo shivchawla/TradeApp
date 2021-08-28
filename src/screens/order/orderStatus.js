@@ -4,15 +4,15 @@ import { useNavigation } from '@react-navigation/native';
 
 import { titleCase } from "title-case";
 
-import { AppView, ConfirmButton } from '../../components/common';
-import { useOrderDetail,  } from '../../helper';
+import { AppView, ConfirmButton, ShowJson } from '../../components/common';
+import { useOrderDetail, getLatestTradingDay, getNextTradingDay } from '../../helper';
 import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
-import { ORDER_MORE_FIELDS, AVAILABLE_TO_CANCEL_ORDER_STATUS } from '../../config';
-import { toTimeZoneDate } from '../../utils';
+import { ORDER_MORE_FIELDS, AVAILABLE_TO_CANCEL_ORDER_STATUS, OPEN_ORDER_STATUS } from '../../config';
+import { toTimeZoneDate, durationBetweenDates } from '../../utils';
 
 const OrderStatusTop = ({orderDetail}) => {
 	const {symbol, type, side} = orderDetail;
-	const styles = useStyles();
+	const {theme, styles} = useStyles();
 	
 	return (
 		<View style={styles.topContainerStyle}>
@@ -24,7 +24,7 @@ const OrderStatusTop = ({orderDetail}) => {
 
 const OrderStatusSummary = ({orderDetail}) => {
 	const {qty, status, limit_price, type, notional, id: orderId} = orderDetail;
-	const styles = useStyles();
+	const {theme, styles} = useStyles();
 	
 	return (
 		<View style={styles.summaryContainerStyle}>
@@ -40,7 +40,7 @@ const OrderStatusSummary = ({orderDetail}) => {
 }
 
 const HorizontalWideField = ({label, value, value2}) => {
-	const styles = useStyles();
+	const {theme, styles} = useStyles();
 
 	return (
 		<View style={styles.horizontalWideField}>
@@ -58,7 +58,7 @@ const HorizontalWideField = ({label, value, value2}) => {
 }
 
 const OrderStatusMore = ({orderDetail}) => {
-	const styles = useStyles();
+	const {theme, styles} = useStyles();
 	return (
 		<View style={styles.moreFieldsContainer}>
 		{Object.keys(ORDER_MORE_FIELDS).map((key, index) => {
@@ -76,15 +76,17 @@ const OrderStatusMore = ({orderDetail}) => {
 }
 
 const OrderButton = ({title, onClick}) => {
-	const styles = useStyles();
+	const {theme, styles} = useStyles();
 	
 	return (
-		<ConfirmButton {...{title, onClick}} swipe={true} cancel={true}/>
+		<TouchableOpacity onPress={onClick} activeOpacity={0.8} style={styles.orderButton}>
+			<StyledText style={{color: theme.red, fontSize: WP(4.5)}}>{title}</StyledText>
+		</TouchableOpacity>
 	)
 }
 
 const OrderStatusButton = ({orderDetail}) => {
-	const styles = useStyles();
+	const {theme, styles} = useStyles();
 	const {status, id} = orderDetail;
 	const navigation = useNavigation();
 
@@ -101,9 +103,60 @@ const OrderStatusButton = ({orderDetail}) => {
 	)
 }
 
+const DisplayOutRTH = ({orderDetail}) => {
+	const {theme, styles} = useStyles();
+
+	const isOpen = OPEN_ORDER_STATUS.includes(orderDetail?.status);
+	const [isAfterMarket, setAfterMarket] = useState(null);
+	const [nextMarketOpen, setMarketOpen] = useState(null);
+	
+	React.useEffect(() => {
+		const computeAfterMarket = async() => {
+			const latestTradingDay = await getLatestTradingDay();
+			const nextTradingDay = await getNextTradingDay();
+			;
+			const dayClose = toTimeZoneDate(latestTradingDay.date + ' ' + latestTradingDay.close);
+			const dayOpen = toTimeZoneDate(latestTradingDay.date + ' ' + latestTradingDay.open);
+			
+			const orderTime = toTimeZoneDate(orderDetail?.submitted_at || orderDetail?.created_at);
+			const durationClose = durationBetweenDates(dayClose, orderTime);
+			const durationOpen = durationBetweenDates(orderTime, dayOpen);
+
+			if (durationClose > 0 || durationOpen > 0) {
+				setAfterMarket(true);
+			}
+
+			const nextOpen = toTimeZoneDate(nextTradingDay.date + ' ' + nextTradingDay.open, "Do MMM YYYY hh:mm A");
+			
+			if (durationOpen > 0) {
+				setMarketOpen(dayOpen);
+			} else {
+				setMarketOpen(nextOpen);
+			}
+		}
+
+		computeAfterMarket();
+
+	}, []) 
+
+	console.log("isOpen: ", isOpen);
+	console.log("isAfterMarket: ", isAfterMarket);
+
+	return (
+		<>
+		{(isOpen && isAfterMarket) &&
+			<View style={styles.alertMessageContainer}>
+				<StyledText style={styles.alertMessageTitle}>Order is placed after regular market hours.</StyledText>
+				<StyledText style={styles.alertMessage}>It will be submitted at next market open on {nextMarketOpen} local time</StyledText>
+			</View>
+		}
+		</>
+	)	
+}
+
 const HeaderRight = ({symbol}) => {
 	const navigation = useNavigation();
-	const styles = useStyles();
+	const {theme, styles} = useStyles();
 
 	return (
 		<TouchableOpacity onPress={() => navigation.navigate('StockDetail', {symbol})}>
@@ -141,10 +194,12 @@ const OrderStatus = (props) => {
 	return (
 		<>
 		{!!orderDetail &&
-			<AppView goBack={goBack || true} headerRight={<HeaderRight {...{symbol}}/>} footer={<OrderStatusButton {...{orderDetail}} />}>
+			<AppView scroll={false} goBack={goBack || true} headerRight={<HeaderRight {...{symbol}}/>} >
 				<OrderStatusTop {...{orderDetail}} />
 				<OrderStatusSummary {...{orderDetail}} />
 				<OrderStatusMore {...{orderDetail}} />
+				<DisplayOutRTH {...{orderDetail}} />
+				<OrderStatusButton {...{orderDetail}} />
 			</AppView>
 		}
 		</>
@@ -167,7 +222,7 @@ const useStyles = () => {
 			color: theme.light,
 		},
 		summaryContainerStyle: {
-			marginTop: WP(30),
+			marginTop: WP(25),
 			justifyContent: 'center',
 			alignItems: 'center',
 		},
@@ -215,11 +270,29 @@ const useStyles = () => {
 			color: theme.green
 		},
 		orderButton :{
-			width: '100%'
+			position: 'absolute',
+			bottom: HP(6),
+			alignSelf: 'center'
+		},
+		alertMessageContainer: {
+			backgroundColor: theme.grey9,
+			padding: WP(5),
+			// paddingLeft: WP(3),
+			// paddingRight: WP(3),
+			marginTop: WP(10),
+		},
+		alertMessageTitle: {
+			fontSize: WP(4),
+			color: theme.grey2
+		},
+		alertMessage: {
+			marginTop: WP(1),
+			color: theme.grey2
 		}
+
 	});
 
-	return styles
+	return {theme, styles};
 }
 
 export default OrderStatus;
