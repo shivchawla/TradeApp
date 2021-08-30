@@ -1,8 +1,10 @@
 import React, {useState} from 'react';
 import {View, TouchableOpacity, StyleSheet} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import { AppView, IconTextButton, ToggleThemeButton, Icon } from '../../components/common';
 import { useTheme, WP, HP, StyledText } from '../../theme';
+import { useTranslation } from 'react-i18next';
 
 
 const TopSetting = ({iconName, title, onPress, ...props}) => {
@@ -45,13 +47,17 @@ const MiddleSetting = ({title, value, onPress, hasIcon = true, leftIcon, ...prop
 
 const MiddleSectionSettings = () => {
 	const {theme, styles} = useStyles();
+	const navigation = useNavigation();
+	const {t, i18n} = useTranslation();
+
+	const currentLanguage = t('language:' + i18n.language.split("-")[0])
 
 	return (
 		<View style={styles.middleSettingsContainer}>
 			<MiddleSetting title="NOTIFICATIONS" leftIcon="notifications-outline" onPress={""} />
 			<MiddleSetting title="USER" leftIcon="person-outline" onPress={""} />
 			<MiddleSetting title="HELP" leftIcon="help-circle-outline" onPress={""} />
-			<MiddleSetting title="LANGUAGE" leftIcon="language" value="English" onPress={""} />
+			<MiddleSetting title="LANGUAGE" leftIcon="language" value={currentLanguage} onPress={() => navigation.navigate("SelectLanguage")} />
 		</View>
 	)
 }

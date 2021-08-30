@@ -86,3 +86,11 @@ export const setCurrentTheme = async(theme) => {
 export const getCurrentTheme = async() => {
   return await getStorageData("theme");
 }
+
+export const setLanguage = async(language) => {
+  return await setStorageData("language", JSON.stringify(language));
+}
+
+export const getLanguage = async() => {
+  return await getStorageData("language");
+}

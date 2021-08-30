@@ -28,7 +28,9 @@ export { AccountStatus } from './enums';
 
 export { useAuth, AuthProvider } from './user';
 
-export { useSymbolActivity, getCurrentTheme, setCurrentTheme } from './store';
+export { useSymbolActivity, 
+		getCurrentTheme, setCurrentTheme,
+		getLanguage, setLanguage } from './store';
 
 export { useStockRealtimeData, WebsocketProvider } from './stream';
 

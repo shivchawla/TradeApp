@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import {LogBox} from 'react-native';
 
 import Router from './src/router';
+import './config-i18n';
 
 LogBox.ignoreAllLogs(true);
 
