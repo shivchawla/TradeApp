@@ -30,7 +30,7 @@ export const FullViewModal = ({isVisible = false, onClose, title, ...props}) => 
 
 
 const useStyles = () => {
-	const theme = useTheme();
+	const {theme} = useTheme();
 	
 	const styles = StyleSheet.create({
 		modal: {

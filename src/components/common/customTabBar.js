@@ -9,7 +9,7 @@ import { deviceWidth, deviceHeight } from '../../utils';
 
 const CustomModal = ({isVisible, onHide, navigation}) => {
   const styles = useStyles();
-  const theme = useTheme();
+  const {theme} = useTheme();
 
   const CustomAction = ({title, description, onPress}) => {
       return (
@@ -44,7 +44,7 @@ const CustomModal = ({isVisible, onHide, navigation}) => {
 export const CustomTabBar = ({ state, descriptors, navigation }) => {
   
   const styles = useStyles();
-  const theme = useTheme();
+  const {theme} = useTheme();
 
   const [isModalVisible, setModalVisible] = useState(false);
   
@@ -114,7 +114,7 @@ export const CustomTabBar = ({ state, descriptors, navigation }) => {
 }
 
 const useStyles = () => {
-  const theme = useTheme();
+  const {theme} = useTheme();
   
   const styles = StyleSheet.create({
     tabBar: {

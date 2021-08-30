@@ -73,7 +73,7 @@ export const StockNews = ({symbol, ...props}) => {
 }
 
 const useStyles = () => {
-	const theme = useTheme();
+	const {theme} = useTheme();
 
 	const styles = StyleSheet.create({
 		newsContainer: {

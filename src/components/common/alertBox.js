@@ -38,7 +38,7 @@ export const AlertBox = ({title, message, show = false, onCancel, cancelText='CA
 
 
 const useStyles = () => {
-	const theme = useTheme();
+	const {theme} = useTheme();
 
 	const styles = StyleSheet.create({
 		modalContent: {

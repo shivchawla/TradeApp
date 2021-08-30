@@ -83,7 +83,7 @@ export const DisplayOrderList = ({orders, ...props}) => {
 
 
 const useStyles = () => {
-	const theme = useTheme();
+	const {theme} = useTheme();
 
 	const styles = StyleSheet.create({
 		container :{

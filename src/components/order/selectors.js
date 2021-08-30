@@ -60,7 +60,7 @@ export const NotionalSelector = ({isNotional, onSelect}) => {
 
 
 const useStyles = () => {
-	const theme = useTheme();
+	const {theme} = useTheme();
 
 	const styles = StyleSheet.create({
 		quantitySelectContainer: {

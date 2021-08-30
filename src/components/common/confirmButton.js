@@ -8,7 +8,7 @@ import SwipeButton from 'jt-swipe-button';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export const ConfirmButton = ({title, onClick, swipe = false, cancel = false,  ...props}) => {
-	const theme = useTheme();
+	const {theme} = useTheme();
 	const styles = useStyles();
 
 	const proceedIcon = ({size = WP(10), color = theme.success} = {}) => {
@@ -52,7 +52,7 @@ export const ConfirmButton = ({title, onClick, swipe = false, cancel = false,  .
 	
 const useStyles = () => {
 
-	const theme = useTheme();
+	const {theme} = useTheme();
 
 	const styles = StyleSheet.create({
 		buttonContainer: {

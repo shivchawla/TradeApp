@@ -157,7 +157,7 @@ const Portfolio = (props) => {
 				content={<PnLGraph />}  
 				show={true}
 			/>
-			
+
 			{tradingAccount && 
 				<Collapsible 
 					title="ACCOUNT SUMMARY" 
@@ -193,7 +193,7 @@ const Portfolio = (props) => {
 }
 
 const useStyles = () => {
-	const theme = useTheme();
+	const {theme} = useTheme();
 	
 	const styles = StyleSheet.create({
 		portfolioHeader: {

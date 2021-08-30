@@ -122,7 +122,7 @@ export const PnLGraph = (props) => {
 }
 
 const useStyles = () => {
-	const theme = useTheme();
+	const {theme} = useTheme();
 	const styles = StyleSheet.create({
 		outerContainer: {
 			marginTop: HP(5)

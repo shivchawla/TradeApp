@@ -61,7 +61,7 @@ export const AppView = ({scroll = true, footer, hasHeader = true, header, isLoad
 }
 
 const useStyles = () => {
-	const theme = useTheme();
+	const {theme} = useTheme();
 
 	const styles = StyleSheet.create({
 		scrollAppContainer: { 

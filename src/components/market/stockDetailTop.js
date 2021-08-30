@@ -41,7 +41,7 @@ export const StockDetailTop = ({symbol}) => {
 }
 
 const useStyles = () => {
-	const theme = useTheme();
+	const {theme} = useTheme();
 	const styles = StyleSheet.create({
 		stockDetailTopContainer: {
 			flexDirection: 'row',

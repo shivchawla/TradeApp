@@ -1,20 +1,18 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import * as Theme from '../../theme'
+import {useTheme, WP, HP, StyledText, getPnLColor, } from '../../theme'
 
 import {formatPctValue, formatValue} from '../../utils';
 
 export const PnLText = ({value = 0, changeValue = 0, withBracket = true, isPct = true, isNotional = false, ...props}) => {
-	const styles = useStyles();
+	const {theme, styles} = useStyles();
 
-	const valueColor = Theme.getPnLColor(value);
-	const changeValueColor = Theme.getPnLColor(changeValue);
+	const valueColor = getPnLColor(value);
+	const changeValueColor = getPnLColor(changeValue);
 
 	const formattedValue = (isNotional ? 'USD ': '') + formatValue(value);
 	const formatChangeValue = (withBracket ? "(" : "") + (isPct ? formatPctValue(changeValue) : formatValue(value)) +  (withBracket ? ")" : "");
 	
-	const StyledText = Theme.StyledText;
-
 	const textAlign = props?.valueStyle?.textAlign;
 	const justifyContent = textAlign == 'right' ? 'flex-end' : textAlign == 'center' ? 'center' : 'flex-start'; 
 
@@ -28,7 +26,7 @@ export const PnLText = ({value = 0, changeValue = 0, withBracket = true, isPct =
 
 
 const useStyles = () => {
-	const theme = Theme.useTheme();
+	const {theme} = useTheme();
 
 	const styles = StyleSheet.create({
 		pnlTextContainer: {
@@ -36,5 +34,5 @@ const useStyles = () => {
 		},
 	});
 
-	return styles;
+	return {theme, styles};
 }

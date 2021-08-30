@@ -6,7 +6,6 @@ import { DisplayOrder } from '../order';
 import { ShowJson } from '../common';
 import { useTheme, WP, HP } from '../../theme';
 
-
 export const DisplayActivity = ({activity}) => {
 	const {theme, styles} = useStyles();
 	const activityType =  activity?.activity_type;
@@ -36,7 +35,7 @@ export const DisplayActivityList = ({activityList, ...props}) => {
 }
 
 const useStyles = () => {
-	const theme = useTheme();
+	const {theme} = useTheme();
 
 	const styles = StyleSheet.create({
 		activityList: {

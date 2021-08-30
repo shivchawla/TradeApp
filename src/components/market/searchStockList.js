@@ -55,7 +55,7 @@ const useStockSearch = () => {
 }
 
 const SearchStockBasic = ({renderItem}) => {
-	const theme = useTheme();
+	const {theme} = useTheme();
 	const styles = useStyles();
 
 	const {stocks, setKeyword} = useStockSearch()
@@ -78,7 +78,7 @@ const SearchStockBasic = ({renderItem}) => {
 } 
 
 export const SearchStockList = ({onPressToOrder = false}) => {
-	const theme = useTheme();
+	const {theme} = useTheme();
 	const styles = useStyles();
 
 	const navigation = useNavigation();
@@ -107,7 +107,7 @@ export const SearchStockList = ({onPressToOrder = false}) => {
 
 
 export const SearchStockWatchlist = React.forwardRef(({initialStocks, onSave}, ref) => {
-	const theme = useTheme();
+	const {theme} = useTheme();
 	const styles = useStyles();
 
 	const [selectedStocks, setSelected] = useState(initialStocks ?? []);
@@ -173,7 +173,7 @@ export const SearchStockWatchlist = React.forwardRef(({initialStocks, onSave}, r
 })
 
 const useStyles = () => {
-	const theme = useTheme();
+	const {theme} = useTheme();
 
 	const styles = StyleSheet.create({
 		listContainer: {

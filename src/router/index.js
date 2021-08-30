@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, {useState} from 'react';
-import {useColorScheme, TouchableOpacity, View, Text} from 'react-native';
+import { TouchableOpacity, View, Text } from 'react-native';
 import { enableScreens } from 'react-native-screens';
 import { NavigationContainer, DarkTheme, DefaultTheme } from '@react-navigation/native';
 import { createStackNavigator} from '@react-navigation/stack';
@@ -33,7 +33,7 @@ const Tabs = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 const homeTabs = () => {
-		const theme = useTheme();
+		const {theme} = useTheme();
 		const tabBarOptions = {
 			showLabel: false, 
 			activeTintColor:theme.tabTint, 

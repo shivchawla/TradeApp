@@ -18,7 +18,7 @@ const deviceHeight =
 export const Picker = ({items, selectedValue, onSelect}) => {
 	const [show, setShow] = useState(false);
 	const styles = useStyles();
-	const theme = useTheme();
+	const {theme} = useTheme();
 
 	return (
 		<>{
@@ -57,7 +57,7 @@ export const Picker = ({items, selectedValue, onSelect}) => {
 export const BottomPicker = ({items, selectedValue, onSelect}) => {
 	const [show, setShow] = useState(false);
 	const styles = useStyles();
-	const theme = useTheme();
+	const {theme} = useTheme();
 
 	return (
 		<>
@@ -103,7 +103,7 @@ export const BottomPicker = ({items, selectedValue, onSelect}) => {
 
 export const TextInputWithIcon = ({value, onChange, ...props}) => {
 	const styles = useStyles();
-	const theme = useTheme();
+	const {theme} = useTheme();
 
 	const [edit, setEdit] = useState(false);
 
@@ -165,7 +165,7 @@ export const HorizontalInputField = ({label, value, onChange, ...props}) => {
 
 
 const useStyles = () => {
-	const theme = useTheme();
+	const {theme} = useTheme();
 
 	const styles = StyleSheet.create({
 		pickerContainer: {

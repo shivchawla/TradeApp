@@ -40,7 +40,7 @@ export const SingleStock = ({symbol, onClick, detail = false}) => {
 }
 
 const useStyles = () => {
-	const theme = useTheme();
+	const {theme} = useTheme();
 
 	const styles = StyleSheet.create({
 		singleStockRow: {

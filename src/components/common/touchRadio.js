@@ -6,7 +6,7 @@ import { StyledText, useTheme, WP } from '../../theme';
 
 
 export const TouchRadio = ({selected, onToggle}) => {
-	const theme = useTheme();
+	const {theme} = useTheme();
 	return (
 		<TouchableOpacity onPress={onToggle} >
 			{selected ?

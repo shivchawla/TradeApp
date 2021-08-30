@@ -69,7 +69,7 @@ export const PortfolioDisplay = ({portfolio, orders = []}) => {
 
 
 const useStyles = () => {
-	const theme = useTheme();
+	const {theme} = useTheme();
 	
 	const styles = StyleSheet.create({
 		portfolioDisplayContainer: {

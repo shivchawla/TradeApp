@@ -99,7 +99,7 @@ export const LineChart = ({data, size, style, hasTooltip = false, base = null, b
 }
 
 const useStyles = () => {
-	const theme = useTheme();
+	const {theme} = useTheme();
 
 	const styles = StyleSheet.create({
 		chartContainer: {

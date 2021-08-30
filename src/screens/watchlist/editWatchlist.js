@@ -15,7 +15,7 @@ import { diffArray, removeArray, deviceWidth, deviceHeight } from '../../utils'
 
 
 const WatchlistItem = ({stock, onSelectionChanged, onDrag}) => {
-	const theme = useTheme();
+	const {theme} = useTheme();
 	const styles = useStyles();
 	const [selected, setSelect] = useState(null);
 
@@ -38,7 +38,7 @@ const WatchlistItem = ({stock, onSelectionChanged, onDrag}) => {
 
 const EditWatchlist = (props) => {
 	const styles = useStyles();
-	const theme = useTheme();
+	const {theme} = useTheme();
 	  
 	const {watchlistId} = props.route.params;
 	const {watchlist, getWatchlist} = useWatchlist(watchlistId);
@@ -188,7 +188,7 @@ const EditWatchlist = (props) => {
 }
 
 const useStyles = () => {
-	const theme = useTheme();
+	const {theme} = useTheme();
 
 	const styles = StyleSheet.create({
 		draggableList: {

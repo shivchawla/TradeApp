@@ -9,7 +9,7 @@ const {useTheme, WP, StyledText} = Theme;
 
 export const HorizontalScrollMenu = ({items, isPadded = true, scroll = true, ...props }) => {
 	const styles = useStyles();
-	const theme = useTheme();
+	const {theme} = useTheme();
 	
 	const [selectedIndex, setIndex] = useState(0);
 
@@ -45,7 +45,7 @@ export const HorizontalScrollMenu = ({items, isPadded = true, scroll = true, ...
 
 
 const useStyles = () => {
-	const theme = useTheme();
+	const {theme} = useTheme();
 	
 	const styles = StyleSheet.create({
 		container: {

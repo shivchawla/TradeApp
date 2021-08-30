@@ -36,7 +36,7 @@ export const StockName = ({symbol, stock, ...props}) => {
 }
 
 const useStyles = () => {
-	const theme = useTheme();
+	const {theme} = useTheme();
 
 	const styles = StyleSheet.create({
 		stockName: {

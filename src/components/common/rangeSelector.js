@@ -22,7 +22,7 @@ export const RangeSelector = ({items, onSelect, selectedIndex}) => {
 }
 
 const useStyles = () => {
-	const theme = useTheme();
+	const {theme} = useTheme();
 
 	const styles = StyleSheet.create({
 		rangeSelector: {

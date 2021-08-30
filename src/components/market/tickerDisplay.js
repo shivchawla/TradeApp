@@ -7,7 +7,7 @@ import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
 import { useFocusEffect } from '@react-navigation/native';
 
 const PriceChange = ({price, changeValue, changePct, ...props}) => {
-	const theme = useTheme();
+	const {theme} = useTheme();
 	const getColor = (chg) => {
 		return chg > 0 ? theme.green : theme.red;
 	}
@@ -54,7 +54,7 @@ export const TickerDisplay = ({symbol, ...props}) => {
 }
 
 const useStyles = () => {
-	const theme = useTheme();
+	const {theme} = useTheme();
 
 	const styles = StyleSheet.create({
 		price: {

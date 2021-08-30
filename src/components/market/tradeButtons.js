@@ -26,7 +26,7 @@ export const TradeButtons = ({ticker, onBuy, onSell, ...props}) => {
 
 const useStyles = () => {
 
-	const theme = useTheme();
+	const {theme} = useTheme();
 	
 	const styles = StyleSheet.create({
 		buttonContainer: {

@@ -96,7 +96,7 @@ export const StockMarketData = ({symbol}) => {
 
 const useStyles = () => {
 	
-	const theme = useTheme();
+	const {theme} = useTheme();
 
 	const styles = StyleSheet.create({
 		marketDataContainer: {

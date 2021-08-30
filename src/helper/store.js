@@ -77,3 +77,12 @@ export const getWatchlistOrder = async() => {
 export const setWatchlistOrder = async(watchlists) => {
   return await setStorageData("watchlistOrder", JSON.stringify(watchlists));
 }
+
+
+export const setCurrentTheme = async(theme) => {
+  return await setStorageData("theme", JSON.stringify(theme));
+}
+
+export const getCurrentTheme = async() => {
+  return await getStorageData("theme");
+}

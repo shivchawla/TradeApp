@@ -8,9 +8,10 @@ export { LineChart } from './linechart';
 export { HorizontalScrollMenu } from './horizontalScrollMenu';
 export { VerticalField } from './verticalField';
 
-export { GobackIcon, AccountIcon, SearchIcon, 
+export { Icon, IconButton, IconTextButton, GobackIcon, AccountIcon, SearchIcon, 
 	FavoriteIcon, EditIcon, AddIcon,
-	DeleteIcon, CloseIcon, CalendarIcon, ShowHideButton} from './iconButtons';
+	DeleteIcon, CloseIcon, CalendarIcon, 
+	ShowHideButton, ToggleThemeButton } from './iconButtons';
 
 export { TinyTextButton } from './tinyTextButton';
 

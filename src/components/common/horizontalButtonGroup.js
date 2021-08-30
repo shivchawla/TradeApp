@@ -36,7 +36,7 @@ export const HorizontalButtonGroup = ({items, onSelect, initialValue, scroll = f
 
 
 const useStyles = () => {
-	const theme = useTheme();
+	const {theme} = useTheme();
 
 	const styles = StyleSheet.create({
 		buttonGroupContainer: {

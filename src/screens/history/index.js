@@ -172,7 +172,7 @@ const History = (props) => {
 }
 
 const useStyles = () => {
-	const theme = useTheme();
+	const {theme} = useTheme();
 
 	const styles = StyleSheet.create({
 		modalContent:{

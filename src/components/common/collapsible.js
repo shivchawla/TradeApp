@@ -36,7 +36,7 @@ export const Collapsible = ({title, content, summary = null, summaryInline = fal
 }
 
 const useStyles = () => {
-	const theme = useTheme();
+	const {theme} = useTheme();
 
 	const styles = StyleSheet.create({
 		headerContainer: {

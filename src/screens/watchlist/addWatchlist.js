@@ -10,7 +10,7 @@ import { useCreateWatchlist } from '../../helper';
 const AddWatchlist = (props) => {
 
 	const styles = useStyles(); 
-	const theme = useTheme();
+	const {theme} = useTheme();
 
 	const {watchlists} = props.route.params;
 	const [name, setName] = useState("");
@@ -60,7 +60,7 @@ const AddWatchlist = (props) => {
 }
 
 const useStyles = () => {
-	const theme = useTheme();
+	const {theme} = useTheme();
 
 	const styles = StyleSheet.create({
 		nameContainer: {
