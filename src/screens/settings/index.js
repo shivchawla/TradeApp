@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, TouchableOpacity, StyleSheet, Share, Platform} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import { AppView, IconTextButton, ToggleThemeButton, Icon } from '../../components/common';
@@ -76,9 +76,26 @@ const BottomSetting = ({title, onPress, ...props}) => {
 const BottomSectionSettings = () => {
 	const {theme, styles} = useStyles();
 
+	const shareApp = async() => {
+
+		const shareObj = {
+	        message: 'Fincript | Start Investing',
+	        ...Platform.OS === 'ios' &&  {url:'https://play.google.com/store/apps/details?id=com.mejspc.app'},
+	        ...Platform.OS === 'android' &&  {title:'https://play.google.com/store/apps/details?id=com.mejspc.app'},
+
+	      };
+
+	      console.log(shareObj);
+		try {
+	      const result = await Share.share(shareObj);
+	    } catch (error) {
+	      console.log("Error while shring app: ", error);
+	    }
+	}
+
 	return (
 		<View style={styles.bottomSettingsContainer}>
-			<BottomSetting title="Share the App" onPress={""} />
+			<BottomSetting title="Share the App" onPress={shareApp} />
 			<BottomSetting title="About Us" onPress={""} />
 		</View>
 	)

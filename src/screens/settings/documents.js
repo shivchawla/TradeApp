@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import { TouchableOpacity, StyleSheet, View, Image, PermissionsAndroid } from "react-native";
 import { useTranslation } from 'react-i18next';
 import * as RNFS from 'react-native-fs';
-import ReactNativeBlobUtil from 'react-native-blob-util'
 
 import { AppView, CalendarIcon, 
 	DatePickerModal, ShowJson, DownloadIcon } from '../../components/common';
