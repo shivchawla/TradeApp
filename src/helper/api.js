@@ -3,6 +3,10 @@ import axios from 'axios';
 import { Base64 } from 'js-base64';
 import {processBars, processSnapshot} from './process'
 
+import * as RNFS from 'react-native-fs';
+import ReactNativeBlobUtil from 'react-native-blob-util'
+
+
 //Get account ID from temporary storage (after successful login)
 const account_id = '9703c0b1-67bf-492d-aeff-95c108299188';
 
@@ -171,3 +175,46 @@ export const getSeekingAlphaNews = async (symbol) => {
 	console.log(`${newsApiUrl}/${symbol}/news`)
 	return await axios.get(`${newsApiUrl}/${symbol}/news`).then(r => r.data);
 }
+
+export const getDocuments = async ({start, end, type} = {}) => {
+		
+	console.log("Get Documents - API");	
+	const params = {...start && {start}, ...end && {end}, ...type && {type}};
+	console.log(params);
+
+	return await axios.get(`/v1/accounts/${account_id}/documents`, {params}).then(r => r.data);
+}
+
+// export const getDocument = async (document_id) => {
+// 	console.log("Get Document: ", document_id);	
+// 	return await axios.get(`/v1/accounts/${account_id}/documents/${document_id}/download`, {responseType: 'blob'}).then(r => r.data);
+// }
+
+
+export const getDocument = async (document_id, fileName) => {
+	ReactNativeBlobUtil
+	.config({
+  		// response data will be saved to this path if it has access right.
+  		path : fileName
+	})
+	.fetch('GET', `${apiUrl}/v1/accounts/${account_id}/documents/${document_id}/download`, {
+		'Authorization': `Basic ${Base64.encode(apiKey + ":" + apiSecret)}`
+	})
+	.then(res => {
+    	// the temp file path with file extension `png`
+    	console.log('The file saved to ', res.path())
+	})
+}
+
+
+// export const getDocument = async (document_id, fileName) => {
+// 	console.log("Get Document: ", document_id);	
+// 	// return await (`/v1/accounts/${account_id}/documents/${document_id}/download`).then(r => r.data);
+// 	// common['Authorization'] = `Basic ${Base64.encode(apiKey + ":" + apiSecret)}`;
+
+// 	return await RNFS.downloadFile({
+// 		fromUrl: `${apiUrl}/v1/accounts/${account_id}/documents/${document_id}/download`, 
+// 		toFile: fileName,
+// 		headers: {'Authorization': `Basic ${Base64.encode(apiKey + ":" + apiSecret)}`}
+// 	}).promise
+// }

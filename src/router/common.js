@@ -19,7 +19,7 @@ import EditWatchlist from '../screens/watchlist/editWatchlist';
 import History from '../screens/history';
 
 import SelectLanguage from '../screens/settings/language';
-//Where to show canceled orders?
+import TradeConfirmation from '../screens/settings/tradeConfirmation';
 
 const innerScreens = (Stack) => {
   return [
@@ -41,6 +41,7 @@ const innerScreens = (Stack) => {
       <Stack.Screen key="History" name="History" component={History} />,
 
       <Stack.Screen key="SelectLanguage" name="SelectLanguage" component={SelectLanguage} />,
+      <Stack.Screen key="TradeConfirmation" name="TradeConfirmation" component={TradeConfirmation} />,
   
   ];
 };

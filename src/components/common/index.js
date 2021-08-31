@@ -11,14 +11,15 @@ export { VerticalField } from './verticalField';
 export { Icon, IconButton, IconTextButton, GobackIcon, AccountIcon, SearchIcon, 
 	FavoriteIcon, EditIcon, AddIcon,
 	DeleteIcon, CloseIcon, CalendarIcon, 
-	ShowHideButton, ToggleThemeButton } from './iconButtons';
+	ShowHideButton, ToggleThemeButton, DownloadIcon } from './iconButtons';
 
 export { TinyTextButton } from './tinyTextButton';
 
 export { TouchRadio} from './touchRadio';
 export { CustomTabBar } from './customTabBar';
 export { FullViewModal } from './fullViewModal';
-export { DateRangePicker } from './dateRangePicker'
+export { DateRangePicker } from './dateRangePicker';
+export { DatePickerModal } from './datePickerModal';
 export { HorizontalButtonGroup } from './horizontalButtonGroup';
 export { Collapsible } from './collapsible';
 export { Clickable, ClickableView } from './clickableContainer';

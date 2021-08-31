@@ -12,6 +12,10 @@ target 'TradeApp' do
     :hermes_enabled => false
   )
 
+  pod 'RNFS', :path => '../node_modules/react-native-fs'
+
+  pod 'react-native-blob-util', :path => '../node_modules/react-native-blob-util'
+
   target 'TradeAppTests' do
     inherit! :complete
     # Pods for testing

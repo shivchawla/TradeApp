@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import { ScrollView, View, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 
-import { AppView, CalendarIcon, FullViewModal, 
-	DateRangePicker, VerticalField, ConfirmButton, HorizontalButtonGroup } from '../../components/common';
+import { AppView, CalendarIcon, 
+	DatePickerModal, HorizontalButtonGroup } from '../../components/common';
 
 import { DisplayActivityList } from '../../components/activity';
 
@@ -42,7 +42,7 @@ const HorizontalPeriodSelection = ({onSelect}) => {
 	/>
 }
 
-const ZeroActivityCount = ({start, end}) => {
+const ZeroActivityCount = () => {
 	const {styles} = useStyles();
 	return (
 		<View style={styles.noActivityContainer}>
@@ -51,8 +51,10 @@ const ZeroActivityCount = ({start, end}) => {
 	) 
 }
 
-const ShowHistory = ({field, start, end}) => {
+const ShowHistory = ({field, range}) => {
 	const {theme, styles} = useStyles();
+
+	const [start, end] = range;
 
 	const {accountActivity, getAccountActivity } = useAccountActivity({activity_type: field, after: start, until: end}, {enabled: field != 'all'})
 	
@@ -93,7 +95,7 @@ const ShowHistory = ({field, start, end}) => {
 					activitList={allActivities}
 				/>
 				: 
-				<ZeroActivityCount {...{start, end}}/>
+				<ZeroActivityCount />
 			}
 
 
@@ -104,12 +106,10 @@ const ShowHistory = ({field, start, end}) => {
 const History = (props) => {
 	const [isModalVisible, setModalVisible] = useState(false);
 
-	//USE LATEST TRADING DATE
-	// const currentDate
-	const [start, setStart] = useState('');
-	const [end, setEnd] = useState('');
-
+	const [range, setRange] = useState(null);
 	const [field, setField] = useState(null);
+
+	//Period needs to in  form of range tooo... avoid extra state variable
 	const [period, setPeriod] = useState(null)
 
 	const {theme, styles} = useStyles();
@@ -130,43 +130,14 @@ const History = (props) => {
 			<HorizontalFieldSelection onSelect={handleFieldSelection} />
 			<HorizontalPeriodSelection onSelect={handlePeriodSelection} />
 
-			<ShowHistory {...{field, start, end}} />
+			<ShowHistory {...{field, range}} />
 
-			<FullViewModal 
-				isVisible={isModalVisible} 
-				onClose={() => setModalVisible(false)} 
-				title="Select Range">
-				<View style={styles.modalContent}>
-					<View style={styles.displayContainer}>
-						<VerticalField label="START" value={start} containerStyle={{alignItems: 'flex-start', paddingLeft: WP(5)}}/>
-						<VerticalField label="END" value={end} containerStyle={{alignItems: 'flex-end', paddingRight: WP(5)}}/>
-					</View>
-					<View style={styles.calendarContainer}>
-						<DateRangePicker
-						  initialRange={[start, end]}	
-						  maxDate={currentISODate('YYYY-MM-DD')}	
-				          onSuccess={(s, e) => {setStart(s); setEnd(e);}}
-				          style={styles.calendar}
-				          theme={{ 
-				          	calendarBackground: theme.background, 
-				          	markColor: theme.backArrow, 
-				          	markTextColor: theme.selectedColor,
-			          		arrowColor: theme.icon,
-			          		monthTextColor: theme.shadedText,
-			          		textDisabledColor: theme.text,
-			      		    dayTextColor: theme.shadedText,
-			          	}}
-			          	/>
-		          	</View>
+			<DatePickerModal 
+				isVisible={isModalVisible}
+				onClose={() => setModalVisible(false)}
+				onSelectRange={(s,e) => setRange([s,e])}
+			/>
 
-		          	{(!!start && !!end) && <ConfirmButton 
-		          		onClick={() => setModalVisible(false)} 
-		          		title="DONE" 
-		          		buttonContainerStyle={{position: 'absolute', bottom:5}}
-		          		buttonStyle={{width: '90%'}}/>
-	          		}
-	          	</View>
-			</FullViewModal>
 		</AppView>
 	);
 }
@@ -175,21 +146,6 @@ const useStyles = () => {
 	const {theme} = useTheme();
 
 	const styles = StyleSheet.create({
-		modalContent:{
-			marginTop: HP(10),
-		},
-		displayContainer: {
-			width: '100%', 
-			flexDirection: 'row', 
-			justifyContent: 'space-between'
-		},
-		calendarContainer: {
-			flex:1,
-			justifyContent: 'center'
-		},
-		calendar: {
-			width: WP(95),
-		},
 		buttonGroupContainer: {
 			flexDirection: 'row',
 			marginTop: WP(3),

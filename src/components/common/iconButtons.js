@@ -95,6 +95,12 @@ export const DeleteIcon = ({onPress, ...props}) => {
 	)
 } 
 
+export const DownloadIcon = ({onPress, ...props}) => {
+	return (
+		<IconButton {...props} iconName="download-outline" onPress={onPress} />
+	)
+} 
+
 export const ShowHideButton = ({showDetail, onToggle, ...props}) => {
 	return(
 		<IconButton opacity={1.0} {...props} iconName={showDetail ? "chevron-up" : "chevron-down"} onPress={onToggle} />

@@ -41,3 +41,5 @@ export {useAllWatchlist, useWatchlist, useCreateWatchlist,
 	useDeleteWatchlist, useUpdateWatchlist} from './watchlist';
 
 export { useAppStartup } from './app';
+
+export { useDocuments, useDownloadDocument } from './document'

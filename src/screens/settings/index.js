@@ -6,7 +6,6 @@ import { AppView, IconTextButton, ToggleThemeButton, Icon } from '../../componen
 import { useTheme, WP, HP, StyledText } from '../../theme';
 import { useTranslation } from 'react-i18next';
 
-
 const TopSetting = ({iconName, title, onPress, ...props}) => {
 	const {theme, styles} = useStyles();
 	return <IconTextButton {...{iconName, title, onPress}} containerStyle={styles.topSetting} textStyle={styles.topSettingTitle}/>
@@ -14,6 +13,7 @@ const TopSetting = ({iconName, title, onPress, ...props}) => {
 
 const TopSectionSettings = () => {
 	const {theme, styles} = useStyles();
+	const navigation = useNavigation();
 
 	return (
 		<View style={styles.topSettingsContainer}>
@@ -21,7 +21,7 @@ const TopSectionSettings = () => {
 			<TopSetting iconName="umbrella-outline" title="Withdraw Funds" onPress={""} />
 			<TopSetting iconName="ios-albums-outline" title="Deposit History" onPress={""} />
 			<TopSetting iconName="ios-arrow-redo-circle-outline" title="Trade Permissions" onPress={""} />
-			<TopSetting iconName="ios-boat-outline" title="Trade Reports" onPress={""} />
+			<TopSetting iconName="ios-boat-outline" title="Trade Reports" onPress={() => navigation.navigate('TradeConfirmation')} />
 			<TopSetting iconName="ios-cellular-outline" title="Activity Statements" onPress={""} />
 		</View>	
 
