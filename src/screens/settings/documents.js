@@ -16,21 +16,20 @@ const ZeroDocumentCount = () => {
 	)
 }
 
-const ShowDocument = ({document}) => {
+const ShowDocument = ({document, type}) => {
 	const {styles} = useStyles();
 
-	const fName = `Trade-Confirmation-${document.date}`;
-	console.log(fName);
+	const fName = type == 'trade_confirmation' ? 
+		`Trade-Confirmation-${document.date}`
+		: `Account-Statement-${document.date}`;
+
 	const directoryFileName = RNFS.DownloadDirectoryPath + '/' + fName + '.pdf'; 
 
-	const {getDocumentLink} = useDownloadDocument(
+	const {downloadDocument} = useDownloadDocument(
 			{id:document?.id, fileName:directoryFileName} , 
 			{enabled: false});
 
-	const downloadDocument = () => {
-		getDocumentLink();
-	}
-
+	
 	// const downloadDocument = async () => {
 	// 	const granted = await PermissionsAndroid.request(
 	// 		PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
@@ -68,11 +67,11 @@ const ShowDocument = ({document}) => {
 	)	
 }
 
-const ShowDocumentList = ({start, end}) => {
+const ShowDocumentList = ({start, end, type}) => {
 	console.log("ShowDocumentList");
 	const {styles} = useStyles();
 
-	const {documents} = useDocuments({start, end, type: 'trade_confirmation'});
+	const {documents} = useDocuments({start, end, type});
 	
 	return (
 		<>
@@ -80,7 +79,7 @@ const ShowDocumentList = ({start, end}) => {
 			<View style={styles.documentList}>
 				{documents && documents.reverse().map((item, index) => {
 					return (
-						<ShowDocument key={`document-${index}`} document={item} />
+						<ShowDocument key={`document-${index}`} document={item} {...{type}}/>
 					)	
 				})}
 			</View>
@@ -91,17 +90,20 @@ const ShowDocumentList = ({start, end}) => {
 	)
 }
 
-const TradeConfirmation = (props) => {
+const DownloadDocument = (props) => {
+
+	const {type} = props.route.params;
 
 	const [isModalVisible, setModalVisible] = useState(false);
 	const [range, setRange] = useState([NMonthsAgoISODate(1, "YYYY-MM-DD"), currentISODate("YYYY-MM-DD")]);
 	const [start, end] = range;
 
-	
+	const heading  = type == 'trade_confirmation' ? "Trade Confirmations" : "Account Statements";
+
 	return (
-		<AppView title="Trade Confirmations" headerRight={<CalendarIcon onPress={() => setModalVisible(true)} />} >
+		<AppView title={heading} headerRight={<CalendarIcon onPress={() => setModalVisible(true)} />} >
 			
-			<ShowDocumentList {...{start, end}} />
+			<ShowDocumentList {...{start, end, type}} />
 
 			<DatePickerModal 
 				isVisible={isModalVisible}
@@ -133,4 +135,5 @@ const useStyles = () => {
 }
 
 
-export default TradeConfirmation;
+export default DownloadDocument;
+

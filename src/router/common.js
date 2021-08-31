@@ -19,7 +19,7 @@ import EditWatchlist from '../screens/watchlist/editWatchlist';
 import History from '../screens/history';
 
 import SelectLanguage from '../screens/settings/language';
-import TradeConfirmation from '../screens/settings/tradeConfirmation';
+import DownloadDocument from '../screens/settings/documents';
 
 const innerScreens = (Stack) => {
   return [
@@ -41,7 +41,7 @@ const innerScreens = (Stack) => {
       <Stack.Screen key="History" name="History" component={History} />,
 
       <Stack.Screen key="SelectLanguage" name="SelectLanguage" component={SelectLanguage} />,
-      <Stack.Screen key="TradeConfirmation" name="TradeConfirmation" component={TradeConfirmation} />,
+      <Stack.Screen key="DownloadDocument" name="DownloadDocument" component={DownloadDocument} />,
   
   ];
 };

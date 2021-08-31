@@ -21,8 +21,8 @@ const TopSectionSettings = () => {
 			<TopSetting iconName="umbrella-outline" title="Withdraw Funds" onPress={""} />
 			<TopSetting iconName="ios-albums-outline" title="Deposit History" onPress={""} />
 			<TopSetting iconName="ios-arrow-redo-circle-outline" title="Trade Permissions" onPress={""} />
-			<TopSetting iconName="ios-boat-outline" title="Trade Reports" onPress={() => navigation.navigate('TradeConfirmation')} />
-			<TopSetting iconName="ios-cellular-outline" title="Activity Statements" onPress={""} />
+			<TopSetting iconName="ios-boat-outline" title="Trade Reports" onPress={() => navigation.navigate('DownloadDocument', {type: 'trade_confirmation'})} />
+			<TopSetting iconName="ios-cellular-outline" title="Account Statement" onPress={() => navigation.navigate('DownloadDocument', {type: 'account_statement'})} />
 		</View>	
 
 	)

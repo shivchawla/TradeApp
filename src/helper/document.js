@@ -24,11 +24,11 @@ export const useDocuments = ({start = yearStartISODate("YYYY-MM-DD"), end = curr
 
 
 export const useDownloadDocument = ({id, fileName}, params = {}) => {
-	const {isLoading, error, isError, data: documentLink, refetch} = useQuery(['downloadDocument', id], () => getDocument(id, fileName), params)
+	const {isLoading, error, isError, data: document, refetch} = useQuery(['downloadDocument', id], () => getDocument(id, fileName), params)
 	if (isError) {
 		console.log("Error [useDownloadDocument]: ", error);
 	}
 
-	return {documentLink, getDocumentLink: () => refetch().then(r => {console.log(r.data); return r.data})};
+	return {document, downloadDocument: () => refetch().then(r => {console.log(r.data); return r.data})};
 }
 
