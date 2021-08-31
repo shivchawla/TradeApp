@@ -20,6 +20,8 @@ import History from '../screens/history';
 
 import SelectLanguage from '../screens/settings/language';
 import DownloadDocument from '../screens/settings/documents';
+import UserSettings from '../screens/settings/user';
+
 
 const innerScreens = (Stack) => {
   return [
@@ -42,6 +44,7 @@ const innerScreens = (Stack) => {
 
       <Stack.Screen key="SelectLanguage" name="SelectLanguage" component={SelectLanguage} />,
       <Stack.Screen key="DownloadDocument" name="DownloadDocument" component={DownloadDocument} />,
+      <Stack.Screen key="UserSettings" name="UserSettings" component={UserSettings} />,
   
   ];
 };

@@ -3,6 +3,8 @@ import {View, TouchableOpacity, StyleSheet, Share, Platform} from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 
 import { AppView, IconTextButton, ToggleThemeButton, Icon } from '../../components/common';
+import { HorizontalSetting } from '../../components/settings';
+
 import { useTheme, WP, HP, StyledText } from '../../theme';
 import { useTranslation } from 'react-i18next';
 
@@ -28,23 +30,6 @@ const TopSectionSettings = () => {
 	)
 }
 
-const MiddleSetting = ({title, value, onPress, hasIcon = true, leftIcon, ...props}) => {
-	const {theme, styles} = useStyles();
-
-	return (
-		<TouchableOpacity activeOpacity={0.8} onPress={onPress} style={styles.middleSetting}>
-			<View style={{flexDirection: 'row', alignItems: 'center'}}>
-				{leftIcon && <Icon iconName={leftIcon} iconSize={WP(4)} iconColor={theme.grey2}/>}
-				<StyledText style={[styles.middleSettingTitle, {...leftIcon && {marginLeft: WP(2)}}]}>{title}</StyledText>
-			</View>
-			<View style={{flexDirection: 'row', alignItems: 'center'}}>
-				{value && <StyledText style={styles.middleSettingValue}>{value}</StyledText> }
-				{hasIcon && <Icon iconName="chevron-forward" iconSize={WP(4)} iconColor={theme.grey2} />}
-			</View>
-		</TouchableOpacity>
-	)
-}
-
 const MiddleSectionSettings = () => {
 	const {theme, styles} = useStyles();
 	const navigation = useNavigation();
@@ -54,10 +39,10 @@ const MiddleSectionSettings = () => {
 
 	return (
 		<View style={styles.middleSettingsContainer}>
-			<MiddleSetting title="NOTIFICATIONS" leftIcon="notifications-outline" onPress={""} />
-			<MiddleSetting title="USER" leftIcon="person-outline" onPress={""} />
-			<MiddleSetting title="HELP" leftIcon="help-circle-outline" onPress={""} />
-			<MiddleSetting title="LANGUAGE" leftIcon="language" value={currentLanguage} onPress={() => navigation.navigate("SelectLanguage")} />
+			<HorizontalSetting title="NOTIFICATIONS" leftIcon="notifications-outline" onPress={""} />
+			<HorizontalSetting title="USER" leftIcon="person-outline" onPress={() => navigation.navigate("UserSettings")} />
+			<HorizontalSetting title="HELP" leftIcon="help-circle-outline" onPress={""} />
+			<HorizontalSetting title="LANGUAGE" leftIcon="language" value={currentLanguage} onPress={() => navigation.navigate("SelectLanguage")} />
 		</View>
 	)
 }
@@ -155,22 +140,6 @@ const useStyles = () => {
 
 		middleSettingsContainer: {
 			marginTop: HP(5)
-		},
-
-		middleSetting: {
-			flexDirection: 'row',
-			justifyContent: 'space-between',
-			marginBottom: HP(3)
-		},
-
-		middleSettingTitle: {
-			color: theme.grey2
-		},
-
-		middleSettingValue: {
-			marginRight: WP(2),
-			fontSize: WP(3.5),
-			color: theme.grey4
 		},
 
 		bottomSettingsContainer: {
