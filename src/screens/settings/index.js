@@ -99,7 +99,7 @@ const Settings = (props) => {
 	}
 	
 	return (
-		<AppView title="Settings" headerRight={<ToggleThemeButton dark={theme.name == 'dark'} onToggle={onToggleTheme} />}>
+		<AppView scroll={false} title="Settings" headerRight={<ToggleThemeButton dark={theme.name == 'dark'} onToggle={onToggleTheme} />}>
 			<TopSectionSettings />
 			<MiddleSectionSettings />
 			<BottomSectionSettings />
@@ -143,12 +143,14 @@ const useStyles = () => {
 		},
 
 		bottomSettingsContainer: {
-			alignItems: 'center',
-			marginTop: HP(15)
+			alignSelf: 'center',
+			position: 'absolute',
+			bottom: 10
 		},
 
 		bottomSetting: {
-			marginBottom: HP(2)
+			marginBottom: HP(2),
+			alignItems: 'center',
 		},
 
 		bottomSettingTitle: {
