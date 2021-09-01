@@ -22,6 +22,8 @@ import SelectLanguage from '../screens/settings/language';
 import DownloadDocument from '../screens/settings/documents';
 import UserSettings from '../screens/settings/user';
 
+import TradeSettings from '../screens/settings/trading';
+
 
 const innerScreens = (Stack) => {
   return [
@@ -45,6 +47,7 @@ const innerScreens = (Stack) => {
       <Stack.Screen key="SelectLanguage" name="SelectLanguage" component={SelectLanguage} />,
       <Stack.Screen key="DownloadDocument" name="DownloadDocument" component={DownloadDocument} />,
       <Stack.Screen key="UserSettings" name="UserSettings" component={UserSettings} />,
+      <Stack.Screen key="TradeSettings" name="TradeSettings" component={TradeSettings} />,
   
   ];
 };

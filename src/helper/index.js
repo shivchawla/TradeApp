@@ -43,3 +43,5 @@ export {useAllWatchlist, useWatchlist, useCreateWatchlist,
 export { useAppStartup } from './app';
 
 export { useDocuments, useDownloadDocument } from './document'
+
+export { useTradeConfig } from './settings';

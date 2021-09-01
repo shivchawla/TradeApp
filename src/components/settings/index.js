@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, View, StyleSheet } from 'react-native';
+import { TouchableOpacity, View, StyleSheet, Switch } from 'react-native';
 
 import {Icon} from '../common';
 
@@ -9,36 +9,49 @@ export const HorizontalSetting = ({title, value, onPress, hasIcon = true, leftIc
 	const {theme, styles} = useStyles();
 
 	return (
-		<TouchableOpacity activeOpacity={0.8} onPress={onPress} style={styles.settingContainer}>
+		<TouchableOpacity activeOpacity={0.8} onPress={onPress} style={styles.horizontalSettingContainer}>
 			<View style={styles.flexContainer}>
 				{leftIcon && <Icon iconName={leftIcon} iconSize={WP(4)} iconColor={theme.grey2}/>}
-				<StyledText style={[styles.settingTitle, {...leftIcon && {marginLeft: WP(2)}}]}>{title}</StyledText>
+				<StyledText style={[styles.horizontalSettingTitle, {...leftIcon && {marginLeft: WP(2)}}]}>{title}</StyledText>
 			</View>
 			<View style={styles.flexContainer}>
-				{value && <StyledText style={styles.settingValue}>{value}</StyledText> }
+				{value && <StyledText style={styles.horizontalSettingValue}>{value}</StyledText> }
 				{hasIcon && <Icon iconName="chevron-forward" iconSize={WP(4)} iconColor={theme.grey2} />}
 			</View>
 		</TouchableOpacity>
 	)
 }
 
+export const SwitchSetting = ({title, description, value, onSwitch}) => {
+	const {theme, styles} = useStyles();
+
+	return ( 
+		<View style={styles.switchSettingContainer}>
+			<View>
+				<StyledText style={styles.switchTitle}>{title}</StyledText>
+				{description && <StyledText style={styles.switchDescription}>{description}</StyledText>}
+			</View>
+			<Switch {...{value}} onValueChange={onSwitch} />
+		</View>
+	)
+}
 
 const useStyles = () => {
 	const {theme} = useTheme();
 
 	const styles = StyleSheet.create({
-		settingContainer: {
+		horizontalSettingContainer: {
 			flexDirection: 'row',
 			justifyContent: 'space-between',
 			marginBottom: HP(4)
 		},
 
-		settingTitle: {
+		horizontalSettingTitle: {
 			color: theme.grey2,
 			fontSize: WP(4),
 		},
 
-		settingValue: {
+		horizontalSettingValue: {
 			marginRight: WP(2),
 			fontSize: WP(3.5),
 			color: theme.grey4
@@ -47,6 +60,23 @@ const useStyles = () => {
 		flexContainer: {
 			flexDirection: 'row', 
 			alignItems: 'center'
+		},
+
+		switchSettingContainer: {
+			flexDirection: 'row', 
+			alignItems: 'center',
+			justifyContent: 'space-between',
+			marginBottom: HP(4)
+		},
+
+		switchTitle: {
+			color: theme.grey2,
+			fontSize: WP(4.2),
+		},
+
+		switchDescription: {
+			color: theme.grey4,
+			fontSize: WP(3.8),
 		}
 
 	});

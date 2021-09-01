@@ -218,3 +218,16 @@ export const getDocument = async (document_id, fileName) => {
 // 		headers: {'Authorization': `Basic ${Base64.encode(apiKey + ":" + apiSecret)}`}
 // 	}).promise
 // }
+
+export const getTradeConfig = async() => {
+	console.log("Get Trade Configuration")
+	return await axios.get(`/v1/trading/accounts/${account_id}/account/configurations`).then(r => r.data);
+}
+
+
+export const updateTradeConfig = async(params) => {
+	console.log("Updating Trade Configuration")
+	console.log(params);
+	return await axios.patch(`/v1/trading/accounts/${account_id}/account/configurations`, params).then(r => r.data);
+}
+
