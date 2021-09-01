@@ -23,7 +23,7 @@ import DownloadDocument from '../screens/settings/documents';
 import UserSettings from '../screens/settings/user';
 
 import TradeSettings from '../screens/settings/trading';
-
+import ChangePassword from '../screens/settings/user/changePassword';
 
 const innerScreens = (Stack) => {
   return [
@@ -46,7 +46,10 @@ const innerScreens = (Stack) => {
 
       <Stack.Screen key="SelectLanguage" name="SelectLanguage" component={SelectLanguage} />,
       <Stack.Screen key="DownloadDocument" name="DownloadDocument" component={DownloadDocument} />,
+      
       <Stack.Screen key="UserSettings" name="UserSettings" component={UserSettings} />,
+      <Stack.Screen key="ChangePassword" name="ChangePassword" component={ChangePassword} />,
+
       <Stack.Screen key="TradeSettings" name="TradeSettings" component={TradeSettings} />,
   
   ];

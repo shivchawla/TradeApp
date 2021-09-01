@@ -174,6 +174,21 @@ const useAuthHelper = () => {
 		await updateAlpacaAccount(null);
 	}
 
+	const changePassword = async({password, newPassword}) => {
+		const currentUser = await getCurrentUser();
+		const email = currenUser?.user?.email;
+		if (!email) {
+			throw new Error("No user found");
+		}
+
+		//Proceed to signIn -- Before changing password, recent signIn is required
+		await signIn(email, password);
+
+		//Now that signIn is complete, update Password
+		await auth().currentUser.updatePassword(newPassword);
+
+	}
+
 	const requestResetPassword = async (email) => {
 		return await auth().sendPasswordResetEmail(email, {handleCodeInApp: true});
 	}
@@ -184,7 +199,7 @@ const useAuthHelper = () => {
 	
 	return {currentUser, userAccount, brokerageAccount, 
 			isErrorUser, isErrorAccount, isErrorBrokerage,  
-			signIn, signUp, signOut, requestResetPassword, resetPassword };
+			signIn, signUp, signOut, requestResetPassword, resetPassword, changePassword };
 }
 
 
