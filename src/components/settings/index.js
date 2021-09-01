@@ -1,7 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, View, StyleSheet, Switch } from 'react-native';
 
-import {Icon} from '../common';
+import { Icon, InfoText } from '../common';
 
 import {useTheme, WP, HP, StyledText} from '../../theme';
 
@@ -22,13 +22,17 @@ export const HorizontalSetting = ({title, value, onPress, hasIcon = true, leftIc
 	)
 }
 
-export const SwitchSetting = ({title, description, value, onSwitch}) => {
+export const SwitchSetting = ({title, description, value, onSwitch, showAlert = false}) => {
 	const {theme, styles} = useStyles();
 
 	return ( 
 		<View style={styles.switchSettingContainer}>
 			<View>
-				<StyledText style={styles.switchTitle}>{title}</StyledText>
+				{showAlert ?
+					<InfoText text={title} info={description} textStyle={styles.switchTitle}/>
+					: 
+					<StyledText style={styles.switchTitle}>{title}</StyledText>
+				}
 				{description && <StyledText style={styles.switchDescription}>{description}</StyledText>}
 			</View>
 			<Switch {...{value}} onValueChange={onSwitch} />
