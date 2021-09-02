@@ -28,7 +28,7 @@ const SignInForm = ({ handleChange, handleBlur, handleSubmit, values, errors, to
 
 	return (
 		<View style={styles.formContainer}>
-			<StyledTextInput style={[styles.textInput, styles.emailInput]}
+			<TextInput style={[styles.textInput, styles.emailInput]}
 				type="email"
 				placeholder="Email"
 				placeholderTextColor='black'
@@ -39,7 +39,7 @@ const SignInForm = ({ handleChange, handleBlur, handleSubmit, values, errors, to
 				value={values.email}
 			/>
 			{errors.email && touched.email && <StyledText style={styles.errorText}>{errors.email}</StyledText>}
-			<StyledTextInput style={[styles.textInput, styles.passwordInput]}
+			<TextInput style={[styles.textInput, styles.passwordInput]}
 				type="password"
 				ref={password}
 				placeholder="Password"

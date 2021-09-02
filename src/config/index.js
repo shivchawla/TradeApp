@@ -124,3 +124,23 @@ export const ACCOUNT_SUMMARY_FIELDS = {
   "maintenance_margin": "Maintenance Margin",
 }
 
+
+export const BANK_CURRENCIES = [
+  {key:'USD', title:'US Dollar'}, 
+  {key: 'GTQ', title: 'Guatemalan Quetzal'}
+];
+export const SUPPORTED_BANKS = [{key:'bi', title:'Banco Industrial'}, 
+  {key: 'azteca', title: 'Banco Azteca Guatemala'},
+  {key: 'bac', title: 'BAC Credomatic'},
+  {key: 'bantrab', title: 'Bantrab Bank'},
+  {key: 'banrural', title: 'Banco de Desarrollo Rural'},
+  {key: 'gtcontinental', title: 'Banco G&T Continental'},
+  {key: 'bam', title: 'BAM: Banco Agromercantil de Guatemala'},
+  {key: 'ficohsa', title: 'Ficohsa Bank'}
+];
+  
+export const BANK_ACCOUNT_TYPES = [
+  {key:"saving", title: "Savings Account"},
+  {key:"checking", title: "Checkings Account"}
+];
+

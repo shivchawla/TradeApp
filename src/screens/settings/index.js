@@ -19,7 +19,7 @@ const TopSectionSettings = () => {
 
 	return (
 		<View style={styles.topSettingsContainer}>
-			<TopSetting iconName="shirt-outline" title="Deposit Funds" onPress={""} />
+			<TopSetting iconName="shirt-outline" title="Deposit Funds" onPress={() => navigation.navigate('CreateDeposit')} />
 			<TopSetting iconName="umbrella-outline" title="Withdraw Funds" onPress={""} />
 			<TopSetting iconName="ios-albums-outline" title="Deposit History" onPress={""} />
 			<TopSetting iconName="ios-arrow-redo-circle-outline" title="Trade Settings" onPress={() => navigation.navigate('TradeSettings')} />

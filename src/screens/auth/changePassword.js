@@ -3,10 +3,10 @@ import {View, Text, StyleSheet, TouchableOpacity, TextInput} from 'react-native'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-import {AppView, ConfirmButton} from '../../../components/common';
+import {AppView, ConfirmButton} from '../../components/common';
 
-import { useTheme, StyledText, WP, HP }  from '../../../theme';
-import { useAuth } from '../../../helper';
+import { useTheme, StyledText, WP, HP }  from '../../theme';
+import { useAuth } from '../../helper';
 
 const ChangePasswordSchema = Yup.object().shape({
    password: Yup.string()

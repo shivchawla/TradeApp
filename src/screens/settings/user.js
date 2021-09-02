@@ -3,11 +3,11 @@ import {View, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
-import { AppView, ConfirmButton } from '../../../components/common';
-import { HorizontalSetting } from '../../../components/settings';
+import { AppView, ConfirmButton } from '../../components/common';
+import { HorizontalSetting } from '../../components/settings';
 
-import { useTheme, WP, HP, StyledText } from '../../../theme';
-import { useAuth } from '../../../helper'
+import { useTheme, WP, HP, StyledText } from '../../theme';
+import { useAuth } from '../../helper'
 
 const UserSettings = (props) => {
 	const {theme, styles} = useStyles();
