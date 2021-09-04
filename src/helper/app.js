@@ -11,13 +11,15 @@ import { useAuth } from './';
 export const useAppStartup = () => {
 
     const [isLoading, setLoading] = useState(true);    
-    const {currentUser, userAccount, brokerageAccount, isErrorUser, isErrorAccount, isErrorBrokerage} = useAuth(); 
+    const {currentUser, userAccount, brokerageAccount, isErrorUser, isErrorAccount, isErrorBrokerage, signIn} = useAuth(); 
   
     React.useEffect(() => {
+
       const setupApp = async() => {
 
         console.log("Setting Up App");
-
+        await signIn('shiv.chawla@yandex.com', 'Password');
+     
         await setupTradingDays();
 
         setLoading(false);

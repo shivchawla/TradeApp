@@ -1,190 +1,245 @@
 import React, {useState, useRef} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
+import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
 
-import { AppView, ConfirmButton, BottomPicker, TinyTextButton } from '../../components/common';
+import 'react-native-get-random-values';
+import { nanoid } from 'nanoid';
 
+import RNFS from 'react-native-fs';
+import NetInfo from "@react-native-community/netinfo";
+
+import DocumentPicker from 'react-native-document-picker';
+import CheckBox from '@react-native-community/checkbox';
+
+import { AppView, ConfirmButton, TinyTextButton, IconTextButton } from '../../components/common';
+import { DepositForm } from '../../components/forms';
+import { SUPPORTED_BANKS, BANK_ACCOUNT_TYPES } from '../../config'
 import { useTheme, StyledText, WP, HP }  from '../../theme';
-import { BANK_CURRENCIES, SUPPORTED_BANKS, BANK_ACCOUNT_TYPES} from '../../config';
-
-
-const DepositSchema = Yup.object().shape({
-   name: Yup.string().required('Name is required'),
-   accountNumber: Yup.string().required('Account Number is required'),
-   confirmAccountNumber: Yup.string().oneOf([Yup.ref('accountNumber')], 'Account Number must match').required('Confirm Account Number is required'),
-   accountType: Yup.string(),
-   bankName: Yup.string(),
-   currency: Yup.string(),
-   amount: Yup.number().test('check-amount', '', function(value, {createError, path}) {
-     	const currency = this.parent.currency;
-     	if (!value && value != 0 ) {
-     		return createError({
-            message: `Amount is required`,
-            path
-          });
-     	}
-
-     	if ((currency === 'USD' && value < 200) || 
-      	(currency === 'GTQ' && value < 1500)) {
-     	return createError({
-            message: `Minimun Deposit of ${currency} ${currency == 'USD' ? 200 : 1500} is required`,
-            path
-          });
-  		}
-
-  		return true;
-
-    }).required('Amount is required')
-})
-
-const DepositForm = ({ handleChange, handleBlur, handleSubmit, values, errors, touched, setErrors, setCustomError}) => {
-	// console.log("DepositForm Props");
-	// console.log(handleChange);
-	// console.log(handleBlur);
-	// console.log(handleSubmit);
-	// console.log(values);
-	// console.log(errors);
-
-	const {theme, styles} = useStyles();
-	
-	const accountNumRef = useRef(null);
-	const confirmAccountNumRef = useRef(null);
-
-	return (
-		<View style={styles.formContainer}>
-			<TextInput style={[styles.textInput, styles.nameInput]}
-				type="text"
-				placeholder="Full Name"
-				placeholderTextColor={theme.grey7}
-				onChangeText={handleChange('name')}
-				onBlur={handleBlur('name')}
-				onFocus={() => {setErrors({}); setCustomError();}}
-				onSubmitEditing={() => accountNumRef.current?.focus()}
-				value={values.name}
-			/>
-			{errors.name && touched.name && <StyledText style={styles.errorText}>{errors.name}</StyledText>}
-			
-			<TextInput style={[styles.textInput, styles.passwordInput]}
-				type="text"
-				ref={accountNumRef}
-				placeholder="Account Number"
-				placeholderTextColor={theme.grey7}
-				onChangeText={handleChange('accountNumber')}
-				onBlur={handleBlur('accountNumber')}
-				onFocus={() => {setErrors({}); setCustomError();}}
-				onSubmitEditing={() => confirmAccountNumRef.current?.focus()}
-				value={values.accountNumber}
-			/>
-			{errors.accountNumber && touched.accountNumber && <StyledText style={styles.errorText}>{errors.accountNumber}</StyledText>}
-
-			<TextInput style={[styles.textInput, styles.passwordInput]}
-				type="password"
-				ref={confirmAccountNumRef}
-				placeholder="Confirm Account Number"
-				placeholderTextColor={theme.grey7}
-				onChangeText={handleChange('confirmAccountNumber')}
-				onBlur={handleBlur('confirmAccountNumber')}
-				onFocus={() => {setErrors({}); setCustomError();}}
-				value={values.confirmAccountNumber}
-			/>
-			{errors.confirmAccountNumber && touched.confirmAccountNumber && <StyledText style={styles.errorText}>{errors.confirmAccountNumber}</StyledText>}
-
-			<BottomPicker 
-				items={SUPPORTED_BANKS} 
-				selectedValue={SUPPORTED_BANKS.find(item => item.key == values.bankName)} 
-				onSelect={(item) => handleChange('bankName')(item.key)} 
-				pickerContainerStyle={styles.pickerView} 
-				valueStyle={styles.pickerViewValue} />
-
-			<BottomPicker 
-				items={BANK_ACCOUNT_TYPES} 
-				selectedValue={BANK_ACCOUNT_TYPES.find(item => item.key == values.accountType)} 
-				onSelect={(item) => handleChange('accountType')(item.key)} 
-				pickerContainerStyle={styles.pickerView} 
-				valueStyle={styles.pickerViewValue} />
-
-			<BottomPicker 
-				items={BANK_CURRENCIES} 
-				selectedValue={BANK_CURRENCIES.find(item => item.key == values.currency)} 
-				onSelect={(item) => handleChange('currency')(item.key)} 
-				pickerContainerStyle={styles.pickerView} 
-				valueStyle={styles.pickerViewValue} />
-
-			<TextInput style={[styles.textInput, styles.amountInput]}
-				type="number"
-				placeholder="Amount"
-				placeholderTextColor={theme.grey5}
-				onChangeText={handleChange('amount')}
-				onBlur={handleBlur('amount')}
-				onFocus={() => {setErrors({}); setCustomError();}}
-				value={values.amount}
-			/>
-			{errors.amount && touched.amount && <StyledText style={styles.errorText}>{errors.amount}</StyledText>}
-			
-			<TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-				<StyledText style={styles.submitButtonText}>NEXT</StyledText> 
-			</TouchableOpacity>
-		</View>
-	)
-}
-
+import { currentISODate } from '../../utils';
+import { useAuth } from '../../helper'
 
 //Add logic to save auth state to temp storage
 const CreateDeposit = (props) => {
 
 	const {theme, styles} = useStyles();
-	const [error , setError] = useState(null);
+	const [formError , setFormError] = useState(null);
 	const {navigation} = props;
-
-	const [showForm, setShowForm] = useState(true);
 		
 	const signInMsg = "Successfully signed in!";
 
-	const [depositSummary, setDepositSummary] = useState(null)
+	const [depositSummary, setDepositSummary] = useState(null);
+	const [document, setDocument] = useState(null);
+	const [agree, setAgree] = useState(null);
+	const [finalAgree, setFinalAgree] = useState(null);
+	const [complete, setComplete] = useState(false);
+	const [depositError, setDepositError] = useState(null);
 
-	const onSubmit = async (values, {validateForm, resetForm}) => {
-		validateForm(values);
-		// await onSignIn(values.email, values.password);
-    	// resetForm();
-    	setDepositSummary(values);
+	const {currentUser, userAccount} = useAuth();
+
+	const onSubmit = async (values) => {
+    	setDepositSummary({
+    		...values, 
+    		bankName: SUPPORTED_BANKS.find(item => item.key == values['bankName']).title,
+    		accountType: BANK_ACCOUNT_TYPES.find(item => item.key == values['accountType']).title,
+			finalAmount: `${values['currency']} ${values['amount']}`
+		});
 	}
 
-	const formik = useFormik({
-		validationSchema: DepositSchema,
-		initialValues: { 
-			name: '', 
-			accountNumber: '', 
-			confirmAccountNumber: '', 
-			accountType: BANK_ACCOUNT_TYPES[0].key, 
-			bankName: SUPPORTED_BANKS[0].key, 
-			currency: BANK_CURRENCIES[0].key
-		},
-		validateOnChange: false,
-      validateOnBlur: false,
-		onSubmit: onSubmit
-	});
+	const selectDocument = async() => {
+		try {
+		  const res = await DocumentPicker.pick({
+		    type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
+		  }).then(arr => arr[0]);
+
+		  if (res) {
+			setDocument(res);
+		  }
+		  
+		} catch (err) {
+		  if (DocumentPicker.isCancel(err)) {
+		    console.log("User Canceled Upload")
+		  } else {
+		    throw err
+		  }
+		}
+	}
+
+
+	const onCompleteDeposit = async() => {
+
+		if (!currentUser ) {
+			setDepositError("User doesn't exist");
+			return;
+		}
+
+		// if (!userAccount) {
+		// 	setDepositError("User Account doesn't exist");
+		// 	return;
+		// }
+
+		let reference;
+
+		try {
+			//First upload the image to cloud storage
+			//Improve the saved file name
+
+			reference = storage().ref(`/images/deposit/${currentUser.user.email}/${document.name}`);
+
+			//For android, first get the correct file destination
+			const destPath = `${RNFS.TemporaryDirectoryPath}/${nanoid()}`;
+			await RNFS.copyFile(document.uri, destPath);
+
+			const fileStat = await RNFS.stat(destPath); 
+		  	console.log("Stat");
+		  	console.log(fileStat);
+
+			await reference.putFile(fileStat.originalFilepath);
+
+		} catch (err) {
+			console.log("Error uploading the document");
+			console.log(err);
+			setDepositError(err);
+			return;
+		}
+
+		const netState = await NetInfo.fetch();
+
+		if (!netState || !netState.isConnected) {
+			setDepositError('Internet not connected');
+			return;
+		}
+  
+		// console.log("********");
+		// console.log({
+		// 	deposit: depositSummary,
+		// 	user: currentUser?.user?.email,
+		// 	// ...userAccount,
+		// 	date: currentISODate(),
+		// 	ipAddress: netState.details.ipAddress,
+		// 	screenshot: reference.getDownloadURL()
+		// });
+
+
+		//Once file uploaded
+		const depositCollection = firestore().collection('Deposits');
+		depositCollection
+		.add({
+			deposit: depositSummary,
+			user: currentUser?.user?.email, //Add user Account instead
+			account: '9703c0b1-67bf-492d-aeff-95c108299188', //Alpaca Account instead
+			date: currentISODate(),
+			ipAddress: netState.details.ipAddress,
+			screenshot: await reference.getDownloadURL(),
+			status: 'Pending'
+		})
+		.then(() => {
+			console.log('Deposit Added');
+			setComplete(true)
+		});
+	}
 
 	const {currency, amount, bankName, accountType} =  depositSummary || {};
-	return (
-		<AppView title="CREATE DEPOSIT" headerTitleStyle={{color: 'white'}}>
-			{!depositSummary && 
-				<View style={styles.formikContainer}>
-					{error && <StyledText style={styles.signInError}>{error} </StyledText>}
-					<DepositForm {...formik} setCustomError={setError} />
-			   </View>
-			}
-			{depositSummary && 
-				<>
-					<View style={styles.depositSummary}>
-						<StyledText>You have agreed to deposit {currency} {amount}</StyledText>
-						<StyledText>Selected Bank: {SUPPORTED_BANKS.find(item => item.key == bankName)?.title || ''}</StyledText>
-						<StyledText>Account Type: {BANK_ACCOUNT_TYPES.find(item => item.key == accountType)?.title}</StyledText>
-					</View>
-					<TinyTextButton onPress={() => setDepositSummary(null)} title="Edit" />	
-					
-				</>
 
+	const Form = () => {
+		return (
+			<View style={styles.formContainer}>
+				{formError && <StyledText style={styles.signInError}>{formError} </StyledText>}
+				<DepositForm setCustomError={setFormError} onSubmit={onSubmit}/>
+		   </View>
+		)
+	}
+
+	const Summary = () => {
+		return (
+			<>
+			<View style={styles.depositSummary}>
+				<StyledText>You have agreed to deposit {currency} {amount}</StyledText>
+				<StyledText>Selected Bank: {SUPPORTED_BANKS.find(item => item.key == bankName)?.title || ''}</StyledText>
+				<StyledText>Account Type: {BANK_ACCOUNT_TYPES.find(item => item.key == accountType)?.title}</StyledText>
+			</View>
+			<TinyTextButton onPress={() => setDepositSummary(null)} title="Edit" />
+			</>
+
+		)
+	}
+
+	const Finalizar = () => {
+		return (
+	  		<>
+		  		<StyledText>Proceed to make a deposit and upload a receipt below </StyledText>
+
+				{!document ? 
+					<IconTextButton 
+						iconName="cloud-upload-outline" 
+						title="UPLOAD" 
+						onPress={selectDocument} 
+						containerStyle={styles.uploadButton}
+						textStyle={{marginLeft: WP(2)}}	
+					/>
+					:
+					<>
+						<View style={{flexDirection: 'row'}}>
+							<StyledText>Receipt Uploaded: YES</StyledText>
+							<StyledText>{document?.name}</StyledText>
+							<TinyTextButton onPress={() => setDocument(null)} title="Remove" />
+						</View>
+						<TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={() => setFinalAgree(!finalAgree)}>
+							<CheckBox
+						    value={finalAgree}
+						    onValueChange={setFinalAgree}
+						  />
+						  <StyledText>I have made the deposit and uploaded the right document</StyledText>
+						</TouchableOpacity>  
+						 
+						<ConfirmButton 
+							buttonContainerStyle={{position: 'absolute', bottom: 20}} 
+							buttonStyle={{width: '70%'}} title="COMPLETE DEPOSIT" 
+							disabled={!finalAgree} 
+							onClick={onCompleteDeposit} 
+						/>
+
+					</>
+				}
+			</>
+		)
+	}
+
+	const title = complete ? "DEPOSIT SUCCESSFUL" : depositError ? "ERROR" : "CREATE DEPOSIT"
+	
+	return (
+		<AppView {...{title}}  scroll={false} goBack={() => complete || depositError ? navigation.navigate('Settings') : navigation.goBack()}>
+			
+			{/*<IconTextButton 
+				iconName="cloud-upload-outline" 
+				title="UPLOAD" 
+				onPress={selectDocument} 
+				containerStyle={styles.uploadButton}
+				textStyle={{marginLeft: WP(2)}}	
+			/>*/}
+
+			{depositError ? 
+				<StyledText>{depositError}</StyledText>
+				:
+				!complete ? 
+					!depositSummary ? 
+						<Form />
+					:
+					<>
+						<Summary />
+						
+						<TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={() => setAgree(!agree)}>
+							<CheckBox
+							 disabled={!!document}
+						    value={agree}
+						    onValueChange={setAgree}
+						  />
+						  <StyledText>I agree to terms and conditions</StyledText>
+					  </TouchableOpacity>
+
+					  {agree && <Finalizar />}
+					</>
+				: <StyledText>Deposit Created Successfully!</StyledText>
 			}
 	   </AppView>
 	);
@@ -196,66 +251,25 @@ const useStyles = () => {
 	const {theme} = useTheme();
 
 	const styles = StyleSheet.create({
-		formikContainer: {
+		formContainer: {
 			justifyContent: 'center', 
 			textAlign: 'center', 
 			flex:1, 
 			width: '100%',
 			marginTop: HP(5)
 		},
-		formContainer: {
-			alignItems: 'center',
-		},
-		textInput: {
-			borderWidth: 1,
-			borderColor: theme.grey5,
-			width: '90%',
-			color: theme.text,
-			marginBottom: 20,
-			backgroundColor: theme.background,
-			paddingLeft:20
-		},
-		submitButton: {
-			backgroundColor: 'white',
-			padding: 5,
-			paddingLeft: 20,
-			paddingRight: 20
-		},
-		submitButtonText: {
-			fontSize: 16,
-			fontWeight: '600'
-		},
-		errorText: {
-			marginTop: -15,
-			textAlign:'left',
-			width: '90%',
-			marginBottom: 10,
-			color: 'red'
-		},
 
-		signInError: {
-			textAlign:'center',
-			// width: '90%',
-			marginBottom: 50,
-			color: 'red'
-		},
-
-		pickerView: {
-			width: '90%', 
+		uploadButton: {
+			flexDirection: 'row', 
 			alignItems: 'center', 
-			borderWidth:1, 
-			borderColor: theme.grey5, 
-			height:50,
-			paddingLeft: WP(4),
-			paddingRight: WP(4), 
-			justifyContent:'space-between', 
-			marginBottom: HP(3)
-		},
-
-		pickerViewValue: {
-			fontSize: WP(4.5)
+			justifyContent: 'center',
+			alignSelf: 'center',
+			// backgroundColor: theme.ico,
+			borderWidth:1,
+			borderColor: theme.text,
+			padding: WP(2),
+			width: '40%'
 		}
-
 	});
 
 	return {theme, styles};

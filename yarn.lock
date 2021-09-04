@@ -1046,6 +1046,11 @@
   dependencies:
     deep-assign "^3.0.0"
 
+"@react-native-community/checkbox@^0.5.8":
+  version "0.5.8"
+  resolved "https://registry.yarnpkg.com/@react-native-community/checkbox/-/checkbox-0.5.8.tgz#a1b50635fd76a07fb53eb4a98120347cb6e75da4"
+  integrity sha512-2ppw40sSqBKSPz75l8rDCvpcvQb/78MtvB5BDtovsJE1kXoUJP4eVLuyLo+LfYdSK9qLD4Llt4bIulr1SI9UIQ==
+
 "@react-native-community/cli-debugger-ui@^5.0.1":
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/@react-native-community/cli-debugger-ui/-/cli-debugger-ui-5.0.1.tgz#6b1f3367b8e5211e899983065ea2e72c1901d75f"
@@ -1199,6 +1204,11 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/masked-view/-/masked-view-0.1.11.tgz#2f4c6e10bee0786abff4604e39a37ded6f3980ce"
   integrity sha512-rQfMIGSR/1r/SyN87+VD8xHHzDYeHaJq6elOSCAD+0iLagXkSI2pfA0LmSXP21uw5i3em7GkkRjfJ8wpqWXZNw==
 
+"@react-native-community/netinfo@^6.0.2":
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-6.0.2.tgz#3b61757c46d0f387815d42b651bbee1eb998a385"
+  integrity sha512-HbVIv6p+VAzSqALkfKKNbtSy0TneL7EILIqxiOjt/5weVdTuZ88NRyPNQAZBh6W8QYirXJo3f00ryMk9iLs7gQ==
+
 "@react-native-firebase/app@^12.3.0":
   version "12.3.0"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-12.3.0.tgz#b21fb4bf89b7df4a80a4818dc2cf5e5be019459d"
@@ -1216,6 +1226,11 @@
   version "12.3.0"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/firestore/-/firestore-12.3.0.tgz#33d91a0393f7488df4dd1a45c434856667f4cb66"
   integrity sha512-bUTTpj5l+kLY5xj1pcBuxGUUJCiHXkv2fvsEvexXp9YtfRMVk/Se99lKJEZNlmePYicTZhP//3gXhtL+dlgOzg==
+
+"@react-native-firebase/storage@^12.7.4":
+  version "12.7.4"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/storage/-/storage-12.7.4.tgz#60e13863ea559a7bbfd2d52a249fd8d7a121cd98"
+  integrity sha512-TQgDxiNS0z2bmVgdXSCcnPzN479TRzxAA6mZG49crLb1LAYaAU0BxvCV8R8/4HYFHTAMWfkwX3nzH/JTadFMPQ==
 
 "@react-native/assets@1.0.0":
   version "1.0.0"
@@ -3207,6 +3222,11 @@ extglob@^2.0.4:
     regex-not "^1.0.0"
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
+
+fast-base64-decode@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/fast-base64-decode/-/fast-base64-decode-1.0.0.tgz#b434a0dd7d92b12b43f26819300d2dafb83ee418"
+  integrity sha512-qwaScUgUGBYeDNRnbc/KyllVU88Jk1pRHPStuF/lO7B0/RTRLj7U0lkdTAutlBblY08rwZDff6tNU9cjv6j//Q==
 
 fast-deep-equal@^3.1.1, fast-deep-equal@^3.1.3:
   version "3.1.3"
@@ -5467,6 +5487,11 @@ nanoid@^3.1.15:
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.1.23.tgz#f744086ce7c2bc47ee0a8472574d5c78e4183a81"
   integrity sha512-FiB0kzdP0FFVGDKlRLEQ1BgDzU87dy5NnzjeW9YZNt+/c3+q82EQDUwniSAUxp/F0gFNI1ZhKU1FqYsMuqZVnw==
 
+nanoid@^3.1.25:
+  version "3.1.25"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.1.25.tgz#09ca32747c0e543f0e1814b7d3793477f9c8e152"
+  integrity sha512-rdwtIXaXCLFAQbnfqDRnI6jaRHp9fTcYBjtFKE8eezcZ7LuLjhUaQGNeMXf1HmRoCH32CLz6XwX0TtxEOS/A3Q==
+
 nanomatch@^1.2.9:
   version "1.2.13"
   resolved "https://registry.yarnpkg.com/nanomatch/-/nanomatch-1.2.13.tgz#b87a8aa4fc0de8fe6be88895b38983ff265bd119"
@@ -6103,6 +6128,13 @@ react-native-codegen@^0.0.6:
     jscodeshift "^0.11.0"
     nullthrows "^1.1.1"
 
+react-native-document-picker@^6.0.4:
+  version "6.0.4"
+  resolved "https://registry.yarnpkg.com/react-native-document-picker/-/react-native-document-picker-6.0.4.tgz#21cbe2b3e8a1aff4aafcb81e06f09494b45e62f8"
+  integrity sha512-qFKf76M1VyiVqZscqND8wDcALfHG0BI77mJ4CzEdANqLiJUbwie7XOKtQlw5oRSAjLPgg9NjXnjbOFY3OmkIXQ==
+  dependencies:
+    invariant "^2.2.4"
+
 react-native-draggable-flatlist@^2.6.2:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/react-native-draggable-flatlist/-/react-native-draggable-flatlist-2.6.2.tgz#d1445fd52e75bc4f4ebbd832a8bc4525cebb8302"
@@ -6131,6 +6163,13 @@ react-native-gesture-handler@^1.10.3:
     hoist-non-react-statics "^3.3.0"
     invariant "^2.2.4"
     prop-types "^15.7.2"
+
+react-native-get-random-values@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/react-native-get-random-values/-/react-native-get-random-values-1.7.0.tgz#86d9d1960828b606392dba4540bf760605448530"
+  integrity sha512-zDhmpWUekGRFb9I+MQkxllHcqXN9HBSsgPwBQfrZ1KZYpzDspWLZ6/yLMMZrtq4pVqNR7C7N96L3SuLpXv1nhQ==
+  dependencies:
+    fast-base64-decode "^1.0.0"
 
 react-native-indicators@^0.17.0:
   version "0.17.0"

@@ -64,7 +64,7 @@ export const BottomPicker = ({items, selectedValue, onSelect, ...props}) => {
 		{!!selectedValue &&
 			<>
 				<TouchableOpacity style={[styles.pickerViewContainer, props.pickerContainerStyle]} onPress={() => setShow(!show)}>
-					<StyledText style={[styles.selectedValue, props.valueStyle]}>{selectedValue.title}</StyledText> 
+					<StyledText style={[styles.selectedValue, props.valueStyle]}>{selectedValue?.title ?? ''}</StyledText> 
 					{show ? <Ionicons name="chevron-up" color={theme.grey3} size={WP(5)} />
 					 : <Ionicons name="chevron-down" color={theme.grey3} size={WP(5)} />
 					}

@@ -7,9 +7,8 @@ import SwipeButton from 'jt-swipe-button';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-export const ConfirmButton = ({title, onClick, swipe = false, cancel = false,  ...props}) => {
-	const {theme} = useTheme();
-	const styles = useStyles();
+export const ConfirmButton = ({title, onClick, swipe = false, cancel = false, disabled = false,  ...props}) => {
+	const {theme, styles} = useStyles();
 
 	const proceedIcon = ({size = WP(10), color = theme.success} = {}) => {
 		return <Ionicons name="chevron-forward" {...{color, size}} />
@@ -18,6 +17,9 @@ export const ConfirmButton = ({title, onClick, swipe = false, cancel = false,  .
 	const cancelIcon = ({size = WP(5), color = theme.error} = {}) => {
 		return <Ionicons name="close-circle" {...{color, size}} />
 	}
+
+
+	const ClickableComponent = disabled ? View : TouchableOpacity;
 
 	return (
 		<>
@@ -41,9 +43,9 @@ export const ConfirmButton = ({title, onClick, swipe = false, cancel = false,  .
           	:
 
 			<View style={[styles.buttonContainer, props.buttonContainerStyle]}>
-				<TouchableOpacity style={[styles.button, props.buttonStyle]} onPress={onClick}>
+				<ClickableComponent style={[styles.button, props.buttonStyle, {...disabled && {backgroundColor: theme.grey9}}]} onPress={onClick}>
 					<StyledText style={[styles.buttonText,props.buttonTextStyle]}>{title}</StyledText>
-				</TouchableOpacity>
+				</ClickableComponent>
 			</View>
 		}
 		</>
@@ -75,5 +77,5 @@ const useStyles = () => {
 		},
 	});
 
-	return styles;
+	return {theme, styles};
 }
