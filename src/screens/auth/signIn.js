@@ -126,12 +126,12 @@ const SignIn = (props) => {
 	const onSubmit = async (values, {validateForm, resetForm}) => {
 		validateForm(values);
 		await onSignIn(values.email, values.password);
-       	resetForm();
+      resetForm();
 	}
 
 	const formik = useFormik({
 		validationSchema: SigninSchema,
-		initialValues: { email: '', password: '' },
+		initialValues: { email: 'shiv.chawla@yandex.com', password: 'Password' },
 		validateOnChange: false,
         validateOnBlur: false,
 		onSubmit: onSubmit
@@ -139,10 +139,12 @@ const SignIn = (props) => {
 
 	return (
 		<AppView title="SIGN IN" headerTitleStyle={{color: 'white'}} goBack={false}>
+			
 			<View style={styles.formikContainer}>
-			{error && <StyledText style={styles.signInError}>{error} </StyledText>}
-			<SignInForm {...formik} setSignInError={setError} />
+				{error && <StyledText style={styles.signInError}>{error} </StyledText>}
+				<SignInForm {...formik} setSignInError={setError} />
 		   </View>
+		   
 	   </AppView>
 	);
 }

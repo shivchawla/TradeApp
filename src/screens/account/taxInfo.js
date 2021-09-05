@@ -6,26 +6,24 @@ import * as Yup from 'yup';
 
 import {AppView, ConfirmButton} from '../../components/common';
 
-const ContactSchema = Yup.object().shape({
-	addressLine1: Yup.string().required('Address is required'),
-	addressLine2: Yup.string(),
-	city: Yup.string().required('City is required'),
-	state: Yup.string().required('State is required'),
-	postalCode: Yup.string().required('Postal Code is required'),
-	country: Yup.string().required('Country is required')
+const IdentitySchema = Yup.object().shape({
+	idType: '',
+	idNumber: '',
+	idCountry: ''
+			
+   taxId: Yup.string().required('First Name is required'),
+   taxCountry: Yup.string().required('Country of Tax')
 });
 
-const ContactForm = ({onSubmit, setCustomError,  ...props}) => {
+const IdentityForm = ({onSubmit, setCustomError,  ...props}) => {
 
 	const formik = useFormik({
 		validationSchema: IdentitySchema,
 		initialValues: { 
-			addressLine1: '',
-			addressLine2: '',
-			city: '',
-			state: '',
-			postalCode: '',
-			country: ''
+			firstName: '', 
+			middleName: '', 
+			lastName: '', 
+			dateBirth: '', 
 		},
 		validateOnChange: false,
       	validateOnBlur: false,
@@ -78,7 +76,7 @@ const ContactForm = ({onSubmit, setCustomError,  ...props}) => {
 	)
 }
 
-const Contact = (props) => {
+const Identity2 = (props) => {
 
 	const {navigation} = props;
 
@@ -95,7 +93,7 @@ const Contact = (props) => {
 
 	return (
 		<AppView title="Add Identity Info" goBack={false}>
-			<ContactForm onSubmit={submitIdentity} />
+			<IdentityForm onSubmit={submitIdentity} />
 		</AppView>
 	);
 }
@@ -104,4 +102,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default Contact;
+export default Identity;

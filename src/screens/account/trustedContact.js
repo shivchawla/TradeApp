@@ -1,40 +1,67 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+
 import {AppView, ConfirmButton} from '../../components/common';
 
-import { useCreateBrokerageAccount, addUserDb, updateAlpacaAccount } from '../../helper';
+const TrustedContactSchema = Yup.object().shape({
+	firstName: Yup.string().required('First name is required'),
+	lastName: Yup.string().required('Last Name is required'),
+	email: Yup.string().required('Email address is required')
+});
 
-import {accountParams} from '../../config'; //TEMP CODE
+const TrustedContactForm = ({onSubmit, setCustomError,  ...props}) => {
+
+	const manageSubmit = (value, {vqlidateForm, resetForm}) => {
+		validateForm();
+
+		onSubmit(values);
+	}
+
+	const formik = useFormik({
+		validationSchema: IdentitySchema,
+		initialValues: { 
+			firstName: '',
+			lastName: '',
+			email: ''
+		},
+		validateOnChange: false,
+      	validateOnBlur: false,
+		onSubmit: manageSubmit
+	});
+
+	return (
+		<View style={style.formContainer}>
+
+			<FormTextField key='firstName' placeholder="First Name"  handler={formik} />
+			<FormTextField key='lastName' placeholder="Last Name"  handler={formik} />
+			<FormTextField key='email' placeholder="Email Address"  handler={formik} />
+
+			<ConfirmButton title="Next" onClick={formik.handleSubmit} />
+		</View>
+	)
+}
 
 const TrustedContact = (props) => {
 
 	const {navigation} = props;
 
-	const [isError, mutate] = useCreateBrokerageAccount();
-
-	const sendApplication = () => {
-		mutate(accountParams, {
-			onSuccess: (response, input) => handleAccountCreation(input.contact.email_address, response), 
-			onError: (error, input) => handleError(error, input)
-		});
+	const toNextScreen = () => {
+		
 	}
 
-	const handleError = (error, input) => {
-		console.log(error);
-	}
+	const submitIdentity = () => {
+		//Save the information in storage
+		//And the complete onboarding should be saved in firebase
 
-	const handleAccountCreation = async(email, account) => {
-		try {
-			const output = [await addUserDb(email, account), await updateAlpacaAccount(account)];
-		} catch(err){
-			console.log(err);
-		}
+		navigation.navigate('Disclosure');
 	}
 
 	return (
-		<AppView title="Add Trusted Contact" goBack={false}>
-			<ConfirmButton title="Send" onClick={sendApplication}/>
+		<AppView title="Add Identity Info" goBack={false}>
+			<TrustedContactForm onSubmit={submitIdentity} />
 		</AppView>
 	);
 }

@@ -67,7 +67,7 @@ const TradingStack = () => {
 
 const Routes = () => {
 	
-	const isLoading = useAppStartup();
+	const {isLoading, currentUser, brokerageAccount} = useAppStartup();
 
 	// console.log("Current User");
 	// console.log(currentUser);
@@ -106,13 +106,13 @@ const Routes = () => {
 		// 	:	
 		<NavigationContainer>
 			<Stack.Navigator screenOptions={{headerShown: false}}>
-				{/*{!!currentUser?.user && !!brokerageAccount && */}
+				{!!currentUser?.user && !!brokerageAccount && 
 					<Stack.Screen name="Trading" component={TradingStack} />
-				{/*}*/}
-				{/*{!!currentUser?.user ?
+				}
+				{!!currentUser?.user ?
 					 <Stack.Screen name="Onboard" component={OnboardStack} />
 					: <Stack.Screen name="Auth" component={AuthStack} />
-				}*/}
+				}
 			</Stack.Navigator>
 	   </NavigationContainer>
 	// }</>

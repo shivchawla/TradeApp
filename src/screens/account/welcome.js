@@ -8,7 +8,7 @@ const Welcome = (props) => {
 	const {navigation} = props;
 
 	const toNextScreen = () => {
-		navigation.navigate('Contact');
+		navigation.navigate('Identity');
 	}
 	return (
 		<AppView title="Welcome" goBack={false}>
