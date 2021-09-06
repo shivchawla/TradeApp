@@ -13,7 +13,7 @@ import DocumentPicker from 'react-native-document-picker';
 import CheckBox from '@react-native-community/checkbox';
 
 import { AppView, ConfirmButton, TinyTextButton, IconTextButton } from '../../components/common';
-import { DepositForm } from '../../components/forms';
+import { DepositForm } from '../../components/form';
 import { SUPPORTED_BANKS, BANK_ACCOUNT_TYPES } from '../../config'
 import { useTheme, StyledText, WP, HP }  from '../../theme';
 import { currentISODate } from '../../utils';

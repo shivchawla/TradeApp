@@ -8,3 +8,5 @@ export const CountryScheme = Yup.object().shape({
 export { DepositForm } from './deposit';
 export { FormTextField } from './formTextField';
 export { FormCountryField } from './formCountryField';
+export { FormDateField } from './formDateField';
+

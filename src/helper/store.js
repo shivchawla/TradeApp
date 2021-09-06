@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const setStorageData = async (key, value) => {
+export const setStorageData = async (key, value, callback) => {
   try {
-    await AsyncStorage.setItem(key, value)
+    await AsyncStorage.setItem(key, value, () => callback ? callback() : '');
   } catch (e) {
     console.error(e);
   }

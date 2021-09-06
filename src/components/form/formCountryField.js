@@ -6,7 +6,7 @@ import { Icon } from '../../components/common';
 
 import { useTheme, WP, HP, StyledText } from '../../theme';
 
-export const FormCountryField = ({field, ...props}) => {
+export const FormCountryField = ({field, placeholder, ...props}) => {
 	
 	const { handleChange, values } = props.handler;
 
@@ -16,8 +16,8 @@ export const FormCountryField = ({field, ...props}) => {
 	const handleSelect = (country) => {
 		const {cca2, name} = country; 
 
-		console.log("Selected Country");
-		console.log(country);
+		// console.log("Selected Country");
+		// console.log(country);
 		handleChange(`${field}.code`)(cca2);
 		handleChange(`${field}.name`)(name);
 	}
@@ -26,16 +26,15 @@ export const FormCountryField = ({field, ...props}) => {
 
 	const CountryField = () => {
 		return (
-			<>
-			{!!selectedValue &&
-				<TouchableOpacity style={[styles.picker, props.pickerStyle]} onPress={() => setShow(!show)}>
-					<StyledText style={[styles.pickerValue, props.valueStyle]}>{selectedValue?.name ?? ''}</StyledText> 
-					{show ? <Icon iconName="chevron-up" iconColor={theme.grey3} iconSize={WP(5)} />
-					 : <Icon iconName="chevron-down" iconColor={theme.grey3} iconSize={WP(5)} />
-					}
-				</TouchableOpacity>
-			}
-			</>
+			<TouchableOpacity style={[styles.picker, props.pickerStyle]} onPress={() => setShow(!show)}>
+				<View style={{flex:1}}>
+					{!!selectedValue && <StyledText style={styles.labelStyle}>{placeholder}</StyledText> }	
+					<StyledText style={[styles.pickerValue, props.valueStyle]}>{selectedValue?.name ?? placeholder}</StyledText> 
+				</View>
+				{show ? <Icon iconName="chevron-up" iconColor={theme.grey3} iconSize={WP(5)} />
+				 : <Icon iconName="chevron-down" iconColor={theme.grey3} iconSize={WP(5)} />
+				}
+			</TouchableOpacity>
 		)
 	}
 
@@ -71,6 +70,16 @@ const useStyles = () => {
 
 		pickerValue: {
 			fontSize: WP(4.5)
+		},
+
+		labelStyle: {
+			position: 'absolute',
+			marginTop: -24, //??
+			fontSize: WP(3.5),
+			color: theme.grey5,
+			paddingLeft: WP(1),
+			paddingRight: WP(1),
+			backgroundColor: theme.background,
 		}
 	});
 

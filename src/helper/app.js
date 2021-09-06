@@ -18,7 +18,7 @@ export const useAppStartup = () => {
       const setupApp = async() => {
 
         console.log("Setting Up App");
-        await signIn('shiv.chawla@yandex.com', 'Password');
+        // await signIn('shiv.chawla@yandex.com', 'Password');
      
         await setupTradingDays();
 
@@ -36,5 +36,5 @@ export const useAppStartup = () => {
     //Improve this logic when you get time
     const isLoadingAuth = !isErrorUser && !isErrorAccount && !isErrorBrokerage && !!!brokerageAccount?.data;
 
-    return isLoading || isLoadingAuth;
+    return {isLoading: isLoading || isLoadingAuth, currentUser, brokerageAccount}
 }

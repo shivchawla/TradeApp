@@ -26,7 +26,7 @@ export { useCreateBrokerageAccount, useTradingAccountData,
 
 export { AccountStatus } from './enums';
 
-export { useAuth, AuthProvider } from './user';
+export { useAuth, AuthProvider, useOnboarding } from './user';
 
 export { useSymbolActivity, 
 		getCurrentTheme, setCurrentTheme,

@@ -46,12 +46,76 @@ export const addUserDb = async(email, userAccount) => {
 
 const USER_CREDENTIAL_KEY = 'userCredentials';
 const ALPACA_ACCOUNT_KEY = 'alpacaAccount';
+const ONBOARDING_KEY = "onboarding";
 
 const getCurrentUser = async() => await getStorageData(USER_CREDENTIAL_KEY);
 const getAlpacaAccount = async() => await getStorageData(ALPACA_ACCOUNT_KEY);
 
 const updateCurrentUser = async(currentUser) => await setStorageData(USER_CREDENTIAL_KEY, JSON.stringify(currentUser)); 
 const updateAlpacaAccount = async(alpacaAccount) => await setStorageData(ALPACA_ACCOUNT_KEY, JSON.stringify({...alpacaAccount, lastUpdated: currentISODate()}));
+
+const updateOnboardingData = async (key, obj) => {
+	
+	const currentUser = await getCurrentUser(); 
+	
+	const email = currentUser?.user?.email;
+
+	//Update in firestore
+	await firestore().collection('Onboarding')
+	.where('email','==', email)
+	.limit(1)
+	.get()
+	.then(querySnapshot => { 
+		if (querySnapshot.size < 1) {
+			firestore().collection('Onboarding').add({email, [key]: obj})	
+		} else {
+    		const doc = querySnapshot.docs[0];
+	    	doc.update({key: obj});
+    	}
+	})
+}
+ 
+const getOnboardingData = async () => {
+
+	const currentUser = await getCurrentUser(); 
+	const email = currentUser?.user?.email;
+
+	//Update in firestore
+	return firestore().collection('Onboarding')
+	.where('email','==', email)
+	.limit(1)
+	.get()
+	.then(querySnapshot => { 
+		if (querySnapshot.size < 1) {
+			return null;	
+		}
+
+    	return querySnapshot.docs[0];
+	})
+}
+
+
+export const useOnboarding = (params = {}) => {
+	
+	const [onboardingData, setData] = useState(null);
+
+	React.useEffect(() => {
+		const getData = async() => {
+			//Get data from API and save it in storage
+			const obAPIdata = await getOnboardingData();
+			setStorageData(ONBOARDING_KEY, JSON.stringify(obAPIdata), () => setData(obAPIdata)) 
+		}
+
+		getData();
+
+	}, []);
+
+	const updateOnboarding = async (key, obj) => {
+		await setStorageData(ONBOARDING_KEY, JSON.stringify({...onboardingData, key: obj}), () => updateOnboardingData(key, obj))
+	}
+	
+	return { onboardingData, updateOnboarding };
+}
 
 const useCheckCredentials = () => {
 	const [currentUser, setCurrentUser] = useState(null);
