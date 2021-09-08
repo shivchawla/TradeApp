@@ -86,7 +86,6 @@ const Onboard = (props) => {
 			{!step && <Welcome />}
 			{step && 
 				<AnyForm 
-					ref={formRef} 
 					type={step} 
 					initialData={onboardingData} 
 					onSubmit={(values) => submitOnboarding(step, values)}
