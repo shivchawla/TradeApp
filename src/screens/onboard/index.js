@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
-import { useFormikContext } from 'formik';
 
 import { AppView, ConfirmButton } from '../../components/common';
 import { useTheme, HP, WP } from '../../theme';
@@ -28,6 +27,7 @@ const agreements = {
 	'margin_agreement': 'https://files.alpaca.markets/disclosures/library/AcctAppMarginAndCustAgmt.pdf'
 }
 
+
 const Onboard = (props) => {
 
 	const {navigation} = props;
@@ -37,15 +37,23 @@ const Onboard = (props) => {
 	React.useEffect(() => {
 		if (!isLoading && onboardingData) {
 			const keys = Object.keys(onboardingData);
-			setStep('identity');
 
-			return;
+			// setStep('identity');
+			// return;
+			var count = 0;
 			steps.every((step, index) => {
 				const idx = keys.findIndex(it => it == step);
 				if (idx == -1) {
 					console.log("Not Found Step: ", step)
 					setStep(step);
 					return false;
+				} else {
+					count++;
+					console.log("Step: ", step);
+					console.log(count);
+					if (count == steps.length) {
+						toKyc();
+					}
 				}
 				
 				return true;
@@ -66,10 +74,20 @@ const Onboard = (props) => {
 
 	const Welcome = () => {
 		return <ConfirmButton buttonContainerStyle={{bottom: 10}} buttonStyle={{width: '80%'}} title="NEXT" onClick={() => setStep('identity')} /> 
+	}
+
+	const toKyc = () => {
+		navigation.navigate('StartKyc', {user: onboardingData});
 	} 
 
 	const toNextStep = () => {
-		setStep(steps[steps.findIndex(it => it == step) + 1])
+		//This is the last 
+		if(step == 'margin_agreement') {
+			//Move to 
+			toKyc();
+		} else {
+			setStep(steps[steps.findIndex(it => it == step) + 1])
+		}
 	}
 
 	const toPreviousStep = () => {

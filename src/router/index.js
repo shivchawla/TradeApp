@@ -23,8 +23,8 @@ import Settings from '../screens/settings';
 // import SignIn from '../screens/auth/signIn'
 
 import AuthStack from './auth';
-// import OnboardStack from './onboard';
-import Onboard from '../screens/onboard'
+import OnboardStack from './onboard';
+// import Onboard from '../screens/onboard'
 
 import innerScreens from './common';
 
@@ -111,7 +111,7 @@ const Routes = () => {
 					<Stack.Screen name="Trading" component={TradingStack} />
 				}
 				{!!currentUser?.user ?
-					 <Stack.Screen name="Onboard" component={Onboard} />
+					 <Stack.Screen name="OnboardStack" component={OnboardStack} />
 					: <Stack.Screen name="Auth" component={AuthStack} />
 				}
 			</Stack.Navigator>
