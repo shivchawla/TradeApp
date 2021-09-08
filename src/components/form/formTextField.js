@@ -1,5 +1,6 @@
 import React from 'react';
 import { TextInput, View, StyleSheet } from 'react-native';
+import get from 'lodash/get';
 
 import { useTheme, StyledText, WP, HP } from '../../theme';
 
@@ -11,11 +12,11 @@ export const FormTextField = ({field, placeholder, handler, setCustomError = nul
 	// console.log(handleChange);
 
 	const {theme, styles} = useStyles();
-	const value = values[field];
-	const error = errors[field];
+	const value = get(values, field);
+	const error = get(errors, field);
 
 	return (
-		<View style={styles.fieldContainer}>
+		<View style={[styles.fieldContainer, props.containerStyle]}>
 			<View style={styles.inputContainer}>
 				{!!value && <StyledText style={styles.labelStyle}>{placeholder}</StyledText>}
 				<TextInput style={[styles.textinput, props.inputStyle]}

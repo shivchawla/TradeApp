@@ -15,7 +15,7 @@ export { Icon, IconButton, IconTextButton, GobackIcon, AccountIcon, SearchIcon,
 
 export { TinyTextButton } from './tinyTextButton';
 
-export { TouchRadio} from './touchRadio';
+export { TouchRadio, TouchRadioGroup } from './touchRadio';
 export { CustomTabBar } from './customTabBar';
 export { FullViewModal } from './fullViewModal';
 export { DateRangePicker } from './dateRangePicker';
@@ -26,3 +26,4 @@ export { Clickable, ClickableView } from './clickableContainer';
 export { AlertBox } from './alertBox';
 export { RangeSelector } from './rangeSelector';
 export { InfoText } from './infoText';
+export { Checkbox } from './checkbox';

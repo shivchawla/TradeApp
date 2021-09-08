@@ -1,11 +1,13 @@
 import React, {useState} from 'react';
-import { SafeAreaView, ScrollView, View, StyleSheet, TouchableOpacity,} from 'react-native';
+import { SafeAreaView, ScrollView, View, 
+	StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 import { useNavigation } from '@react-navigation/native';
 import { BarIndicator } from 'react-native-indicators';
 
-import { StyledText, useTheme, WP, defaultIconSize } from '../../theme';
+import { StyledText, useTheme, WP, defaultIconSize, HP } from '../../theme';
 import { GobackIcon } from './iconButtons';
 
 export const AppHeader = ({title, goBack = true, ...props}) => {
@@ -42,9 +44,9 @@ export const AppView = ({scroll = true, footer, hasHeader = true, header, isLoad
 		scroll ? 
 			<View style={styles.scrollAppContainer}>
 				{hasHeader || header ? header ? header : <AppHeader {...props}/> : <></>}
-				<ScrollView contentContainerStyle={[styles.scrollView, {...hasPadding && {paddingLeft: WP(props.padding), paddingRight: WP(props.padding)}}]} showsVerticalScrollIndicator={false}>
+				<KeyboardAwareScrollView enableOnAndroid={true} contentContainerStyle={[styles.scrollView, props.scrollViewStyle, {...hasPadding && {paddingLeft: WP(props.padding), paddingRight: WP(props.padding)}}]} showsVerticalScrollIndicator={false}>
 					{props.children}
-				</ScrollView>
+				</KeyboardAwareScrollView>
 				{footer && <View style={[styles.footerContainer, props.footerContainerStyle]}>{footer}</View>}
 			</View>	
 			:
@@ -74,7 +76,7 @@ const useStyles = () => {
 	    	backgroundColor: theme.background,
 	    	width: WP(100),
 	    	paddingLeft:WP(3),
-	    	paddingRight:WP(3)
+	    	paddingRight:WP(3),
 	    },
 		appContainer: { 
 			flex: 1,

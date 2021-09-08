@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { TextInput, View, StyleSheet, TouchableOpacity } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import get from 'lodash/get';
 
 import { Icon, FullViewModal } from '../../components/common';
 import { useTheme, WP, HP, StyledText } from '../../theme';
@@ -16,15 +17,15 @@ export const FormDateField = ({field, placeholder, ...props}) => {
 	const handleDaySelect = (d) => {
 		console.log("Selected Date");
 		console.log(d);
-		handleChange(field)(toISODate(d.nativeEvent.timestamp, "YYYY-MM-DD"));
+		handleChange(field)(toISODate(new Date(d.nativeEvent.timestamp).toLocaleDateString(), "YYYY-MM-DD"));
 		setShow(false);
 	}
 
-	const value = values[field];
+	const value = get(values, field);
 	const date = value ? new Date(value) : new Date();
 	const displayDate = value ? toISODate(value, 'DD/MM/YYYY') : ''; 
 
-	const error = errors[field];
+	const error = get(errors, field);
 
 	return (
 		<View style={styles.fieldContainer}>

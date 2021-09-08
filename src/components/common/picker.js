@@ -25,7 +25,7 @@ export const Picker = ({items, selectedValue, onSelect}) => {
 			!!selectedValue &&
 		<View style={styles.pickerContainer}>
 			<TouchableOpacity style={styles.pickerViewContainer} onPress={() => setShow(!show)}>
-				<StyledText style={styles.selectedValue}>{selectedValue.title}</StyledText> 
+				<StyledText style={[styles.selectedValue, {...!selectedValue?.key && {fontSize: WP(3.5)}}]}>{selectedValue.title}</StyledText> 
 				{show ? <Ionicons name="chevron-up" color={theme.grey3} size={WP(5)} />
 				 : <Ionicons name="chevron-down" color={theme.grey3} size={WP(5)} />
 				}
@@ -54,7 +54,7 @@ export const Picker = ({items, selectedValue, onSelect}) => {
 	)
 }
 
-export const BottomPicker = ({items, selectedValue, onSelect, ...props}) => {
+export const BottomPicker = ({items, selectedValue, onSelect, placeholder = '', ...props}) => {
 	const [show, setShow] = useState(false);
 	const styles = useStyles();
 	const {theme} = useTheme();
@@ -64,7 +64,7 @@ export const BottomPicker = ({items, selectedValue, onSelect, ...props}) => {
 		{!!selectedValue &&
 			<>
 				<TouchableOpacity style={[styles.pickerViewContainer, props.pickerContainerStyle]} onPress={() => setShow(!show)}>
-					<StyledText style={[styles.selectedValue, props.valueStyle]}>{selectedValue?.title ?? ''}</StyledText> 
+					<StyledText style={[styles.selectedValue, props.valueStyle]}>{selectedValue?.title ?? placeholder}</StyledText> 
 					{show ? <Ionicons name="chevron-up" color={theme.grey3} size={WP(5)} />
 					 : <Ionicons name="chevron-down" color={theme.grey3} size={WP(5)} />
 					}

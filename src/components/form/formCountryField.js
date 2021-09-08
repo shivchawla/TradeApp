@@ -1,6 +1,10 @@
 import React, {useState} from 'react';
 import { TextInput, View, StyleSheet, TouchableOpacity } from 'react-native';
 import CountryPicker from 'react-native-country-picker-modal';
+import get from 'lodash/get';
+import countries from 'i18n-iso-countries';
+countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
+countries.registerLocale(require("i18n-iso-countries/langs/es.json"));
 
 import { Icon } from '../../components/common';
 
@@ -14,22 +18,23 @@ export const FormCountryField = ({field, placeholder, ...props}) => {
 	const {theme, styles} = useStyles();
 
 	const handleSelect = (country) => {
-		const {cca2, name} = country; 
+		const {name} = country; 
 
 		// console.log("Selected Country");
 		// console.log(country);
-		handleChange(`${field}.code`)(cca2);
-		handleChange(`${field}.name`)(name);
+		// handleChange(`${field}.code`)(cca2);
+		// handleChange(`${field}.name`)(name);
+		handleChange(field)(name);
 	}
 
-	const selectedValue = values[field];
+	const selectedValue = get(values, field);
 
 	const CountryField = () => {
 		return (
 			<TouchableOpacity style={[styles.picker, props.pickerStyle]} onPress={() => setShow(!show)}>
 				<View style={{flex:1}}>
 					{!!selectedValue && <StyledText style={styles.labelStyle}>{placeholder}</StyledText> }	
-					<StyledText style={[styles.pickerValue, props.valueStyle]}>{selectedValue?.name ?? placeholder}</StyledText> 
+					<StyledText style={[styles.pickerValue, props.valueStyle]}>{selectedValue ?? placeholder}</StyledText> 
 				</View>
 				{show ? <Icon iconName="chevron-up" iconColor={theme.grey3} iconSize={WP(5)} />
 				 : <Icon iconName="chevron-down" iconColor={theme.grey3} iconSize={WP(5)} />
@@ -40,7 +45,7 @@ export const FormCountryField = ({field, placeholder, ...props}) => {
 
 	return (	
 		<CountryPicker
-	        countryCode={selectedValue?.code || 'GT'}	 
+	        countryCode={countries.getAlpha2Code(selectedValue, "en") || 'GT'}	 
 	        preferredCountries={['GT', 'IN']}
 	        onSelect={handleSelect}
 	        renderFlagButton={CountryField}

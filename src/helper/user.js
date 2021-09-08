@@ -70,7 +70,8 @@ const updateOnboardingData = async (key, obj) => {
 			firestore().collection('Onboarding').add({email, [key]: obj})	
 		} else {
     		const doc = querySnapshot.docs[0];
-	    	doc.update({key: obj});
+    		//doc.ref saves the day
+	    	doc.ref.update({[key]: obj});
     	}
 	})
 }
@@ -90,7 +91,7 @@ const getOnboardingData = async () => {
 			return null;	
 		}
 
-    	return querySnapshot.docs[0];
+    	return querySnapshot.docs[0].data();
 	})
 }
 
@@ -99,22 +100,40 @@ export const useOnboarding = (params = {}) => {
 	
 	const [onboardingData, setData] = useState(null);
 
+	const [isLoading, setLoading] = useState(true);
+
+	const getDataDb = async() => {
+		const obAPIdata = await getOnboardingData();
+		await setStorageData(ONBOARDING_KEY, JSON.stringify(obAPIdata));
+		setData(obAPIdata);
+	}
+
 	React.useEffect(() => {
-		const getData = async() => {
-			//Get data from API and save it in storage
-			const obAPIdata = await getOnboardingData();
-			setStorageData(ONBOARDING_KEY, JSON.stringify(obAPIdata), () => setData(obAPIdata)) 
+		if (params?.enabled){
+			getDataDb();
 		}
-
-		getData();
-
 	}, []);
+
+	React.useEffect(() => {
+		if (onboardingData) {
+			setLoading(false);
+		}
+	}, [onboardingData])
 
 	const updateOnboarding = async (key, obj) => {
 		await setStorageData(ONBOARDING_KEY, JSON.stringify({...onboardingData, key: obj}), () => updateOnboardingData(key, obj))
 	}
+
+	const getOnboarding = async () => {
+		const localOnboarding = await getStorageData(ONBOARDING_KEY);
+		if (!!localOnboarding) {
+			return localOnboarding;
+		} else {
+			getDataDb()
+		}  
+	}
 	
-	return { onboardingData, updateOnboarding };
+	return { isLoading, onboardingData, getOnboarding, updateOnboarding };
 }
 
 const useCheckCredentials = () => {
