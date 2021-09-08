@@ -76,6 +76,7 @@ const Onboard = (props) => {
 		setStep(steps[steps.findIndex(it => it == step) - 1])
 	} 
 
+	//Code to imperatively call submitForm (when using parent Confirm Button)
 	const formRef = React.useRef();
 
 	const SubmitForm = () => {
