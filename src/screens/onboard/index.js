@@ -76,19 +76,6 @@ const Onboard = (props) => {
 		setStep(steps[steps.findIndex(it => it == step) - 1])
 	} 
 
-	const formRef = React.useRef();
-
-	const SubmitForm = () => {
-		const handleFormSubmit = () => {
-			if (formRef.current) {
-				//Imperatively call the form submit
-				formRef.current.submitForm()
-			}
-		}
-
-		return <ConfirmButton buttonContainerStyle={{bottom: 10}} buttonStyle={{width: '80%'}} title="NEXT" onClick={handleFormSubmit} />
-	}
-
 	return (
 		<AppView 
 			scrollViewStyle={{flexGrow:1}} 
