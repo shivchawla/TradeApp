@@ -35,36 +35,47 @@ const Onboard = (props) => {
 	const {isLoading, onboardingData, getOnboarding, updateOnboarding} = useOnboarding({enabled: true});
 
 	React.useEffect(() => {
-		if (!isLoading && onboardingData) {
-			const keys = Object.keys(onboardingData);
 
-			// setStep('identity');
-			// return;
-			var count = 0;
-			steps.every((step, index) => {
-				const idx = keys.findIndex(it => it == step);
-				if (idx == -1) {
-					console.log("Not Found Step: ", step)
-					setStep(step);
-					return false;
-				} else {
-					count++;
-					console.log("Step: ", step);
-					console.log(count);
-					if (count == steps.length) {
-						toKyc();
-					}
+		const handleOnboardingStep = async() => {
+			if (!isLoading && onboardingData) {
+				const keys = Object.keys(onboardingData);
+
+				if (onboardingData?.formStatus?.status == 'complete') {
+					toKyc();
+					return;
 				}
-				
-				return true;
-			})	
+
+				var count = 0;
+				steps.every((step, index) => {
+					const idx = keys.findIndex(it => it == step);
+					if (idx == -1) {
+						// console.log("Not Found Step: ", step)
+						setStep(step);
+						return false;
+					} else {
+						count++;
+						// console.log("Step: ", step);
+						// console.log(count);
+					}
+					
+					return true;
+				})
+
+				if (count == steps.length) {
+					await updateOnboarding('formStatus', {status: 'complete', date: new Date().toISOString()});						toKyc();
+					toKyc();
+				}	
+			}
 		}
+
+		handleOnboardingStep()
+
 	}, [isLoading]);
 
 	const submitOnboarding = async (key, values) => {
 
-		console.log("submitOnboarding: ", key);
-		console.log(values);
+		// console.log("submitOnboarding: ", key);
+		// console.log(values);
 
 		//Save the information in storage
 		//And the complete onboarding should be saved in firebase
@@ -80,10 +91,11 @@ const Onboard = (props) => {
 		navigation.navigate('StartKyc', {user: onboardingData});
 	} 
 
-	const toNextStep = () => {
+	const toNextStep = async() => {
 		//This is the last 
 		if(step == 'margin_agreement') {
-			//Move to 
+			//Move to
+			await updateOnboarding('formStatus', {status: 'complete', date: new Date().toISOString()})
 			toKyc();
 		} else {
 			setStep(steps[steps.findIndex(it => it == step) + 1])
