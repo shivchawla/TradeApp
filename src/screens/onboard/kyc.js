@@ -1,26 +1,20 @@
 import React, {useState, useCallback} from 'react';
-import {View, TouchableOpacity, StyleSheet} from 'react-native';
+import { View, TouchableOpacity, StyleSheet} from 'react-native';
 
 import { AppView, ConfirmButton } from '../../components/common';
 import { useTheme, HP, WP, StyledText } from '../../theme';
 
-import { usePersonaSession, usePersonaInquiry, useOnboarding } from '../../helper';
+import { usePersonaSession, usePersonaInquiry, 
+	useOnboarding, useCreateBrokerageAccount, 
+	processOnboardingData } from '../../helper';
 
 import Inquiry, {Fields, Environment} from 'react-native-persona';
 
-const KycButton = ({templateId = "tmpl_6Uj4QPGVn4hx7nQ9pNKwr65t", inquiry, session, user}) => {
+const KycButton = ({templateId = "tmpl_6Uj4QPGVn4hx7nQ9pNKwr65t", inquiry, session, user, onSuccess}) => {
   
-  	const {updateOnboarding} = useOnboarding({enabled: false});
-
   	const handleSuccess = useCallback((inquiryId, attributes) => {
 	 	console.log("Inquiry #{inquiryId} succeeded with attributes #{attributes}");
-	 	await updateOnboarding('kyc', {
-	   		...user?.kyc ?? {}, 
-   			inquiryId, 
-	   		status: 'completed', 
-	   		updatedAt: new Date(), 
-	   		...attributes
-	 	});
+	 	await onSuccess(attributes);
   	}, []);
 
 	const handleCancelled = useCallback(() => {
@@ -37,7 +31,7 @@ const KycButton = ({templateId = "tmpl_6Uj4QPGVn4hx7nQ9pNKwr65t", inquiry, sessi
 
 	const handleBeginInquiry = useCallback(async() => {
 
-		const inquiryId = null; //inquiry?.id;
+		const inquiryId = inquiry?.id;
 
 		if (inquiryId && session) {
 			console.log("Inquiry from inquiryID: ", inquiryId);
@@ -87,6 +81,8 @@ const KycButton = ({templateId = "tmpl_6Uj4QPGVn4hx7nQ9pNKwr65t", inquiry, sessi
 const StartKyc = (props) => {
 
 	const {user} = props.route.params;
+	const {navigation} = props;
+
 	const [inquiry, setInquiry] = useState(null);
 	const [session, setSession] = useState(null);
 
@@ -94,6 +90,9 @@ const StartKyc = (props) => {
 	//If none pending start a new one,
 	const {inquiries, getInquiries} = usePersonaInquiry(user.email);
 	const {getSession} = usePersonaSession(inquiry?.id, {enabled: false});
+
+	const {updateOnboarding} = useOnboarding({enabled: false});
+  	const {createBrokerageAccount} = useCreateBrokerageAccount();
 
 	React.useEffect(() => {
 		const getActiveInquiry = () => {
@@ -140,6 +139,21 @@ const StartKyc = (props) => {
 
 	}, [inquiry])
 
+  	const onSuccess = async(kycAttributes) => {
+  		await updateOnboarding('kyc', {
+	   		...user?.kyc ?? {}, 
+   			inquiryId, 
+	   		status: 'completed', 
+	   		updatedAt: new Date(), 
+	   		...kycAttributes
+	 	});
+
+	 	//Now create the brokerage account
+	 	createBrokerageAccount(processAccountParams(user), {
+	 		onSuccess: (res, input) => console.log(res),
+	 		onError: (err, input) => console.log(err)
+	 	});
+  	}
 
 	//Pass referenceId
   	//Pass InquiryId
@@ -148,7 +162,7 @@ const StartKyc = (props) => {
 
 	return (
 		<AppView isLoading={isLoading} title="Start KYC" goBack={false} >
-			<KycButton {...{inquiry, session, user}} />
+			<KycButton {...{inquiry, session, user}} onSuccess={onSuccess} />
 		</AppView>
 	)	
 }

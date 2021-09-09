@@ -16,15 +16,15 @@ const titles = {
 	'disclosure': 'Disclosures',
 	'employment': 'Employment',
 	'trustedContact': 'Add Trusted Contact', 
-	'customer_agreement': 'Customer Agreement',
-	'account_agreement': 'Account Agreement',
-	'margin_agreement': 'Margin Agreement',
+	'customerAgreement': 'Customer Agreement',
+	'accountAgreement': 'Account Agreement',
+	'marginAgreement': 'Margin Agreement',
 }
 
 const agreements = {
-	'customer_agreement': 'https://files.alpaca.markets/disclosures/library/AcctAppMarginAndCustAgmt.pdf',
-	'account_agreement': 'https://files.alpaca.markets/disclosures/library/AcctAppMarginAndCustAgmt.pdf',
-	'margin_agreement': 'https://files.alpaca.markets/disclosures/library/AcctAppMarginAndCustAgmt.pdf'
+	'customerAgreement': 'https://files.alpaca.markets/disclosures/library/AcctAppMarginAndCustAgmt.pdf',
+	'accountAgreement': 'https://files.alpaca.markets/disclosures/library/AcctAppMarginAndCustAgmt.pdf',
+	'marginAgreement': 'https://files.alpaca.markets/disclosures/library/AcctAppMarginAndCustAgmt.pdf'
 }
 
 
@@ -62,7 +62,6 @@ const Onboard = (props) => {
 				})
 
 				if (count == steps.length) {
-					await updateOnboarding('formStatus', {status: 'complete', date: new Date().toISOString()});						toKyc();
 					toKyc();
 				}	
 			}

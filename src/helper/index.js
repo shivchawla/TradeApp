@@ -47,3 +47,4 @@ export { useDocuments, useDownloadDocument } from './document'
 export { useTradeConfig } from './settings';
 
 export { usePersonaSession, usePersonaInquiry } from './persona';
+export { processOnboardingData } from './onboard';
