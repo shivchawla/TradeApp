@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 import { ConfirmButton } from '../../components/common';
-import { useTheme, WP, HP } from '../../theme';
+import { useTheme, WP, HP, StyledText } from '../../theme';
 
 export const FormView = ({onSubmit, children, ...props}) => {
 	
@@ -11,6 +11,8 @@ export const FormView = ({onSubmit, children, ...props}) => {
 
 	return (
 		<>	
+			{props?.error && <StyledText style={styles.signInError}>{props?.error} </StyledText>}
+
 			<View style={[styles.formContainer, props.formContainerStyle]}>
 				{children}
 			</View>

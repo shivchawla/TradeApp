@@ -14,7 +14,7 @@ const KycButton = ({templateId = "tmpl_6Uj4QPGVn4hx7nQ9pNKwr65t", inquiry, sessi
   
   	const handleSuccess = useCallback((inquiryId, attributes) => {
 	 	console.log("Inquiry #{inquiryId} succeeded with attributes #{attributes}");
-	 	await onSuccess(attributes);
+	 	onSuccess(attributes);
   	}, []);
 
 	const handleCancelled = useCallback(() => {

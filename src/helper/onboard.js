@@ -42,7 +42,7 @@ export const processOnboardingData = (user) => {
 		},
 		{
 			agreement: "customer_agreement",
-			signed_at: user?.customer_agreement?.signedAt,,
+			signed_at: user?.customer_agreement?.signedAt,
 			ip_address: user?.customer_agreement?.ipAddress,
 		}],
 		trusted_contact: {

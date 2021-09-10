@@ -21,7 +21,7 @@ export const FormTextField = ({field, placeholder, handler, setCustomError = nul
 				{!!value && <StyledText style={styles.labelStyle}>{placeholder}</StyledText>}
 				<TextInput style={[styles.textinput, props.inputStyle]}
 					{...{placeholder}}
-					keyboardType={props.type == "numeric" ? "numeric" : 'default'}
+					keyboardType={props?.type ?? 'default'}
 					placeholderTextColor={theme.grey7}
 					onChangeText={handleChange(field)}
 					onBlur={handleBlur(field)}

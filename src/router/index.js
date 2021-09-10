@@ -70,8 +70,8 @@ const Routes = () => {
 	
 	const {isLoading, currentUser, brokerageAccount} = useAppStartup();
 
-	// console.log("Current User");
-	// console.log(currentUser);
+	console.log("Current User");
+	console.log(currentUser);
 
 	// console.log("User Account");
 	// console.log(userAccount);

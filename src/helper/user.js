@@ -3,6 +3,9 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {useQuery} from 'react-query';
 
+export const EmailAuthProvider = auth.EmailAuthProvider;
+export const PhoneAuthProvider = auth.PhoneAuthProvider;
+
 // import { signInWithEmailPassword, createUserWithEmailPassword, signOutFirebase findUserDb, addUserDb } from './firebase';
 import {getStorageData, setStorageData} from './store';
 import { currentISODate, toISODate } from '../utils';
@@ -54,11 +57,12 @@ const getAlpacaAccount = async() => await getStorageData(ALPACA_ACCOUNT_KEY);
 const updateCurrentUser = async(currentUser) => await setStorageData(USER_CREDENTIAL_KEY, JSON.stringify(currentUser)); 
 const updateAlpacaAccount = async(alpacaAccount) => await setStorageData(ALPACA_ACCOUNT_KEY, JSON.stringify({...alpacaAccount, lastUpdated: currentISODate()}));
 
+
 const updateOnboardingData = async (key, obj) => {
 	
 	const currentUser = await getCurrentUser(); 
 	
-	const email = currentUser?.user?.email;
+	const email = currentUser?.email;
 
 	//Update in firestore
 	await firestore().collection('Onboarding')
@@ -79,7 +83,7 @@ const updateOnboardingData = async (key, obj) => {
 const getOnboardingData = async () => {
 
 	const currentUser = await getCurrentUser(); 
-	const email = currentUser?.user?.email;
+	const email = currentUser?.email;
 
 	//Update in firestore
 	return firestore().collection('Onboarding')
@@ -190,7 +194,7 @@ const useAuthHelper = () => {
 	const [currentUser, setCurrentUser] = useState(null);
 	const [isErrorUser, setErrorUser] = useState(false);
 
-	const email = currentUser?.user?.email;
+	const email = currentUser?.email;
 	const {userAccount, setUserAccount, isError: isErrorAccount} = useGetUserAccount(email, {enabled: !!email});
 
 	const accountId = userAccount?.id;
@@ -202,18 +206,26 @@ const useAuthHelper = () => {
 		console.log("useCheckCredentials");
 		const checkUserCredential  = async () => {
 			//Update logic to check for last signed in time 
-			const currentUser = await getCurrentUser();
-			if (!!currentUser?.user?.email) {
+			var currentUser = await getCurrentUser();
+			if (!!currentUser?.email) {
 				setCurrentUser(currentUser);
 			} else {
-				setErrorUser(true);
+
+				console.log("Check the user from auth");
+				currentUser = await auth().currentUser;
+				console.log(currentUser);
+
+				if (!currentUser) {
+					setErrorUser(true);
+				} else {
+					setCurrentUser(currentUser);
+				}
 			}
 		}
 
 		checkUserCredential()
 
-	}, []);
-
+	}, [])
 
 	const getUserFromDb = async (email) => {
 		console.log("Getting User");
@@ -232,9 +244,10 @@ const useAuthHelper = () => {
 		console.log(userCredential);
 
 	  	if (userCredential.user.emailVerified) {
-	  		await updateCurrentUser(userCredential);
-			setCurrentUser(userCredential)
+	  		await updateCurrentUser(userCredential?.user);
+			setCurrentUser(userCredential?.user)
 	  		
+			//Should this be moved to side effect?
 	        await getUserFromDb(email);
 	  	} else {
 	  		// setLoading(false);
@@ -244,11 +257,29 @@ const useAuthHelper = () => {
 	  	return;
 	}
 
-	const signUp = async ({email, password}) => {
+	const signUpEmail = async ({email, password}, {sendEmail=true, linkTo= null}) => {
 		const userCredential = await auth().createUserWithEmailAndPassword(email, password);
-        userCredential.user.sendEmailVerification();
-        auth().signOut();
-        return true;
+    	if(sendEmail) {
+    		await userCredential.user.sendEmailVerification({
+    			url:'https://fincript-dev.firebaseapp.com',	
+    			handleCodeInApp: true,
+    			android: {
+    				packageName: 'com.fincript.rndev'
+    			}
+    		});
+		}
+
+		if(linkTo) {
+			await userCredential.user.linkWithCredential(linkTo);
+		}
+
+        await auth().signOut();
+
+        return userCredential;
+	}
+
+	const signUpPhone = async (phoneNumber) => {
+    	return await auth().signInWithPhoneNumber(phoneNumber);
 	}
 
 	const signOut = async () => {
@@ -259,7 +290,7 @@ const useAuthHelper = () => {
 
 	const changePassword = async({password, newPassword}) => {
 		const currentUser = await getCurrentUser();
-		const email = currenUser?.user?.email;
+		const email = currenUser?.email;
 		if (!email) {
 			throw new Error("No user found");
 		}
@@ -282,7 +313,7 @@ const useAuthHelper = () => {
 	
 	return {currentUser, userAccount, brokerageAccount, 
 			isErrorUser, isErrorAccount, isErrorBrokerage,  
-			signIn, signUp, signOut, requestResetPassword, resetPassword, changePassword };
+			signIn, signUpEmail, signUpPhone, signOut, requestResetPassword, resetPassword, changePassword };
 }
 
 
