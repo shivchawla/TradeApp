@@ -23,7 +23,7 @@ const PhoneSignUpSchema = Yup.object().shape({
  });
 
 
-const EmailSignUpForm = React.forwardRef(({onSubmit, type, onSigupError, error,  ...props}, ref) => {
+const EmailSignUpForm = React.forwardRef(({onSubmit, type, onError, ...props}, ref) => {
 	const {theme, styles} = useStyles();
 
 	const formik = useFormik({
@@ -39,14 +39,14 @@ const EmailSignUpForm = React.forwardRef(({onSubmit, type, onSigupError, error, 
  	React.useImperativeHandle(ref, () => ({submitForm: formik.handleSubmit}), []);
 
 	return (
-		<FormView {...{error}} onSubmit={formik.handleSubmit}>
-			<FormTextField field="email" placeholder="Email" handler={formik} setCustomError={onSigupError}/>
-			<FormTextField field="password" placeholder="Password" handler={formik} setCustomError={onSigupError}/>
+		<FormView {...props} onSubmit={formik.handleSubmit} >
+			<FormTextField field="email" placeholder="Email" handler={formik} setCustomError={onError}/>
+			<FormTextField field="password" placeholder="Password" handler={formik} setCustomError={onError}/>
 		</FormView>
 	)
 })
 
-const PhoneSignUpForm = React.forwardRef(({onSubmit, type, onSignupError, error,  ...props}, ref) => {
+const PhoneSignUpForm = React.forwardRef(({onSubmit, type, onError, ...props}, ref) => {
 	const {theme, styles} = useStyles();
 
 	// console.log("PhoneSignUpForm");
@@ -66,15 +66,14 @@ const PhoneSignUpForm = React.forwardRef(({onSubmit, type, onSignupError, error,
  	React.useImperativeHandle(ref, () => ({submitForm: formik.handleSubmit}), []);
 
 	return (
-		<FormView {...{error}} onSubmit={formik.handleSubmit}>
-			<FormTextField field="phoneNumber" type="phone-pad" placeholder="Phone" handler={formik} setCustomError={onSignupError}/>
+		<FormView {...props} onSubmit={formik.handleSubmit}>
+			<FormTextField field="phoneNumber" type="phone-pad" placeholder="Phone" handler={formik} setCustomError={onError}/>
 		</FormView>
 	)
 })
 
 
 export const SignUpForm = ({type, ...props}) => {
-	console.log(type);
 	return (
 		<>{
 			type == 'email' ?

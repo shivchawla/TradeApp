@@ -26,7 +26,7 @@ export { useCreateBrokerageAccount, useTradingAccountData,
 
 export { AccountStatus } from './enums';
 
-export { useAuth, AuthProvider, EmailAuthProvider, PhoneAuthProvider, useOnboarding } from './user';
+export { useAuth, AuthProvider, EmailAuthProvider, PhoneAuthProvider } from './user';
 
 export { useSymbolActivity, 
 		getCurrentTheme, setCurrentTheme,
@@ -47,4 +47,4 @@ export { useDocuments, useDownloadDocument } from './document'
 export { useTradeConfig } from './settings';
 
 export { usePersonaSession, usePersonaInquiry } from './persona';
-export { processOnboardingData } from './onboard';
+export { processOnboardingData, useOnboarding } from './onboard';

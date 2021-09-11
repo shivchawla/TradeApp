@@ -16,9 +16,8 @@ export const FormView = ({onSubmit, children, ...props}) => {
 			<View style={[styles.formContainer, props.formContainerStyle]}>
 				{children}
 			</View>
-			<View style={{position: 'absolute', bottom: 10}} >
-				<ConfirmButton buttonContainerStyle={styles.buttonContainer} buttonStyle={{width: '90%'}} title="Next" onClick={onSubmit} />
-			</View>
+				
+			<ConfirmButton buttonContainerStyle={[{position: 'absolute', bottom: 10}, styles.buttonContainer, props.submitButtonContainerStyle]} buttonStyle={[{width: '90%'}, props.submitButtonStyle]} title="Next" onClick={onSubmit} />
 		</>
 	)
 } 

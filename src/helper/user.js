@@ -1,143 +1,53 @@
 import React, {useState} from 'react';
+import { AppState } from 'react-native';
+
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {useQuery} from 'react-query';
+import queryString from 'query-string';
 
 export const EmailAuthProvider = auth.EmailAuthProvider;
 export const PhoneAuthProvider = auth.PhoneAuthProvider;
 
-// import { signInWithEmailPassword, createUserWithEmailPassword, signOutFirebase findUserDb, addUserDb } from './firebase';
-import {getStorageData, setStorageData} from './store';
+import {getCurrentUser, updateCurrentUser, 
+	getAlpacaAccount, updateAlpacaAccount} from './store';
+
 import { currentISODate, toISODate } from '../utils';
 
 import { useBrokerageAccountData } from './account';
 
-export const findUserDb = async(email) => {
+const USER_DB = 'Users';
+
+const findUserDb = async(email) => {
 	console.log("findUserDb");
 	console.log(email);
-	return firestore().collection('Users')
-	.where('email','==', email)
-	.limit(1)
-  	.get()
-	.then(querySnapshot => {
-		
-		if (querySnapshot.size < 1) {
-			return null;
-		}
+	try{
+		return firestore().collection(USER_DB)
+		.where('email','==', email)
+		.limit(1)
+	  	.get()
+		.then(querySnapshot => {
+			
+			if (querySnapshot.size < 1) {
+				return null;
+			}
 
-	    return querySnapshot.docs[0];
-	})
-	.catch(err => {
+		    return querySnapshot.docs[0].data();
+		})
+	} catch(err) {
+		console.log("There is an Error");
 		console.log(err);
-	})
+		return null;
+	}
 }
 
-export const addUserDb = async(email, userAccount) => {
-	return firestore().collection('Users')
+const addUserDb = async(email, userAccount) => {
+	return firestore().collection(USER_DB)
 	.add({
 		email,
 	    ...userAccount
 	})
-}
-
-// export const signInWithEmailPassword = async ({email, password}) => await auth().signInWithEmailAndPassword(email, password);
-
-// export const createUserWithEmailPassword = async({email, password}) => await auth().createUserWithEmailAndPassword(email, password);
-
-// export const signOutFirebase = async() => await auth().signOut();
-
-
-const USER_CREDENTIAL_KEY = 'userCredentials';
-const ALPACA_ACCOUNT_KEY = 'alpacaAccount';
-const ONBOARDING_KEY = "onboarding";
-
-const getCurrentUser = async() => await getStorageData(USER_CREDENTIAL_KEY);
-const getAlpacaAccount = async() => await getStorageData(ALPACA_ACCOUNT_KEY);
-
-const updateCurrentUser = async(currentUser) => await setStorageData(USER_CREDENTIAL_KEY, JSON.stringify(currentUser)); 
-const updateAlpacaAccount = async(alpacaAccount) => await setStorageData(ALPACA_ACCOUNT_KEY, JSON.stringify({...alpacaAccount, lastUpdated: currentISODate()}));
-
-
-const updateOnboardingData = async (key, obj) => {
-	
-	const currentUser = await getCurrentUser(); 
-	
-	const email = currentUser?.email;
-
-	//Update in firestore
-	await firestore().collection('Onboarding')
-	.where('email','==', email)
-	.limit(1)
-	.get()
-	.then(querySnapshot => { 
-		if (querySnapshot.size < 1) {
-			firestore().collection('Onboarding').add({email, [key]: obj})	
-		} else {
-    		const doc = querySnapshot.docs[0];
-    		//doc.ref saves the day
-	    	doc.ref.update({[key]: obj});
-    	}
-	})
-}
- 
-const getOnboardingData = async () => {
-
-	const currentUser = await getCurrentUser(); 
-	const email = currentUser?.email;
-
-	//Update in firestore
-	return firestore().collection('Onboarding')
-	.where('email','==', email)
-	.limit(1)
-	.get()
-	.then(querySnapshot => { 
-		if (querySnapshot.size < 1) {
-			return null;	
-		}
-
-    	return querySnapshot.docs[0].data();
-	})
-}
-
-
-export const useOnboarding = (params = {}) => {
-	
-	const [onboardingData, setData] = useState(null);
-
-	const [isLoading, setLoading] = useState(true);
-
-	const getDataDb = async() => {
-		const obAPIdata = await getOnboardingData();
-		await setStorageData(ONBOARDING_KEY, JSON.stringify(obAPIdata));
-		setData(obAPIdata);
-	}
-
-	React.useEffect(() => {
-		if (params?.enabled){
-			getDataDb();
-		}
-	}, []);
-
-	React.useEffect(() => {
-		if (onboardingData) {
-			setLoading(false);
-		}
-	}, [onboardingData])
-
-	const updateOnboarding = async (key, obj) => {
-		await setStorageData(ONBOARDING_KEY, JSON.stringify({...onboardingData, key: obj}), () => updateOnboardingData(key, obj))
-	}
-
-	const getOnboarding = async () => {
-		const localOnboarding = await getStorageData(ONBOARDING_KEY);
-		if (!!localOnboarding) {
-			return localOnboarding;
-		} else {
-			getDataDb()
-		}  
-	}
-	
-	return { isLoading, onboardingData, getOnboarding, updateOnboarding };
 }
 
 const useCheckCredentials = () => {
@@ -155,9 +65,9 @@ const useCheckCredentials = () => {
 	}, []);
 
 	return currentUser;
-
 }
 
+//Removed it's use
 const useGetUserAccount = (email, {enabled = false}) => {
 	const [userAccount, setUserAccount] = useState(null);
 	const [isError, setError] = useState(false);
@@ -188,14 +98,17 @@ const useGetUserAccount = (email, {enabled = false}) => {
 //Based on Email, db Account is loaded
 //Based on AccountId, Brokerage account is fetched
 
-
 const useAuthHelper = () => {
-	// const [userAccount, setUserAccount] = useState(null);
+
 	const [currentUser, setCurrentUser] = useState(null);
 	const [isErrorUser, setErrorUser] = useState(false);
 
-	const email = currentUser?.email;
-	const {userAccount, setUserAccount, isError: isErrorAccount} = useGetUserAccount(email, {enabled: !!email});
+	const [userAccount, setUserAccount] = useState(null);
+
+	const [confirmPhone, setConfirmPhone] = useState(null);
+
+	// const email = currentUser?.email;
+	// const {userAccount, setUserAccount, isError: isErrorAccount} = useGetUserAccount(email, {enabled: !!email});
 
 	const accountId = userAccount?.id;
 	console.log("AccountId ", accountId);
@@ -203,52 +116,100 @@ const useAuthHelper = () => {
 	const {data: brokerageAccount, isError: isErrorBrokerage} = useBrokerageAccountData({enabled: !!accountId})
 
 	React.useEffect(() => {
+
+		const handleDynamicLink = async(link) => {
+			// Handle dynamic link inside your own application
+		    console.log("Received Dynamic Link: ", link)
+		    if (link?.url) {
+		    	const parsed = queryString.parse(link?.url);
+		    	const mode = parsed?.mode;
+		    	if(mode == "verifyEmail") {
+		    		const oobCode = parsed?.oobCode;
+		    		//Apply oob code
+		    		await auth().applyActionCode(oobCode)
+		    		await checkUserCredential();
+		    	}
+		    }	
+		};
+
 		console.log("useCheckCredentials");
+	    const unsubscribeDL = dynamicLinks().onLink(handleDynamicLink);
+
 		const checkUserCredential  = async () => {
+
 			//Update logic to check for last signed in time 
 			var currentUser = await getCurrentUser();
-			if (!!currentUser?.email) {
+			if (!!currentUser?.emailVerified) {
 				setCurrentUser(currentUser);
 			} else {
+				try{
+					//If Email is not verified, refetch from aut
+					console.log("Check the user from auth - After reload");
 
-				console.log("Check the user from auth");
-				currentUser = await auth().currentUser;
-				console.log(currentUser);
+					await auth().currentUser.reload();
 
-				if (!currentUser) {
-					setErrorUser(true);
-				} else {
-					setCurrentUser(currentUser);
+					let updatedUser = await auth().currentUser;
+					console.log(updatedUser);
+
+					if (!currentUser) {
+						setErrorUser(true);
+					} else {
+						setCurrentUser(updatedUser);
+					}
+				} catch(err) {
+					console.log(err);
 				}
 			}
 		}
 
 		checkUserCredential()
 
+ 		return () => {
+	      unsubscribeDL()
+	    };
 	}, [])
+
+	React.useEffect(() => {
+		(async() => {
+			if (currentUser) {
+				console.log("Current User Change Effect");
+				console.log(currentUser);
+				await updateCurrentUser(currentUser);
+				if (currentUser?.emailVerified) {
+					console.log(currentUser?.email);
+					await getUserFromDb(currentUser?.email);
+				}
+			}
+		})()
+	}, [currentUser])
+
+
+	React.useEffect(() => {
+		(async() => {
+			if (userAccount) {
+				await updateAlpacaAccount(account);	
+			}
+		})()	
+	}, [userAccount])
+
 
 	const getUserFromDb = async (email) => {
 		console.log("Getting User");
 		const account = await findUserDb(email)
 		console.log("Found Account");
 		console.log(account);
-		await updateAlpacaAccount(account);	
 		console.log("Setting User Account");
 		setUserAccount(account);
 	};
 
-	const signIn = async (email, password) => {
+	const signInEmail = async (email, password) => {
 		const userCredential = await auth().signInWithEmailAndPassword(email, password);
 
 		console.log("Signed In");
 		console.log(userCredential);
 
-	  	if (userCredential.user.emailVerified) {
-	  		await updateCurrentUser(userCredential?.user);
+	  	if (userCredential.user?.emailVerified) {
 			setCurrentUser(userCredential?.user)
-	  		
-			//Should this be moved to side effect?
-	        await getUserFromDb(email);
 	  	} else {
 	  		// setLoading(false);
 	  		throw new Error({code: "auth/email-not-verified"});
@@ -257,8 +218,25 @@ const useAuthHelper = () => {
 	  	return;
 	}
 
+	const signInPhone = async (phoneNumber) => {
+		setConfirmPhone(await auth().signInWithPhoneNumber(phoneNumber));
+	}
+
+	const submitPhoneCode = async (code) => {
+		const userCredential = confirmPhone.confirm(code);
+
+		if (userCredential?.user) {
+			setCurrentUser(userCredential?.user)
+	  	} else {
+	  		throw new Error({code: "auth/email-not-verified"});
+	  	}
+
+	  	return; 
+	}
+
 	const signUpEmail = async ({email, password}, {sendEmail=true, linkTo= null}) => {
-		const userCredential = await auth().createUserWithEmailAndPassword(email, password);
+		let userCredential = await auth().createUserWithEmailAndPassword(email, password);
+    	
     	if(sendEmail) {
     		await userCredential.user.sendEmailVerification({
     			url:'https://fincript-dev.firebaseapp.com',	
@@ -270,10 +248,14 @@ const useAuthHelper = () => {
 		}
 
 		if(linkTo) {
-			await userCredential.user.linkWithCredential(linkTo);
+			//Get finally linked userCredentials
+			userCredential = await userCredential.user.linkWithCredential(linkTo);
 		}
 
-        await auth().signOut();
+		setCurrentUser(userCredential?.user);
+
+		//Don't signout to allow sign-In on clicking the link
+        // await auth().signOut();
 
         return userCredential;
 	}
@@ -300,7 +282,6 @@ const useAuthHelper = () => {
 
 		//Now that signIn is complete, update Password
 		await auth().currentUser.updatePassword(newPassword);
-
 	}
 
 	const requestResetPassword = async (email) => {
@@ -310,10 +291,13 @@ const useAuthHelper = () => {
 	const resetPassword = async (code, newPassword) => {
 		return await auth().confirmPasswordReset(code, newPassword);
 	} 
-	
+
 	return {currentUser, userAccount, brokerageAccount, 
-			isErrorUser, isErrorAccount, isErrorBrokerage,  
-			signIn, signUpEmail, signUpPhone, signOut, requestResetPassword, resetPassword, changePassword };
+		isErrorUser, isErrorBrokerage, 
+		signInEmail, signUpEmail, signUpPhone, 
+		signOut, requestResetPassword, resetPassword, 
+		changePassword 
+	};
 }
 
 

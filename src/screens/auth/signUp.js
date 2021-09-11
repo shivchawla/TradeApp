@@ -1,18 +1,19 @@
 import React, {useState} from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native'
 
-import { useAuth, EmailAuthProvider, PhoneAuthProvider, setStorageData } from '../../helper';
-import { AppView, ConfirmButton } from '../../components/common';
+import { useAuth, PhoneAuthProvider, setStorageData } from '../../helper';
+import { AppView, ConfirmButton, TinyTextButton } from '../../components/common';
 import { SignUpForm } from '../../components/auth';
 
 import { useTheme, StyledText, WP, HP }  from '../../theme';
 
 const SignUp = (props) => {
 
-	const {signUpPhone, signUpEmail, updateUser} = useAuth();
+	const {currentUser, signUpPhone, signUpEmail} = useAuth();
 
 	const [signUpType, setSignUpType] = useState('phone');
-	const [signUpError, setSignUpError] = useState(null);
+	const [error, setError] = useState(null);
 	const [signedUp, setSignedUp] = useState(false);
 	const [phoneConfirm, setPhoneConfirm] = useState(null); 
 	
@@ -20,6 +21,15 @@ const SignUp = (props) => {
 	const [emailCredentials, setEmailCredentials] = useState(null);	
 
 	const [otp, setOtp] = useState(null); 
+
+	const {navigation} = props
+
+	// useFocusEffect(
+	// 	React.useCallback(() => {
+	// 		console.log("Sign Up Mount Effect");
+	// 		console.log(currentUser);
+	// 	}, [])
+	// )
 
 	React.useEffect(() => {
 
@@ -65,9 +75,7 @@ const SignUp = (props) => {
 			console.log("phoneAuthCredentials");
 			console.log(phoneAuthCredentials);
 
-			// const userCredentials = await phoneConfirm.confirm(otp);
-
-			console.log("User successfully signed/created with PHONE");
+			// console.log("User successfully signed/created with PHONE");
 			// console.log(userCredentials);
 
 			setPhoneCredentials(phoneAuthCredentials);
@@ -94,10 +102,10 @@ const SignUp = (props) => {
 		
 		try {
 			
-			const userCredentials = await signUpEmail({email, password}, {linkTo: phoneCredentials});
+			const userCredential = await signUpEmail({email, password}, {linkTo: phoneCredentials});
 			console.log("User successfully signed/created with EMAIL");
 			
-			setEmailCredentials(userCredentials)
+			setEmailCredentials(userCredential);
 						
 		} catch(error) {
 			if (error.code === 'auth/email-already-in-use') {
@@ -122,14 +130,22 @@ const SignUp = (props) => {
 	// console.log((signUpType == "phone" && !phoneConfirm) || (signUpType == "email"));
 	
 	return (
-		<AppView title="Sign Up" goBack={false}>
+		<AppView title="Sign Up" goBack={false} scroll={false} staticViewStyle={styles.screenContentStyle}>
 			{signedUp ? 
 				<StyledText>Verify Email to proceed</StyledText>
 			:
-			
 				<>
 				{((signUpType == "phone" && !phoneConfirm) || (signUpType == "email")) &&
-					<SignUpForm type={signUpType} disabled={signUpType == "phone" && phoneConfirm} onSubmit={signUpType == "phone" ? onSignUpPhone : onSignUpEmail}/>
+					<SignUpForm 
+						type={signUpType} 
+						disabled={signUpType == "phone" && phoneConfirm} 
+						onSubmit={signUpType == "phone" ? onSignUpPhone : onSignUpEmail}
+						onError={setError}
+						error={error}
+						submitButtonContainerStyle={styles.submitButtonContainer}
+						submitButtonStyle={styles.submitButton}
+						formContainerStyle={styles.formContainer}
+					/>
 				}
 
 				{(signUpType == "phone" && phoneConfirm) && 
@@ -145,6 +161,11 @@ const SignUp = (props) => {
 						<ConfirmButton title="SUBMIT OTP" onClick={onSubmitOtp} />
 					</View>
 				}
+
+				<View style={styles.tinyButtonContainer}>
+					<TinyTextButton title="SIGN IN" onPress={() => navigation.navigate('SignIn')} />
+				</View>
+
 				</>
 			}
 		</AppView>
@@ -155,7 +176,25 @@ const useStyles = () => {
 	const {theme} = useTheme();
 
 	const styles = StyleSheet.create({
-
+		screenContentStyle: {
+			alignItems: 'center',
+			justifyContent: 'center',
+		},
+		formContainer: {
+			flex:0, 
+			// marginBottom: HP(5)
+		},
+		submitButtonContainer:{
+			position: 'relative', 
+			// top: 0
+		},
+		submitButton: {
+			width: '60%', 
+			marginTop: WP(0),
+		},
+		tinyButtonContainer: {
+			marginTop: HP(10)
+		}
 	})
 
 	return {theme, styles};

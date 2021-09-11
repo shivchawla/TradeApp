@@ -52,7 +52,7 @@ export const AppView = ({scroll = true, footer, hasHeader = true, header, isLoad
 			:
 			<View style={[styles.appContainer, props.appContainerStyle]}>
 				{hasHeader || header ? header ? header : <AppHeader {...props}/> : <></>}
-				<View style={[styles.staticView, {...hasPadding && {paddingLeft: WP(props.padding), paddingRight: WP(props.padding)}}]}>
+				<View style={[styles.staticView, {...hasPadding && {paddingLeft: WP(props.padding), paddingRight: WP(props.padding)}}, props.staticViewStyle]}>
 					{props.children}
 				</View>
 				{footer && <View style={[styles.footerContainer, props.footerContainerStyle]}>{footer}</View>}

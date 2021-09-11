@@ -13,25 +13,24 @@ const SigninSchema = Yup.object().shape({
 		.required('Password is required'),
 });
 
-export const SignInForm = React.forwardRef(({onSubmit, initialValues = {}, setSignInError,  ...props}, ref) => {
+export const SignInForm = React.forwardRef(({onSubmit, onError, ...props}, ref) => {
 	const {theme, styles} = useStyles();
 
 	const formik = useFormik({
 		validationSchema: SigninSchema,
-		initialValues: { email: 'shiv.chawla@yandex.com', password: 'Password' , ...initialValues},
+		initialValues: { email: 'shiv.chawla@yandex.com', password: 'Password'},
 		validateOnChange: false,
         validateOnBlur: false,
 		onSubmit: onSubmit
 	});
 
-	
 	//Added this to get ref to formik handleSubmit 
  	React.useImperativeHandle(ref, () => ({submitForm: formik.handleSubmit}), []);
 
 	return (
-		<FormView onSubmit={formik.handleSubmit}>
-			<FormTextField field="email" placeholder="Email" handler={formik} setCustomError={setSignInError}/>
-			<FormTextField field="password" placeholder="Password" handler={formik} setCustomError={setSignInError}/>
+		<FormView {...props} onSubmit={formik.handleSubmit}>
+			<FormTextField field="email" placeholder="Email" handler={formik} setCustomError={onError}/>
+			<FormTextField field="password" placeholder="Password" handler={formik} setCustomError={onError}/>
 		</FormView>
 	)
 })

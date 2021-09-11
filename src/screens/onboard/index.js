@@ -105,6 +105,8 @@ const Onboard = (props) => {
 		setStep(steps[steps.findIndex(it => it == step) - 1])
 	} 
 
+	console.log("Onboarding isLoading: ", isLoading);
+	
 	return (
 		<AppView 
 			scrollViewStyle={{flexGrow:1}} 

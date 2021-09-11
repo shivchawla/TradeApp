@@ -99,6 +99,8 @@ const Routes = () => {
 	// console.log("Scheme");
 	// console.log(scheme);
 
+	console.log("Estoy Aqui");
+	console.log(currentUser);
 
 	return (
 		// <>
@@ -107,10 +109,10 @@ const Routes = () => {
 		// 	:	
 		<NavigationContainer>
 			<Stack.Navigator screenOptions={{headerShown: false}}>
-				{!!currentUser?.user && !!brokerageAccount && 
+				{!!currentUser?.emailVerified && !!brokerageAccount && 
 					<Stack.Screen name="Trading" component={TradingStack} />
 				}
-				{!!currentUser?.user ?
+				{!!currentUser?.emailVerified ?
 					 <Stack.Screen name="OnboardStack" component={OnboardStack} />
 					: <Stack.Screen name="Auth" component={AuthStack} />
 				}

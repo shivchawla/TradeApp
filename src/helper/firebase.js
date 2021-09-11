@@ -14,7 +14,7 @@ export const findUserDb = async(email) => {
 			return null;
 		}
 
-	    return querySnapshot.docs[0];
+	    return querySnapshot.docs[0].data();
 	})
 	.catch(err => {
 		console.log(err);

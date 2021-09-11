@@ -1304,6 +1304,11 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-6.0.2.tgz#3b61757c46d0f387815d42b651bbee1eb998a385"
   integrity sha512-HbVIv6p+VAzSqALkfKKNbtSy0TneL7EILIqxiOjt/5weVdTuZ88NRyPNQAZBh6W8QYirXJo3f00ryMk9iLs7gQ==
 
+"@react-native-firebase/analytics@^12.7.5":
+  version "12.7.5"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/analytics/-/analytics-12.7.5.tgz#317f6a6f02c4fd7e0913376f257e55df671eca2a"
+  integrity sha512-tBFKkQHrZv4TEjRIF62lvqa6d2bIJ3SKOoa2UW/zRPgyzp5yak9casfvokHdCwMk1jXNgHgVOYbg2jiwSldK4A==
+
 "@react-native-firebase/app@^12.3.0":
   version "12.7.5"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-12.7.5.tgz#337fd517a6329dd9d734b36ca91bf0c54cc3a337"
@@ -1317,6 +1322,11 @@
   version "12.7.5"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/auth/-/auth-12.7.5.tgz#67b16ba9f244e0c6387f1498bb4a36e2759f17da"
   integrity sha512-skpbmPJl2YvkS9eGuJ8mSnlr4sVjkMzPFi98kEAOuOTHmRB72/YXVqR72AS4HFBxvGJDIRtZJCeLm+Vc2Ngcrw==
+
+"@react-native-firebase/dynamic-links@^12.7.5":
+  version "12.7.5"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/dynamic-links/-/dynamic-links-12.7.5.tgz#34afc293bd1dbce7c58b57415a0c8d69172c476c"
+  integrity sha512-fhiJdVLMCOLQi2g8EmJK9MTWQq0iEB97Ndu5HuTxeUhFTBAtStOB3qhnw1NVVX6TJnRxmzGXVmuiw76GIZySzA==
 
 "@react-native-firebase/firestore@^12.3.0":
   version "12.7.5"
@@ -6416,6 +6426,16 @@ query-string@^6.13.6:
   version "6.14.1"
   resolved "https://registry.yarnpkg.com/query-string/-/query-string-6.14.1.tgz#7ac2dca46da7f309449ba0f86b1fd28255b0c86a"
   integrity sha512-XDxAeVmpfu1/6IjyT/gXHOl+S0vQ9owggJ30hhWKdHAsNPOcasn5o9BW0eejZqL2e4vMjhAxoW3jVHcD6mbcYw==
+  dependencies:
+    decode-uri-component "^0.2.0"
+    filter-obj "^1.1.0"
+    split-on-first "^1.0.0"
+    strict-uri-encode "^2.0.0"
+
+query-string@^7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/query-string/-/query-string-7.0.1.tgz#45bd149cf586aaa582dffc7ec7a8ad97dd02f75d"
+  integrity sha512-uIw3iRvHnk9to1blJCG3BTc+Ro56CBowJXKmNNAm3RulvPBzWLRqKSiiDk+IplJhsydwtuNMHi8UGQFcCLVfkA==
   dependencies:
     decode-uri-component "^0.2.0"
     filter-obj "^1.1.0"

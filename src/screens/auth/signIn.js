@@ -1,7 +1,7 @@
 import React, {useState, useRef} from 'react';
 import { View, Text, StyleSheet, Pressable, TextInput } from 'react-native';
 
-import { AppView, ConfirmButton} from '../../components/common';
+import { AppView, ConfirmButton, TinyTextButton} from '../../components/common';
 import { SignInForm } from '../../components/auth';
 import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
 import { useAuth } from '../../helper';
@@ -9,40 +9,41 @@ import { useAuth } from '../../helper';
 //Add logic to save auth state to temp storage
 const SignIn = (props) => {
 
-	// const [email , setemail] = useState('');
-	// const [password , setpassword] = useState('');
+	const {theme, styles} = useStyles();
+
 	const [error , setError] = useState(null);
 
 	const {navigation} = props;
 
-	const {currentUser, userAccount, signIn, brokerageAccount, signOut} = useAuth();
+	const {currentUser, userAccount, signInEmail, brokerageAccount, signOut} = useAuth();
 	
 	React.useEffect(() => {
-		console.log("Running the useEffect in SignIn");
-		console.log("Whats the brokerage Account");
-		console.log(brokerageAccount);
-		console.log(currentUser);
+		// console.log("Running the useEffect in SignIn");
+		// console.log("Whats the brokerage Account");
+		// console.log(brokerageAccount);
+		// console.log(currentUser);
 
-		if (!!brokerageAccount?.data) {
-			if (brokerageAccount.data.status == AccountStatus.ACTIVE) {
-				navigation.navigate('Trading')	
-			} 
+		if (!!brokerageAccount?.data && 
+				brokerageAccount.data.status == AccountStatus.ACTIVE) {
 
-			//What to do in other status message
-
-		} else if (!!currentUser?.user) {
-			// console.log("~~~~Sign out!!!!");
-			// signOut()
-			console.log("Navigating to Onboard");
-			navigation.navigate('Onboard')
+			navigation.navigate('Trading')	
 		} 
 
-	}, [currentUser, brokerageAccount]);
+		//What to do in other status message
 
-	const onSignIn = async (email, password) => {
-		console.log("onSignIn Pressed")
+		// else if (!!currentUser?.user) {
+		// 	// console.log("~~~~Sign out!!!!");
+		// 	// signOut()
+		// 	console.log("Navigating to Onboard");
+		// 	navigation.navigate('Onboard')
+		// } 
+
+	}, [brokerageAccount]);
+
+	const onSignInEmail = async ({email, password}) => {
+		console.log("onSignIn Email Pressed")
 		try {
-			await signIn(email, password);			
+			await signInEmail(email, password);			
 		} catch(error) {
 			console.log(error);
 			console.log(error.code);
@@ -71,30 +72,49 @@ const SignIn = (props) => {
 		
 	const signInMsg = "Successfully signed in!";
 
-	const onSubmit = async (values, {validateForm, resetForm}) => {
-		await onSignIn(values.email, values.password);
-      resetForm();
-	}
-
 	return (
-		<AppView title="SIGN IN" headerTitleStyle={{color: 'white'}} goBack={false}>
-			
-			<View style={styles.formikContainer}>
-				{error && <StyledText style={styles.signInError}>{error} </StyledText>}
-				<SignInForm setSignInError={setError} onSubmit={onSubmit} />
-		   </View>
-		   
+		<AppView title="SIGN IN" goBack={false} scroll={false} staticViewStyle={styles.screenContentStyle}>
+			<SignInForm  
+				onSubmit={onSignInEmail}
+				onError={setError}
+				error={error} 
+				submitButtonContainerStyle={styles.submitButtonContainer}
+				submitButtonStyle={styles.submitButton}
+				formContainerStyle={styles.formContainer}
+			/>
+			<View style={styles.tinyButtonContainer}>
+		   	<TinyTextButton title="SIGN UP" onPress={() => navigation.navigate('SignUp')} />
+	   	</View>
 	   </AppView>
 	);
 }
 
 export default SignIn;
 
-const styles = StyleSheet.create({
-	formikContainer: {
-		justifyContent: 'center', 
-		textAlign: 'center', 
-		flex:1, 
-		width: '100%',
-	}
-});
+const useStyles = () => {
+	const {theme} = useTheme();
+
+	const styles = StyleSheet.create({
+		screenContentStyle: {
+			alignItems: 'center',
+			justifyContent: 'center',
+		},
+		formContainer: {
+			flex:0, 
+			// marginBottom: HP()
+		},
+		submitButtonContainer:{
+			position: 'relative', 
+			// top: 0
+		},
+		submitButton: {
+			width: '60%', 
+			marginTop: WP(0),
+		},
+		tinyButtonContainer: {
+			marginTop: HP(10)
+		}
+	})
+
+	return {theme, styles};
+}

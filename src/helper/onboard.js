@@ -1,3 +1,10 @@
+import React, {useState} from 'react';
+import firestore from '@react-native-firebase/firestore';
+
+import { getCurrentUser, setStorageData } from './store'
+
+const ONBOARDING_KEY = "onboarding";
+
 export const processOnboardingData = (user) => {
 	return {
 		contact: {
@@ -51,4 +58,98 @@ export const processOnboardingData = (user) => {
     		email_address: user?.trustedContact?.email,
 		}
 	};
+}
+
+const updateOnboardingData = async (key, obj) => {
+	
+	const currentUser = await getCurrentUser(); 
+	const email = currentUser?.email;
+
+	try {
+		//Update in firestore
+		await firestore().collection('Onboarding')
+		.where('email','==', email)
+		.limit(1)
+		.get()
+		.then(querySnapshot => { 
+			if (querySnapshot.size < 1) {
+				firestore().collection('Onboarding').add({email, [key]: obj})	
+			} else {
+	    		const doc = querySnapshot.docs[0];
+	    		//doc.ref saves the day
+		    	doc.ref.update({[key]: obj});
+	    	}
+		})
+	} catch(err) {
+		console.log(err);
+	}
+}
+ 
+const getOnboardingData = async () => {
+
+	const currentUser = await getCurrentUser(); 
+	const email = currentUser?.email;
+
+	try {
+		//Update in firestore
+		return firestore().collection('Onboarding')
+		.where('email','==', email)
+		.limit(1)
+		.get()
+		.then(querySnapshot => { 
+			if (querySnapshot.size < 1) {
+				return null;	
+			}
+
+	    	return querySnapshot.docs[0].data();
+		})
+	} catch (err) {
+		console.log("Error fetching onboarding data");
+		return null;
+	}
+}
+
+
+export const useOnboarding = (params = {}) => {
+	
+	const [onboardingData, setData] = useState(null);
+
+	const [isLoading, setLoading] = useState(true);
+
+	const getDataDb = async() => {
+		const obAPIdata = await getOnboardingData();
+		if (obAPIdata) {
+			await setStorageData(ONBOARDING_KEY, JSON.stringify(obAPIdata));
+		}
+
+		//backtop with empty object to start onboard (set loading false)
+		setData(obAPIdata || {});
+	}
+
+	React.useEffect(() => {
+		if (params?.enabled){
+			getDataDb();
+		}
+	}, []);
+
+	React.useEffect(() => {
+		if (onboardingData) {
+			setLoading(false);
+		}
+	}, [onboardingData])
+
+	const updateOnboarding = async (key, obj) => {
+		await setStorageData(ONBOARDING_KEY, JSON.stringify({...onboardingData, key: obj}), () => updateOnboardingData(key, obj))
+	}
+
+	const getOnboarding = async () => {
+		const localOnboarding = await getStorageData(ONBOARDING_KEY);
+		if (!!localOnboarding) {
+			return localOnboarding;
+		} else {
+			getDataDb()
+		}  
+	}
+	
+	return { isLoading, onboardingData, getOnboarding, updateOnboarding };
 }

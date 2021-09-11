@@ -84,7 +84,7 @@ const CreateDeposit = (props) => {
 			//First upload the image to cloud storage
 			//Improve the saved file name
 
-			reference = storage().ref(`/images/deposit/${currentUser.user.email}/${document.name}`);
+			reference = storage().ref(`/images/deposit/${currentUser.email}/${document.name}`);
 
 			//For android, first get the correct file destination
 			const destPath = `${RNFS.TemporaryDirectoryPath}/${nanoid()}`;

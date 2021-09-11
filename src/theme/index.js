@@ -92,7 +92,7 @@ export const ThemeProvider = ({children}) => {
     
     React.useEffect(() => {
         const manageTheme = async() => {
-            const scheme = await getCurrentTheme();
+            let scheme = await getCurrentTheme();
             if (!scheme) {
                 await setCurrentTheme(systemScheme);
                 scheme = systemScheme;  
