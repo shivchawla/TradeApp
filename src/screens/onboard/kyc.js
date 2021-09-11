@@ -95,7 +95,10 @@ const StartKyc = (props) => {
   	const {createBrokerageAccount} = useCreateBrokerageAccount();
 
 	React.useEffect(() => {
-		const getActiveInquiry = () => {
+
+		console.log("[INQUIRIES] Start KYC Use Effect");
+
+		(async() => {
 			// console.log("Inquiries");
 		  	// console.log(inquiries);
 
@@ -105,9 +108,9 @@ const StartKyc = (props) => {
 				let foundInquiry = {};
 			  	inquiries.data.every((inquiry, index) => {
 					const status = inquiry?.attributes?.status;
-					// console.log("Inquiry");
+					console.log("Inquiry Status: ", status);
 					// console.log(inquiry);
-					if (status != 'expired') {
+					if (status != 'pending' || status != 'created') {
 						foundInquiry = inquiry;
 						return false;
 				  	}
@@ -117,16 +120,19 @@ const StartKyc = (props) => {
 
 			  	setInquiry(foundInquiry);
 		  	}
-		}
-
-		getActiveInquiry();
+		})()
 
   	}, [inquiries])
 
 
   	React.useEffect(() => {
-	  	if (inquiry && inquiry != {}) {
-			// console.log("Finding Session");
+  		console.log("[INQUIRY] Start KYC Use Effect");
+  		console.log(inquiry);
+  		console.log(inquiry && inquiry != {});
+
+  		const status = inquiry?.attributes?.status;
+	  	if (inquiry && inquiry != {} && status == 'pending') {
+			console.log("Finding Session");
 			// console.log(inquiry);
 
 			getSession().then(s => {

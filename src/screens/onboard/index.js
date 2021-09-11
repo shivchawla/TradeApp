@@ -36,8 +36,10 @@ const Onboard = (props) => {
 
 	React.useEffect(() => {
 
-		const handleOnboardingStep = async() => {
-			if (!isLoading && onboardingData) {
+		console.log("Onboard useEffect is called");
+
+		(async() => {
+			if (onboardingData) {
 				const keys = Object.keys(onboardingData);
 
 				if (onboardingData?.formStatus?.status == 'complete') {
@@ -65,11 +67,9 @@ const Onboard = (props) => {
 					toKyc();
 				}	
 			}
-		}
+		})()
 
-		handleOnboardingStep()
-
-	}, [isLoading]);
+	}, [onboardingData]);
 
 	const submitOnboarding = async (key, values) => {
 
@@ -106,7 +106,7 @@ const Onboard = (props) => {
 	} 
 
 	console.log("Onboarding isLoading: ", isLoading);
-	
+
 	return (
 		<AppView 
 			scrollViewStyle={{flexGrow:1}} 

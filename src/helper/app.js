@@ -11,7 +11,7 @@ import { useAuth } from './';
 export const useAppStartup = () => {
 
     const [isLoading, setLoading] = useState(true);    
-    const {currentUser, userAccount, brokerageAccount, isErrorUser, isErrorAccount, isErrorBrokerage, signIn} = useAuth(); 
+    const {isLoadingAuth, currentUser, userAccount, brokerageAccount, signIn} = useAuth(); 
   
     React.useEffect(() => {
 
@@ -32,9 +32,6 @@ export const useAppStartup = () => {
       setupApp();
 
     }, []);
-
-    //Improve this logic when you get time
-    const isLoadingAuth = !isErrorUser && !isErrorAccount && !isErrorBrokerage && !!!brokerageAccount?.data;
 
     return {isLoading: isLoading || isLoadingAuth, currentUser, brokerageAccount}
 }

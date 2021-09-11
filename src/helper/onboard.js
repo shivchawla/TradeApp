@@ -9,7 +9,7 @@ export const processOnboardingData = (user) => {
 	return {
 		contact: {
 			email_address: user?.email,
-			phone_number: user?.phone || "",
+			phone_number: user?.phoneNumber || "",
 			street_address: (user?.contact?.addressLine1 + ' ' +  user?.contact?.addressLine2).trim(),
 			city: user?.contact?.city,
 			state: user?.contact?.state,
@@ -19,7 +19,7 @@ export const processOnboardingData = (user) => {
 		identity: {
 			given_name: (user?.identity?.firstName + '' + user?.identity?.middleName).trim(),
 			family_name: user?.identity?.lastName,
-			date_of_birth: user?.identity?.dateBirth,
+			date_of_birth: user?.identity?.dateBirth, ///HAS A PROBLEM/// CHECK
 			tax_id: user?.taxInfo?.taxId,
 			tax_id_type: user?.taxInfo?.taxType,
 			country_of_citizenship: user?.identity?.citizenCountry,

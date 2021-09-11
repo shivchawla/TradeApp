@@ -9,7 +9,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { AuthProvider, useAppStartup } from '../helper';
-import { useTheme, ThemeProvider } from  '../theme';
+import { useTheme, ThemeProvider, StyledText } from  '../theme';
 import { WebsocketProvider } from  '../helper';
 
 import { CustomTabBar } from '../components/common';
@@ -70,8 +70,8 @@ const Routes = () => {
 	
 	const {isLoading, currentUser, brokerageAccount} = useAppStartup();
 
-	console.log("Current User");
-	console.log(currentUser);
+	// console.log("Current User");
+	// console.log(currentUser);
 
 	// console.log("User Account");
 	// console.log(userAccount);
@@ -82,8 +82,8 @@ const Routes = () => {
 	//Hence we have to wait for one of the steps to fail or till we get Brokerage Data to proceed
 
 	
-	// console.log("Is Loading");
-	// console.log(isLoading);
+	console.log("Is Loading");
+	console.log(isLoading);
 
 	// console.log("isErrorUser");
 	// console.log(!isErrorUser);
@@ -99,26 +99,27 @@ const Routes = () => {
 	// console.log("Scheme");
 	// console.log(scheme);
 
-	console.log("Estoy Aqui");
-	console.log(currentUser);
+	// console.log("Estoy Aqui");
+	// console.log(currentUser);
 
 	return (
-		// <>
-		// {isLoading ? 
-		// 	<StyledText style={{color: 'white'}}>Loading...</StyledText>
-		// 	:	
-		<NavigationContainer>
-			<Stack.Navigator screenOptions={{headerShown: false}}>
-				{!!currentUser?.emailVerified && !!brokerageAccount && 
-					<Stack.Screen name="Trading" component={TradingStack} />
-				}
-				{!!currentUser?.emailVerified ?
-					 <Stack.Screen name="OnboardStack" component={OnboardStack} />
-					: <Stack.Screen name="Auth" component={AuthStack} />
-				}
-			</Stack.Navigator>
-	   </NavigationContainer>
-	// }</>
+		<>
+		{isLoading ? 
+			<StyledText style={{color: 'white'}}>Loading...</StyledText>
+			:	
+			<NavigationContainer>
+				<Stack.Navigator screenOptions={{headerShown: false}}>
+					{!!currentUser?.emailVerified && !!brokerageAccount && 
+						<Stack.Screen name="Trading" component={TradingStack} />
+					}
+					{!!currentUser?.emailVerified ?
+						 <Stack.Screen name="OnboardStack" component={OnboardStack} />
+						: <Stack.Screen name="Auth" component={AuthStack} />
+					}
+				</Stack.Navigator>
+		   </NavigationContainer>
+		}
+		</>
 	)
 }
 

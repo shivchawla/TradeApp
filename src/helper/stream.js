@@ -168,7 +168,7 @@ function useWebsocketHelper() {
 
   //Use debounce to handle subscription symbols
   const [, cancel] = useDebounce(() => {
-    console.log("useDebounce")  
+    // console.log("useDebounce")  
     handleSubscription()
   }, 15000, [subscriptionList]);
   

@@ -101,19 +101,19 @@ const useGetUserAccount = (email, {enabled = false}) => {
 const useAuthHelper = () => {
 
 	const [currentUser, setCurrentUser] = useState(null);
+	const [isLoadingAuth, setLoadingAuth] = useState(true);
+	
 	const [isErrorUser, setErrorUser] = useState(false);
-
 	const [userAccount, setUserAccount] = useState(null);
-
 	const [confirmPhone, setConfirmPhone] = useState(null);
 
 	// const email = currentUser?.email;
 	// const {userAccount, setUserAccount, isError: isErrorAccount} = useGetUserAccount(email, {enabled: !!email});
 
-	const accountId = userAccount?.id;
-	console.log("AccountId ", accountId);
+	// const accountId = userAccount?.id;
+	// console.log("AccountId ", accountId);
 
-	const {data: brokerageAccount, isError: isErrorBrokerage} = useBrokerageAccountData({enabled: !!accountId})
+	const {brokerageAccount, getBrokerageAccount} = useBrokerageAccountData({enabled: false})
 
 	React.useEffect(() => {
 
@@ -145,19 +145,14 @@ const useAuthHelper = () => {
 				try{
 					//If Email is not verified, refetch from aut
 					console.log("Check the user from auth - After reload");
-
 					await auth().currentUser.reload();
-
 					let updatedUser = await auth().currentUser;
 					console.log(updatedUser);
+					setCurrentUser(updatedUser);
 
-					if (!currentUser) {
-						setErrorUser(true);
-					} else {
-						setCurrentUser(updatedUser);
-					}
 				} catch(err) {
 					console.log(err);
+					setLoadingAuth(false);
 				}
 			}
 		}
@@ -177,7 +172,19 @@ const useAuthHelper = () => {
 				await updateCurrentUser(currentUser);
 				if (currentUser?.emailVerified) {
 					console.log(currentUser?.email);
-					await getUserFromDb(currentUser?.email);
+					const account = await getUserFromDb(currentUser?.email);
+					console.log("Found Account");
+					console.log(account);
+					console.log("Setting User Account");
+
+					if (account) {
+						setUserAccount(account);
+					} else {
+						console.log("Setting Loading false");
+						setLoadingAuth(false);
+					}
+				} else {
+					setLoadingAuth(false);
 				}
 			}
 		})()
@@ -187,54 +194,47 @@ const useAuthHelper = () => {
 	React.useEffect(() => {
 		(async() => {
 			if (userAccount) {
-				await updateAlpacaAccount(account);	
-			}
+				console.log("User Account Effect")
+				await updateAlpacaAccount(account);
+				//After storage data is updated
+				await getBrokerageAccount();
+
+				//Setting Loading false
+
+				console.log("Setting Loading false");
+				setLoadingAuth(false);
+			} 
 		})()	
 	}, [userAccount])
 
 
 	const getUserFromDb = async (email) => {
 		console.log("Getting User");
-		const account = await findUserDb(email)
-		console.log("Found Account");
-		console.log(account);
-		console.log("Setting User Account");
-		setUserAccount(account);
+		return await findUserDb(email)
 	};
 
 	const signInEmail = async (email, password) => {
-		const userCredential = await auth().signInWithEmailAndPassword(email, password);
+		setLoadingAuth(true);
 
+		const userCredential = await auth().signInWithEmailAndPassword(email, password);
 		console.log("Signed In");
 		console.log(userCredential);
-
-	  	if (userCredential.user?.emailVerified) {
-			setCurrentUser(userCredential?.user)
-	  	} else {
-	  		// setLoading(false);
-	  		throw new Error({code: "auth/email-not-verified"});
-	  	}
-
-	  	return;
+		setCurrentUser(userCredential?.user)
 	}
 
 	const signInPhone = async (phoneNumber) => {
+		setLoadingAuth(true);
 		setConfirmPhone(await auth().signInWithPhoneNumber(phoneNumber));
 	}
 
 	const submitPhoneCode = async (code) => {
 		const userCredential = confirmPhone.confirm(code);
-
-		if (userCredential?.user) {
-			setCurrentUser(userCredential?.user)
-	  	} else {
-	  		throw new Error({code: "auth/email-not-verified"});
-	  	}
-
-	  	return; 
+		setCurrentUser(userCredential?.user)
 	}
 
 	const signUpEmail = async ({email, password}, {sendEmail=true, linkTo= null}) => {
+		setLoadingAuth(true);
+		
 		let userCredential = await auth().createUserWithEmailAndPassword(email, password);
     	
     	if(sendEmail) {
@@ -261,6 +261,8 @@ const useAuthHelper = () => {
 	}
 
 	const signUpPhone = async (phoneNumber) => {
+		setLoadingAuth(true);
+		
     	return await auth().signInWithPhoneNumber(phoneNumber);
 	}
 
@@ -292,8 +294,8 @@ const useAuthHelper = () => {
 		return await auth().confirmPasswordReset(code, newPassword);
 	} 
 
-	return {currentUser, userAccount, brokerageAccount, 
-		isErrorUser, isErrorBrokerage, 
+	//userAccount is not used anywhere (except locally) - remove it from output
+	return {isLoadingAuth, currentUser, brokerageAccount,  
 		signInEmail, signUpEmail, signUpPhone, 
 		signOut, requestResetPassword, resetPassword, 
 		changePassword 
