@@ -36,12 +36,12 @@ export function useCreateBrokerageAccount() {
 
 export function useBrokerageAccountData(params = {}) {
 	console.log("useBrokerageAccountData");
-	const {isError, error, data: brokerageAccount, refetch} = useQuery(['brokerageAccount'], () => getBrokerageAccount(), params);
+	const {isLoading, isError, error, data: brokerageAccount, refetch} = useQuery(['brokerageAccount'], () => getBrokerageAccount(), params);
 	if (isError) {
 		console.log(`ERROR (useBrokerageAccountData): ${error}`);
 	}
 
-	return {isError, brokerageAccount, getBrokerageAccount: () => refetch().then(r => r.data)};  
+	return {isLoading, brokerageAccount, getBrokerageAccount: () => refetch().then(r => r.data)};  
 }
 
 

@@ -190,21 +190,14 @@ const useAuthHelper = () => {
 		})()
 	}, [currentUser])
 
-
 	React.useEffect(() => {
 		(async() => {
 			if (userAccount) {
-				console.log("User Account Effect")
-				await updateAlpacaAccount(account);
-				//After storage data is updated
-				await getBrokerageAccount();
-
-				//Setting Loading false
-
-				console.log("Setting Loading false");
+				await updateAlpacaAccount(userAccount);
 				setLoadingAuth(false);
-			} 
-		})()	
+			}
+		})()
+
 	}, [userAccount])
 
 
@@ -295,7 +288,7 @@ const useAuthHelper = () => {
 	} 
 
 	//userAccount is not used anywhere (except locally) - remove it from output
-	return {isLoadingAuth, currentUser, brokerageAccount,  
+	return {isLoadingAuth, currentUser, userAccount,  
 		signInEmail, signUpEmail, signUpPhone, 
 		signOut, requestResetPassword, resetPassword, 
 		changePassword 
