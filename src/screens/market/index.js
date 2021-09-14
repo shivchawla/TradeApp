@@ -82,7 +82,7 @@ const Market = (props) => {
 		if (!!!watchlists || watchlists.length == 0) {
 			createWatchlist({name: "Default", symbols: defaultStocks}, {
 				onSuccess: (response, input) => {
-					setOrderedWatchlists([response]); 
+					setWatchlists([response]); 
 				},
 				onError: (err, input) => console.log(err)
 			});

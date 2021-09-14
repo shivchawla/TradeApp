@@ -33,7 +33,7 @@ const Onboard = (props) => {
 	const {navigation} = props;
 	const [step, setStep] = useState(null);
 	const {isLoading, onboardingData, getOnboarding, updateOnboarding} = useOnboarding({enabled: true});
-
+	
 	React.useEffect(() => {
 
 		console.log("Onboard useEffect is called");
@@ -106,6 +106,7 @@ const Onboard = (props) => {
 	} 
 
 	console.log("Onboarding isLoading: ", isLoading);
+	console.log(onboardingData);
 
 	return (
 		<AppView 

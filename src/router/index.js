@@ -77,8 +77,8 @@ const Routes = () => {
 	React.useEffect(() => {
 		// Subscribe
 		const unsubscribe = NetInfo.addEventListener(state => {
-		  	console.log("Connection type", state.type);
-		  	console.log("Is connected?", state.isConnected);
+		  	// console.log("Connection type", state.type);
+		  	// console.log("Is connected?", state.isConnected);
 	  		setHasInternet(state.isConnected);
 		});
 

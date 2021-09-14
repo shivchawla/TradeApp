@@ -1,36 +1,79 @@
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
-export const findUserDb = async(email) => {
+export const EmailAuthProvider = auth.EmailAuthProvider;
+export const PhoneAuthProvider = auth.PhoneAuthProvider;
+
+const USER_DB = 'Users';
+
+export const findUserInDb = async(email) => {
 	console.log("findUserDb");
 	console.log(email);
-	return firestore().collection('Users')
-	.where('email','==', email)
-	.limit(1)
-  	.get()
-	.then(querySnapshot => {
-		
-		if (querySnapshot.size < 1) {
-			return null;
-		}
+	try{
+		return firestore().collection(USER_DB)
+		.where('email','==', email)
+		.limit(1)
+	  	.get()
+		.then(querySnapshot => {
+			
+			if (querySnapshot.size < 1) {
+				return null;
+			}
 
-	    return querySnapshot.docs[0].data();
-	})
-	.catch(err => {
+		    return querySnapshot.docs[0].data();
+		})
+	} catch(err) {
+		console.log("There is an Error");
 		console.log(err);
-	})
+		return null;
+	}
 }
 
-export const addUserDb = async(email, userAccount) => {
-	return firestore().collection('Users')
+export const updateUserInDb = async(email, userAccount) => {
+	try{
+		return firestore().collection(USER_DB)
+		.where('email','==', email)
+		.limit(1)
+	  	.get()
+		.then(querySnapshot => {
+			
+			if (querySnapshot.size < 1) {
+				return null;
+			}
+
+		    return querySnapshot.docs[0].update({account: userAccount.account})
+		})
+	} catch(err) {
+		console.log("There is an Error");
+		console.log(err);
+		return null;
+	}
+}
+
+export const addUserInDb = async(email, userAccount) => {
+	return firestore().collection(USER_DB)
 	.add({
 		email,
-	    ...userAccount
+	    account: userAccount.account
 	})
 }
 
-export const signInWithEmailPassword = async ({email, password}) => await auth().signInWithEmailAndPassword(email, password);
+export const signInWithEmailAndPassword = async (email, password) => await auth().signInWithEmailAndPassword(email, password);
 
-export const createUserWithEmailPassword = async({email, password}) => await auth().createUserWithEmailAndPassword(email, password);
+export const createUserWithEmailAndPassword = async({email, password}) => await auth().createUserWithEmailAndPassword(email, password);
 
-export const signOutFirebase = async() => await auth().signOut();
+export const signOut = async() => await auth().signOut();
+
+export const signInWithPhoneNumber = async(phoneNumber) => await auth().signInWithPhoneNumber(phoneNumber);
+
+export const sendPasswordResetEmail = async(email, params = {}) => await auth().sendPasswordResetEmail(email, params);
+
+export const confirmPasswordReset = async(code, newPassword) => await auth().confirmPasswordReset(code, newPassword);
+
+export const applyActionCode = async(oobCode) => await auth().applyActionCode(oobCode);
+
+export const reloadUser = async() => await auth().currentUser.reload();
+
+export const currentUser = async() => await auth().currentUser;
+
+export const updatePassword = async(newPassword) => await auth().currentUser.updatePassword(newPassword);

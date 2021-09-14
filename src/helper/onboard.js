@@ -6,10 +6,10 @@ import { getCurrentUser, setStorageData } from './store'
 const ONBOARDING_KEY = "onboarding";
 
 export const processOnboardingData = (user) => {
-	return {
+	var pd = {
 		contact: {
-			email_address: user?.email,
-			phone_number: user?.phoneNumber || "",
+			email_address: 'shivchawla2001@gmail.com', //user?.email,
+			phone_number: '+50240428803', //user?.phoneNumber || "",
 			street_address: (user?.contact?.addressLine1 + ' ' +  user?.contact?.addressLine2).trim(),
 			city: user?.contact?.city,
 			state: user?.contact?.state,
@@ -19,23 +19,23 @@ export const processOnboardingData = (user) => {
 		identity: {
 			given_name: (user?.identity?.firstName + '' + user?.identity?.middleName).trim(),
 			family_name: user?.identity?.lastName,
-			date_of_birth: user?.identity?.dateBirth, ///HAS A PROBLEM/// CHECK
+			date_of_birth: new Date("1985-07-04"), //user?.identity?.dateBirth, ///HAS A PROBLEM/// CHECK
 			tax_id: user?.taxInfo?.taxId,
-			tax_id_type: user?.taxInfo?.taxType,
-			country_of_citizenship: user?.identity?.citizenCountry,
-			country_of_birth: user?.identity?.birthCountry,
-			country_of_tax_residence: user?.taxInfo?.taxCountry,
-			funding_source: user?.taxInfo?.fundSource
+			tax_id_type: user?.taxInfo?.taxIdType,
+			country_of_citizenship: 'GTM', //user?.identity?.citizenCountry,
+			country_of_birth: 'GTM', //user?.identity?.birthCountry,
+			country_of_tax_residence: 'GTM', //user?.taxInfo?.taxCountry,
+			funding_source: [user?.taxInfo?.fundSource]
 		},
 		disclosures: {
-			is_control_person: user?.disclosures?.isControlPerson,
-			is_affiliated_exchange_or_finra: user?.disclosures?.isAffiliated,
-			is_politically_exposed: user?.disclosures?.isPolitical,
-			immediate_family_exposed: user?.disclosures?.isFamilyExposed,
-			employmentStatus: user?.employment?.employmentStatus,
-			employerName: user?.employment?.employerName,
-			employerAddress: Object.values(user?.employment?.employerAddress).join(', '),
-			employmentPosition: user?.employment?.employmentPosition
+			is_control_person: user?.disclosure?.isControlPerson == "YES",
+			is_affiliated_exchange_or_finra: user?.disclosure?.isAffiliated == "YES",
+			is_politically_exposed: user?.disclosure?.isPolitical == "YES",
+			immediate_family_exposed: user?.disclosure?.isFamilyExposed == "YES",
+			employment_status: user?.employment?.employmentStatus,
+			employer_name: user?.employment?.employerName,
+			employer_address: Object.values(user?.employment?.employerAddress).join(', '),
+			employment_position: user?.employment?.employmentPosition
 		},
 		agreements: [{
 			agreement: "margin_agreement",
@@ -58,6 +58,41 @@ export const processOnboardingData = (user) => {
     		email_address: user?.trustedContact?.email,
 		}
 	};
+
+	const documents = [];
+	const dsinContent = [];
+	Object.keys(user.documents).forEach(docType => {
+		var sides = ['front', 'back'];
+		if (docType == 'document/government-id') {
+			sides.forEach(side => {
+				const sideContent = user.documents[docType][side];
+				if (sideContent) {
+					documents.push({
+						document_type: 'identity_verification',
+						document_sub_type: 'government-id-'+side,
+						content: sideContent,
+						mime_type: 'image/jpeg'
+					})
+
+					dsinContent.push({
+						document_type: 'identity_verification',
+						document_sub_type: 'government-id-'+side,
+						mime_type: 'image/jpeg'
+					})
+				}
+			})
+		}
+	})
+
+	console.log("Documents Processing ")
+	console.log(documents.map(item => console.log(Object.keys(item))));
+
+	console.log(pd);
+	console.log(dsinContent);
+
+	pd['documents'] = documents;
+
+	return pd;
 }
 
 const updateOnboardingData = async (key, obj) => {

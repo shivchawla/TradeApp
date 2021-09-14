@@ -101,4 +101,4 @@ export const getCurrentUser = async() => await getStorageData(USER_CREDENTIAL_KE
 export const getAlpacaAccount = async() => await getStorageData(ALPACA_ACCOUNT_KEY);
 
 export const updateCurrentUser = async(currentUser) => await setStorageData(USER_CREDENTIAL_KEY, JSON.stringify(currentUser)); 
-export const updateAlpacaAccount = async(alpacaAccount) => await setStorageData(ALPACA_ACCOUNT_KEY, JSON.stringify({...alpacaAccount, lastUpdated: currentISODate()}));
+export const updateAlpacaAccount = async(alpacaAccount) => await setStorageData(ALPACA_ACCOUNT_KEY, JSON.stringify(alpacaAccount));

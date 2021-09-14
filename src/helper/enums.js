@@ -9,3 +9,17 @@ export const AccountStatus = {
 	ACCOUNT_CLOSE: 7
 };
 
+export const EmploymentStatus = {
+	unemployed:	0,
+	employed: 1,
+	student: 2,
+	retired: 3
+}
+
+export const Document = {
+	unemployed:	0,
+	employed: 1,
+	student: 2,
+	retired: 3
+}
+

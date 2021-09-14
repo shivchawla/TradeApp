@@ -2,53 +2,20 @@ import React, {useState} from 'react';
 import { AppState } from 'react-native';
 
 import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {useQuery} from 'react-query';
 import queryString from 'query-string';
-
-export const EmailAuthProvider = auth.EmailAuthProvider;
-export const PhoneAuthProvider = auth.PhoneAuthProvider;
 
 import {getCurrentUser, updateCurrentUser, 
 	getAlpacaAccount, updateAlpacaAccount} from './store';
 
 import { currentISODate, toISODate } from '../utils';
 
-import { useBrokerageAccountData } from './account';
-
-const USER_DB = 'Users';
-
-const findUserDb = async(email) => {
-	console.log("findUserDb");
-	console.log(email);
-	try{
-		return firestore().collection(USER_DB)
-		.where('email','==', email)
-		.limit(1)
-	  	.get()
-		.then(querySnapshot => {
-			
-			if (querySnapshot.size < 1) {
-				return null;
-			}
-
-		    return querySnapshot.docs[0].data();
-		})
-	} catch(err) {
-		console.log("There is an Error");
-		console.log(err);
-		return null;
-	}
-}
-
-const addUserDb = async(email, userAccount) => {
-	return firestore().collection(USER_DB)
-	.add({
-		email,
-	    ...userAccount
-	})
-}
+import {findUserInDb, addUserInDb, updateUserInDb,
+	signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, 
+	signInWithPhoneNumber, sendPasswordResetEmail, confirmPasswordReset, 
+	applyActionCode, reloadUser, currentUser, updatePassword,
+} from './firebase';
 
 const useCheckCredentials = () => {
 	const [currentUser, setCurrentUser] = useState(null);
@@ -67,32 +34,6 @@ const useCheckCredentials = () => {
 	return currentUser;
 }
 
-//Removed it's use
-const useGetUserAccount = (email, {enabled = false}) => {
-	const [userAccount, setUserAccount] = useState(null);
-	const [isError, setError] = useState(false);
-
-	React.useEffect(() => {
-		if (enabled) {
-			console.log("useGetUserAccount");
-
-			const getUser = async () => {
-				const account = await findUserDb(email)
-				if (account) {
-					await updateAlpacaAccount(account);	
-					setUserAccount(account);
-				} else {
-					setError(true);
-				}
-			};
-
-			getUser();
-		}
-	}, [email]);
-
-	return {userAccount, setUserAccount, isError};
-}
-
 
 //User Email is Loaded
 //Based on Email, db Account is loaded
@@ -107,14 +48,6 @@ const useAuthHelper = () => {
 	const [userAccount, setUserAccount] = useState(null);
 	const [confirmPhone, setConfirmPhone] = useState(null);
 
-	// const email = currentUser?.email;
-	// const {userAccount, setUserAccount, isError: isErrorAccount} = useGetUserAccount(email, {enabled: !!email});
-
-	// const accountId = userAccount?.id;
-	// console.log("AccountId ", accountId);
-
-	const {brokerageAccount, getBrokerageAccount} = useBrokerageAccountData({enabled: false})
-
 	React.useEffect(() => {
 
 		const handleDynamicLink = async(link) => {
@@ -126,7 +59,7 @@ const useAuthHelper = () => {
 		    	if(mode == "verifyEmail") {
 		    		const oobCode = parsed?.oobCode;
 		    		//Apply oob code
-		    		await auth().applyActionCode(oobCode)
+		    		await applyActionCode(oobCode)
 		    		await checkUserCredential();
 		    	}
 		    }	
@@ -145,8 +78,8 @@ const useAuthHelper = () => {
 				try{
 					//If Email is not verified, refetch from aut
 					console.log("Check the user from auth - After reload");
-					await auth().currentUser.reload();
-					let updatedUser = await auth().currentUser;
+					await realoadUser();
+					let updatedUser = await currentUser();
 					console.log(updatedUser);
 					setCurrentUser(updatedUser);
 
@@ -167,20 +100,20 @@ const useAuthHelper = () => {
 	React.useEffect(() => {
 		(async() => {
 			if (currentUser) {
-				console.log("Current User Change Effect");
-				console.log(currentUser);
+				// console.log("Current User Change Effect");
+				// console.log(currentUser);
 				await updateCurrentUser(currentUser);
 				if (currentUser?.emailVerified) {
 					console.log(currentUser?.email);
 					const account = await getUserFromDb(currentUser?.email);
-					console.log("Found Account");
-					console.log(account);
-					console.log("Setting User Account");
+					// console.log("Found Account");
+					// console.log(account);
+					// console.log("Setting User Account");
 
 					if (account) {
 						setUserAccount(account);
 					} else {
-						console.log("Setting Loading false");
+						// console.log("Setting Loading false");
 						setLoadingAuth(false);
 					}
 				} else {
@@ -196,28 +129,30 @@ const useAuthHelper = () => {
 				await updateAlpacaAccount(userAccount);
 				setLoadingAuth(false);
 			}
+			else if (!userAccount && currentUser) {
+				setLoadingAuth(false);					
+			}
 		})()
 
 	}, [userAccount])
 
-
 	const getUserFromDb = async (email) => {
-		console.log("Getting User");
-		return await findUserDb(email)
+		// console.log("Getting User");
+		return await findUserInDb(email)
 	};
 
 	const signInEmail = async (email, password) => {
 		setLoadingAuth(true);
 
-		const userCredential = await auth().signInWithEmailAndPassword(email, password);
-		console.log("Signed In");
-		console.log(userCredential);
-		setCurrentUser(userCredential?.user)
+		const userCredential = await signInWithEmailAndPassword(email, password);
+		// console.log("Signed In");
+		// console.log(userCredential);
+		setCurrentUser(userCredential?.user);
 	}
 
 	const signInPhone = async (phoneNumber) => {
 		setLoadingAuth(true);
-		setConfirmPhone(await auth().signInWithPhoneNumber(phoneNumber));
+		setConfirmPhone(await signInWithPhoneNumber(phoneNumber));
 	}
 
 	const submitPhoneCode = async (code) => {
@@ -228,7 +163,7 @@ const useAuthHelper = () => {
 	const signUpEmail = async ({email, password}, {sendEmail=true, linkTo= null}) => {
 		setLoadingAuth(true);
 		
-		let userCredential = await auth().createUserWithEmailAndPassword(email, password);
+		let userCredential = await createUserWithEmailAndPassword(email, password);
     	
     	if(sendEmail) {
     		await userCredential.user.sendEmailVerification({
@@ -256,11 +191,11 @@ const useAuthHelper = () => {
 	const signUpPhone = async (phoneNumber) => {
 		setLoadingAuth(true);
 		
-    	return await auth().signInWithPhoneNumber(phoneNumber);
+    	return await signInWithPhoneNumber(phoneNumber);
 	}
 
 	const signOut = async () => {
-		await auth().signOut();
+		await signOut();
 		await updateCurrentUser(null);
 		await updateAlpacaAccount(null);
 	}
@@ -276,22 +211,33 @@ const useAuthHelper = () => {
 		await signIn(email, password);
 
 		//Now that signIn is complete, update Password
-		await auth().currentUser.updatePassword(newPassword);
+		await updatePassword(newPassword);
 	}
 
 	const requestResetPassword = async (email) => {
-		return await auth().sendPasswordResetEmail(email, {handleCodeInApp: true});
+		return await sendPasswordResetEmail(email, {handleCodeInApp: true});
 	}
 
 	const resetPassword = async (code, newPassword) => {
-		return await auth().confirmPasswordReset(code, newPassword);
+		return await confirmPasswordReset(code, newPassword);
 	} 
+
+	const updateUserAccount = async(userAccount) => {
+		const account = await getAlpacaAccount();
+		if (account) {
+			await updateUserInDb(currentUser?.email, userAccount);	
+		} else {
+			await addUserInDb(currentUser?.email, userAccount);	
+		}
+
+		setUserAccount(userAccount);
+	}
 
 	//userAccount is not used anywhere (except locally) - remove it from output
 	return {isLoadingAuth, currentUser, userAccount,  
 		signInEmail, signUpEmail, signUpPhone, 
 		signOut, requestResetPassword, resetPassword, 
-		changePassword 
+		changePassword, updateUserAccount 
 	};
 }
 

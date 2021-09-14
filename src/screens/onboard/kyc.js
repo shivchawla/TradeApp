@@ -4,9 +4,9 @@ import { View, TouchableOpacity, StyleSheet} from 'react-native';
 import { AppView, ConfirmButton } from '../../components/common';
 import { useTheme, HP, WP, StyledText } from '../../theme';
 
-import { usePersonaSession, usePersonaInquiry, 
+import { usePersonaSession, usePersonaInquiry, usePersonaInquiries,  
 	useOnboarding, useCreateBrokerageAccount, 
-	processOnboardingData } from '../../helper';
+	processOnboardingData, useAuth } from '../../helper';
 
 import Inquiry, {Fields, Environment} from 'react-native-persona';
 
@@ -85,14 +85,17 @@ const StartKyc = (props) => {
 
 	const [inquiry, setInquiry] = useState(null);
 	const [session, setSession] = useState(null);
-
+	
 	//Get pending inquiry from Persona for user email 
 	//If none pending start a new one,
-	const {inquiries, getInquiries} = usePersonaInquiry(user.email);
+	const {inquiries, getInquiries} = usePersonaInquiries(user.email);
 	const {getSession} = usePersonaSession(inquiry?.id, {enabled: false});
-
+	const {getInquiry} = usePersonaInquiry(inquiry?.id, {enabled: false});
+	
 	const {updateOnboarding} = useOnboarding({enabled: false});
   	const {createBrokerageAccount} = useCreateBrokerageAccount();
+
+  	const {updateUserAccount} = useAuth();
 
 	React.useEffect(() => {
 
@@ -139,13 +142,56 @@ const StartKyc = (props) => {
 			  // console.log("Session"); console.log(s); 
 				setSession(s?.meta?.['session-token']);
 			})
+	  	} else if (inquiry && inquiry != {} && status == 'completed') {
+	  		//Generally it should come here but do it anyways
+	  		console.log("Creating Account")
+	  		createAccount();
 	  	} else {
 			setSession({});
 		}
 
 	}, [inquiry])
 
+	const createAccount = async() => {
+		//Now create the brokerage account
+		const inquiry = await getInquiry();
+		// console.log("Files");
+		// console.log(inquiry?.files);
+
+		const pd = processOnboardingData({...user, documents: inquiry?.files});
+		console.log("Processed Data");
+		console.log(Object.keys(pd));
+
+		
+		console.log(pd.documents.map(it => {console.log(Object.keys(it));}));
+		pd.documents.map(doc => {
+			Object.keys(doc).forEach(it => {
+				if( it == 'content') {
+					console.log(it + ": " + doc[it].slice(0, 5))
+				} else {
+					console.log(it + ": " + doc[it])
+				}
+			})
+		});
+
+		console.log(pd.documents.length);
+		console.log(pd.contact);
+		console.log(pd.identity);
+		console.log(pd.disclosures);
+		console.log(pd.agreements);
+		console.log(pd.trusted_contact);
+
+	 	createBrokerageAccount(pd, {
+	 		onSuccess: (res, input) => {
+	 			updateUserAccount(res);	
+	 		},
+	 		onError: (err, input) => console.log(err)
+	 	});
+	}
+
   	const onSuccess = async(kycAttributes) => {
+ 		//Fetch the inquiry again to update verification Documents
+	 
   		await updateOnboarding('kyc', {
 	   		...user?.kyc ?? {}, 
    			inquiryId, 
@@ -154,11 +200,8 @@ const StartKyc = (props) => {
 	   		...kycAttributes
 	 	});
 
-	 	//Now create the brokerage account
-	 	createBrokerageAccount(processAccountParams(user), {
-	 		onSuccess: (res, input) => console.log(res),
-	 		onError: (err, input) => console.log(err)
-	 	});
+	 	
+  		createAccount();
   	}
 
 	//Pass referenceId
