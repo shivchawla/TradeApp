@@ -12,7 +12,7 @@ import {getCurrentUser, updateCurrentUser,
 import { currentISODate, toISODate } from '../utils';
 
 import {findUserInDb, addUserInDb, updateUserInDb,
-	signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, 
+	signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut as firebaseSignOut, 
 	signInWithPhoneNumber, sendPasswordResetEmail, confirmPasswordReset, 
 	applyActionCode, reloadUser, currentUser, updatePassword,
 } from './firebase';
@@ -195,7 +195,7 @@ const useAuthHelper = () => {
 	}
 
 	const signOut = async () => {
-		await signOut();
+		await firebaseSignOut();
 		await updateCurrentUser(null);
 		await updateAlpacaAccount(null);
 	}

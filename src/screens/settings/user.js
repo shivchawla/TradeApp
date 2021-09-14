@@ -19,7 +19,7 @@ const UserSettings = (props) => {
 	const onLogout = () => {
 		signOut()
 		.then(() => {
-			navigation.navigate('SignIn');
+			navigation.navigate('Auth', {screen: 'SignIn'});
 		})
 	}
 
@@ -31,7 +31,7 @@ const UserSettings = (props) => {
 				<HorizontalSetting title="TWO FACTOR AUTHENTICATION" leftIcon="keypad" onPress={() => navigation.navigate("TwoFactor")} />
 			</View>
 
-			<ConfirmButton title="LOG OUT" buttonContainerStyle={styles.logoutButton} onPress={onLogout}/>
+			<ConfirmButton title="LOG OUT" buttonContainerStyle={styles.logoutButton} onClick={onLogout}/>
 		</AppView>
 	)	
 }

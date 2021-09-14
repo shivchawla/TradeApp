@@ -98,17 +98,17 @@ const Routes = () => {
 	
 	const isLoading = isLoadingAuth || (userAccount && !brokerageAccount);
 
-	console.log("Is Loading");
-	console.log(isLoading);
+	// console.log("Is Loading");
+	// console.log(isLoading);
 
-	console.log("Current User");
-	console.log(currentUser);
+	// console.log("Current User");
+	// console.log(currentUser);
 
-	console.log("User Account");
-	console.log(userAccount);
+	// console.log("User Account");
+	// console.log(userAccount);
 
-	console.log("Brokerage Account")
-	console.log(brokerageAccount);
+	// console.log("Brokerage Account")
+	// console.log(brokerageAccount);
 	
 	return (
 		<>
@@ -121,13 +121,15 @@ const Routes = () => {
 						<Stack.Screen name="NoInternet" component={NoInternet} />
 						:
 						<>
-						{!!currentUser?.emailVerified && !!brokerageAccount && 
+						{(!!currentUser?.emailVerified && !!userAccount) &&  
 							<Stack.Screen name="Trading" component={TradingStack} />
 						}
-						{!!currentUser?.emailVerified ?
+						
+						{!!currentUser?.emailVerified &&
 							 <Stack.Screen name="OnboardStack" component={OnboardStack} />
-							: <Stack.Screen name="Auth" component={AuthStack} />
 						}
+
+						<Stack.Screen name="Auth" component={AuthStack} />
 						</>
 					}
 				</Stack.Navigator>
