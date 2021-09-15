@@ -15,16 +15,16 @@ const SignIn = (props) => {
 
 	const {navigation} = props;
 
-	const {currentUser, userAccount, signInEmail, brokerageAccount, signOut} = useAuth();
+	const {currentUser, userAccount, signInEmail, signOut} = useAuth();
 	
 	React.useEffect(() => {
-		// console.log("Running the useEffect in SignIn");
-		// console.log("Whats the brokerage Account");
-		// console.log(brokerageAccount);
-		// console.log(currentUser);
+		console.log("Running the useEffect in SignIn");
+		console.log("Whats the brokerage Account");
+		console.log(userAccount);
+		console.log(currentUser);
 
-		if (!!brokerageAccount?.data && 
-				brokerageAccount.data.status == AccountStatus.ACTIVE) {
+		if (!!userAccount?.account && 
+				userAccount?.account?.status == 'ACTIVE') {
 
 			navigation.navigate('Trading')	
 		} 
@@ -38,7 +38,7 @@ const SignIn = (props) => {
 		// 	navigation.navigate('Onboard')
 		// } 
 
-	}, [brokerageAccount]);
+	}, [userAccount]);
 
 	const onSignInEmail = async ({email, password}) => {
 		console.log("onSignIn Email Pressed")

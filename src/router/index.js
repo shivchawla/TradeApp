@@ -2,7 +2,7 @@ import 'react-native-gesture-handler';
 import React, {useState} from 'react';
 import { TouchableOpacity, View, Text } from 'react-native';
 import { enableScreens } from 'react-native-screens';
-import { NavigationContainer, DarkTheme, DefaultTheme } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator} from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import NetInfo from "@react-native-community/netinfo";
@@ -13,12 +13,13 @@ import { WebsocketProvider } from  '../helper';
 
 import { CustomTabBar } from '../components/common';
 
+import Splash from '../screens/splash';
 import Market from '../screens/market';
 import History from '../screens/history';
 import OrdersTrades from '../screens/order/ordersTrades';
 import Portfolio from '../screens/portfolio';
 import Settings from '../screens/settings';
-import NoInternet from '../screens/extra/noInternet';
+import NoInternet from '../screens/errors/noInternet';
 
 import AuthStack from './auth';
 import OnboardStack from './onboard';
@@ -64,14 +65,18 @@ const TradingStack = () => {
 
 const Routes = () => {
 	
-	const [hasInternet, setHasInternet] = useState(true);	
-	const {isLoading: isLoadingApp} = useAppStartup();
+	const [hasInternet, setHasInternet] = useState(true);
+	const [isLoading , setIsLoading] = useState(true);	
+
+	const appStartup = useAppStartup();
 
 	// Extract auth  from APP startup and make it dependent on app loading state
 	const { isLoadingAuth, currentUser, userAccount } = useAuth(); //Club the output into one!!!
 
 	//Extract brokerage account from Auth as well
-	const {brokerageAccount, getBrokerageAccount} = useBrokerageAccountData({enabled: false})
+	// const {brokerageAccount, getBrokerageAccount} = useBrokerageAccountData({enabled: false})
+
+	const navRef = React.useRef();
 
 	//Subscribe to net events
 	React.useEffect(() => {
@@ -86,56 +91,60 @@ const Routes = () => {
 		return () => unsubscribe();
 	}, []);
 
-	React.useEffect(() => {
-		(async() => {
-			if (userAccount) {
-				//After storage data is updated
-				await getBrokerageAccount();			
-			} 
-		})()	
-	}, [userAccount])
+	// React.useEffect(() => {
+	// 	(async() => {
+	// 		if (userAccount) {
+	// 			//After storage data is updated
+	// 			await getBrokerageAccount();			
+	// 		} 
+	// 	})()	
+	// }, [userAccount])
 
+
+	// React.useEffect(() => {
+	// 	setLoading(isLoadingAuth;	
+	// }, [isLoadingAuth, currentUser, userAccount])
 	
-	const isLoading = isLoadingAuth || (userAccount && !brokerageAccount);
+	// const isLoading = 
 
-	// console.log("Is Loading");
-	// console.log(isLoading);
+	console.log("Is Loading");
+	console.log(isLoadingAuth);
 
-	// console.log("Current User");
-	// console.log(currentUser);
+	console.log("Current User");
+	console.log(currentUser);
 
-	// console.log("User Account");
-	// console.log(userAccount);
+	console.log("User Account");
+	console.log(userAccount);
 
 	// console.log("Brokerage Account")
 	// console.log(brokerageAccount);
+
+
+ 	console.log("Trading Stack Condition")
+ 	console.log((!!currentUser?.emailVerified && !!userAccount));
 	
 	return (
-		<>
-		{isLoading ? 
-			<StyledText style={{color: 'white'}}>Loading...</StyledText>
-			:	
-			<NavigationContainer>
-				<Stack.Navigator screenOptions={{headerShown: false}}>
-					{!hasInternet ? 
-						<Stack.Screen name="NoInternet" component={NoInternet} />
-						:
-						<>
-						{(!!currentUser?.emailVerified && !!userAccount) &&  
-							<Stack.Screen name="Trading" component={TradingStack} />
-						}
-						
-						{!!currentUser?.emailVerified &&
-							 <Stack.Screen name="OnboardStack" component={OnboardStack} />
-						}
+		<NavigationContainer>
+			<Stack.Navigator screenOptions={{headerShown: false}}>
+				{(isLoadingAuth || isLoadingAuth == null) && <Stack.Screen name="Splash" component={Splash} />}
 
-						<Stack.Screen name="Auth" component={AuthStack} />
-						</>
+				{!hasInternet ? 
+					<Stack.Screen name="NoInternet" component={NoInternet} />
+					:
+					<>
+					{(!!currentUser?.emailVerified && !!userAccount) &&  
+						<Stack.Screen name="Trading" component={TradingStack} />
 					}
-				</Stack.Navigator>
-		   </NavigationContainer>
-		}
-		</>
+					
+					{!!currentUser?.emailVerified &&
+						 <Stack.Screen name="OnboardStack" component={OnboardStack} />
+					}
+
+					<Stack.Screen name="Auth" component={AuthStack} />
+					</>
+				}
+			</Stack.Navigator>
+	   </NavigationContainer>
 	)
 }
 

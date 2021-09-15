@@ -78,7 +78,7 @@ const useAuthHelper = () => {
 				try{
 					//If Email is not verified, refetch from aut
 					console.log("Check the user from auth - After reload");
-					await realoadUser();
+					await reloadUser();
 					let updatedUser = await currentUser();
 					console.log(updatedUser);
 					setCurrentUser(updatedUser);
