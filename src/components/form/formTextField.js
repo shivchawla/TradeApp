@@ -4,7 +4,7 @@ import get from 'lodash/get';
 
 import { useTheme, StyledText, WP, HP } from '../../theme';
 
-export const FormTextField = ({field, placeholder, handler, setCustomError = null, ref = null, ...props}) => {
+export const FormTextField = ({field, placeholder, handler, setCustomError = null, ref = null, disabled = false, instructionText='', ...props}) => {
 	const { handleChange, handleBlur, handleSubmit, values, errors, touched, setErrors} = handler;
 
 	// console.log("FormTextField");
@@ -29,8 +29,10 @@ export const FormTextField = ({field, placeholder, handler, setCustomError = nul
 					onSubmitEditing={() => props?.nextRef?.current?.focus() || ''}
 					autoCompleteType="off"
 					value={value}
+					editable={!disabled}
 				/>
 			</View>
+			{!!instructionText && <StyledText style={styles.instructionText}>{instructionText}</StyledText>}
 			{error && <StyledText style={styles.errorText}>{error}</StyledText>}
 
 		</View>
@@ -69,6 +71,10 @@ const useStyles = () => {
 			color: theme.error,
 			marginTop: HP(0.2)
 		},
+		instructionText: {
+			fontSize: WP(3.8),
+			color: theme.grey6
+		}
 	});
 
 	return {theme, styles};

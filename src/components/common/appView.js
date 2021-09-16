@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { SafeAreaView, ScrollView, View, 
+import { SafeAreaView, ScrollView, View, Image,
 	StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -9,6 +9,7 @@ import { BarIndicator } from 'react-native-indicators';
 
 import { StyledText, useTheme, WP, defaultIconSize, HP } from '../../theme';
 import { GobackIcon } from './iconButtons';
+import { FullViewModal } from './';
 
 export const AppHeader = ({title, goBack = true, ...props}) => {
 	const showHeader = title || goBack;
@@ -40,7 +41,10 @@ export const AppView = ({scroll = true, footer, hasHeader = true, header, isLoad
 	return (
 		<>
 		{isLoading ? 
-			<BarIndicator color="white" /> : 
+			<FullViewModal opacity={0.4} isVisible={isLoading}> 
+				<BarIndicator color={theme.icon} /> 
+			</FullViewModal> 
+			: 
 		scroll ? 
 			<View style={styles.scrollAppContainer}>
 				{hasHeader || header ? header ? header : <AppHeader {...props}/> : <></>}

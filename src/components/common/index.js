@@ -27,3 +27,5 @@ export { AlertBox } from './alertBox';
 export { RangeSelector } from './rangeSelector';
 export { InfoText } from './infoText';
 export { Checkbox } from './checkbox';
+export { AppIcon } from './appIcon';
+export { OtpInput } from './otpInput';

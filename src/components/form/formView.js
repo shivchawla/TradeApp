@@ -5,7 +5,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { ConfirmButton } from '../../components/common';
 import { useTheme, WP, HP, StyledText } from '../../theme';
 
-export const FormView = ({onSubmit, children, ...props}) => {
+export const FormView = ({onSubmit, children, buttonTitle="Next", showButton = true, ...props}) => {
 	
 	const {theme, styles} = useStyles();
 
@@ -17,7 +17,14 @@ export const FormView = ({onSubmit, children, ...props}) => {
 				{children}
 			</View>
 				
-			<ConfirmButton buttonContainerStyle={[{position: 'absolute', bottom: 10}, styles.buttonContainer, props.submitButtonContainerStyle]} buttonStyle={[{width: '90%'}, props.submitButtonStyle]} title="Next" onClick={onSubmit} />
+			{showButton && 
+				<ConfirmButton 
+					buttonContainerStyle={[{position: 'absolute', bottom: 10}, styles.buttonContainer, props.submitButtonContainerStyle]} 
+					buttonStyle={[{width: '90%'}, props.submitButtonStyle]} 
+					title={buttonTitle} 
+					onClick={onSubmit} 
+				/>
+			}
 		</>
 	)
 } 

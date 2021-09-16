@@ -7,32 +7,16 @@ import {useQuery} from 'react-query';
 import queryString from 'query-string';
 
 import {getCurrentUser, updateCurrentUser, 
-	getAlpacaAccount, updateAlpacaAccount} from './store';
+	getAlpacaAccount, updateAlpacaAccount, updateAuthMetaData, getAuthMetaData} from './store';
 
 import { currentISODate, toISODate } from '../utils';
 
 import {findUserInDb, addUserInDb, updateUserInDb,
 	signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut as firebaseSignOut, 
 	signInWithPhoneNumber, sendPasswordResetEmail, confirmPasswordReset, 
-	applyActionCode, reloadUser, currentUser, updatePassword,
+	applyActionCode, reloadUser, getUser, updatePassword, signInWithEmailLink,
+	sendSignInLinkToEmail, PhoneAuthProvider
 } from './firebase';
-
-const useCheckCredentials = () => {
-	const [currentUser, setCurrentUser] = useState(null);
-
-	React.useEffect(() => {
-		console.log("useCheckCredentials");
-		const checkUserCredential  = async () => {
-			//Update logic to check for last signed in time 
-			setCurrentUser(await getCurrentUser())
-		}
-
-		checkUserCredential()
-
-	}, []);
-
-	return currentUser;
-}
 
 
 //User Email is Loaded
@@ -56,32 +40,59 @@ const useAuthHelper = () => {
 		    if (link?.url) {
 		    	const parsed = queryString.parse(link?.url);
 		    	const mode = parsed?.mode;
+		    	const oobCode = parsed?.oobCode;
+		    	console.log("Code: ", oobCode);
+
 		    	if(mode == "verifyEmail") {
-		    		const oobCode = parsed?.oobCode;
 		    		//Apply oob code
 		    		await applyActionCode(oobCode)
+		    		await checkUserCredential();
+		    	} else if (mode == "signIn") {
+		    		//This means forgot password has been clicked
+		    		//Apply oob code
+		    		// await applyActionCode(oobCode);
+		    		await signInWithEmailLink("shivchawla2001@gmail.com", link?.url)
+		    		await updateAuthMetaData({emailAuth: true, phoneAuth: false});
 		    		await checkUserCredential();
 		    	}
 		    }	
 		};
 
-		console.log("useCheckCredentials");
 	    const unsubscribeDL = dynamicLinks().onLink(handleDynamicLink);
-
+	    
 		const checkUserCredential  = async () => {
 
+			try{
+				const x = await auth().currentUser;
+				console.log("User signed In");
+				console.log(x);
+
+				if (!x) {
+					setLoadingAuth(false);
+					onNewCurrentUser(null);
+					return;
+				}
+			} catch (err) {
+				setLoadingAuth(false);
+				onNewCurrentUser(null);
+				return;
+			} 
+
 			//Update logic to check for last signed in time 
-			var currentUser = await getCurrentUser();
-			if (!!currentUser?.emailVerified) {
-				setCurrentUser(currentUser);
+			var storedUser = await getCurrentUser();
+			if (!!storedUser?.emailVerified) {
+				onNewCurrentUser(storedUser);
 			} else {
 				try{
 					//If Email is not verified, refetch from aut
 					console.log("Check the user from auth - After reload");
 					await reloadUser();
-					let updatedUser = await currentUser();
+					let updatedUser = await getUser();
+
+					console.log("Updated User");
 					console.log(updatedUser);
-					setCurrentUser(updatedUser);
+
+					onNewCurrentUser({...updatedUser._user});
 
 				} catch(err) {
 					console.log(err);
@@ -89,9 +100,9 @@ const useAuthHelper = () => {
 				}
 			}
 		}
-
-		checkUserCredential()
-
+	
+    	checkUserCredential()
+		
  		return () => {
 	      unsubscribeDL()
 	    };
@@ -100,10 +111,17 @@ const useAuthHelper = () => {
 	React.useEffect(() => {
 		(async() => {
 			if (currentUser) {
-				// console.log("Current User Change Effect");
-				// console.log(currentUser);
+				console.log("Current User Change Effect");
+				console.log(currentUser);
 				await updateCurrentUser(currentUser);
-				if (currentUser?.emailVerified) {
+
+				//Check Auth Meta as well to make user Account is fetched
+
+				if (currentUser?.emailVerified && 
+					currentUser?.authMeta?.emailAuth && 
+					currentUser?.authMeta?.phoneAuth && 
+					!!!currentUser?.authMeta?.pending) {
+					
 					console.log(currentUser?.email);
 					const account = await getUserFromDb(currentUser?.email);
 					// console.log("Found Account");
@@ -141,13 +159,36 @@ const useAuthHelper = () => {
 		return await findUserInDb(email)
 	};
 
+	const onNewCurrentUser = async(user) => {
+		if (user) {
+			const authMeta = await getAuthMetaData();
+			console.log("Auth Meta Data");
+			console.log(authMeta);
+
+			console.log("User Argument");
+			console.log(user);
+
+			// console.log("Appended User")
+			// console.log({...user._user})
+
+			setCurrentUser({...user, authMeta});
+		} else {
+			setCurrentUser(null);
+		}
+	}
+
 	const signInEmail = async (email, password) => {
 		setLoadingAuth(true);
+
+		console.log("signInEmail")
+		console.log("Email: ", email);
+		console.log("Password: ", password);
 
 		const userCredential = await signInWithEmailAndPassword(email, password);
 		// console.log("Signed In");
 		// console.log(userCredential);
-		setCurrentUser(userCredential?.user);
+		await updateAuthMetaData({emailAuth: true, phoneAuth: true});	
+		onNewCurrentUser({...userCredential?.user._user});
 	}
 
 	const signInPhone = async (phoneNumber) => {
@@ -155,24 +196,42 @@ const useAuthHelper = () => {
 		setConfirmPhone(await signInWithPhoneNumber(phoneNumber));
 	}
 
-	const submitPhoneCode = async (code) => {
-		const userCredential = confirmPhone.confirm(code);
-		setCurrentUser(userCredential?.user)
+	const getPhoneCredentials = async(code) => {
+		return await PhoneAuthProvider.credential(phoneConfirm.verificationId, code); 
 	}
 
-	const signUpEmail = async ({email, password}, {sendEmail=true, linkTo= null}) => {
-		setLoadingAuth(true);
-		
-		let userCredential = await createUserWithEmailAndPassword(email, password);
-    	
-    	if(sendEmail) {
-    		await userCredential.user.sendEmailVerification({
+	const submitPhoneCode = async (code) => {
+		const userCredential = confirmPhone.confirm(code);
+
+		const oldAuthMeta = await getAuthMetaData();
+		await updateAuthMetaData({...oldAuthMeta, phoneAuth: true});
+
+		onNewCurrentUser({...userCredential?.user._user})
+	}
+
+	const sendEmailVerification = async() => {
+		try{
+			await auth().currentUser.sendEmailVerification({
     			url:'https://fincript-dev.firebaseapp.com',	
     			handleCodeInApp: true,
     			android: {
     				packageName: 'com.fincript.rndev'
     			}
-    		});
+    		}) 
+		} catch(err) {
+
+		}
+	}
+
+	const signUpEmail = async ({email, password}, {sendEmail=true, linkTo= null}) => {
+		setLoadingAuth(true);
+		
+		console.log("Email: ", email);
+		console.log("Password: ", password);
+		let userCredential = await createUserWithEmailAndPassword(email, password);
+
+    	if(sendEmail) {
+    		await sendEmailVerification();
 		}
 
 		if(linkTo) {
@@ -180,7 +239,10 @@ const useAuthHelper = () => {
 			userCredential = await userCredential.user.linkWithCredential(linkTo);
 		}
 
-		setCurrentUser(userCredential?.user);
+		const oldAuthMeta = await getAuthMetaData();
+		await updateAuthMetaData({...oldAuthMeta, emailAuth: true});
+
+		onNewCurrentUser({...userCredential?.user._user});
 
 		//Don't signout to allow sign-In on clicking the link
         // await auth().signOut();
@@ -190,13 +252,12 @@ const useAuthHelper = () => {
 
 	const signUpPhone = async (phoneNumber) => {
 		setLoadingAuth(true);
-		
-    	return await signInWithPhoneNumber(phoneNumber);
+    	setConfirmPhone(await signInWithPhoneNumber(phoneNumber));
 	}
 
 	const signOut = async () => {
 		await firebaseSignOut();
-		await updateCurrentUser(null);
+		await onNewCurrentUser(null);
 		await updateAlpacaAccount(null);
 	}
 
@@ -233,11 +294,26 @@ const useAuthHelper = () => {
 		setUserAccount(userAccount);
 	}
 
+	const sendSignInLink = async(email) => {
+		console.log("Sending link auth to: ", email);
+		return await sendSignInLinkToEmail(email, {
+			url:'https://fincript-dev.firebaseapp.com',	
+			handleCodeInApp: true,
+			android: {
+				packageName: 'com.fincript.rndev'
+			}
+		})
+	}
+
 	//userAccount is not used anywhere (except locally) - remove it from output
-	return {isLoadingAuth, currentUser, userAccount,  
-		signInEmail, signUpEmail, signUpPhone, 
+	return {isLoadingAuth, currentUser, userAccount, confirmPhone, submitPhoneCode,
+		signInEmail, signUpEmail, signUpPhone, signInPhone,
 		signOut, requestResetPassword, resetPassword, 
-		changePassword, updateUserAccount 
+		changePassword, updateUserAccount, sendSignInLink,
+		verifiedUser: currentUser?.emailVerified && currentUser?.authMeta?.emailAuth && currentUser?.authMeta?.phoneAuth,
+		authMeta: currentUser?.authMeta, 
+		sendEmailVerification,
+		getPhoneCredentials		
 	};
 }
 

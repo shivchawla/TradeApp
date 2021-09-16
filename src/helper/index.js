@@ -50,3 +50,5 @@ export { usePersonaSession, usePersonaInquiry, usePersonaDocument, usePersonaInq
 export { processOnboardingData, useOnboarding } from './onboard';
 
 export { PhoneAuthProvider, addUserInFirebase } from './firebase';
+
+export { useLoading } from './extra';

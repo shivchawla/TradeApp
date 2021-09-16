@@ -42,6 +42,7 @@ const EmailSignUpForm = React.forwardRef(({onSubmit, type, onError, ...props}, r
 		<FormView {...props} onSubmit={formik.handleSubmit} >
 			<FormTextField field="email" placeholder="Email" handler={formik} setCustomError={onError}/>
 			<FormTextField field="password" placeholder="Password" handler={formik} setCustomError={onError}/>
+			<FormTextField field="confirmPassword" placeholder="Confirm Password" handler={formik} setCustomError={onError}/>
 		</FormView>
 	)
 })
@@ -66,8 +67,8 @@ const PhoneSignUpForm = React.forwardRef(({onSubmit, type, onError, ...props}, r
  	React.useImperativeHandle(ref, () => ({submitForm: formik.handleSubmit}), []);
 
 	return (
-		<FormView {...props} onSubmit={formik.handleSubmit}>
-			<FormTextField field="phoneNumber" type="phone-pad" placeholder="Phone" handler={formik} setCustomError={onError}/>
+		<FormView {...props} onSubmit={formik.handleSubmit} showButton={!!!props.disabled}>
+			<FormTextField field="phoneNumber" type="phone-pad" placeholder="Phone" handler={formik} setCustomError={onError} disabled={props.disabled} instructionText="Enter you phone to receive OTP" />
 		</FormView>
 	)
 })

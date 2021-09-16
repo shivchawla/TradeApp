@@ -71,7 +71,7 @@ const Routes = () => {
 	const appStartup = useAppStartup();
 
 	// Extract auth  from APP startup and make it dependent on app loading state
-	const { isLoadingAuth, currentUser, userAccount } = useAuth(); //Club the output into one!!!
+	const { isLoadingAuth, verifiedUser, authMeta, userAccount } = useAuth(); 
 
 	//Extract brokerage account from Auth as well
 	// const {brokerageAccount, getBrokerageAccount} = useBrokerageAccountData({enabled: false})
@@ -116,13 +116,14 @@ const Routes = () => {
 	console.log("User Account");
 	console.log(userAccount);
 
-	// console.log("Brokerage Account")
-	// console.log(brokerageAccount);
-
+	console.log("Brokerage Account")
+	console.log(brokerageAccount);
 
  	console.log("Trading Stack Condition")
  	console.log((!!currentUser?.emailVerified && !!userAccount));
-	
+
+ 	const pendingAction = !!userAccount && authMeta?.pending;
+ 	
 	return (
 		<NavigationContainer>
 			<Stack.Navigator screenOptions={{headerShown: false}}>
@@ -132,11 +133,13 @@ const Routes = () => {
 					<Stack.Screen name="NoInternet" component={NoInternet} />
 					:
 					<>
-					{(!!currentUser?.emailVerified && !!userAccount) &&  
+					{!!pendingAction ?? <Stack.Screen name={pendingAction} component={pendingAction} />}
+					
+					{(verifiedUser && !!userAccount) &&  
 						<Stack.Screen name="Trading" component={TradingStack} />
 					}
 					
-					{!!currentUser?.emailVerified &&
+					{verifiedUser && 
 						 <Stack.Screen name="OnboardStack" component={OnboardStack} />
 					}
 

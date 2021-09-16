@@ -7,20 +7,22 @@ import {useTheme, WP, StyledText} from '../../theme';
 
 import {CloseIcon} from './iconButtons';
 
-export const FullViewModal = ({isVisible = false, onClose, title, ...props}) => {
+export const FullViewModal = ({isVisible = false, opacity = 1.0, onClose, title, ...props}) => {
 	
 	const {theme, styles} = useStyles();
 
 	return (
 		<Modal 
 			animationType="slide" 
-			backdropOpacity={1.0}
+			backdropOpacity={opacity}
+			backdropColor={theme.background}
+			hideModalContentWhileAnimating={true}
 			style={styles.modal}
 			{...{isVisible, deviceWidth, deviceHeight}}>
 			<View style={[styles.modalContent, props.modalContentStyle]}>
 				<View style={[styles.modalContentHeader, props.contentHeaderStyle]}>
 					{title && <StyledText style={[styles.headerTitle, props.headerTitleStyle]}>{title}</StyledText>}
-					<CloseIcon onPress={onClose} containerStyle={styles.closeIconStyle}/>
+					{onClose && <CloseIcon onPress={onClose} containerStyle={styles.closeIconStyle}/>}
 				</View>
 				{props.children}
 			</View>
@@ -34,14 +36,15 @@ const useStyles = () => {
 	
 	const styles = StyleSheet.create({
 		modal: {
-			backgroundColor: theme.background,
+			// backgroundColor: theme.background,
 			margin: 0
 		},
 		modalContent: {
 			flex:1, 
 			// justifyContent: 'center', 
 			alignItems: 'center',
-			height: '100%'
+			height: '100%',
+			backgroundColor: theme.background,
 		},
 		modalContentHeader: {
 			width: '100%', 
@@ -49,7 +52,9 @@ const useStyles = () => {
 			justifyContent: 'center',
 			position:'absolute',
 			top:0,
-			padding: WP(5)
+			padding: WP(5),
+			backgroundColor: theme.background,
+
 		},
 		closeIconStyle: {
 			position: 'absolute', 

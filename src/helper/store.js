@@ -96,9 +96,14 @@ export const getLanguage = async() => {
 
 const USER_CREDENTIAL_KEY = 'userCredentials';
 const ALPACA_ACCOUNT_KEY = 'alpacaAccount';
+const AUTH_META_KEY = 'authMeta';
 
 export const getCurrentUser = async() => await getStorageData(USER_CREDENTIAL_KEY);
 export const getAlpacaAccount = async() => await getStorageData(ALPACA_ACCOUNT_KEY);
 
 export const updateCurrentUser = async(currentUser) => await setStorageData(USER_CREDENTIAL_KEY, JSON.stringify(currentUser)); 
 export const updateAlpacaAccount = async(alpacaAccount) => await setStorageData(ALPACA_ACCOUNT_KEY, JSON.stringify(alpacaAccount));
+
+
+export const updateAuthMetaData = async(data) => await setStorageData(AUTH_META_KEY, JSON.stringify(data));
+export const getAuthMetaData = async() => await getStorageData(AUTH_META_KEY);

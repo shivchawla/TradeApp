@@ -60,7 +60,7 @@ export const addUserInDb = async(email, userAccount) => {
 
 export const signInWithEmailAndPassword = async (email, password) => await auth().signInWithEmailAndPassword(email, password);
 
-export const createUserWithEmailAndPassword = async({email, password}) => await auth().createUserWithEmailAndPassword(email, password);
+export const createUserWithEmailAndPassword = async(email, password) => await auth().createUserWithEmailAndPassword(email, password);
 
 export const signOut = async() => await auth().signOut();
 
@@ -68,12 +68,16 @@ export const signInWithPhoneNumber = async(phoneNumber) => await auth().signInWi
 
 export const sendPasswordResetEmail = async(email, params = {}) => await auth().sendPasswordResetEmail(email, params);
 
+export const sendSignInLinkToEmail = async(email, params = {}) => await auth().sendSignInLinkToEmail(email, params);
+
 export const confirmPasswordReset = async(code, newPassword) => await auth().confirmPasswordReset(code, newPassword);
 
 export const applyActionCode = async(oobCode) => await auth().applyActionCode(oobCode);
 
 export const reloadUser = async() => await auth().currentUser.reload();
 
-export const currentUser = async() => await auth().currentUser;
+export const getUser = async() => await auth().currentUser;
 
 export const updatePassword = async(newPassword) => await auth().currentUser.updatePassword(newPassword);
+
+export const signInWithEmailLink = async(email, emailLink) => await auth().signInWithEmailLink(email, emailLink);

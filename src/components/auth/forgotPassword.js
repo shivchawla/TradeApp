@@ -8,19 +8,16 @@ import { FormView, FormTextField } from '../form';
 import { useTheme, WP, HP } from '../../theme';
 import { TinyTextButton } from '../../components/common';
 
-const SigninSchema = Yup.object().shape({
-   email: Yup.string().email('Please enter valid email').required('Email is required'),
-   password: Yup.string()
-		.min(8, ({ min }) => `Password must be at least ${min} characters`)
-		.required('Password is required'),
+const ForgotPasswordSchema = Yup.object().shape({
+   email: Yup.string().email('Please enter valid email').required('Email is required')
 });
 
-export const SignInForm = React.forwardRef(({onSubmit, onError, ...props}, ref) => {
+export const ForgotPasswordForm = React.forwardRef(({onSubmit, onError, ...props}, ref) => {
 	const {theme, styles} = useStyles();
 
 	const formik = useFormik({
-		validationSchema: SigninSchema,
-		initialValues: { email: 'shiv.chawla@yandex.com', password: 'Password'},
+		validationSchema: ForgotPasswordSchema,
+		initialValues: { email: 'shivchawla2001@gmail.com'},
 		validateOnChange: false,
         validateOnBlur: false,
 		onSubmit: onSubmit
@@ -34,14 +31,6 @@ export const SignInForm = React.forwardRef(({onSubmit, onError, ...props}, ref) 
 	return (
 		<FormView {...props} onSubmit={formik.handleSubmit}>
 			<FormTextField field="email" placeholder="Email" handler={formik} setCustomError={onError}/>
-			<FormTextField field="password" placeholder="Password" handler={formik} setCustomError={onError}/>
-			<View style={styles.tinyButtonContainer}>
-	   		<TinyTextButton 
-	   			title="Forgot Password ?" 
-	   			onPress={() => navigation.navigate('ForgotPassword')}
-	   			buttonTextStyle={{fontSize: WP(3.5), color: theme.grey5}}
-   			/>
-   		</View>
 		</FormView>
 	)
 })

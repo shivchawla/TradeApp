@@ -2,20 +2,20 @@ import React, {useState} from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native'
 
-import { useAuth, PhoneAuthProvider, setStorageData } from '../../helper';
-import { AppView, ConfirmButton, TinyTextButton } from '../../components/common';
+import { useAuth, setStorageData, useLoading } from '../../helper';
+import { AppView, ConfirmButton, TinyTextButton, AppIcon, OtpInput } from '../../components/common';
 import { SignUpForm } from '../../components/auth';
 
 import { useTheme, StyledText, WP, HP }  from '../../theme';
 
 const SignUp = (props) => {
 
-	const {currentUser, signUpPhone, signUpEmail} = useAuth();
+	const {currentUser, signUpPhone, signUpEmail, phoneConfirm, getPhoneCredentials} = useAuth();
 
 	const [signUpType, setSignUpType] = useState('phone');
 	const [error, setError] = useState(null);
 	const [signedUp, setSignedUp] = useState(false);
-	const [phoneConfirm, setPhoneConfirm] = useState(null); 
+	const {isLoading, loadingFunc} = useLoading(false); 
 	
 	const [phoneCredentials, setPhoneCredentials] = useState(null);
 	const [emailCredentials, setEmailCredentials] = useState(null);	
@@ -24,12 +24,15 @@ const SignUp = (props) => {
 
 	const {navigation} = props
 
-	// useFocusEffect(
-	// 	React.useCallback(() => {
-	// 		console.log("Sign Up Mount Effect");
-	// 		console.log(currentUser);
-	// 	}, [])
-	// )
+	// useFocusEffect(React.useCallback(() => {
+	// 	setLoading(false);
+	// }, []))
+
+	React.useEffect(() => {
+		if (currentUser && !!!currentUser.emailVerfied) {
+			navigation.navigate('AuthInfo', {type: 'email-not-verified', message: 'Please click the link in the email we sent to complete the signup process.'})
+		}
+	}, [currentUser])
 
 	React.useEffect(() => {
 
@@ -48,41 +51,34 @@ const SignUp = (props) => {
 
 	}, [phoneCredentials])
 
-	React.useEffect(() => {
+	// React.useEffect(() => {
 
-		const handleChangeEmailCredentials = async() => {
-			if (emailCredentials) {
-				//When phone is confirmed update storage
-				//when does this expire
-				await setStorageData("emailAuth", JSON.stringify(emailCredentials));
+	// 	const handleChangeEmailCredentials = async() => {
+	// 		if (emailCredentials) {
+	// 			//When phone is confirmed update storage
+	// 			//when does this expire
+	// 			await setStorageData("emailAuth", JSON.stringify(emailCredentials));
 
-				if (emailCredentials && phoneCredentials) {
-					//Now, move on-to email auth
-					setSignedUp(true);	
-				}
-			}
-		}
+	// 			if (emailCredentials && phoneCredentials) {
+	// 				//Now, move on-to email auth
+	// 				setSignedUp(true);	
+	// 			}
+	// 		}
+	// 	}
 
-		handleChangeEmailCredentials();
+	// 	handleChangeEmailCredentials();
 
-	}, [emailCredentials])
+	// }, [emailCredentials])
 
 	const onSubmitOtp = async() => {
 		try {
-
-			const phoneAuthCredentials = await PhoneAuthProvider.credential(phoneConfirm.verificationId, otp);
-
-			console.log("phoneAuthCredentials");
+			const phoneAuthCredentials = await loadingFunc(async() => await getPhoneCredentials(otp));
 			console.log(phoneAuthCredentials);
-
-			// console.log("User successfully signed/created with PHONE");
-			// console.log(userCredentials);
-
 			setPhoneCredentials(phoneAuthCredentials);
 
 	    } catch (error) {
 	    	console.log(error);
-			setSignUpError('Invalid OTP code');
+			setError('Invalid OTP code');
     	}
 	}
 
@@ -91,18 +87,23 @@ const SignUp = (props) => {
 		console.log(phoneNumber);
 
 		try {
-			setPhoneConfirm(await signUpPhone(phoneNumber));
+			await loadingFunc(async() => await signUpPhone(phoneNumber));
 		} catch (error) {
-			setSignUpError(error.code);
+			setError(error.code);
 		}
+
+		// console.log("Ending onSignUpPhone");
 	}
 
 	const onSignUpEmail = async ({email, password}) => {
 		console.log("In onSignup - Email");
+		console.log(email);
+		console.log(password);
+		console.log(phoneCredentials);
 		
 		try {
-			
-			const userCredential = await signUpEmail({email, password}, {linkTo: phoneCredentials});
+			const userCredential = await loadingFunc(async() => await signUpEmail({email, password}, {linkTo: phoneCredentials}));
+			console.log(userCredential);
 			console.log("User successfully signed/created with EMAIL");
 			
 			setEmailCredentials(userCredential);
@@ -120,54 +121,42 @@ const SignUp = (props) => {
 		}
 	}
 	
-	const signupMsg = "Successfully signed up! Please Check your email";
-
 	const {theme, styles} = useStyles();
 
-	// console.log("signUpType: ", signUpType);
-	// console.log(phoneConfirm);
-	// console.log(signUpType == "phone" && !phoneConfirm);
-	// console.log((signUpType == "phone" && !phoneConfirm) || (signUpType == "email"));
-	
 	return (
-		<AppView title="Sign Up" goBack={false} scroll={false} staticViewStyle={styles.screenContentStyle}>
-			{signedUp ? 
-				<StyledText>Verify Email to proceed</StyledText>
-			:
-				<>
-				{((signUpType == "phone" && !phoneConfirm) || (signUpType == "email")) &&
-					<SignUpForm 
-						type={signUpType} 
-						disabled={signUpType == "phone" && phoneConfirm} 
-						onSubmit={signUpType == "phone" ? onSignUpPhone : onSignUpEmail}
-						onError={setError}
-						error={error}
-						submitButtonContainerStyle={styles.submitButtonContainer}
-						submitButtonStyle={styles.submitButton}
-						formContainerStyle={styles.formContainer}
-					/>
-				}
+		<AppView isLoading={isLoading} goBack={false} scroll={false} staticViewStyle={styles.screenContentStyle} showLogo={true}>
+			<AppIcon logoContainerStyle={styles.logoContainer} logoStyle={{height: 70}} titleStyle={styles.title}/>
+			<StyledText style={styles.screenTitle}>SIGN UP</StyledText>
+			<View style={styles.stepTextContainer}>
+				{signUpType == "phone" && <StyledText style={styles.currentStepText}>Register Phone</StyledText>}
+				{signUpType == "email" && <StyledText style={styles.currentStepText}>Register Email</StyledText>}
+			</View>
+
+			<View style={{marginBottom: HP(5), alignItems: 'center', width: '100%'}}>
+				{((signUpType == "phone" && !phoneConfirm) || signUpType == "email") && <SignUpForm 
+					type={signUpType}
+					buttonTitle={signUpType == "phone" ? phoneConfirm ? 'CONFIRM OTP' : 'SEND OTP' : 'CREATE ACCOUNT'} 
+					disabled={!!(signUpType == "phone" && phoneConfirm)} 
+					onSubmit={signUpType == "phone" ? onSignUpPhone : onSignUpEmail}
+					onError={setError}
+					error={error}
+					submitButtonContainerStyle={styles.submitButtonContainer}
+					submitButtonStyle={styles.submitButton}
+					formContainerStyle={styles.formContainer}
+				/>}
 
 				{(signUpType == "phone" && phoneConfirm) && 
-					<View>
-						<TextInput 
-							placeholder="OTP"
-							keyboardType="numeric"
-							placeholderTextColor={theme.grey7}
-							onChangeText={setOtp}
-							autoCompleteType="off"
-							value={otp}
-						/>
-						<ConfirmButton title="SUBMIT OTP" onClick={onSubmitOtp} />
+					<View style={{alignItems: 'center'}}>
+						<OtpInput code={otp || ''} onCodeChange={setOtp}/>
+						<ConfirmButton title="SUBMIT OTP" onClick={onSubmitOtp} buttonContainerStyle={{marginTop: HP(10)}} buttonStyle={styles.submitButton}/>
 					</View>
 				}
+			</View>
 
-				<View style={styles.tinyButtonContainer}>
-					<TinyTextButton title="SIGN IN" onPress={() => navigation.navigate('SignIn')} />
-				</View>
+			<View style={styles.tinyButtonContainer}>
+				<TinyTextButton title="SIGN IN" onPress={() => navigation.navigate('SignIn')} />
+			</View>
 
-				</>
-			}
 		</AppView>
 	);
 }
@@ -186,14 +175,30 @@ const useStyles = () => {
 		},
 		submitButtonContainer:{
 			position: 'relative', 
+			marginBottom: HP(5)
 			// top: 0
 		},
 		submitButton: {
-			width: '60%', 
+			width: '70%', 
 			marginTop: WP(0),
 		},
 		tinyButtonContainer: {
-			marginTop: HP(10)
+			// marginTop: HP(10)
+		},
+		logoContainer: {
+			marginBottom: HP(5), 
+		},
+		screenTitle: {
+			fontWeight: 'bold',
+			fontSize: WP(6),
+			color: theme.icon
+		},
+		stepTextContainer: {
+			marginBottom: HP(5),
+		},
+		currentStepText: {
+			color: theme. grey5,
+			fontSize: WP(5)
 		}
 	})
 
