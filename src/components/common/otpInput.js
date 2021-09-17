@@ -1,20 +1,19 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState} from 'react';
 import {View, TextInput, StyleSheet} from 'react-native';
 
 import {useTheme, HP, WP} from '../../theme';
 import {deviceHeight, deviceWidth} from '../../utils';
 
-export const  OtpInput = ({code, onCodeChange, onCodeFinish, codeCount = 6, ...props}) => {
+export const OtpInput = ({code, onCodeChange, onCodeFinish, codeCount = 6, onFocus, ...props}) => {
 	
 	const {theme, styles} = useStyles();
 
 	const inputCodeRef = React.useRef(new Array());
-	const [codes, setCodes] = useState(code.split(''));
+	const [codes, setCodes] = useState(new Array());
 
 	React.useEffect(() => {
-		setCodes(Array(codeCount).fill(''));
-	}, []);
+		setCodes(Array.from({...(code||'').split(''), length: codeCount}, (v,i) => v || ''));
+	}, [code]);
 
 	React.useEffect(() => {
 		onCodeChange && onCodeChange(getCodes());
@@ -62,7 +61,8 @@ export const  OtpInput = ({code, onCodeChange, onCodeFinish, codeCount = 6, ...p
 			{codes.map((code, index) => {
 				return (
 					<TextInput
-						key={`OtpInput-${index}`}
+						onFocus={() => index == 0 ? onFocus() : null}
+						key={index}
 						keyboardType="numeric"
 						ref={element => inputCodeRef.current.push(element)}
 						style={[
