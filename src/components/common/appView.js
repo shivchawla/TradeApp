@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import { SafeAreaView, ScrollView, View, Image,
-	StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform} from 'react-native';
+	StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, Modal} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { BarIndicator } from 'react-native-indicators';
 
 import { StyledText, useTheme, WP, defaultIconSize, HP } from '../../theme';
@@ -35,34 +35,55 @@ export const AppView = ({scroll = true, footer, hasHeader = true, header, isLoad
 	const Component = scroll ? ScrollView : View;
 	const {theme, styles} = useStyles();
 
+	const [showModal, setShowModal] = useState(isLoading);
+
+	//This sets showModal based on prop change 
+	React.useEffect(() => {
+		setShowModal(isLoading);
+	}, [isLoading])
+
+	//On Blur, any modal should be turned off 
+	useFocusEffect(
+		React.useCallback(() => {
+
+			//Blur Effect
+			return () => {
+				setShowModal(false)
+			};	
+		}, [])
+	)
+
 	//Check for ZERO padding
 	const hasPadding = (props?.padding ?? '') !== '';
 	
 	return (
-		<>
-		{isLoading ? 
-			<FullViewModal opacity={0.4} isVisible={isLoading}> 
-				<BarIndicator color={theme.icon} /> 
-			</FullViewModal> 
-			: 
-		scroll ? 
-			<View style={styles.scrollAppContainer}>
-				{hasHeader || header ? header ? header : <AppHeader {...props}/> : <></>}
-				<KeyboardAwareScrollView enableOnAndroid={true} contentContainerStyle={[styles.scrollView, props.scrollViewStyle, {...hasPadding && {paddingLeft: WP(props.padding), paddingRight: WP(props.padding)}}]} showsVerticalScrollIndicator={false}>
-					{props.children}
-				</KeyboardAwareScrollView>
-				{footer && <View style={[styles.footerContainer, props.footerContainerStyle]}>{footer}</View>}
-			</View>	
-			:
-			<View style={[styles.appContainer, props.appContainerStyle]}>
-				{hasHeader || header ? header ? header : <AppHeader {...props}/> : <></>}
-				<View style={[styles.staticView, {...hasPadding && {paddingLeft: WP(props.padding), paddingRight: WP(props.padding)}}, props.staticViewStyle]}>
-					{props.children}
+		<View style={{backgroundColor: theme.background, flex:1}}>
+			<FullViewModal isVisible={showModal} opacity={0.8} animation="fadeOut">
+				<View>
+					{showModal && <BarIndicator color={theme.icon} /> }
 				</View>
-				{footer && <View style={[styles.footerContainer, props.footerContainerStyle]}>{footer}</View>}
-			</View>
-		}
-		</>
+			</FullViewModal>
+
+			<>
+			{scroll ? 
+				<View style={styles.scrollAppContainer}>
+					{hasHeader || header ? header ? header : <AppHeader {...props}/> : <></>}
+					<KeyboardAwareScrollView enableOnAndroid={true} contentContainerStyle={[styles.scrollView, props.scrollViewStyle, {...hasPadding && {paddingLeft: WP(props.padding), paddingRight: WP(props.padding)}}]} showsVerticalScrollIndicator={false}>
+						{props.children}
+					</KeyboardAwareScrollView>
+					{footer && <View style={[styles.footerContainer, props.footerContainerStyle]}>{footer}</View>}
+				</View>	
+				:
+				<View style={[styles.appContainer, props.appContainerStyle]}>
+					{hasHeader || header ? header ? header : <AppHeader {...props}/> : <></>}
+					<View style={[styles.staticView, {...hasPadding && {paddingLeft: WP(props.padding), paddingRight: WP(props.padding)}}, props.staticViewStyle]}>
+						{props.children}
+					</View>
+					{footer && <View style={[styles.footerContainer, props.footerContainerStyle]}>{footer}</View>}
+				</View>
+			}
+			</>
+		</View>
 	);
 }
 

@@ -7,16 +7,15 @@ import {useTheme, WP, StyledText} from '../../theme';
 
 import {CloseIcon} from './iconButtons';
 
-export const FullViewModal = ({isVisible = false, opacity = 1.0, onClose, title, ...props}) => {
+export const FullViewModal = ({isVisible = false, opacity = 1.0, animation="slide", onClose, title, ...props}) => {
 	
 	const {theme, styles} = useStyles();
 
 	return (
 		<Modal 
-			animationType="slide" 
+			animationType={animation} 
 			backdropOpacity={opacity}
 			backdropColor={theme.background}
-			hideModalContentWhileAnimating={true}
 			style={styles.modal}
 			{...{isVisible, deviceWidth, deviceHeight}}>
 			<View style={[styles.modalContent, props.modalContentStyle]}>
@@ -44,7 +43,7 @@ const useStyles = () => {
 			// justifyContent: 'center', 
 			alignItems: 'center',
 			height: '100%',
-			backgroundColor: theme.background,
+			// backgroundColor: theme.background,
 		},
 		modalContentHeader: {
 			width: '100%', 
