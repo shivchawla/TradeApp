@@ -24,6 +24,7 @@ const SignIn = (props) => {
 
 	useFocusEffect(React.useCallback(() => {
 		updateLoading(false);
+		setError(null);
 	}, []))
 
 	React.useEffect(() => {
@@ -81,11 +82,11 @@ const SignIn = (props) => {
 		  	}
 
 		  	if (error.code == "auth/wrong-password") {
-		  		setError("Incorrect Password");
+		  		setError("Incorrect Email/Password");
 		  	}
 
 		  	if (error.code == "auth/invalid-email") {
-		  		setError("Invalid email. Please check your email");
+		  		setError("Incorrect Email/Password");
 		  	}
 
 		  	if (error.code == "auth/user-disabled") {

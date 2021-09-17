@@ -13,17 +13,37 @@ import AuthInfo from '../screens/auth/authInfo';
 
 const AuthStack = (props) => {
 
-	const {currentUser, authMeta} = useAuth();
+	const {currentUser, authMeta, linkError} = useAuth();
 	const [signInParams, setSignInParams] = useState(null);
 	const {navigation} = props;
 
 	React.useEffect(() => {
-		if (currentUser && !!!authMeta?.phoneAuth) {
-			console.log("Updating signin params");
+		// console.log("Use Effect - AuthStack");
+		// console.log(currentUser);
+		// console.log(authMeta);
+		// console.log(linkError);
+		
+		if (currentUser && !!!currentUser.email) {
+			//Email signup still pending
+			//Write logic to ask OTP again if phone sign up more than 1 hour ****
+			navigation.push('SignUp', {signUpType: 'email'});
+		} else if (currentUser && !!authMeta?.emailAuth && !!!authMeta?.phoneAuth) {
+			// console.log("Updating signin params");
 			navigation.navigate('SignIn', {phoneAuth: true});
-		} else if (currentUser && !!!currentUser.emailVerified) {
-			navigation.navigate('AuthInfo', {type: 'email-not-verified', message: 'Please click the link in the email we sent to complete the signup process.'})		}	
-	}, [])
+		} else if (currentUser && linkError) {
+			navigation.navigate('AuthInfo', {
+				type: linkError, 
+				message: 'Verification Link has expired or invalid. Please click Send Email Again to receive a new email.'
+			})
+		} else if (currentUser && !!currentUser.email && !!!currentUser.emailVerified) {
+			navigation.navigate('AuthInfo', {
+				type: 'email-not-verified', 
+				message: 'Please click the link in the email we sent to complete the signup process.'
+			})
+		}	
+	}, [currentUser, linkError])
+
+	console.log("**************Rendering AuthStack**********")
 
 	return (
 		<Stack.Navigator screenOptions={{headerShown: false}}>

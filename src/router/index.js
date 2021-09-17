@@ -41,14 +41,8 @@ const homeTabs = () => {
 
 		return (
 		  <Tabs.Navigator {...{tabBarOptions}} tabBar={props => <CustomTabBar {...props} />}>
-		    {/*<Tabs.Screen name="SignIn" component={SignIn} />*/}
 		    <Tabs.Screen name="Portfolio" component={Portfolio} />
-		    
-		    {/*<Tabs.Screen name="ChooseStock" component={ChooseStock}/>*/}
-		    {/*<Tabs.Screen name="OrdersTrades" component={OrdersTrades} />*/}
 		  	<Tabs.Screen name="Market" component={Market} />
-		  	{/*<Tabs.Screen name="History" component={History} />*/}
-		    
 		  </Tabs.Navigator>
 		)
 }
@@ -91,39 +85,8 @@ const Routes = () => {
 		return () => unsubscribe();
 	}, []);
 
-	// React.useEffect(() => {
-	// 	(async() => {
-	// 		if (userAccount) {
-	// 			//After storage data is updated
-	// 			await getBrokerageAccount();			
-	// 		} 
-	// 	})()	
-	// }, [userAccount])
-
-
-	// React.useEffect(() => {
-	// 	setLoading(isLoadingAuth;	
-	// }, [isLoadingAuth, currentUser, userAccount])
-	
-	// const isLoading = 
-
-	console.log("Is Loading");
-	console.log(isLoadingAuth);
-
-	console.log("Current User");
-	console.log(currentUser);
-
-	console.log("User Account");
-	console.log(userAccount);
-
-	console.log("Brokerage Account")
-	console.log(brokerageAccount);
-
- 	console.log("Trading Stack Condition")
- 	console.log((!!currentUser?.emailVerified && !!userAccount));
-
  	const pendingAction = !!userAccount && authMeta?.pending;
- 	
+
 	return (
 		<NavigationContainer>
 			<Stack.Navigator screenOptions={{headerShown: false}}>

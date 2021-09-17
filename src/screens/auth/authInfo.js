@@ -13,7 +13,7 @@ const AuthInfo = (props) => {
 
 	const {navigation} = props;
 	const {message, type} = props.route.params;
-	const {sendEmailVerification, signOut} = useAuth();
+	const {sendEmailVerification, signOut, isLoadingAuth, linkError} = useAuth();
 	const {isLoading, loadingFunc} = useLoading(false);
 
 	const sendEmail = async() => {
@@ -26,20 +26,31 @@ const AuthInfo = (props) => {
 		navigation.navigate('SignIn')
 	}
 
+	console.log("IsLoading AuthInfo: ", isLoading ||isLoadingAuth);
+
 	return (
-		<AppView isLoading={isLoading} goBack={false} scroll={false} staticViewStyle={styles.screenContentStyle}>
+		<AppView isLoading={isLoading || isLoadingAuth} goBack={false} scroll={false} staticViewStyle={styles.screenContentStyle}>
 			<View style={{position: 'absolute', top:HP(10), alignItems: 'center'}}>
 				<AppIcon logoContainerStyle={styles.logoContainer} logoStyle={{height: 70}} titleStyle={styles.title}/>
 				<StyledText style={styles.screenTitle}>FINCRIPT</StyledText>
 			</View>
-			<StyledText style={{textAlign: 'center', marginBottom: HP(10)}}>{message}</StyledText>
+			<StyledText style={[styles.message, {...type == "error-verification" && {color: theme.error}}]}>{message}</StyledText>
 
 			{type == "email-not-verified" && 
-				<TinyTextButton title="Send Email Again" onPress={sendEmail} />
+				<View style={{alignItems: 'center'}}>
+					<StyledText>Didn't receive any email?</StyledText>
+					<TinyTextButton title="Send Email Again" onPress={sendEmail} />
+				</View>
+			}
+
+			{type == "error-verification" && 
+				<View style={{alignItems: 'center'}}>
+					<TinyTextButton title="Send Email Again" onPress={sendEmail} />
+				</View>
 			}
 
 			<View style={styles.tinyButtonContainer}>
-				<TinyTextButton title="SIGN IN AGAIN" onPress={signInAgain} buttonStyle={{marginBottom: HP(2)}}/>
+				<TinyTextButton title="SIGN IN" onPress={signInAgain} buttonStyle={{marginBottom: HP(2)}}/>
 		   		<TinyTextButton title="CREATE ACCOUNT" onPress={() => navigation.navigate('SignUp')} />
 	   		</View>
 	   </AppView>
@@ -81,6 +92,10 @@ const useStyles = () => {
 			fontSize: WP(6),
 			color: theme.icon,
 		},
+		message: {
+			textAlign: 'center', 
+			marginBottom: HP(10)
+		}
 	})
 
 	return {theme, styles};

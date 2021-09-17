@@ -81,3 +81,5 @@ export const getUser = async() => await auth().currentUser;
 export const updatePassword = async(newPassword) => await auth().currentUser.updatePassword(newPassword);
 
 export const signInWithEmailLink = async(email, emailLink) => await auth().signInWithEmailLink(email, emailLink);
+
+export const signInWithCredential = async(credential) => await auth().signInWithCredential(credential);

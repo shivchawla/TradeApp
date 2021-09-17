@@ -15,7 +15,7 @@ import {findUserInDb, addUserInDb, updateUserInDb,
 	signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut as firebaseSignOut, 
 	signInWithPhoneNumber, sendPasswordResetEmail, confirmPasswordReset, 
 	applyActionCode, reloadUser, getUser, updatePassword, signInWithEmailLink,
-	sendSignInLinkToEmail, PhoneAuthProvider
+	sendSignInLinkToEmail, PhoneAuthProvider, EmailAuthProvider, signInWithCredential
 } from './firebase';
 
 
@@ -31,6 +31,7 @@ const useAuthHelper = () => {
 	const [isErrorUser, setErrorUser] = useState(false);
 	const [userAccount, setUserAccount] = useState(null);
 	const [confirmPhone, setConfirmPhone] = useState(null);
+	const [linkError, setLinkError] = useState(null);
 
 	React.useEffect(() => {
 
@@ -45,7 +46,16 @@ const useAuthHelper = () => {
 
 		    	if(mode == "verifyEmail") {
 		    		//Apply oob code
-		    		await applyActionCode(oobCode)
+		    		try{
+		    			await applyActionCode(oobCode);
+		    			setLinkError(null)
+		    			setLoadingAuth(true);
+	    			} catch(err) {
+	    				//auth/invalid-action-code]
+	    				// this link error is then caught in AuthInfo to show error	
+	    				setLinkError('error-verification');
+	    			}
+
 		    		await checkUserCredential();
 		    	} else if (mode == "signIn") {
 		    		//This means forgot password has been clicked
@@ -63,18 +73,15 @@ const useAuthHelper = () => {
 		const checkUserCredential  = async () => {
 
 			try{
-				const x = await auth().currentUser;
-				console.log("User signed In");
-				console.log(x);
-
+				const x = await getUser();
 				if (!x) {
 					setLoadingAuth(false);
-					onNewCurrentUser(null);
+					setCurrentUser(null);
 					return;
 				}
 			} catch (err) {
 				setLoadingAuth(false);
-				onNewCurrentUser(null);
+				setCurrentUser(null);
 				return;
 			} 
 
@@ -160,6 +167,9 @@ const useAuthHelper = () => {
 	};
 
 	const onNewCurrentUser = async(user) => {
+		console.log("onNewCurrentUser");
+		console.log(user);
+
 		if (user) {
 			const authMeta = await getAuthMetaData();
 			console.log("Auth Meta Data");
@@ -191,18 +201,53 @@ const useAuthHelper = () => {
 		onNewCurrentUser({...userCredential?.user._user});
 	}
 
+	const linkEmail = async ({email, password}, {sendEmail = true} = {}) => {
+
+		console.log("Linking Email")
+		setLoadingAuth(true);
+
+		console.log("liningEmailToUser")
+		console.log("Email: ", email);
+		console.log("Password: ", password);
+
+		const user = await getUser()
+
+		if (user && !!user.email) {
+			throw({code: 'auth/already-linked-another-email'});
+		}
+
+		const emailCredential = await EmailAuthProvider.credential(email, password);
+		const userCredential = await user.linkWithCredential(emailCredential);	
+		
+		if(sendEmail) {
+    		await sendEmailVerification();
+		}
+
+		const oldAuthMeta = await getAuthMetaData();
+		await updateAuthMetaData({...oldAuthMeta, emailAuth: true});	
+		onNewCurrentUser({...userCredential?.user._user});
+	}
+
 	const signInPhone = async (phoneNumber) => {
 		setLoadingAuth(true);
 		setConfirmPhone(await signInWithPhoneNumber(phoneNumber));
 	}
 
 	const getPhoneCredentials = async(code) => {
-		return await PhoneAuthProvider.credential(phoneConfirm.verificationId, code); 
+		const credentials = await PhoneAuthProvider.credential(confirmPhone.verificationId, code); 
+		
+		//Signin with phone credential to make sure OTP is valid
+		await signInWithCredential(credentials);
+		await signOut();
+		//Then signout to continue with email  
+
+		setConfirmPhone(null);
+		return credentials;
 	}
 
 	const submitPhoneCode = async (code) => {
-		const userCredential = confirmPhone.confirm(code);
-
+		const userCredential = await confirmPhone.confirm(code);
+		setConfirmPhone(null);
 		const oldAuthMeta = await getAuthMetaData();
 		await updateAuthMetaData({...oldAuthMeta, phoneAuth: true});
 
@@ -223,6 +268,10 @@ const useAuthHelper = () => {
 		}
 	}
 
+
+	//Not in use downstream
+	//because phone credentials can't be connected once verified
+	//hence, we do other way round... link email credential to phone
 	const signUpEmail = async ({email, password}, {sendEmail=true, linkTo= null}) => {
 		setLoadingAuth(true);
 		
@@ -256,9 +305,17 @@ const useAuthHelper = () => {
 	}
 
 	const signOut = async () => {
-		await firebaseSignOut();
-		await onNewCurrentUser(null);
+
+		try{
+			await firebaseSignOut();
+		} catch(err) {
+			console.log(err);
+		}
+
+		await setCurrentUser(null);
+		await setUserAccount(null);
 		await updateAlpacaAccount(null);
+		await updateCurrentUser(null);
 	}
 
 	const changePassword = async({password, newPassword}) => {
@@ -305,6 +362,11 @@ const useAuthHelper = () => {
 		})
 	}
 
+	const resetAuth = async() => {
+		setConfirmPhone(null);
+		await signOut();
+	}
+
 	//userAccount is not used anywhere (except locally) - remove it from output
 	return {isLoadingAuth, currentUser, userAccount, confirmPhone, submitPhoneCode,
 		signInEmail, signUpEmail, signUpPhone, signInPhone,
@@ -313,7 +375,7 @@ const useAuthHelper = () => {
 		verifiedUser: currentUser?.emailVerified && currentUser?.authMeta?.emailAuth && currentUser?.authMeta?.phoneAuth,
 		authMeta: currentUser?.authMeta, 
 		sendEmailVerification,
-		getPhoneCredentials		
+		getPhoneCredentials, linkError, resetAuth, linkEmail		
 	};
 }
 

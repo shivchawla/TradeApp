@@ -10,26 +10,30 @@ import { useTheme, StyledText, WP, HP }  from '../../theme';
 
 const SignUp = (props) => {
 
-	const {currentUser, signUpPhone, signUpEmail, phoneConfirm, getPhoneCredentials} = useAuth();
+	const {currentUser, signUpPhone, linkEmail, confirmPhone, submitPhoneCode, resetAuth} = useAuth();
+	console.log(props?.route?.params?.signUpType);
 
-	const [signUpType, setSignUpType] = useState('phone');
+	const [signUpType, setSignUpType] = useState(props?.route?.params?.signUpType || 'phone');
 	const [error, setError] = useState(null);
 	const [signedUp, setSignedUp] = useState(false);
-	const {isLoading, loadingFunc} = useLoading(false); 
+	const {isLoading, updateLoading, loadingFunc} = useLoading(false); 
 	
 	const [phoneCredentials, setPhoneCredentials] = useState(null);
 	const [emailCredentials, setEmailCredentials] = useState(null);	
 
 	const [otp, setOtp] = useState(null); 
-
 	const {navigation} = props
 
-	// useFocusEffect(React.useCallback(() => {
-	// 	setLoading(false);
-	// }, []))
+	useFocusEffect(React.useCallback(() => {
+		// console.log("useFocusEffect");
+		updateLoading(false);
+
+		return () => updateLoading(false);
+	}, []))
 
 	React.useEffect(() => {
-		if (currentUser && !!!currentUser.emailVerfied) {
+		// console.log("useEffect [currentUser]");
+		if (currentUser && !!currentUser.email && !!!currentUser.emailVerfied) {
 			navigation.navigate('AuthInfo', {type: 'email-not-verified', message: 'Please click the link in the email we sent to complete the signup process.'})
 		}
 	}, [currentUser])
@@ -51,40 +55,27 @@ const SignUp = (props) => {
 
 	}, [phoneCredentials])
 
-	// React.useEffect(() => {
-
-	// 	const handleChangeEmailCredentials = async() => {
-	// 		if (emailCredentials) {
-	// 			//When phone is confirmed update storage
-	// 			//when does this expire
-	// 			await setStorageData("emailAuth", JSON.stringify(emailCredentials));
-
-	// 			if (emailCredentials && phoneCredentials) {
-	// 				//Now, move on-to email auth
-	// 				setSignedUp(true);	
-	// 			}
-	// 		}
-	// 	}
-
-	// 	handleChangeEmailCredentials();
-
-	// }, [emailCredentials])
 
 	const onSubmitOtp = async() => {
 		try {
-			const phoneAuthCredentials = await loadingFunc(async() => await getPhoneCredentials(otp));
-			console.log(phoneAuthCredentials);
+			const phoneAuthCredentials = await loadingFunc(async() => await submitPhoneCode(otp));
+			// console.log(phoneAuthCredentials);
 			setPhoneCredentials(phoneAuthCredentials);
 
 	    } catch (error) {
-	    	console.log(error);
-			setError('Invalid OTP code');
+	    	// console.log("OOOPPPS");
+	    	// console.log(error);
+	    	// console.log(error.code);
+	    	if (error.code === "auth/invalid-verification-code") {
+				setOtp('');
+				setError('Invalid OTP code');
+			}
     	}
 	}
 
 	const onSignUpPhone = async ({phoneNumber}) => {
-		console.log("On SignUp - Phone");
-		console.log(phoneNumber);
+		// console.log("On SignUp - Phone");
+		// console.log(phoneNumber);
 
 		try {
 			await loadingFunc(async() => await signUpPhone(phoneNumber));
@@ -92,36 +83,39 @@ const SignUp = (props) => {
 			setError(error.code);
 		}
 
-		// console.log("Ending onSignUpPhone");
 	}
 
 	const onSignUpEmail = async ({email, password}) => {
-		console.log("In onSignup - Email");
-		console.log(email);
-		console.log(password);
-		console.log(phoneCredentials);
-		
 		try {
-			const userCredential = await loadingFunc(async() => await signUpEmail({email, password}, {linkTo: phoneCredentials}));
-			console.log(userCredential);
-			console.log("User successfully signed/created with EMAIL");
-			
+			// console.log("Signing up with email -- LINKING")
+			const userCredential = await loadingFunc(async() => await linkEmail({email, password}), {keep: true});
 			setEmailCredentials(userCredential);
 						
 		} catch(error) {
 			if (error.code === 'auth/email-already-in-use') {
-				alert('That email address is already in use!');
+				setError('That email address is already in use!');
+			}
+
+			//What does it mean? happens when already signed in phone is connected to 
+			//new user account
+			if (error.code === 'auth/credential-already-in-use') {
+				setError(error.code);
 			}
 
 			if (error.code === 'auth/invalid-email') {
-				alert('That email address is invalid!');
+				setError('That email address is invalid!');
 			}
 
-			console.error(error);
+			if (error.code == 'auth/requires-recent-login') {
+				setError('Code has expired. Signup again!')
+				await signOut();
+			}
 		}
 	}
 	
 	const {theme, styles} = useStyles();
+
+	console.log(isLoading);
 
 	return (
 		<AppView isLoading={isLoading} goBack={false} scroll={false} staticViewStyle={styles.screenContentStyle} showLogo={true}>
@@ -133,10 +127,10 @@ const SignUp = (props) => {
 			</View>
 
 			<View style={{marginBottom: HP(5), alignItems: 'center', width: '100%'}}>
-				{((signUpType == "phone" && !phoneConfirm) || signUpType == "email") && <SignUpForm 
+				{((signUpType == "phone" && !confirmPhone) || signUpType == "email") && <SignUpForm 
 					type={signUpType}
-					buttonTitle={signUpType == "phone" ? phoneConfirm ? 'CONFIRM OTP' : 'SEND OTP' : 'CREATE ACCOUNT'} 
-					disabled={!!(signUpType == "phone" && phoneConfirm)} 
+					buttonTitle={signUpType == "phone" ? confirmPhone ? 'CONFIRM OTP' : 'SEND OTP' : 'CREATE ACCOUNT'} 
+					disabled={!!(signUpType == "phone" && confirmPhone)} 
 					onSubmit={signUpType == "phone" ? onSignUpPhone : onSignUpEmail}
 					onError={setError}
 					error={error}
@@ -145,16 +139,19 @@ const SignUp = (props) => {
 					formContainerStyle={styles.formContainer}
 				/>}
 
-				{(signUpType == "phone" && phoneConfirm) && 
-					<View style={{alignItems: 'center'}}>
-						<OtpInput code={otp || ''} onCodeChange={setOtp}/>
+				{(signUpType == "phone" && confirmPhone) &&
+					<>
+					{!!error && <StyledText style={styles.error}>{error}</StyledText>} 
+					<View key="otpContainer" style={{alignItems: 'center'}}>
+						<OtpInput code={otp} onCodeChange={(code) => setOtp(code)} onFocus={() => setError('')} />
 						<ConfirmButton title="SUBMIT OTP" onClick={onSubmitOtp} buttonContainerStyle={{marginTop: HP(10)}} buttonStyle={styles.submitButton}/>
 					</View>
+					</>
 				}
 			</View>
 
 			<View style={styles.tinyButtonContainer}>
-				<TinyTextButton title="SIGN IN" onPress={() => navigation.navigate('SignIn')} />
+				<TinyTextButton title="SIGN IN" onPress={() => {resetAuth(); navigation.navigate('SignIn')}} />
 			</View>
 
 		</AppView>
@@ -199,6 +196,10 @@ const useStyles = () => {
 		currentStepText: {
 			color: theme. grey5,
 			fontSize: WP(5)
+		},
+		error: {
+			color: theme.error,
+			marginBottom: HP(5)
 		}
 	})
 

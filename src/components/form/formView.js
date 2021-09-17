@@ -11,7 +11,7 @@ export const FormView = ({onSubmit, children, buttonTitle="Next", showButton = t
 
 	return (
 		<>	
-			{props?.error && <StyledText style={styles.signInError}>{props?.error} </StyledText>}
+			{!!props?.error && <StyledText style={styles.error}>{props?.error} </StyledText>}
 
 			<View style={[styles.formContainer, props.formContainerStyle]}>
 				{children}
@@ -39,6 +39,10 @@ const useStyles = () => {
 			marginTop: HP(5),
 			flex: 1,
 			marginBottom: HP(10)
+		},
+		error: {
+			color: theme.error,
+			fontSize: WP(4.5)
 		}		
 	});
 
