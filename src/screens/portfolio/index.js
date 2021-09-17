@@ -148,10 +148,13 @@ const Portfolio = (props) => {
 
 	const loading = !!!portfolioHistory;
 
+	console.log("Portfolio Screen");
+	console.log("Portfolio Loading: ", loading);
+
 	const pendingOrders = orders && orders.filter(item => item.status == "new");
 
 	return (
-		<AppView loading={loading} header={<PortfolioHeader />} title="Portfolio">
+		<AppView isLoading={loading} header={<PortfolioHeader />} title="Portfolio">
 			<Collapsible 
 				title="PERFORMANCE" 
 				content={<PnLGraph />}  
