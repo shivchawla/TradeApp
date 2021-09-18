@@ -1,15 +1,18 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 
+import { useFocusEffect } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 const Stack = createStackNavigator();
 
-import {useAuth} from '../helper';
+import {AppView} from '../components/common';
+import {useAuth, useLoading} from '../helper';
 
 import SignIn from '../screens/auth/signIn';
 import ForgotPassword from '../screens/auth/forgotPassword';
 import SignUp from '../screens/auth/signUp';
 import AuthInfo from '../screens/auth/authInfo';
+import Splash from '../screens/splash';
 
 const AuthStack = (props) => {
 
@@ -18,8 +21,11 @@ const AuthStack = (props) => {
 	const {navigation} = props;
 
 	React.useEffect(() => {
-		
-		if (currentUser && !!!currentUser.email) {
+		if (!!!currentUser) {
+			navigation.push('SignUp', {signUpType: 'phone'});
+		} else if (currentUser && !!!currentUser.email && !!!authMeta?.phoneAuth) { 
+			navigation.push('SignUp', {signUpType: 'phone'}); 
+		} else if (currentUser && !!!currentUser.email) {
 			//Email signup still pending
 			//Write logic to ask OTP again if phone sign up more than 1 hour ****
 			navigation.push('SignUp', {signUpType: 'email'});
@@ -38,13 +44,13 @@ const AuthStack = (props) => {
 			})
 		} else if (verifiedUser && !!!userAccount) {
 			navigation.navigate('OnboardStack');
-		}	
-	}, [currentUser, linkError])
+		}
 
-	console.log("**************Rendering AuthStack**********")
+	}, [currentUser, linkError])
 
 	return (
 		<Stack.Navigator screenOptions={{headerShown: false}}>
+			<Stack.Screen name="Splash" component={Splash} />	
 			<Stack.Screen name="SignIn" component={SignIn}/>
 			<Stack.Screen name="SignUp" component={SignUp} />
 			<Stack.Screen name="ForgotPassword" component={ForgotPassword} />

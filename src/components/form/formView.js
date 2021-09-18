@@ -42,7 +42,8 @@ const useStyles = () => {
 		},
 		error: {
 			color: theme.error,
-			fontSize: WP(4.5)
+			fontSize: WP(4.5),
+			textAlign: 'center'
 		}		
 	});
 

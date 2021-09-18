@@ -206,9 +206,9 @@ const useAuthHelper = () => {
 		console.log("Linking Email")
 		setLoadingAuth(true);
 
-		console.log("liningEmailToUser")
-		console.log("Email: ", email);
-		console.log("Password: ", password);
+		// console.log("liningEmailToUser")
+		// console.log("Email: ", email);
+		// console.log("Password: ", password);
 
 		const user = await getUser()
 
@@ -367,6 +367,12 @@ const useAuthHelper = () => {
 		await signOut();
 	}
 
+	const resetPhoneAuth = async() => {
+		const oldAuthMeta = await getAuthMetaData();
+		await updateAuthMetaData({...oldAuthMeta, phoneAuth: false});
+		setConfirmPhone(null);
+	}
+
 	//userAccount is not used anywhere (except locally) - remove it from output
 	return {isLoadingAuth, currentUser, userAccount, confirmPhone, submitPhoneCode,
 		signInEmail, signUpEmail, signUpPhone, signInPhone,
@@ -375,7 +381,7 @@ const useAuthHelper = () => {
 		verifiedUser: currentUser?.emailVerified && currentUser?.authMeta?.emailAuth && currentUser?.authMeta?.phoneAuth,
 		authMeta: currentUser?.authMeta, 
 		sendEmailVerification,
-		getPhoneCredentials, linkError, resetAuth, linkEmail		
+		getPhoneCredentials, linkError, resetAuth, resetPhoneAuth, linkEmail		
 	};
 }
 

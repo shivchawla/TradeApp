@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 
-export const useLoading = () => {
-	const [isLoading, setLoading] = useState(false);
+export const useLoading = (loading) => {
+	const [isLoading, setLoading] = useState(loading);
 
 	const loadingFunc = async(func, {keep = false} = {}) => {
 		setLoading(true);

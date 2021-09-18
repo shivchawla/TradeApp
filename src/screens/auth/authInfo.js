@@ -14,22 +14,24 @@ const AuthInfo = (props) => {
 	const {navigation} = props;
 	const {message, type} = props.route.params;
 	const {sendEmailVerification, signOut, isLoadingAuth, linkError} = useAuth();
-	const {isLoading, loadingFunc} = useLoading(false);
+	const {isLoading, updateLoading, loadingFunc} = useLoading(false);
 
 	const sendEmail = async() => {
 		// console.log("Sending Verfication Email Again");
-		await loadingFunc(async() =>  await sendEmailVerification())
+		await loadingFunc(async() =>  await sendEmailVerification(), {keep: true})
 	}
+
+	React.useEffect(() => {
+		updateLoading(isLoadingAuth);
+	}, [isLoadingAuth])
 
 	const signInAgain = async() => {
 		await signOut()
 		navigation.navigate('SignIn')
 	}
 
-	console.log("IsLoading AuthInfo: ", isLoading ||isLoadingAuth);
-
 	return (
-		<AppView isLoading={isLoading || isLoadingAuth} goBack={false} scroll={false} staticViewStyle={styles.screenContentStyle}>
+		<AppView isLoading={isLoading} goBack={false} scroll={false} staticViewStyle={styles.screenContentStyle}>
 			<View style={{position: 'absolute', top:HP(10), alignItems: 'center'}}>
 				<AppIcon logoContainerStyle={styles.logoContainer} logoStyle={{height: 70}} titleStyle={styles.title}/>
 				<StyledText style={styles.screenTitle}>FINCRIPT</StyledText>

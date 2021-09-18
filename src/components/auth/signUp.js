@@ -56,7 +56,7 @@ const PhoneSignUpForm = React.forwardRef(({onSubmit, type, onError, ...props}, r
 
 	const formik = useFormik({
 		validationSchema: PhoneSignUpSchema,
-		initialValues: { phoneNumber: '+50240428803'},
+		initialValues: { phoneNumber: ''},
 		validateOnChange: false,
         validateOnBlur: false,
 		onSubmit
@@ -68,7 +68,7 @@ const PhoneSignUpForm = React.forwardRef(({onSubmit, type, onError, ...props}, r
 
 	return (
 		<FormView {...props} onSubmit={formik.handleSubmit} showButton={!!!props.disabled}>
-			<FormTextField field="phoneNumber" type="phone-pad" placeholder="Phone" handler={formik} setCustomError={onError} disabled={props.disabled} instructionText="Enter you phone to receive OTP" />
+			<FormTextField isPhone={true} field="phoneNumber" type="phone-pad" placeholder="Phone" handler={formik} setCustomError={onError} disabled={props.disabled} instructionText="Enter you phone to receive OTP" />
 		</FormView>
 	)
 })

@@ -116,7 +116,8 @@ const Onboard = (props) => {
 	}
 
 	return (
-		<AppView 
+		<AppView
+			goBack={false} 
 			header={step && <Header />}
 			scrollViewStyle={{flexGrow:1}} 
 			isLoading={isLoading} 

@@ -10,8 +10,8 @@ import { useTheme, StyledText, WP, HP }  from '../../theme';
 
 const SignUp = (props) => {
 
-	const {currentUser, signUpPhone, linkEmail, confirmPhone, submitPhoneCode, resetAuth} = useAuth();
-	console.log(props?.route?.params?.signUpType);
+	const {currentUser, signUpPhone, linkEmail, confirmPhone, submitPhoneCode, resetPhoneAuth, signOut} = useAuth();
+	// console.log(props?.route?.params?.signUpType);
 
 	const [signUpType, setSignUpType] = useState(props?.route?.params?.signUpType || 'phone');
 	const [error, setError] = useState(null);
@@ -31,12 +31,14 @@ const SignUp = (props) => {
 		return () => updateLoading(false);
 	}, []))
 
-	React.useEffect(() => {
-		// console.log("useEffect [currentUser]");
-		if (currentUser && !!currentUser.email && !!!currentUser.emailVerfied) {
-			navigation.navigate('AuthInfo', {type: 'email-not-verified', message: 'Please click the link in the email we sent to complete the signup process.'})
-		}
-	}, [currentUser])
+
+	// It's already handled in AuthStack
+	// React.useEffect(() => {
+	// 	// console.log("useEffect [currentUser]");
+	// 	if (currentUser && !!currentUser.email && !!!currentUser.emailVerfied) {
+	// 		navigation.navigate('AuthInfo', {type: 'email-not-verified', message: 'Please click the link in the email we sent to complete the signup process.'})
+	// 	}
+	// }, [currentUser])
 
 	React.useEffect(() => {
 
@@ -46,8 +48,10 @@ const SignUp = (props) => {
 				//when does this expire
 				// await setStorageData("phoneAuth", JSON.stringify(phoneCredentials));
 
+				// console.log("Setting up signup type to PHONE");
 				//Now, move on-to email auth
 				setSignUpType("email");
+				updateLoading(false);
 			}
 		}
 
@@ -58,14 +62,15 @@ const SignUp = (props) => {
 
 	const onSubmitOtp = async() => {
 		try {
-			const phoneAuthCredentials = await loadingFunc(async() => await submitPhoneCode(otp));
+			const phoneAuthCredentials = await loadingFunc(async() => await submitPhoneCode(otp), {keep: true});
 			// console.log(phoneAuthCredentials);
 			setPhoneCredentials(phoneAuthCredentials);
-
+			setOtp(''); 
 	    } catch (error) {
 	    	// console.log("OOOPPPS");
 	    	// console.log(error);
 	    	// console.log(error.code);
+	    	updateLoading(false);
 	    	if (error.code === "auth/invalid-verification-code") {
 				setOtp('');
 				setError('Invalid OTP code');
@@ -74,8 +79,10 @@ const SignUp = (props) => {
 	}
 
 	const onSignUpPhone = async ({phoneNumber}) => {
-		// console.log("On SignUp - Phone");
-		// console.log(phoneNumber);
+		console.log("On SignUp - Phone");
+		console.log(phoneNumber);
+
+		setError(null);
 
 		try {
 			await loadingFunc(async() => await signUpPhone(phoneNumber));
@@ -107,22 +114,28 @@ const SignUp = (props) => {
 			}
 
 			if (error.code == 'auth/requires-recent-login') {
-				setError('Code has expired. Signup again!')
-				await signOut();
+				setError('Code has expired!! Click SEND OTP to receive the code again!')
+				
+				await resetPhoneAuth();
+				//Restart phone authentication
+				setSignUpType('phone');
 			}
 		}
 	}
 	
 	const {theme, styles} = useStyles();
 
-	console.log(isLoading);
+	// console.log(isLoading);
 
 	return (
 		<AppView isLoading={isLoading} goBack={false} scroll={false} staticViewStyle={styles.screenContentStyle} showLogo={true}>
 			<AppIcon logoContainerStyle={styles.logoContainer} logoStyle={{height: 70}} titleStyle={styles.title}/>
 			<StyledText style={styles.screenTitle}>SIGN UP</StyledText>
 			<View style={styles.stepTextContainer}>
-				{signUpType == "phone" && <StyledText style={styles.currentStepText}>Register Phone</StyledText>}
+				{/*<View style={{flexDirection: 'row', alignItems: 'center'}}>*/}
+					{signUpType == "phone" && <StyledText style={styles.currentStepText}>Register Phone</StyledText>}
+					{/*{signUpType == "email" && <View style={styles.circle}></View>}*/}
+				{/*</View>*/}
 				{signUpType == "email" && <StyledText style={styles.currentStepText}>Register Email</StyledText>}
 			</View>
 
@@ -139,9 +152,13 @@ const SignUp = (props) => {
 					formContainerStyle={styles.formContainer}
 				/>}
 
-				{(signUpType == "phone" && confirmPhone) &&
+				{(signUpType == "phone" && confirmPhone && !!!error) &&
 					<>
-					{!!error && <StyledText style={styles.error}>{error}</StyledText>} 
+					{!!error && 
+						<View style={{alignItems: 'center', justifyContent:'center'}}>
+							<StyledText style={styles.error}>{error}</StyledText>
+						</View>
+					}
 					<View key="otpContainer" style={{alignItems: 'center'}}>
 						<OtpInput code={otp} onCodeChange={(code) => setOtp(code)} onFocus={() => setError('')} />
 						<ConfirmButton title="SUBMIT OTP" onClick={onSubmitOtp} buttonContainerStyle={{marginTop: HP(10)}} buttonStyle={styles.submitButton}/>
@@ -195,11 +212,22 @@ const useStyles = () => {
 		},
 		currentStepText: {
 			color: theme. grey5,
-			fontSize: WP(5)
+			fontSize: WP(4),
+			marginTop: HP(1)
 		},
 		error: {
 			color: theme.error,
-			marginBottom: HP(5)
+			marginBottom: HP(5),
+			textAlign: 'center'
+		},
+		circle: {
+			height: HP(1),
+			width: HP(1),
+			borderRadius: HP(0.5),
+			backgroundColor: theme.green,
+			marginLeft: WP(2),
+			justifyContent: 'center',
+			alignItems: 'center'
 		}
 	})
 
