@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 
-import { AppView, ConfirmButton } from '../../components/common';
+import { AppView, ConfirmButton, GobackIcon } from '../../components/common';
 import { useTheme, HP, WP } from '../../theme';
 
-import { AnyForm, Welcome } from '../../components/onboard';
+import { AnyForm, Welcome, OnboardHeader } from '../../components/onboard';
 
 import { useOnboarding } from '../../helper';
 
@@ -106,13 +106,23 @@ const Onboard = (props) => {
 		setStep(steps[steps.findIndex(it => it == step) - 1])
 	} 
 
+	const Header = () => {
+		return (
+			<View style={{marginTop: HP(2), marginLeft: WP(2), flexDirection: 'row', alignItems: 'center'}}>
+				{(!!step && step !='identity') && <GobackIcon goBack={toPreviousStep} />}
+				<OnboardHeader {...{step}} style={{marginTop: HP(0)}}/>
+			</View>
+		)
+	}
+
 	return (
 		<AppView 
+			header={step && <Header />}
 			scrollViewStyle={{flexGrow:1}} 
 			isLoading={isLoading} 
-			goBack={step ? toPreviousStep : false}>
+			>
 
-			{!step && <Welcome onNect={() => setStep('identity')}/>}
+			{!step && <Welcome onNext={() => {console.log("Next Preseed"); setStep('identity')}} />}
 			{step && 
 				<AnyForm 
 					type={step} 

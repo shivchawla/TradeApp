@@ -17,7 +17,7 @@ const AuthInfo = (props) => {
 	const {isLoading, loadingFunc} = useLoading(false);
 
 	const sendEmail = async() => {
-		console.log("Sending Verfication Email Again");
+		// console.log("Sending Verfication Email Again");
 		await loadingFunc(async() =>  await sendEmailVerification())
 	}
 

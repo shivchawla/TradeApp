@@ -25,6 +25,8 @@ const SignIn = (props) => {
 	useFocusEffect(React.useCallback(() => {
 		updateLoading(false);
 		setError(null);
+
+		return () => updateLoading(false);
 	}, []))
 
 	React.useEffect(() => {
