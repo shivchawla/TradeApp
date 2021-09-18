@@ -3,12 +3,15 @@ import { View, StyleSheet } from 'react-native';
 import {useTheme, HP, WP, StyledText} from '../../theme';
 
 const formHeaderInfo = {
-	'identity': {title: 'Identity Information', subTitle: "Share your basic idenity"},
-	'taxInfo': {title: 'Tax Information', subTitle: "Share your basic tax details" },
-	'contact': {title: 'Contact Information', subTitle: "Share your contact information"  },
-	'disclousre': {title: 'Disclosure', subTitle: "Some important disclosures"},
-	'employment': {title: 'Employment Information', subTitle:  "What's your employment status?"},
-	'trustedContact': {title: 'Trusted Contact Information', subTitle: "Share one emergency/trusted contact"}
+	'identity': {title: 'Identity', subTitle: "Share your basic idenity"},
+	'taxInfo': {title: 'Tax Info', subTitle: "Share your basic tax details" },
+	'contact': {title: 'Contact', subTitle: "Share your contact information"  },
+	'disclosure': {title: 'Disclosure', subTitle: "Some important disclosures"},
+	'employment': {title: 'Employment', subTitle:  "What's your employment status?"},
+	'trustedContact': {title: 'Trusted Contact', subTitle: "Share one emergency/trusted contact"},
+	'customer_agreement': {title: 'Customer Agreement', subTitle: ""},
+	'account_agreement': {title: 'Account Agreement', subTitle: ""},
+	'margin_agreement': {title: 'Margin Agreement', subTitle: ""}
 }; 
 
 export const OnboardHeader = ({step, ...props}) => {
@@ -43,7 +46,7 @@ const useStyles = () => {
 		headerContainer: {
 			flexDirection: 'row', 
 			alignItems: 'center', 
-			marginLeft: WP(5),
+			marginLeft: WP(0),
 		},
 		stepNumberContainer: {
 			height: HP(6),

@@ -57,14 +57,13 @@ export const AppView = ({scroll = true, footer, hasHeader = true, header, isLoad
 	const hasPadding = (props?.padding ?? '') !== '';
 	
 	return (
-		<View style={{backgroundColor: theme.background, flex:1}}>
+			<>
 			<FullViewModal isVisible={showModal} opacity={0.8} animation="fadeOut">
 				<View>
 					{showModal && <BarIndicator color={theme.icon} /> }
 				</View>
 			</FullViewModal>
 
-			<>
 			{scroll ? 
 				<View style={styles.scrollAppContainer}>
 					{hasHeader || header ? header ? header : <AppHeader {...props}/> : <></>}
@@ -83,7 +82,6 @@ export const AppView = ({scroll = true, footer, hasHeader = true, header, isLoad
 				</View>
 			}
 			</>
-		</View>
 	);
 }
 

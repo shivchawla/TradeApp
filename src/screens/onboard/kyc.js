@@ -1,7 +1,7 @@
 import React, {useState, useCallback} from 'react';
 import { View, TouchableOpacity, StyleSheet} from 'react-native';
 
-import { AppView, ConfirmButton } from '../../components/common';
+import { AppView, ConfirmButton, AppIcon } from '../../components/common';
 import { useTheme, HP, WP, StyledText } from '../../theme';
 
 import { usePersonaSession, usePersonaInquiry, usePersonaInquiries,  
@@ -74,7 +74,12 @@ const KycButton = ({templateId = "tmpl_6Uj4QPGVn4hx7nQ9pNKwr65t", inquiry, sessi
 	}, [])
 
 	return (
-		<ConfirmButton onClick={handleBeginInquiry} title="START KYC" />
+		<ConfirmButton 
+			onClick={handleBeginInquiry} 
+			title="PROCEED TO KYC" 
+			buttonContainerStyle={{position: 'absolute', bottom: 20}}
+			buttonStyle={{width: '80%'}}
+		/>
 	)
 }
 
@@ -122,6 +127,8 @@ const StartKyc = (props) => {
 			  	})
 
 			  	setInquiry(foundInquiry);
+		  	} else {
+		  		setInquiry({});
 		  	}
 		})()
 
@@ -159,27 +166,27 @@ const StartKyc = (props) => {
 		// console.log(inquiry?.files);
 
 		const pd = processOnboardingData({...user, documents: inquiry?.files});
-		console.log("Processed Data");
-		console.log(Object.keys(pd));
+		// console.log("Processed Data");
+		// console.log(Object.keys(pd));
 
 		
-		console.log(pd.documents.map(it => {console.log(Object.keys(it));}));
-		pd.documents.map(doc => {
-			Object.keys(doc).forEach(it => {
-				if( it == 'content') {
-					console.log(it + ": " + doc[it].slice(0, 5))
-				} else {
-					console.log(it + ": " + doc[it])
-				}
-			})
-		});
+		// console.log(pd.documents.map(it => {console.log(Object.keys(it));}));
+		// pd.documents.map(doc => {
+		// 	Object.keys(doc).forEach(it => {
+		// 		if( it == 'content') {
+		// 			console.log(it + ": " + doc[it].slice(0, 5))
+		// 		} else {
+		// 			console.log(it + ": " + doc[it])
+		// 		}
+		// 	})
+		// });
 
-		console.log(pd.documents.length);
-		console.log(pd.contact);
-		console.log(pd.identity);
-		console.log(pd.disclosures);
-		console.log(pd.agreements);
-		console.log(pd.trusted_contact);
+		// console.log(pd.documents.length);
+		// console.log(pd.contact);
+		// console.log(pd.identity);
+		// console.log(pd.disclosures);
+		// console.log(pd.agreements);
+		// console.log(pd.trusted_contact);
 
 	 	createBrokerageAccount(pd, {
 	 		onSuccess: (res, input) => {
@@ -209,11 +216,43 @@ const StartKyc = (props) => {
   	//Save templateId in CONFIG
   	const isLoading = !inquiry || !session;
 
+  	console.log("IsLoading: ", isLoading);
+  	console.log("Inquiry");
+  	console.log(inquiry);
+	
+  	console.log("Session");
+  	console.log(session);
+
+  	const {theme, styles} = useStyles();
+
 	return (
-		<AppView isLoading={isLoading} title="Start KYC" goBack={false} >
+		<AppView isLoading={isLoading} goBack={false} scroll={false} staticViewStyle={styles.screenContentStyle}>
+			<AppIcon logoStyle={{height: 70}} logoContainerStyle={{marginTop: HP(5)}} />
+			<View style={{width: '90%'}}>
+				<StyledText style={[styles.text, {marginTop: HP(15)}]}>We need to do an identity check before creating your account</StyledText>
+				<StyledText style={[styles.text, {marginTop: HP(10)}]}>In the next step, you will be asked to upload an identity document and to take a selfie</StyledText> 
+				<StyledText style={[styles.text, {marginTop: HP(15)}]}>Click PROCEED TO KYC to start</StyledText>
+			</View>
 			<KycButton {...{inquiry, session, user}} onSuccess={onSuccess} />
 		</AppView>
 	)	
 }
+
+const useStyles = () => {
+	const {theme} = useTheme();
+	const styles = StyleSheet.create({
+		screenContentStyle: {
+			alignItems: 'center',
+			// justifyContent: 'center'
+		},
+		text: {
+			textAlign: 'center', 
+			fontSize: WP(4.5)
+		}
+	})
+
+	return {theme, styles};
+}
+
 
 export default StartKyc;

@@ -22,9 +22,9 @@ const titles = {
 }
 
 const agreements = {
-	'customerAgreement': 'https://files.alpaca.markets/disclosures/library/AcctAppMarginAndCustAgmt.pdf',
-	'accountAgreement': 'https://files.alpaca.markets/disclosures/library/AcctAppMarginAndCustAgmt.pdf',
-	'marginAgreement': 'https://files.alpaca.markets/disclosures/library/AcctAppMarginAndCustAgmt.pdf'
+	'customer_agreement': 'https://files.alpaca.markets/disclosures/library/AcctAppMarginAndCustAgmt.pdf',
+	'account_agreement': 'https://files.alpaca.markets/disclosures/library/AcctAppMarginAndCustAgmt.pdf',
+	'margin_agreement': 'https://files.alpaca.markets/disclosures/library/AcctAppMarginAndCustAgmt.pdf'
 }
 
 
