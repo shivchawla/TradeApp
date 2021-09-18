@@ -4,7 +4,7 @@ import {View, StyleSheet} from 'react-native';
 import { AppView, ConfirmButton } from '../../components/common';
 import { useTheme, HP, WP } from '../../theme';
 
-import { AnyForm } from '../../components/onboard';
+import { AnyForm, Welcome } from '../../components/onboard';
 
 import { useOnboarding } from '../../helper';
 
@@ -41,6 +41,10 @@ const Onboard = (props) => {
 		(async() => {
 			if (onboardingData) {
 				const keys = Object.keys(onboardingData);
+
+				if (keys.length == 0 ) {
+					return;
+				}
 
 				if (onboardingData?.formStatus?.status == 'complete') {
 					toKyc();
@@ -82,9 +86,6 @@ const Onboard = (props) => {
 		toNextStep();
 	}
 
-	const Welcome = () => {
-		return <ConfirmButton buttonContainerStyle={{bottom: 10}} buttonStyle={{width: '80%'}} title="NEXT" onClick={() => setStep('identity')} /> 
-	}
 
 	const toKyc = () => {
 		navigation.navigate('StartKyc', {user: onboardingData});
@@ -105,17 +106,13 @@ const Onboard = (props) => {
 		setStep(steps[steps.findIndex(it => it == step) - 1])
 	} 
 
-	console.log("Onboarding isLoading: ", isLoading);
-	console.log(onboardingData);
-
 	return (
 		<AppView 
 			scrollViewStyle={{flexGrow:1}} 
 			isLoading={isLoading} 
-			title={titles[step] || "Welcome"} 
-			goBack={() => toPreviousStep()}
-		>
-			{!step && <Welcome />}
+			goBack={step ? toPreviousStep : false}>
+
+			{!step && <Welcome onNect={() => setStep('identity')}/>}
 			{step && 
 				<AnyForm 
 					type={step} 

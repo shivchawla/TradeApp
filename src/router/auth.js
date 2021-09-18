@@ -13,15 +13,11 @@ import AuthInfo from '../screens/auth/authInfo';
 
 const AuthStack = (props) => {
 
-	const {currentUser, authMeta, linkError} = useAuth();
+	const {currentUser, authMeta, linkError, verifiedUser, userAccount} = useAuth();
 	const [signInParams, setSignInParams] = useState(null);
 	const {navigation} = props;
 
 	React.useEffect(() => {
-		// console.log("Use Effect - AuthStack");
-		// console.log(currentUser);
-		// console.log(authMeta);
-		// console.log(linkError);
 		
 		if (currentUser && !!!currentUser.email) {
 			//Email signup still pending
@@ -40,6 +36,8 @@ const AuthStack = (props) => {
 				type: 'email-not-verified', 
 				message: 'Please click the link in the email we sent to complete the signup process.'
 			})
+		} else if (verifiedUser && !!!userAccount) {
+			navigation.navigate('OnboardStack');
 		}	
 	}, [currentUser, linkError])
 

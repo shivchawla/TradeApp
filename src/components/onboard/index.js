@@ -8,6 +8,8 @@ import { DisclosureForm } from './disclosure';
 import { EmploymentForm } from './employment';
 import { Agreement } from './agreement';
 
+export  { Welcome } from './welcome';
+
 export const AnyForm = React.forwardRef(({type, initialData, agreements, onSubmit}, ref) => {
 
 	const isAgreement = ["customer_agreement", "account_agreement", "margin_agreement"].includes(type);
