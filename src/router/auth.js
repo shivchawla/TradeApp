@@ -16,13 +16,13 @@ import Splash from '../screens/splash';
 
 const AuthStack = (props) => {
 
-	const {currentUser, authMeta, linkError, verifiedUser, userAccount} = useAuth();
+	const {isLoadingAuth, currentUser, authMeta, linkError, verifiedUser, userAccount} = useAuth();
 	const [signInParams, setSignInParams] = useState(null);
 	const {navigation} = props;
 
 	React.useEffect(() => {
 		if (!!!currentUser) {
-			navigation.push('SignUp', {signUpType: 'phone'});
+			navigation.push('SignIn');
 		} else if (currentUser && !!!currentUser.email && !!!authMeta?.phoneAuth) { 
 			navigation.push('SignUp', {signUpType: 'phone'}); 
 		} else if (currentUser && !!!currentUser.email) {
@@ -42,7 +42,7 @@ const AuthStack = (props) => {
 				type: 'email-not-verified', 
 				message: 'Please click the link in the email we sent to complete the signup process.'
 			})
-		} else if (verifiedUser && !!!userAccount) {
+		} else if (verifiedUser && !!!userAccount && !isLoadingAuth) {
 			navigation.navigate('OnboardStack');
 		}
 
@@ -50,7 +50,6 @@ const AuthStack = (props) => {
 
 	return (
 		<Stack.Navigator screenOptions={{headerShown: false}}>
-			<Stack.Screen name="Splash" component={Splash} />	
 			<Stack.Screen name="SignIn" component={SignIn}/>
 			<Stack.Screen name="SignUp" component={SignUp} />
 			<Stack.Screen name="ForgotPassword" component={ForgotPassword} />

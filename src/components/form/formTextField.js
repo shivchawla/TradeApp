@@ -5,12 +5,8 @@ import CountryPicker, {Flag} from 'react-native-country-picker-modal';
 
 import { useTheme, StyledText, WP, HP } from '../../theme';
 
-export const FormTextField = ({field, placeholder, handler, setCustomError = null, ref = null, disabled = false, instructionText='', isPhone=false, ...props}) => {
+export const FormTextField = ({field, placeholder, handler, setCustomError = null, ref = null, disabled = false, instructionText='', isPhone = false, ...props}) => {
 	const { handleChange, handleBlur, handleSubmit, values, errors, touched, setErrors} = handler;
-
-	// console.log("FormTextField");
-	// console.log(field);
-	// console.log(handleChange);
 
 	const {theme, styles} = useStyles();
 	const value = get(values, field);
@@ -20,14 +16,16 @@ export const FormTextField = ({field, placeholder, handler, setCustomError = nul
 	const [valueWithoutCode, setValueWithoutCode] = useState(null)
 
 	React.useEffect(() => {
-		setValueWithoutCode(value.replace(callingCode ?? '',''))
+		if (isPhone ) {
+			setValueWithoutCode((value || '').replace(callingCode ?? '',''));
+		}
 	}, [value])
 
 	const [callingCode, setCallingCode] = useState(null);
 
 	const handleChangeNumber = (txt) => {
 		if (isPhone) {
-			console.log("handleChangeNumber")
+			// console.log("handleChangeNumber")
 			handleChange(field)(callingCode + txt)
 		} else {
 			handleChange(field)(txt);
@@ -36,9 +34,9 @@ export const FormTextField = ({field, placeholder, handler, setCustomError = nul
 
 	React.useEffect(() => {
 		if(selectedCountry) {
-			console.log("Country Selected");
-			console.log(selectedCountry);
-			console.log(selectedCountry?.callingCode?.[0]);
+			// console.log("Country Selected");
+			// console.log(selectedCountry);
+			// console.log(selectedCountry?.callingCode?.[0]);
 			setCallingCode('+' + selectedCountry?.callingCode?.[0]);
 		} else {
 			setCallingCode('+502');
@@ -46,7 +44,9 @@ export const FormTextField = ({field, placeholder, handler, setCustomError = nul
 	}, [selectedCountry])
 
 	React.useEffect(() => {
-		handleChangeNumber(valueWithoutCode || '');
+		if (isPhone) {
+			handleChangeNumber(valueWithoutCode || '');
+		}
 	}, [callingCode])
 
 	const FlagButton = () => {
@@ -66,7 +66,6 @@ export const FormTextField = ({field, placeholder, handler, setCustomError = nul
 			<View style={styles.inputContainer}>
 				{!!value && <StyledText style={styles.labelStyle}>{placeholder}</StyledText>}
 				
-				
 				<View style={{flexDirection: 'row', alignItems: 'center'}}>
 					{isPhone &&  
 						<CountryPicker
@@ -81,7 +80,7 @@ export const FormTextField = ({field, placeholder, handler, setCustomError = nul
 		      		}
 					<TextInput style={[styles.textinput, props.inputStyle]}
 						placeholder={isPhone ? '' : placeholder}
-						style={[{fontSize: WP(4.5)}, {...isPhone && {marginTop: 3, marginLeft: 10, flex:1}}]}
+						style={[{fontSize: WP(4.5), flex:1}, {...isPhone && {marginTop: 3, marginLeft: 10}}]}
 						keyboardType={props?.type ?? 'default'}
 						placeholderTextColor={theme.grey7}
 						onChangeText={handleChangeNumber}
@@ -89,8 +88,7 @@ export const FormTextField = ({field, placeholder, handler, setCustomError = nul
 						onFocus={() => {setErrors({}); if(setCustomError) {setCustomError()}}}
 						onSubmitEditing={() => props?.nextRef?.current?.focus() || ''}
 						autoCompleteType="off"
-						value={valueWithoutCode}
-						autoFocus={isPhone}
+						value={isPhone ? valueWithoutCode : value}
 						editable={!disabled}
 					/>
 				</View>

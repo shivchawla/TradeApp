@@ -10,7 +10,7 @@ import { useTheme, StyledText, WP, HP }  from '../../theme';
 
 const SignUp = (props) => {
 
-	const {currentUser, signUpPhone, linkEmail, confirmPhone, submitPhoneCode, resetPhoneAuth, signOut} = useAuth();
+	const {currentUser, signUpPhone, linkEmail, confirmPhone, submitPhoneCode, resetPhoneAuth, resetAuth, signOut} = useAuth();
 	// console.log(props?.route?.params?.signUpType);
 
 	const [signUpType, setSignUpType] = useState(props?.route?.params?.signUpType || 'phone');
