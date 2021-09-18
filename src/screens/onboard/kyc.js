@@ -11,7 +11,7 @@ import { usePersonaSession, usePersonaInquiry, usePersonaInquiries,
 import Inquiry, {Fields, Environment} from 'react-native-persona';
 
 const KycButton = ({templateId = "tmpl_6Uj4QPGVn4hx7nQ9pNKwr65t", inquiry, session, user, onSuccess}) => {
-  
+  	
   	const handleSuccess = useCallback((inquiryId, attributes) => {
 	 	console.log("Inquiry #{inquiryId} succeeded with attributes #{attributes}");
 	 	onSuccess(attributes);
@@ -73,12 +73,14 @@ const KycButton = ({templateId = "tmpl_6Uj4QPGVn4hx7nQ9pNKwr65t", inquiry, sessi
 	
 	}, [])
 
+	const {theme, styles} = useStyles();
+
 	return (
 		<ConfirmButton 
 			onClick={handleBeginInquiry} 
 			title="PROCEED TO KYC" 
-			buttonContainerStyle={{position: 'absolute', bottom: 20}}
 			buttonStyle={{width: '80%'}}
+			buttonContainerStyle={{position: 'absolute', bottom: 15, alignItems: 'center'}}
 		/>
 	)
 }
@@ -216,12 +218,12 @@ const StartKyc = (props) => {
   	//Save templateId in CONFIG
   	const isLoading = !inquiry || !session;
 
-  	console.log("IsLoading: ", isLoading);
-  	console.log("Inquiry");
-  	console.log(inquiry);
+  	// console.log("IsLoading: ", isLoading);
+  	// console.log("Inquiry");
+  	// console.log(inquiry);
 	
-  	console.log("Session");
-  	console.log(session);
+  	// console.log("Session");
+  	// console.log(session);
 
   	const {theme, styles} = useStyles();
 
@@ -232,6 +234,7 @@ const StartKyc = (props) => {
 				<StyledText style={[styles.text, {marginTop: HP(15)}]}>We need to do an identity check before creating your account</StyledText>
 				<StyledText style={[styles.text, {marginTop: HP(10)}]}>In the next step, you will be asked to upload an identity document and to take a selfie</StyledText> 
 				<StyledText style={[styles.text, {marginTop: HP(15)}]}>Click PROCEED TO KYC to start</StyledText>
+				<StyledText style={[styles.text, styles.instructionText]}>*KYC check is completed by third party</StyledText>
 			</View>
 			<KycButton {...{inquiry, session, user}} onSuccess={onSuccess} />
 		</AppView>
@@ -248,6 +251,11 @@ const useStyles = () => {
 		text: {
 			textAlign: 'center', 
 			fontSize: WP(4.5)
+		},
+		instructionText: {
+			color: theme.grey5,
+			fontSize: WP(4),
+			marginTop: HP(0.5)
 		}
 	})
 
