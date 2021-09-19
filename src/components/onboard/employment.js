@@ -39,11 +39,13 @@ export const EmploymentForm = React.forwardRef(({onSubmit, initialValues = {}, s
 			employerName: '',
 			employmentPosition: '',
 
-			addressLine1: '',
-			city: 'Guatemala City',
-			state: 'Guatemala',
-			postalCode: '01001',
-			country: 'Guatemala',
+			employerAddress: {
+				addressLine1: '',
+				city: 'Guatemala City',
+				state: 'Guatemala',
+				postalCode: '01001',
+				country: 'Guatemala',
+			},
 			...initialValues
 		},
 		validateOnChange: false,

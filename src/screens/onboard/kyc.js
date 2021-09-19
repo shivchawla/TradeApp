@@ -231,8 +231,9 @@ const StartKyc = (props) => {
 		<AppView isLoading={isLoading} goBack={false} scroll={false} staticViewStyle={styles.screenContentStyle}>
 			<AppIcon logoStyle={{height: 70}} logoContainerStyle={{marginTop: HP(5)}} />
 			<View style={{width: '90%'}}>
-				<StyledText style={[styles.text, {marginTop: HP(15)}]}>We need to do an identity check before creating your account</StyledText>
-				<StyledText style={[styles.text, {marginTop: HP(10)}]}>In the next step, you will be asked to upload an identity document and to take a selfie</StyledText> 
+				<StyledText style={[styles.title, {marginTop: HP(2)}]}>Thanks for uploading all the information!</StyledText>
+				<StyledText style={[styles.text, {marginTop: HP(15)}]}>Next, we need to do an identity check before creating your account. In the next step, you will be asked to upload an identity document and to take a selfie.</StyledText>
+				{/*<StyledText style={[styles.text, {marginTop: HP(10)}]}>In the next step, you will be asked to upload an identity document and to take a selfie</StyledText> */}
 				<StyledText style={[styles.text, {marginTop: HP(15)}]}>Click PROCEED TO KYC to start</StyledText>
 				<StyledText style={[styles.text, styles.instructionText]}>*KYC check is completed by third party</StyledText>
 			</View>
@@ -247,6 +248,10 @@ const useStyles = () => {
 		screenContentStyle: {
 			alignItems: 'center',
 			// justifyContent: 'center'
+		},
+		title: {
+			textAlign: 'center', 
+			fontSize: WP(5)
 		},
 		text: {
 			textAlign: 'center', 
