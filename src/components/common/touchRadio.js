@@ -4,10 +4,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { StyledText, useTheme, WP } from '../../theme';
 
-export const TouchRadio = ({selected, title='', onToggle}) => {
+export const TouchRadio = ({selected, title='', onToggle, ...props}) => {
 	const {theme} = useTheme();
 	return (
-		<TouchableOpacity onPress={onToggle} >
+		<TouchableOpacity onPress={onToggle} style={props.style}>
 			{selected ?
 				<View style={{flexDirection: 'row'}}>
 					{title && <StyledText style={{marginRight: WP(1)}}>{title}</StyledText>}
@@ -38,9 +38,9 @@ export const TouchRadioGroup = ({items, selectedIndex = 0, onSelect, ...props}) 
 	}
 
 	return (
-		<View style={[{flexDirection: 'row'}, props.containerStyle]}>
+		<View style={[{flexDirection: 'row'}, props.style]}>
 			{items.map((item, index) => {
-				return <TouchRadio key={index} title={items[index]} selected={index == selectedIndex} onToggle={() => onClick(index)}/>	
+				return <TouchRadio style={{marginRight: WP(5)}} key={index} title={items[index]} selected={index == selectedIndex} onToggle={() => onClick(index)}/>	
 			})}
 		</View>
 	)

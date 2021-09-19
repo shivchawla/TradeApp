@@ -42,25 +42,29 @@ export const DisclosureForm = React.forwardRef(({onSubmit, initialValues = {}, s
 			<FormBooleanField 
 				field="isControlPerson" 
 				title="Are you a control person"
-				handler={formik} 
+				handler={formik}
+				style={styles.booleanField}
 			/>
 
 			<FormBooleanField 
 				field="isAffiliated" 
 				title="Are you a control person"
 				handler={formik} 
+				style={styles.booleanField} 
 			/>
 
 			<FormBooleanField 
 				field="isPolitical" 
-				title="Are you a control person"
+				title="Are you a control person? Are you a control person? Are you a control person"
 				handler={formik} 
+				style={styles.booleanField} 
 			/>
 
 			<FormBooleanField 
 				field="isFamilyExposed" 
 				title="Are you a control person"
 				handler={formik} 
+				style={styles.booleanField} 
 			/>
 
 		</FormView>
@@ -72,7 +76,9 @@ const useStyles = () => {
 	const {theme} = useTheme();
 
 	const styles = StyleSheet.create({
-
+		booleanField: {
+			marginBottom: HP(5)
+		}
 	});
 
 	return {theme, styles}

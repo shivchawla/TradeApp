@@ -22,10 +22,17 @@ export const FormBooleanField = ({items = ['NO', 'YES'], title, field, ...props}
 	// console.log("Passed Index:", value ? 1 : 0);
 	// console.log("Passed Index:", value ? "YES" : "NO");
 
+	const {theme, styles} = useStyles();
+
 	return (
-		<View>
-			<StyledText>{title}</StyledText>
-			<TouchRadioGroup items={items} selectedIndex={value == "YES" ? 1 : 0} onSelect={onSelect} />
+		<View style={[{width: '100%'}, props.style, {...props.horizontal && {flexDirection: 'row', justifyContent: 'space-between'}}]}>
+			<StyledText style={styles.text}>{title}</StyledText>
+			<TouchRadioGroup 
+				items={items} 
+				selectedIndex={value == "YES" ? 1 : 0} 
+				onSelect={onSelect}
+				style={[{marginTop: HP(1)}, {...props.horizontal && {marginLeft: WP(5)}}]} 
+			/>
 		</View>
 	)
 }
@@ -36,7 +43,9 @@ const useStyles = () => {
 	const {theme} = useTheme();
 
 	const styles = StyleSheet.create({
-
+		text: {
+			fontSize: WP(5),
+		}
 	});
 
 	return {theme, styles};
