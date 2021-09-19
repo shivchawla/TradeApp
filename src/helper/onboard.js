@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import firestore from '@react-native-firebase/firestore';
+import countries from 'i18n-iso-countries';
 
 import { getCurrentUser, setStorageData } from './store'
 
@@ -8,8 +9,8 @@ const ONBOARDING_KEY = "onboarding";
 export const processOnboardingData = (user) => {
 	var pd = {
 		contact: {
-			email_address: 'shivchawla2001@gmail.com', //user?.email,
-			phone_number: '+50240428803', //user?.phoneNumber || "",
+			email_address: user?.email, // 'shivchawla2001@gmail.com', //
+			phone_number: user?.phoneNumber, //'+50240428803', //
 			street_address: (user?.contact?.addressLine1 + ' ' +  user?.contact?.addressLine2).trim(),
 			city: user?.contact?.city,
 			state: user?.contact?.state,
@@ -19,12 +20,12 @@ export const processOnboardingData = (user) => {
 		identity: {
 			given_name: (user?.identity?.firstName + '' + user?.identity?.middleName).trim(),
 			family_name: user?.identity?.lastName,
-			date_of_birth: new Date("1985-07-04"), //user?.identity?.dateBirth, ///HAS A PROBLEM/// CHECK
+			date_of_birth: new Date(user?.identity?.dateBirth), ///HAS A PROBLEM/// CHECK //new Date("1985-07-04"), //
 			tax_id: user?.taxInfo?.taxId,
 			tax_id_type: user?.taxInfo?.taxIdType,
-			country_of_citizenship: 'GTM', //user?.identity?.citizenCountry,
-			country_of_birth: 'GTM', //user?.identity?.birthCountry,
-			country_of_tax_residence: 'GTM', //user?.taxInfo?.taxCountry,
+			country_of_citizenship: countries.getAlpha3Code(user?.identity?.citizenCountry, "en"),
+			country_of_birth: countries.getAlpha3Code(user?.identity?.birthCountry, "en"),
+			country_of_tax_residence: countries.getAlpha3Code(user?.taxInfo?.taxCountry, "en"),
 			funding_source: [user?.taxInfo?.fundSource]
 		},
 		disclosures: {

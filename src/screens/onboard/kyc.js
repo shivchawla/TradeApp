@@ -53,7 +53,7 @@ const KycButton = ({templateId = "tmpl_6Uj4QPGVn4hx7nQ9pNKwr65t", inquiry, sessi
 					'first': user?.identity?.firstName ?? '',
 					'middle': user?.idetity?.middleName ?? '',
 					'last': user?.identity?.lastName ?? ''})
-				.birthdate(new Date("1985-07-04")) //user?.identity?.birthDate
+				.birthdate(new Date(user?.identity?.birthDate))
 				.address({
 					'street1': user?.contact?.addressLine1 ?? '',
 					'street2': user?.contact?.addressLine2 ?? '',

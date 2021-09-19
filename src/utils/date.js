@@ -7,6 +7,7 @@ const startMinute = 30;
 const endHour = 16;
 const endMinute = 0;
 
+export const startOfDayLocal = (d, fmt) => moment(d).local().hour(0).minute(0).second(0).utc().format(fmt);
 export const currentISODate = (fmt) => moment.tz(tradingTimeZone).utc().format(fmt);
 export const NDaysAgoISODate = (days, fmt) => moment.tz(tradingTimeZone).subtract(days, 'days').utc().format(fmt);
 export const NWeeksAgoISODate = (wks, fmt) => moment.tz(tradingTimeZone).subtract(wks, 'weeks').utc().format(fmt);

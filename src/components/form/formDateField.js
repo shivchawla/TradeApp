@@ -5,7 +5,7 @@ import get from 'lodash/get';
 
 import { Icon, FullViewModal } from '../../components/common';
 import { useTheme, WP, HP, StyledText } from '../../theme';
-import { currentISODate, toISODate } from '../../utils';
+import { currentISODate, toISODate, startOfDayLocal } from '../../utils';
 
 export const FormDateField = ({field, placeholder, ...props}) => {
 	
@@ -15,9 +15,13 @@ export const FormDateField = ({field, placeholder, ...props}) => {
 	const {theme, styles} = useStyles();
 
 	const handleDaySelect = (d) => {
-		console.log("Selected Date");
-		console.log(d);
-		handleChange(field)(toISODate(new Date(d.nativeEvent.timestamp).toLocaleDateString(), "YYYY-MM-DD"));
+		// console.log("Selected Date");
+		// console.log(d);
+		// console.log(startOfDayLocal(d.nativeEvent.timestamp));
+		// console.log(new Date(d.nativeEvent.timestamp).toLocaleDateString());
+		// console.log(toISODate(startOfDayLocal(d.nativeEvent.timestamp), "YYYY-MM-DD"));
+
+		handleChange(field)(startOfDayLocal(d.nativeEvent.timestamp));
 		setShow(false);
 	}
 
@@ -45,6 +49,7 @@ export const FormDateField = ({field, placeholder, ...props}) => {
 					mode="date"
 					value={date}
 			        onChange={handleDaySelect}
+			        maximumDate={new Date()}
 		      	/>
 			}
 		</View>

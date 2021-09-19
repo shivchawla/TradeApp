@@ -1,7 +1,7 @@
 import { Dimensions } from 'react-native';
 
 export {
-	currentISODate, toISODate, yearStartISODate, 
+	currentISODate, toISODate, yearStartISODate, startOfDayLocal, 
 	NDaysAgoISODate, NWeeksAgoISODate, NMonthsAgoISODate, NYearsAgoISODate, 
 	NDaysAfterISODate, NWeeksAfterISODate,
 	dayStartISODate, dayEndISODate, duration,

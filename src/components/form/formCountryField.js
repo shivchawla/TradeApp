@@ -19,11 +19,6 @@ export const FormCountryField = ({field, placeholder, ...props}) => {
 
 	const handleSelect = (country) => {
 		const {name} = country; 
-
-		// console.log("Selected Country");
-		// console.log(country);
-		// handleChange(`${field}.code`)(cca2);
-		// handleChange(`${field}.name`)(name);
 		handleChange(field)(name);
 	}
 

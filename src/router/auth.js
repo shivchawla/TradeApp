@@ -46,7 +46,7 @@ const AuthStack = (props) => {
 			navigation.navigate('OnboardStack');
 		}
 
-	}, [currentUser, linkError])
+	}, [currentUser, linkError, userAccount, isLoadingAuth])
 
 	return (
 		<Stack.Navigator screenOptions={{headerShown: false}}>
