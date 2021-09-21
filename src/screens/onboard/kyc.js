@@ -1,7 +1,7 @@
 import React, {useState, useCallback} from 'react';
 import { View, TouchableOpacity, StyleSheet} from 'react-native';
 
-import { AppView, ConfirmButton, AppIcon } from '../../components/common';
+import { AppView, ConfirmButton, AppIcon, TinyTextButton } from '../../components/common';
 import { useTheme, HP, WP, StyledText } from '../../theme';
 
 import { usePersonaSession, usePersonaInquiry, usePersonaInquiries,  
@@ -79,8 +79,7 @@ const KycButton = ({templateId = "tmpl_6Uj4QPGVn4hx7nQ9pNKwr65t", inquiry, sessi
 		<ConfirmButton 
 			onClick={handleBeginInquiry} 
 			title="PROCEED TO KYC" 
-			buttonStyle={{width: '80%'}}
-			buttonContainerStyle={{position: 'absolute', bottom: 15, alignItems: 'center'}}
+			buttonStyle={styles.kycButton}
 		/>
 	)
 }
@@ -102,7 +101,7 @@ const StartKyc = (props) => {
 	const {updateOnboarding} = useOnboarding({enabled: false});
   	const {createBrokerageAccount} = useCreateBrokerageAccount();
 
-  	const {updateUserAccount} = useAuth();
+  	const {updateUserAccount, signOut} = useAuth();
 
 	React.useEffect(() => {
 
@@ -236,7 +235,10 @@ const StartKyc = (props) => {
 				<StyledText style={[styles.text, {marginTop: HP(15)}]}>Click PROCEED TO KYC to start</StyledText>
 				<StyledText style={[styles.text, styles.instructionText]}>*KYC check is completed by third party</StyledText>
 			</View>
-			<KycButton {...{inquiry, session, user}} onSuccess={onSuccess} />
+			<View style={styles.bottomButtons}>
+				<KycButton {...{inquiry, session, user}} onSuccess={onSuccess} />
+				<TinyTextButton title="SIGN OUT" onPress={signOut} buttonStyle={{marginTop: HP(4)}}/>
+			</View>
 		</AppView>
 	)	
 }
@@ -260,7 +262,16 @@ const useStyles = () => {
 			color: theme.grey5,
 			fontSize: WP(4),
 			marginTop: HP(0.5)
+		},
+		bottomButtons: {
+			position: 'absolute', 
+			bottom: 15,
+			alignItems: 'center'
+		},
+		kycButton: {
+			width: '90%'
 		}
+
 	})
 
 	return {theme, styles};
