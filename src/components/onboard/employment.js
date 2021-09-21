@@ -8,26 +8,7 @@ import { FormView, FormBottomPicker, FormTextField,
 
 import { useTheme, WP, HP } from '../../theme';
 
-const EmploymentSchema = Yup.object().shape({
-	employmentStatus: Yup.string().required('Employment Status is required'),
-	employerName: Yup.string().required("Employer Name is requied"),
-	employmentPosition: Yup.string().required("Employment Position is required"),
-
-	employerAddress: Yup.object().shape({
-		addressLine1: Yup.string().required('Address is required'),
-		city: Yup.string().required('City is required'),
-		state: Yup.string().required('State is required'),
-		postalCode: Yup.string().required('Postal Code is required'),
-		country: CountrySchema
-	})
-});
-
-const EMPLOYMENT_POSITIONS = [
-	{key:'unemployed', title: 'Unemployment' },
-	{key:'employed', title: 'Employed' },
-	{key:'student', title: 'Student' },
-	{key:'retired', title: 'Retired' },
-];
+import { EmploymentSchema, EMPLOYMENT_POSITIONS } from './meta';
 
 export const EmploymentForm = React.forwardRef(({onSubmit, initialValues = {}, setCustomError,  ...props}, ref) => {
 	const {theme, styles} = useStyles();
@@ -103,6 +84,7 @@ export const EmploymentForm = React.forwardRef(({onSubmit, initialValues = {}, s
 		</FormView>
 	)
 })
+
 
 const useStyles = () => {
 	

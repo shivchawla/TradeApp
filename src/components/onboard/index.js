@@ -8,8 +8,11 @@ import { DisclosureForm } from './disclosure';
 import { EmploymentForm } from './employment';
 import { Agreement } from './agreement';
 
+
+
 export { Welcome } from './welcome';
 export { OnboardHeader } from './onboardHeader';
+export { OnboardSummary } from './summary';
 
 export const AnyForm = React.forwardRef(({type, initialData, agreements, onSubmit}, ref) => {
 

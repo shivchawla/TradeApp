@@ -2,11 +2,10 @@ import React, {useState} from 'react';
 import { View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 
 import { WebView } from 'react-native-webview';
-import CheckBox from '@react-native-community/checkbox';
 import NetInfo from "@react-native-community/netinfo";
 import PDFView from 'react-native-view-pdf/lib/index';
 
-import { ConfirmButton } from '../../components/common';
+import { ConfirmButton, Checkbox } from '../../components/common';
 
 import { useTheme, WP, HP, StyledText } from '../../theme';
 
@@ -42,17 +41,15 @@ export const Agreement = React.forwardRef(({field, uri, title, onAgree, ...props
 		        />
 				{!isLoading && 
 					<TouchableOpacity style={styles.checkBoxContainer} onPress={() => setAgree(!agree)}>
-						<CheckBox
+						<Checkbox
 					    	value={agree}
-					    	onValueChange={setAgree}
+					    	onToggle={() => setAgree(!agree)}
 					  	/>
 					  <StyledText>I have made the deposit and uploaded the right document</StyledText>
 					</TouchableOpacity>
 				}  
 			</View>			
-			<View style={{position: 'absolute', bottom: 10}} >
-				{agree && <ConfirmButton buttonContainerStyle={styles.buttonContainer} buttonStyle={{width: '90%'}} title="Next" onClick={onSubmit} />}
-			</View>
+			{agree && <ConfirmButton buttonContainerStyle={styles.buttonContainer} buttonStyle={{width: '90%'}} title="Next" onClick={onSubmit} />}
 		</>
 	)
 })
@@ -68,7 +65,9 @@ const useStyles = () => {
 		},
 		buttonContainer: {
 			position: 'absolute',
-			bottom: 0
+			bottom: 10,
+			alignSelf: 'center',
+			// marginBottom: HP(2)
 		}
 	});
 

@@ -5,14 +5,8 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 import { FormView, FormTextField } from '../form';
-
 import { useTheme, WP, HP } from '../../theme';
-
-const TrustedContactSchema = Yup.object().shape({
-	firstName: Yup.string().required('First name is required'),
-	lastName: Yup.string().required('Last Name is required'),
-	email: Yup.string().email().required('Email address is required')
-});
+import {TrustedContactSchema} from './meta';
 
 export const TrustedContactForm = React.forwardRef(({onSubmit, initialValues = {}, setCustomError,  ...props}, ref) => {
 	const {theme, styles} = useStyles();

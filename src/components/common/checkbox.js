@@ -13,12 +13,12 @@ export const Checkbox = ({value, title='', onToggle, disabled = false, ...props}
 		<Component onPress={onToggle} >
 			{value ?
 				<View style={{flexDirection: 'row'}}>
-					{title && <StyledText style={{marginRight: WP(1)}}>{title}</StyledText>}
+					{!!title && <StyledText style={{marginRight: WP(1)}}>{title}</StyledText>}
 					<Ionicons name="checkbox-outline" color={theme.backArrow } size={WP(5)} />
 				</View>
 				:
 				<View style={{flexDirection: 'row'}}>
-					{title && <StyledText style={{marginRight: WP(1)}}>{title}</StyledText>}
+					{!!title && <StyledText style={{marginRight: WP(1)}}>{title}</StyledText>}
 					<Ionicons name="square-outline" color={theme.backArrow } size={WP(5)} />
 				</View>
 			}

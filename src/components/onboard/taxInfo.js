@@ -8,26 +8,7 @@ import { FormView, FormDateField, FormTextField,
 
 import { useTheme, WP, HP } from '../../theme';
 
-const TaxInfoSchema = Yup.object().shape({
-	idType: Yup.string().required('Identification type is required'),
-	idNumber: Yup.string().required('Identification number is required'),
-	idCountry: CountrySchema,
-			
-	taxId: Yup.string().required('Tax ID is required'),
-	taxCountry: CountrySchema,
-
-	fundSource: Yup.string().required('Funding Source required')
-});
-
-const FUND_SOURCES = [
-	{key: 'employment_income', title: 'Employment Income'},
-	{key: 'investments', title: 'Investments'},
-	{key: 'inheritance', title: 'Inheritance'},
-	{key: 'business_income', title: 'Business Income'},
-	{key: 'savings', title: 'Savings'},
-	{key: 'family', title: 'Family'},
-];
-
+import { TaxInfoSchema, TaxInfoMeta, FUND_SOURCES } from './meta';
 
 export const TaxInfoForm = React.forwardRef(({onSubmit, initialValues = {}, setCustomError,  ...props}, ref) => {
 

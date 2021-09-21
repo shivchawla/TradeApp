@@ -1,25 +1,14 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 
-import { AppView, ConfirmButton, GobackIcon } from '../../components/common';
-import { useTheme, HP, WP } from '../../theme';
+import { AppView, ConfirmButton, GobackIcon, TinyTextButton, Checkbox } from '../../components/common';
+import { useTheme, HP, WP, StyledText } from '../../theme';
 
-import { AnyForm, Welcome, OnboardHeader } from '../../components/onboard';
+import { AnyForm, Welcome, OnboardHeader, OnboardSummary } from '../../components/onboard';
 
 import { useOnboarding } from '../../helper';
 
-const steps = ['identity', 'taxInfo', 'contact', 'disclosure', 'employment', 'trustedContact', 'customer_agreement', 'account_agreement', 'margin_agreement'];
-const titles = {
-	'identity': 'Add Identity Info',
-	'taxInfo': 'Add Tax Info',
-	'contact': 'Add Contact Info',
-	'disclosure': 'Disclosures',
-	'employment': 'Employment',
-	'trustedContact': 'Add Trusted Contact', 
-	'customerAgreement': 'Customer Agreement',
-	'accountAgreement': 'Account Agreement',
-	'marginAgreement': 'Margin Agreement',
-}
+const steps = ['identity', 'taxInfo', 'contact', 'disclosure', 'employment', 'trustedContact', 'customer_agreement', 'account_agreement', 'margin_agreement', 'form_status'];
 
 const agreements = {
 	'customer_agreement': 'https://files.alpaca.markets/disclosures/library/AcctAppMarginAndCustAgmt.pdf',
@@ -27,19 +16,24 @@ const agreements = {
 	'margin_agreement': 'https://files.alpaca.markets/disclosures/library/AcctAppMarginAndCustAgmt.pdf'
 }
 
-
 const Onboard = (props) => {
 
 	const {navigation} = props;
-	const [step, setStep] = useState(null);
+	const {step: forcedStep} = props?.route?.params ?? {};
+
+	const [step, setStep] = useState(forcedStep);
 	const {isLoading, onboardingData, getOnboarding, updateOnboarding} = useOnboarding({enabled: true});
-	
+	// const [showSummary, setShowSummary] = useState(false);
+
+	const [agreeOne, setAgreeOne] = useState(false);
+	const [agreeTwo, setAgreeTwo] = useState(false);
+
 	React.useEffect(() => {
 
 		console.log("Onboard useEffect is called");
 
 		(async() => {
-			if (onboardingData) {
+			if (onboardingData && !!!forcedStep) {
 				const keys = Object.keys(onboardingData);
 
 				if (keys.length == 0 ) {
@@ -54,7 +48,7 @@ const Onboard = (props) => {
 				var count = 0;
 				steps.every((step, index) => {
 					const idx = keys.findIndex(it => it == step);
-					if (idx == -1) {
+					if (idx == -1 ) {
 						// console.log("Not Found Step: ", step)
 						setStep(step);
 						return false;
@@ -67,9 +61,9 @@ const Onboard = (props) => {
 					return true;
 				})
 
-				if (count == steps.length) {
-					toKyc();
-				}	
+				// if (count == steps.length) {
+				// 	toSummary();
+				// }
 			}
 		})()
 
@@ -86,20 +80,17 @@ const Onboard = (props) => {
 		toNextStep();
 	}
 
-
 	const toKyc = () => {
 		navigation.navigate('StartKyc', {user: onboardingData});
-	} 
+	}
+
+	const onConfirm = async() => {
+		await updateOnboarding('formStatus', {status: 'complete', date: new Date().toISOString()})
+		toKyc();
+	}
 
 	const toNextStep = async() => {
-		//This is the last 
-		if(step == 'margin_agreement') {
-			//Move to
-			await updateOnboarding('formStatus', {status: 'complete', date: new Date().toISOString()})
-			toKyc();
-		} else {
-			setStep(steps[steps.findIndex(it => it == step) + 1])
-		}
+		setStep(steps[steps.findIndex(it => it == step) + 1])
 	}
 
 	const toPreviousStep = () => {
@@ -109,11 +100,14 @@ const Onboard = (props) => {
 	const Header = () => {
 		return (
 			<View style={{marginTop: HP(2), marginLeft: WP(2), flexDirection: 'row', alignItems: 'center'}}>
-				{(!!step && step !='identity') && <GobackIcon goBack={toPreviousStep} />}
-				<OnboardHeader {...{step}} style={{marginTop: HP(0)}}/>
+				{(!!step && step !='identity' && step != 'form_status') && <GobackIcon goBack={toPreviousStep} />}
+				{(!!step && step != 'form_status') && <OnboardHeader {...{step}} style={{marginTop: HP(0)}}/>}
 			</View>
 		)
 	}
+
+	const {theme, styles} = useStyles();
+
 
 	return (
 		<AppView
@@ -122,15 +116,53 @@ const Onboard = (props) => {
 			scrollViewStyle={{flexGrow:1}} 
 			isLoading={isLoading} 
 			>
+			{step != 'form_status' ? 
+				<>
+					{!step && <Welcome onNext={() => {console.log("Next Pressed"); setStep('identity')}} />}
+					{step && 
+						<AnyForm 
+							type={step} 
+							initialData={onboardingData} 
+							onSubmit={(values) => submitOnboarding(step, values)}
+							{...{agreements}}
+						/>
+					}
+				</>
+				:
+				<View style={styles.summaryContainer}>
+					<StyledText style={styles.title}>Review and Submit your application</StyledText>
+					{steps && steps.map((step , index) => {
+						if (index <= 5) {
+							return (
+								<View key={index} style={styles.singleSummary}>
+									<OnboardSummary type={step} data={onboardingData} />
+									<View style={{alignItems: 'flex-end'}}>
+										<TinyTextButton title="Edit" onPress={() => {setShowSummary(false); setStep(step)}} />
+									</View>
+								</View>
+							)
+						}
+					})}
 
-			{!step && <Welcome onNext={() => {console.log("Next Preseed"); setStep('identity')}} />}
-			{step && 
-				<AnyForm 
-					type={step} 
-					initialData={onboardingData} 
-					onSubmit={(values) => submitOnboarding(step, values)}
-					{...{agreements}}
-				/>
+					<View style={styles.checkboxContainer}>
+						<Checkbox value={agreeOne} onToggle={() => setAgreeOne(!agreeOne)} />
+						<StyledText style={styles.checkboxText}> I have read all the agreements and agree to terms and conditions mentioned within</StyledText>
+					</View>
+
+					<View style={{flexDirection: 'row'}}>
+						<Checkbox value={agreeTwo} onToggle={() => setAgreeTwo(!agreeTwo)} />
+						<StyledText style={styles.checkboxText}>I have filled this application my self and all the information provided above is accurate to my best knowledge </StyledText>
+					</View>
+
+					<ConfirmButton 
+						title="SUBMIT" 
+						disabled={!agreeTwo || !agreeOne } 
+						onClick={onConfirm} 
+						buttonStyle={styles.confirmButton}
+						buttonContainerStyle={styles.confirmButtonContainer}
+					/>
+
+				</View>
 			}
 		</AppView>
 	);
@@ -142,7 +174,33 @@ const useStyles = () => {
 	const {theme} = useTheme();
 
 	const styles = StyleSheet.create({
-	
+		summaryContainer: {
+			marginTop: HP(2),
+			justifyContent: 'center',
+		},
+		title: {
+			fontSize: WP(5),
+			textAlign: 'center'
+		},
+		checkboxContainer: {
+			flexDirection: 'row',
+			marginTop: HP(4),
+			marginBottom: HP(2),
+			paddingRight: WP(2)
+		},
+		checkboxText: {
+			// fontSize: WP(4)
+			marginLeft: WP(2)
+		},
+		confirmButtonContainer: {
+			marginTop: HP(10),
+			marginBottom: HP(10),
+			// alignItems: 'center',
+			justifyContent: 'center',
+		},
+		confirmButton: {
+			width: '90%'
+		}
 	});
 
 	return {theme, styles};

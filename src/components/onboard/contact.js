@@ -6,14 +6,7 @@ import * as Yup from 'yup';
 import { FormView, FormDateField, FormTextField, FormCountryField, CountrySchema } from '../form';
 import { useTheme, WP, HP } from '../../theme';
 
-const ContactSchema = Yup.object().shape({
-	addressLine1: Yup.string().required('Address is required'),
-	addressLine2: Yup.string(),
-	city: Yup.string().required('City is required'),
-	state: Yup.string().required('State is required'),
-	postalCode: Yup.string().required('Postal Code is required'),
-	country: ContactSchema
-});
+import { ContactSchema } from './meta';
 
 export const ContactForm = React.forwardRef(({onSubmit, initialValues = {}, setCustomError,  ...props}, ref) => {
 	const {theme, styles} = useStyles();

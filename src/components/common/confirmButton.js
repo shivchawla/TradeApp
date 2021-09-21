@@ -43,7 +43,7 @@ export const ConfirmButton = ({title, onClick, swipe = false, cancel = false, di
           	:
 
 			<View style={[styles.buttonContainer, props.buttonContainerStyle]}>
-				<ClickableComponent style={[styles.button, props.buttonStyle, {...disabled && {backgroundColor: theme.grey9}}]} onPress={onClick}>
+				<ClickableComponent style={[styles.button, props.buttonStyle, {...disabled && {backgroundColor: theme.grey9}}]} onPress={disabled ? null : onClick}>
 					<StyledText style={[styles.buttonText,props.buttonTextStyle]}>{title}</StyledText>
 				</ClickableComponent>
 			</View>
@@ -58,7 +58,7 @@ const useStyles = () => {
 
 	const styles = StyleSheet.create({
 		buttonContainer: {
-		    width: WP(100),
+		    width: '100%',
 		    flexDirection:'row',
 		    justifyContent:'center'
 		},
@@ -67,7 +67,7 @@ const useStyles = () => {
 		    height: 35,
 		    justifyContent:'center',
 		    alignItems:'center',
-		    width: WP(40)
+		    width: '40%'
 		  },
 		buttonText: {
 		    fontFamily: "roboto-700",

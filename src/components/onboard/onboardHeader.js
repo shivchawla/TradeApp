@@ -1,26 +1,15 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import {useTheme, HP, WP, StyledText} from '../../theme';
-
-const formHeaderInfo = {
-	'identity': {title: 'Identity', subTitle: "Share your basic idenity"},
-	'taxInfo': {title: 'Tax Info', subTitle: "Share your basic tax details" },
-	'contact': {title: 'Contact', subTitle: "Share your contact information"  },
-	'disclosure': {title: 'Disclosure', subTitle: "Some important disclosures"},
-	'employment': {title: 'Employment', subTitle:  "What's your employment status?"},
-	'trustedContact': {title: 'Trusted Contact', subTitle: "Share one emergency/trusted contact"},
-	'customer_agreement': {title: 'Customer Agreement', subTitle: ""},
-	'account_agreement': {title: 'Account Agreement', subTitle: ""},
-	'margin_agreement': {title: 'Margin Agreement', subTitle: ""}
-}; 
+import { useTheme, HP, WP, StyledText } from '../../theme';
+import { FormMeta } from './meta';
 
 export const OnboardHeader = ({step, ...props}) => {
 
-	console.log(Object.keys(formHeaderInfo));
+	console.log(Object.keys(FormMeta));
 	console.log("Step: ", step);
-	console.log(Object.keys(formHeaderInfo).findIndex(item => item == step));
+	console.log(Object.keys(FormMeta).findIndex(item => item == step));
 
-	const stepNumber = Object.keys(formHeaderInfo).findIndex(item => item == step) + 1;
+	const stepNumber = Object.keys(FormMeta).findIndex(item => item == step) + 1;
 	console.log("Step Number: ", stepNumber);
 
 	const {theme, styles} = useStyles();
@@ -31,8 +20,8 @@ export const OnboardHeader = ({step, ...props}) => {
 				<StyledText style={styles.stepNumber}>{stepNumber}</StyledText>
 			</View>
 			<View style={{justifyContent: 'center'}}>
-				<StyledText style={styles.title}>{formHeaderInfo[step]['title']}</StyledText>
-				<StyledText style={styles.subTitle}>{formHeaderInfo[step]['subTitle']}</StyledText>
+				<StyledText style={styles.title}>{FormMeta[step]['title']}</StyledText>
+				<StyledText style={styles.subTitle}>{FormMeta[step]['subTitle']}</StyledText>
 			</View>
 		</View>
 	)

@@ -44,6 +44,9 @@ const useStyles = () => {
 			color: theme.error,
 			fontSize: WP(4.5),
 			textAlign: 'center'
+		},
+		buttonContainer: {
+			alignSelf: 'center'
 		}		
 	});
 

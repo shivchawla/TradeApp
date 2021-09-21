@@ -208,7 +208,6 @@ const StartKyc = (props) => {
 	   		updatedAt: new Date(), 
 	   		...kycAttributes
 	 	});
-
 	 	
   		createAccount();
   	}

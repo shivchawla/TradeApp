@@ -7,12 +7,7 @@ import { TouchRadioGroup } from '../common'
 import { FormView, FormBooleanField } from '../form';
 import { useTheme, WP, HP } from '../../theme';
 
-const DisclosureSchema = Yup.object().shape({
-	isControlPerson: Yup.string().oneOf(["YES", "NO"]),
-	isAffiliated: Yup.string().oneOf(["YES", "NO"]),
-	isPolitical: Yup.string().oneOf(["YES", "NO"]),
-	isFamilyExposed: Yup.string().oneOf(["YES", "NO"])
-});
+import { DisclosureSchema } from './meta'
 
 export const DisclosureForm = React.forwardRef(({onSubmit, initialValues = {}, setCustomError,  ...props}, ref) => {
 
