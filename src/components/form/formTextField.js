@@ -33,13 +33,15 @@ export const FormTextField = ({field, placeholder, handler, setCustomError = nul
 	}
 
 	React.useEffect(() => {
-		if(selectedCountry) {
-			// console.log("Country Selected");
-			// console.log(selectedCountry);
-			// console.log(selectedCountry?.callingCode?.[0]);
-			setCallingCode('+' + selectedCountry?.callingCode?.[0]);
-		} else {
-			setCallingCode('+502');
+		if (isPhone) {
+			if(selectedCountry ) {
+				// console.log("Country Selected");
+				// console.log(selectedCountry);
+				// console.log(selectedCountry?.callingCode?.[0]);
+				setCallingCode('+' + selectedCountry?.callingCode?.[0]);
+			} else {
+				setCallingCode('+502');
+			}
 		}
 	}, [selectedCountry])
 

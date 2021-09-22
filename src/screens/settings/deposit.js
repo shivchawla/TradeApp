@@ -10,14 +10,13 @@ import RNFS from 'react-native-fs';
 import NetInfo from "@react-native-community/netinfo";
 
 import DocumentPicker from 'react-native-document-picker';
-import CheckBox from '@react-native-community/checkbox';
 
-import { AppView, ConfirmButton, TinyTextButton, IconTextButton } from '../../components/common';
-import { DepositForm } from '../../components/form';
+import { AppView, ConfirmButton, TinyTextButton, IconTextButton, Checkbox } from '../../components/common';
+import { DepositForm } from '../../components/funds';
 import { SUPPORTED_BANKS, BANK_ACCOUNT_TYPES } from '../../config'
 import { useTheme, StyledText, WP, HP }  from '../../theme';
 import { currentISODate } from '../../utils';
-import { useAuth } from '../../helper'
+import { useAuth, useLoading } from '../../helper'
 
 //Add logic to save auth state to temp storage
 const CreateDeposit = (props) => {
@@ -32,10 +31,10 @@ const CreateDeposit = (props) => {
 	const [document, setDocument] = useState(null);
 	const [agree, setAgree] = useState(null);
 	const [finalAgree, setFinalAgree] = useState(null);
-	const [complete, setComplete] = useState(false);
 	const [depositError, setDepositError] = useState(null);
 
 	const {currentUser, userAccount} = useAuth();
+	const {isLoading, loadingFunc} = useLoading();
 
 	const onSubmit = async (values) => {
     	setDepositSummary({
@@ -65,108 +64,113 @@ const CreateDeposit = (props) => {
 		}
 	}
 
-
-	const onCompleteDeposit = async() => {
+	const submitDeposit = async() => {
 
 		if (!currentUser ) {
-			setDepositError("User doesn't exist");
-			return;
+			throw Error("User doesn't exist");
 		}
 
-		// if (!userAccount) {
-		// 	setDepositError("User Account doesn't exist");
-		// 	return;
-		// }
+		if (!userAccount) {
+			throw Error("User Account doesn't exist");
+		}
 
 		let reference;
 
-		try {
-			//First upload the image to cloud storage
-			//Improve the saved file name
+		//First upload the image to cloud storage
+		//Improve the saved file name
+		reference = storage().ref(`/images/deposit/${currentUser.email}/${document.name}`);
 
-			reference = storage().ref(`/images/deposit/${currentUser.email}/${document.name}`);
+		//For android, first get the correct file destination
+		const destPath = `${RNFS.TemporaryDirectoryPath}/${nanoid()}`;
+		await RNFS.copyFile(document.uri, destPath);
 
-			//For android, first get the correct file destination
-			const destPath = `${RNFS.TemporaryDirectoryPath}/${nanoid()}`;
-			await RNFS.copyFile(document.uri, destPath);
+		const fileStat = await RNFS.stat(destPath); 
+	  	console.log("Stat");
+	  	console.log(fileStat);
 
-			const fileStat = await RNFS.stat(destPath); 
-		  	console.log("Stat");
-		  	console.log(fileStat);
+		await reference.putFile(fileStat.originalFilepath);
 
-			await reference.putFile(fileStat.originalFilepath);
-
-		} catch (err) {
-			console.log("Error uploading the document");
-			console.log(err);
-			setDepositError(err);
-			return;
-		}
-
+		//After creating reference
+		
 		const netState = await NetInfo.fetch();
 
 		if (!netState || !netState.isConnected) {
-			setDepositError('Internet not connected');
-			return;
+			throw Error('Internet not connected');
 		}
-  
-		// console.log("********");
-		// console.log({
-		// 	deposit: depositSummary,
-		// 	user: currentUser?.user?.email,
-		// 	// ...userAccount,
-		// 	date: currentISODate(),
-		// 	ipAddress: netState.details.ipAddress,
-		// 	screenshot: reference.getDownloadURL()
-		// });
 
+		console.log("Email: ", currentUser?.email);
+		console.log("Account: ", userAccount?.account?.id);
 
+		const depositId = nanoid(10);
 		//Once file uploaded
-		const depositCollection = firestore().collection('Deposits');
-		depositCollection
+		await firestore().collection('Deposits')
 		.add({
 			deposit: depositSummary,
-			user: currentUser?.user?.email, //Add user Account instead
-			account: '9703c0b1-67bf-492d-aeff-95c108299188', //Alpaca Account instead
+			depositId,
+			user: currentUser?.email, //Add user Account instead
+			account: userAccount?.account?.id, //Alpaca Account instead
 			date: currentISODate(),
 			ipAddress: netState.details.ipAddress,
 			screenshot: await reference.getDownloadURL(),
 			status: 'Pending'
 		})
-		.then(() => {
-			console.log('Deposit Added');
-			setComplete(true)
-		});
+
+		return depositId;
 	}
+
+	const onCompleteDeposit = async() => {
+		try{
+			const depositId = await loadingFunc(async() => await submitDeposit());
+			console.log('Deposit Added');
+			setDepositSummary({...depositSummary, depositId, complete: true});
+		} catch (err) {
+			setDepositError(err.message);
+		}
+	} 
 
 	const {currency, amount, bankName, accountType} =  depositSummary || {};
 
 	const Form = () => {
 		return (
 			<View style={styles.formContainer}>
-				{formError && <StyledText style={styles.signInError}>{formError} </StyledText>}
-				<DepositForm setCustomError={setFormError} onSubmit={onSubmit}/>
+				<DepositForm error={formError} onError={setFormError} onSubmit={onSubmit}/>
 		   </View>
 		)
 	}
 
-	const Summary = () => {
+	const LabelValue = ({label, value}) => {
+		return (
+			<View style={styles.summaryLabelValue}>
+				<StyledText style={styles.summaryLabel}>{label} </StyledText>
+				<StyledText style={styles.summaryValue}>{value}</StyledText>
+			</View>
+		)
+	}
+
+	const Summary = ({edit = true}) => {
 		return (
 			<>
-			<View style={styles.depositSummary}>
-				<StyledText>You have agreed to deposit {currency} {amount}</StyledText>
-				<StyledText>Selected Bank: {SUPPORTED_BANKS.find(item => item.key == bankName)?.title || ''}</StyledText>
-				<StyledText>Account Type: {BANK_ACCOUNT_TYPES.find(item => item.key == accountType)?.title}</StyledText>
+			<View style={styles.summaryContainer}>
+				<StyledText style={styles.summaryTitle}>DEPOSIT SUMMARY</StyledText>
+				<LabelValue label="You have agreed to deposit" value={`${currency} ${amount}`} />
+				<LabelValue label="Account Number:" value={`${depositSummary.accountNumber}`} />
+				<LabelValue label="Selected Bank:" value={`${depositSummary.bankName}`} />
+				<LabelValue label="Account Type:" value={`${depositSummary.accountType}`} />
+				
+				{depositSummary?.depositId && <LabelValue label="Deposit Reference Id:" value={`${depositSummary.depositId}`} />}
+				{depositSummary?.complete && <LabelValue label="Status:" value="Processing" />}
 			</View>
-			<TinyTextButton onPress={() => setDepositSummary(null)} title="Edit" />
-			</>
 
+			{edit && <View style={{alignItems: 'flex-end'}} >
+				<TinyTextButton onPress={() => setDepositSummary(null)} title="Edit" />
+			</View>}	
+			</>
 		)
 	}
 
 	const Finalizar = () => {
 		return (
-	  		<>
+	  		<View style={styles.finalizeContainer}>
 		  		<StyledText>Proceed to make a deposit and upload a receipt below </StyledText>
 
 				{!document ? 
@@ -179,21 +183,24 @@ const CreateDeposit = (props) => {
 					/>
 					:
 					<>
-						<View style={{flexDirection: 'row'}}>
-							<StyledText>Receipt Uploaded: YES</StyledText>
+						<View style={styles.summaryContainer}>
+							<LabelValue label="Receipt Uploaded" value="YES" />
+							
 							<StyledText>{document?.name}</StyledText>
-							<TinyTextButton onPress={() => setDocument(null)} title="Remove" />
+							<View style={{alignItems: 'center', marginTop: HP(2)}}>
+								<TinyTextButton onPress={() => setDocument(null)} title="Remove and Upload Again" />
+							</View>
 						</View>
-						<TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={() => setFinalAgree(!finalAgree)}>
-							<CheckBox
+						<TouchableOpacity style={styles.checkboxContainer} onPress={() => setFinalAgree(!finalAgree)}>
+							<Checkbox
 						    value={finalAgree}
-						    onValueChange={setFinalAgree}
+						    onToggle={setFinalAgree}
 						  />
-						  <StyledText>I have made the deposit and uploaded the right document</StyledText>
+						  <StyledText style={styles.agreeText}>I have made the deposit and uploaded the right document</StyledText>
 						</TouchableOpacity>  
 						 
-						<ConfirmButton 
-							buttonContainerStyle={{position: 'absolute', bottom: 20}} 
+						<ConfirmButton
+							buttonContainerStyle={{position: 'absolute', bottom: 10}} 
 							buttonStyle={{width: '70%'}} title="COMPLETE DEPOSIT" 
 							disabled={!finalAgree} 
 							onClick={onCompleteDeposit} 
@@ -201,45 +208,49 @@ const CreateDeposit = (props) => {
 
 					</>
 				}
-			</>
+			</View>
 		)
 	}
 
-	const title = complete ? "DEPOSIT SUCCESSFUL" : depositError ? "ERROR" : "CREATE DEPOSIT"
+	const title = depositSummary?.complete ? "DEPOSIT SUCCESSFUL" : depositError ? "ERROR" : "CREATE DEPOSIT"
 	
 	return (
-		<AppView {...{title}}  scroll={false} goBack={() => complete || depositError ? navigation.navigate('Settings') : navigation.goBack()}>
-			
-			{/*<IconTextButton 
-				iconName="cloud-upload-outline" 
-				title="UPLOAD" 
-				onPress={selectDocument} 
-				containerStyle={styles.uploadButton}
-				textStyle={{marginLeft: WP(2)}}	
-			/>*/}
+		<AppView 
+			{...{title, isLoading}}  
+			scrollViewStyle={{flexGrow:1}} 
+			goBack={() => depositSummary?.complete || depositError ? navigation.navigate('Settings') : navigation.goBack()}
+		>
 
 			{depositError ? 
 				<StyledText>{depositError}</StyledText>
 				:
-				!complete ? 
+				!depositSummary?.complete ? 
+					
 					!depositSummary ? 
 						<Form />
 					:
 					<>
 						<Summary />
 						
-						<TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={() => setAgree(!agree)}>
-							<CheckBox
-							 disabled={!!document}
-						    value={agree}
-						    onValueChange={setAgree}
+						<TouchableOpacity style={styles.checkboxContainer} onPress={() => setAgree(!agree)}>
+							<Checkbox
+								disabled={!!document}
+						    	value={agree}
+						    	onToggle={setAgree}
 						  />
-						  <StyledText>I agree to terms and conditions</StyledText>
+						  <StyledText style={styles.agreeText}>I agree to terms and conditions</StyledText>
 					  </TouchableOpacity>
 
 					  {agree && <Finalizar />}
 					</>
-				: <StyledText>Deposit Created Successfully!</StyledText>
+
+				: 
+				<View>
+					<View style={{marginTop: HP(5), alignItems: 'center' }}>
+						<StyledText style={{textAlign: 'center', width: '80%', fontSize: WP(4.5)}}>We have received a deposit request! We will send a notificaition with 1-3 days once it's completed. Thanks!</StyledText>
+					</View>
+					<Summary edit={false}/>
+				</View>	
 			}
 	   </AppView>
 	);
@@ -258,7 +269,6 @@ const useStyles = () => {
 			width: '100%',
 			marginTop: HP(5)
 		},
-
 		uploadButton: {
 			flexDirection: 'row', 
 			alignItems: 'center', 
@@ -268,7 +278,46 @@ const useStyles = () => {
 			borderWidth:1,
 			borderColor: theme.text,
 			padding: WP(2),
-			width: '40%'
+			width: '40%',
+			marginTop: HP(3)
+		},
+		summaryContainer: {
+			marginTop: HP(5),
+			backgroundColor: theme.grey9,
+			padding: WP(3)
+		},
+		summaryLabelValue: {
+			flexDirection: 'row',
+			justifyContent: 'space-between',
+			marginBottom: WP(2),
+			alignItems: 'center' 
+		},
+		summaryLabel: {
+			fontSize: WP(4),
+			marginTop: WP(2),
+			color: theme.grey4
+		},
+		summaryValue: {
+			fontSize: WP(4.5),
+			marginTop: WP(2),
+			color: theme.grey
+		},
+		summaryTitle:{
+			fontSize: WP(4.5),
+			color: theme.icon
+		},
+		checkboxContainer: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			marginTop: HP(2)
+		},
+		agreeText: {
+			fontSize: WP(4),
+			marginLeft: WP(2)
+		},
+		finalizeContainer: {
+			marginTop: HP(5),
+			flex: 1
 		}
 	});
 
