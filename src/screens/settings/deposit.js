@@ -78,7 +78,7 @@ const CreateDeposit = (props) => {
 			screenshot: downloadUrl,
 			status: 'Pending', 
 			depositId,
-			date: currentISODate(),
+			date: new Date(currentISODate()),
 			ipAddress: netInfo.details.ipAddress,
 		})
 

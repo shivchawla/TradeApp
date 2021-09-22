@@ -27,6 +27,7 @@ import ChangePassword from '../screens/auth/changePassword';
 import TradeSettings from '../screens/settings/trading';
 import CreateDeposit from '../screens/settings/deposit';
 import CreateWithdraw from '../screens/settings/withdraw';
+import FundHistory from '../screens/settings/fundHistory';
 
 const innerScreens = (Stack) => {
   return [
@@ -56,7 +57,8 @@ const innerScreens = (Stack) => {
       <Stack.Screen key="TradeSettings" name="TradeSettings" component={TradeSettings} />,
 
       <Stack.Screen key="CreateDeposit" name="CreateDeposit" component={CreateDeposit} />,
-      <Stack.Screen key="CreateWithdraw" name="CreateWithdraw" component={CreateWithdraw} />
+      <Stack.Screen key="CreateWithdraw" name="CreateWithdraw" component={CreateWithdraw} />,
+      <Stack.Screen key="FundHistory" name="FundHistory" component={FundHistory} />
   
   ];
 };

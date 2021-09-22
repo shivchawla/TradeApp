@@ -3,7 +3,7 @@ import { ScrollView, View, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { useTheme, WP, HP, StyledText} from '../../theme';
 
-export const HorizontalButtonGroup = ({items, onSelect, initialValue, scroll = false, ...props}) => {
+export const HorizontalButtonGroup = ({items, onSelect, initialValue = 0, scroll = false, ...props}) => {
 	const [selectedIndex, setSelected] = useState(initialValue);
 	const {styles} = useStyles();
 	
@@ -11,7 +11,7 @@ export const HorizontalButtonGroup = ({items, onSelect, initialValue, scroll = f
 		return Object.keys(items).map((key, index) => {
 			return (
 				<TouchableOpacity style={[props.buttonStyle, {...index == selectedIndex && props.selectedButtonStyle}]} {...{key}} onPress={() => {setSelected(index); onSelect(key)}}>
-					<StyledText style={props.buttonTextStyle}>{items[key]}</StyledText>
+					<StyledText style={[props.buttonTextStyle, {...index == selectedIndex && props.selectedButtonTextStyle}]}>{items[key]}</StyledText>
 				</TouchableOpacity>
 			)
 		})

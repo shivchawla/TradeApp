@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { getDeposits, getWithdraws, 
+import { getDepositsInDb, getWithdrawsInDb, 
 	addDepositInDb, addWithdrawInDb } from './firebase'
 
 import { useLoading } from './extra';
@@ -9,20 +9,31 @@ import { useAuth } from './user'
 export const useFunds = () => {
 	
 	const { currentUser, userAccount } = useAuth();
-	const {isLoading, loadingFunc} = useLoading();
+	const { isLoading, loadingFunc } = useLoading();
+
+	const getFundingTransactions = async({start, end, type}) => {
+		return await Promise.all([
+			type != 'withdraw' ? await getDepositsInDb(currentUser?.email, {start, end}) : [],
+			type != 'deposit' ? await getWithdrawsInDb(currentUser?.email, {start, end}) : []
+		]).then(([deposits, withdraws]) => {
+			return [
+				...deposits.map(item => { return {...item, type: "DEPOSIT"}}),
+				...withdraws.map(item => { return {...item, type: "WITHDRAW"}})
+			];
+		});		
+	}
 
 	const getDeposits = async() => await loadingFunc(
 		async() => {
 			const email = currentUser?.email;
-			return await getDeposits(email)
+			return await getDeposits(email);
 		}	
 	)
 
 	const getWithdraws = async() => await loadingFunc(
 		async() => {
 			const email = currentUser?.email;
-
-			return await getWithdraws(email)
+			return await getWithdraws(email);
 		} 
 	)
 
@@ -59,7 +70,9 @@ export const useFunds = () => {
 		}
 	)
 
-
-	return { isLoading, getDeposits, getWithdraws, addDeposit, addWithdraw };
+	return { isLoading, 
+		getDeposits, getWithdraws, 
+		getFundingTransactions, addDeposit, 
+		addWithdraw };
 
 } 

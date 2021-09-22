@@ -2,7 +2,8 @@ import React, {useState, useRef} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
 
 import 'react-native-get-random-values';
-import { nanoid } from 'nanoid';
+import { customAlphabet } from 'nanoid'
+const nanoid = customAlphabet('1234567890abcdef', 10)
 
 import {useNetInfo} from "@react-native-community/netinfo";
 
@@ -38,13 +39,13 @@ const CreateWithdraw = (props) => {
 
 	const submitWithdraw = async() => {
 
-		const withdrawId = nanoid(10);
+		const withdrawId = nanoid();
 		
 		//Once file uploaded
 		await addWithdraw({
 			details: withdrawSummary, 
 			withdrawId, 
-			date: currentISODate(), 
+			date: new Date(currentISODate()), 
 			ipAddress: netInfo.details.ipAddress,
 			status: 'Pending'
 		});

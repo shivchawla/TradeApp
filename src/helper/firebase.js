@@ -76,12 +76,53 @@ export const addWithdrawInDb = async(email, withdraw) => {
 	.add({email, ...withdraw})
 }
 
-export const getWithdraws = async(email) => {
+export const getWithdrawsInDb = async(email, {start, end} = {}) => {
+	try{
+		return firestore().collection(WITHDRAW_DB)
+		.where('email','==', email)
+		.where('date', '>=', new Date(start))
+		.where('date', '<=', new Date(end))
+	  	.get()
+		.then(querySnapshot => {
+			console.log("querySnapshot");
+			console.log(querySnapshot);
+			
+			if (querySnapshot.size < 1) {
+				return [];
+			}
 
+		    return querySnapshot.docs.map(doc => doc.data());
+		})
+	} catch(err) {
+		console.log("There is an Error");
+		console.log(err);
+		return [];
+	}
 }
 
-export const getDeposits = async(email) => {
+export const getDepositsInDb = async(email, {start, end}) => {
+	try{
+		return firestore().collection(DEPOSIT_DB)
+		.where('email', '==', email)
+		.where('date', '>=', new Date(start))
+		.where('date', '<=', new Date(end))
+	  	.get()
+		.then(querySnapshot => {
 
+			console.log("querySnapshot");
+			console.log(querySnapshot);
+
+			if (querySnapshot.size < 1) {
+				return [];
+			}
+
+		    return querySnapshot.docs.map(doc => doc.data());
+		})
+	} catch(err) {
+		console.log("There is an Error");
+		console.log(err);
+		return [];
+	}
 }
 
 export const uploadDocumentInStorage = async(document, path) => {
