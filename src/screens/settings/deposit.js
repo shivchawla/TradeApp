@@ -1,13 +1,11 @@
 import React, {useState, useRef} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
-import firestore from '@react-native-firebase/firestore';
-import storage from '@react-native-firebase/storage';
 
 import 'react-native-get-random-values';
-import { nanoid } from 'nanoid';
+import { customAlphabet } from 'nanoid'
+const nanoid = customAlphabet('1234567890abcdef', 10)
 
-import RNFS from 'react-native-fs';
-import NetInfo from "@react-native-community/netinfo";
+import {useNetInfo} from "@react-native-community/netinfo";
 
 import DocumentPicker from 'react-native-document-picker';
 
@@ -16,7 +14,7 @@ import { DepositForm } from '../../components/funds';
 import { SUPPORTED_BANKS, BANK_ACCOUNT_TYPES } from '../../config'
 import { useTheme, StyledText, WP, HP }  from '../../theme';
 import { currentISODate } from '../../utils';
-import { useAuth, useLoading } from '../../helper'
+import { useFunds, useStorage } from '../../helper'
 
 //Add logic to save auth state to temp storage
 const CreateDeposit = (props) => {
@@ -33,8 +31,10 @@ const CreateDeposit = (props) => {
 	const [finalAgree, setFinalAgree] = useState(null);
 	const [depositError, setDepositError] = useState(null);
 
-	const {currentUser, userAccount} = useAuth();
-	const {isLoading, loadingFunc} = useLoading();
+	const { isLoading: isLoadingDeposit, addDeposit } = useFunds(); 
+	const { isLoading: isLoadingStorage, uploadDocument } = useStorage(); 
+
+	const netInfo = useNetInfo(); 
 
 	const onSubmit = async (values) => {
     	setDepositSummary({
@@ -66,53 +66,20 @@ const CreateDeposit = (props) => {
 
 	const submitDeposit = async() => {
 
-		if (!currentUser ) {
-			throw Error("User doesn't exist");
-		}
-
-		if (!userAccount) {
-			throw Error("User Account doesn't exist");
-		}
-
-		let reference;
-
 		//First upload the image to cloud storage
 		//Improve the saved file name
-		reference = storage().ref(`/images/deposit/${currentUser.email}/${document.name}`);
-
-		//For android, first get the correct file destination
-		const destPath = `${RNFS.TemporaryDirectoryPath}/${nanoid()}`;
-		await RNFS.copyFile(document.uri, destPath);
-
-		const fileStat = await RNFS.stat(destPath); 
-	  	console.log("Stat");
-	  	console.log(fileStat);
-
-		await reference.putFile(fileStat.originalFilepath);
-
-		//After creating reference
+		const downloadUrl = await uploadDocument(document, {folder: 'deposit'});
 		
-		const netState = await NetInfo.fetch();
-
-		if (!netState || !netState.isConnected) {
-			throw Error('Internet not connected');
-		}
-
-		console.log("Email: ", currentUser?.email);
-		console.log("Account: ", userAccount?.account?.id);
-
-		const depositId = nanoid(10);
+		const depositId = nanoid();
 		//Once file uploaded
-		await firestore().collection('Deposits')
-		.add({
-			deposit: depositSummary,
+
+		await addDeposit({
+			details: depositSummary, 
+			screenshot: downloadUrl,
+			status: 'Pending', 
 			depositId,
-			user: currentUser?.email, //Add user Account instead
-			account: userAccount?.account?.id, //Alpaca Account instead
 			date: currentISODate(),
-			ipAddress: netState.details.ipAddress,
-			screenshot: await reference.getDownloadURL(),
-			status: 'Pending'
+			ipAddress: netInfo.details.ipAddress,
 		})
 
 		return depositId;
@@ -120,7 +87,8 @@ const CreateDeposit = (props) => {
 
 	const onCompleteDeposit = async() => {
 		try{
-			const depositId = await loadingFunc(async() => await submitDeposit());
+			const depositId = await submitDeposit();
+
 			console.log('Deposit Added');
 			setDepositSummary({...depositSummary, depositId, complete: true});
 		} catch (err) {
@@ -129,14 +97,6 @@ const CreateDeposit = (props) => {
 	} 
 
 	const {currency, amount, bankName, accountType} =  depositSummary || {};
-
-	const Form = () => {
-		return (
-			<View style={styles.formContainer}>
-				<DepositForm error={formError} onError={setFormError} onSubmit={onSubmit}/>
-		   </View>
-		)
-	}
 
 	const LabelValue = ({label, value}) => {
 		return (
@@ -213,7 +173,8 @@ const CreateDeposit = (props) => {
 	}
 
 	const title = depositSummary?.complete ? "DEPOSIT SUCCESSFUL" : depositError ? "ERROR" : "CREATE DEPOSIT"
-	
+	const isLoading = isLoadingDeposit || isLoadingStorage;
+
 	return (
 		<AppView 
 			{...{title, isLoading}}  
@@ -227,7 +188,9 @@ const CreateDeposit = (props) => {
 				!depositSummary?.complete ? 
 					
 					!depositSummary ? 
-						<Form />
+						<View style={styles.formContainer}>
+							<DepositForm error={formError} onError={setFormError} onSubmit={onSubmit}/>
+					   </View>
 					:
 					<>
 						<Summary />

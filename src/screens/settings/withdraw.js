@@ -1,19 +1,17 @@
 import React, {useState, useRef} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
-import firestore from '@react-native-firebase/firestore';
-import storage from '@react-native-firebase/storage';
 
 import 'react-native-get-random-values';
 import { nanoid } from 'nanoid';
 
-import NetInfo from "@react-native-community/netinfo";
+import {useNetInfo} from "@react-native-community/netinfo";
 
 import { AppView, ConfirmButton, TinyTextButton, IconTextButton, Checkbox } from '../../components/common';
 import { WithdrawForm } from '../../components/funds';
 import { SUPPORTED_BANKS, BANK_ACCOUNT_TYPES } from '../../config'
 import { useTheme, StyledText, WP, HP }  from '../../theme';
 import { currentISODate } from '../../utils';
-import { useAuth, useLoading } from '../../helper'
+import { useFunds } from '../../helper'
 
 //Add logic to save auth state to temp storage
 const CreateWithdraw = (props) => {
@@ -26,8 +24,8 @@ const CreateWithdraw = (props) => {
 	const [agree, setAgree] = useState(null);
 	const [withdrawError, setWithdrawError] = useState(null);
 
-	const {currentUser, userAccount} = useAuth();
-	const {isLoading, loadingFunc} = useLoading();
+	const {isLoading, addWithdraw} = useFunds();
+	const netInfo = useNetInfo();
 
 	const onSubmit = async (values) => {
     	setWithdrawSummary({
@@ -40,42 +38,23 @@ const CreateWithdraw = (props) => {
 
 	const submitWithdraw = async() => {
 
-		if (!currentUser ) {
-			throw Error("User doesn't exist");
-		}
-
-		if (!userAccount) {
-			throw Error("User Account doesn't exist");
-		}
-
-		const netState = await NetInfo.fetch();
-
-		if (!netState || !netState.isConnected) {
-			throw Error('Internet not connected');
-		}
-
-		console.log("Email: ", currentUser?.email);
-		console.log("Account: ", userAccount?.account?.id);
-
 		const withdrawId = nanoid(10);
+		
 		//Once file uploaded
-		await firestore().collection('Withdraws')
-		.add({
-			withdraw: withdrawSummary,
-			withdrawId,
-			user: currentUser?.email, //Add user Account instead
-			account: userAccount?.account?.id, //Alpaca Account instead
-			date: currentISODate(),
-			ipAddress: netState.details.ipAddress,
+		await addWithdraw({
+			details: withdrawSummary, 
+			withdrawId, 
+			date: currentISODate(), 
+			ipAddress: netInfo.details.ipAddress,
 			status: 'Pending'
-		})
+		});
 
 		return withdrawId;
 	}
 
 	const onCompleteWithdraw = async() => {
 		try{
-			const withdrawId = await loadingFunc(async() => await submitWithdraw());
+			const withdrawId = await submitWithdraw();
 			console.log('Withdraw Created');
 			setWithdrawSummary({...withdrawSummary, withdrawId, complete: true});
 		} catch (err) {
@@ -84,14 +63,6 @@ const CreateWithdraw = (props) => {
 	} 
 
 	const {currency, amount, bankName, accountType} =  withdrawSummary || {};
-
-	const Form = () => {
-		return (
-			<View style={styles.formContainer}>
-				<WithdrawForm error={formError} onError={setFormError} onSubmit={onSubmit}/>
-		   </View>
-		)
-	}
 
 	const LabelValue = ({label, value}) => {
 		return (
@@ -158,7 +129,9 @@ const CreateWithdraw = (props) => {
 				!withdrawSummary?.complete ? 
 					
 					!withdrawSummary ? 
-						<Form />
+						<View style={styles.formContainer}>
+							<WithdrawForm error={formError} onError={setFormError} onSubmit={onSubmit}/>
+					   </View>
 					:
 					<>
 						<Summary />

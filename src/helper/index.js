@@ -49,6 +49,11 @@ export { useTradeConfig } from './settings';
 export { usePersonaSession, usePersonaInquiry, usePersonaDocument, usePersonaInquiries } from './persona';
 export { processOnboardingData, useOnboarding } from './onboard';
 
-export { PhoneAuthProvider, addUserInFirebase } from './firebase';
+export { PhoneAuthProvider, addUserInFirebase, 
+	addDepositInDb, addWithdrawInDb, 
+	getDeposits, getWithdraws } from './firebase';
 
 export { useLoading } from './extra';
+
+export { useFunds } from './funds';
+export { useStorage } from './storage';

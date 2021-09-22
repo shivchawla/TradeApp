@@ -1,10 +1,18 @@
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
+
+import 'react-native-get-random-values';
+import { nanoid } from 'nanoid';
+
+import RNFS from 'react-native-fs';
 
 export const EmailAuthProvider = auth.EmailAuthProvider;
 export const PhoneAuthProvider = auth.PhoneAuthProvider;
 
 const USER_DB = 'Users';
+const DEPOSIT_DB = 'Deposits';
+const WITHDRAW_DB = 'Withdraws';
 
 export const findUserInDb = async(email) => {
 	console.log("findUserDb");
@@ -57,6 +65,38 @@ export const addUserInDb = async(email, userAccount) => {
 	    account: userAccount.account
 	})
 }
+
+export const addDepositInDb = async(email, deposit) => {
+	await firestore().collection(DEPOSIT_DB)
+	.add({email, ...deposit})
+}
+
+export const addWithdrawInDb = async(email, withdraw) => {
+	await firestore().collection(WITHDRAW_DB)
+	.add({email, ...withdraw})
+}
+
+export const getWithdraws = async(email) => {
+
+}
+
+export const getDeposits = async(email) => {
+
+}
+
+export const uploadDocumentInStorage = async(document, path) => {
+	const reference = await storage().ref(path);
+
+	//For android, first get the correct file destination
+	const destPath = `${RNFS.TemporaryDirectoryPath}/${nanoid()}`;
+	await RNFS.copyFile(document.uri, destPath);
+	const fileStat = await RNFS.stat(destPath); 
+
+	await reference.putFile(fileStat.originalFilepath);
+
+	return await reference.getDownloadURL(); 
+}
+
 
 export const signInWithEmailAndPassword = async (email, password) => await auth().signInWithEmailAndPassword(email, password);
 
