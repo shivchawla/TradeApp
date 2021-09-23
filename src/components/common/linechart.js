@@ -8,7 +8,7 @@ import {useDebounce, useThrottle, useThrottleFn} from 'react-use';
 import * as Theme  from '../../theme';
 const { useTheme, WP, HP, StyledText } = Theme;
 
-export const LineChart = ({data, size, style, hasTooltip = false, base = null, baseline= false}) => {
+export const LineChart = ({data, size, hasTooltip = false, base = null, baseline= false, ...props}) => {
 	const {theme, styles} = useStyles();
 	
 	const [locationX, setX] = useState(null);
@@ -77,18 +77,17 @@ export const LineChart = ({data, size, style, hasTooltip = false, base = null, b
   	}
 
 	return (
-		<View style={styles.chartContainer} 
+		<View style={[styles.chartContainer, props.chartContainerStyle]} 
 		 	onMoveShouldSetResponder={hasTooltip ? (evt) => {setTrigger(true); return true} : false}
 		 	onResponderTerminate={hasTooltip ? (evt) => setTimeout(() => setTrigger(false), 5000) : false}
 		 	onResponderRelease={hasTooltip ? (evt) => setTimeout(() => setTrigger(false), 5000) : false}
 			onResponderMove={hasTooltip ? (evt) => setX(evt.nativeEvent.locationX) : false}
 		>
 			<SVGLineChart
-	            style={[getSize(size), style]}
+	            style={[getSize(size), props.chartStyle]}
 	            data={ data }
 	            svg={{ stroke: getColor(data) }}
 	            contentInset={ { bottom: 0 } }
-	           
 	        >
 	        {baseline && <HorizontalLine />}
 	        {hasTooltip && trigger && <VerticalLine />}
@@ -103,13 +102,11 @@ const useStyles = () => {
 
 	const styles = StyleSheet.create({
 		chartContainer: {
-			// alignItems: 'center',
-			// justifyContent: 'center',
 			width: '90%',
 			alignSelf: 'center'
 		},
 		tinyChart: {
-			height: HP(6), width: WP(20), 
+			height: HP(6), width: '20%', 
 		},
 		mediumChart:{
 			height: HP(20), width: WP(50)
