@@ -29,6 +29,8 @@ import CreateDeposit from '../screens/settings/deposit';
 import CreateWithdraw from '../screens/settings/withdraw';
 import FundHistory from '../screens/settings/fundHistory';
 
+import FAQ from '../screens/settings/faq';
+
 const innerScreens = (Stack) => {
   return [
       <Stack.Screen key="StockDetail" name="StockDetail" component={StockDetail} />,
@@ -58,7 +60,9 @@ const innerScreens = (Stack) => {
 
       <Stack.Screen key="CreateDeposit" name="CreateDeposit" component={CreateDeposit} />,
       <Stack.Screen key="CreateWithdraw" name="CreateWithdraw" component={CreateWithdraw} />,
-      <Stack.Screen key="FundHistory" name="FundHistory" component={FundHistory} />
+      <Stack.Screen key="FundHistory" name="FundHistory" component={FundHistory} />,
+
+      <Stack.Screen key="FAQ" name="FAQ" component={FAQ} />
   
   ];
 };
