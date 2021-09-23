@@ -8,7 +8,7 @@ import {wsUrl, apiKey, apiSecret} from '../config';
 
 const mutex = new Mutex(); //Use to control access to subscription list
 
-function useWS() {
+const useWS = () => {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const {
@@ -29,8 +29,7 @@ function useWS() {
   }[readyState];
 
   useEffect(() => {
-
-    // console.log("Websocket useEffect on Mount")
+    // console.log("Websocket useEffect: ALL")
     // console.log(lastJsonMessage)
     // console.log(wsUrl);
     // console.log(connectionStatus);
@@ -44,24 +43,31 @@ function useWS() {
 
       var T = data["T"];
       if (data && (T == "success" || T == "error")) {
-        // console.log("Last Json Message");
-        // console.log(lastJsonMessage);
-    
+       
         var msg = data["msg"];
         var code = data["code"];
 
         if (T == "success" && msg == "connected" && !isAuthenticated) {
-          console.log("Sending Message");
-          console.log(JSON.stringify({"action": "auth", "key": apiKey, "secret": apiSecret}));
+          // console.log("Last Json Message");
+          // console.log(lastJsonMessage);
+    
+          // console.log("Sending Message");
+          // console.log(JSON.stringify({"action": "auth", "key": apiKey, "secret": apiSecret}));
           sendJsonMessage({"action": "auth", "key": apiKey, "secret": apiSecret});
         }
 
         if (T == "success" && msg == "authenticated" && !isAuthenticated) {
-          console.log("Setting Authentication", true)
+          //  console.log("Last Json Message");
+          //  console.log(lastJsonMessage);
+    
+          // console.log("Setting Authentication", true)
           setIsAuthenticated(true);   
         }
 
         if (T == "error" && code == 406 && !isAuthenticated) {
+           // console.log("Last Json Message");
+           // console.log(lastJsonMessage);
+    
           console.log("Too many connections");
           // setIsAuthenticated(true);
           // console.log("Setting Connect: false");
@@ -69,12 +75,19 @@ function useWS() {
         }
 
         if (T == "error" && [400, 401, 402, 404, 408, 409, 500].includes(code)) {
-          console.log("Setting Authentication", false)
+           // console.log("Last Json Message");
+           // console.log(lastJsonMessage);
+    
+          // console.log("Setting Authentication", false)
           setIsAuthenticated(false);
         }
 
         //On Already authenticated
         if (T == "error" && code == 403) {
+
+           // console.log("Last Json Message");
+           // console.log(lastJsonMessage);
+    
           // console.log(lastJsonMessage);
           // console.log("Setting Authentication", true)
           setIsAuthenticated(true);
@@ -83,13 +96,19 @@ function useWS() {
       } 
     }
 
-  }) //Added only on mount
+  }, [lastJsonMessage])  //Added when message changes (filter initial connection messages)
+
+  // React.useEffect(() => {
+  //   console.log("Websocket useEffect on Mount")
+  // }, []);
 
   return {isAuthenticated, sendJsonMessage, lastJsonMessage};
 
 }
 
-function useWebsocketHelper() {
+
+
+const useWebsocketHelper = () => {
 
   const {isAuthenticated, sendJsonMessage, lastJsonMessage: msg} = useWS();
   const [subscriptionList, setList] = useState({});
@@ -121,6 +140,7 @@ function useWebsocketHelper() {
     await mutex.runExclusive(async () => {
       //Subscribe immediately -- Handle  rest 5 seconds later
       if (isAuthenticated) {
+        // console.log("Subscribing to WS: ", symbol);
         sendJsonMessage({"action":"subscribe","trades":[symbol]});
       }
 
@@ -140,16 +160,16 @@ function useWebsocketHelper() {
 
   const handleSubscription = () => {
     if (isAuthenticated) {
-      console.log(subscriptionList);
+      // console.log(subscriptionList);
 
       const subSymbols = Object.keys(subscriptionList).filter(key => subscriptionList[key] > 0);
       const unsubSymbols = Object.keys(subscriptionList).filter(key => subscriptionList[key] == 0);
 
-      console.log(subSymbols);
-      console.log(unsubSymbols);
+      // console.log(subSymbols);
+      // console.log(unsubSymbols);
 
-      console.log(JSON.stringify({"action":"subscribe","trades":subSymbols}));
-      console.log(JSON.stringify({"action":"unsubscribe","trades":unsubSymbols}));
+      // console.log(JSON.stringify({"action":"subscribe","trades":subSymbols}));
+      // console.log(JSON.stringify({"action":"unsubscribe","trades":unsubSymbols}));
 
       //Subscribe and unsubscribe the symbols based on change in subscription list
       if (subSymbols.length > 0) {
