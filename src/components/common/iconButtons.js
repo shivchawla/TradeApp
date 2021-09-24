@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet, TouchableOpacity, Linking } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -110,6 +110,41 @@ export const ShowHideButton = ({showDetail, onToggle, ...props}) => {
 export const ToggleThemeButton = ({dark = false, onToggle, ...props}) => {
 	return(
 		<IconButton {...props} iconName={dark ? "sunny-outline" : "moon-outline"} onPress={onToggle} />
+	)
+}
+
+export const SocialIcon = ({social, ...props}) => {
+	const getSocialUrl = () => {
+		var url = '';
+		switch(social) {
+			case 'facebook': 
+				url = 'fb://';
+				break;
+			case 'facebook': 
+				url = 'fb://';
+				break;
+			case 'facebook': 
+				url = 'fb://';
+				break;
+			case 'facebook': 
+				url = 'fb://';
+				break;
+			case 'default':
+				url =  'fb://'
+		}
+
+		return url;			
+	}
+
+	const onPress = async() => {
+		const url = getSocialUrl(); 
+		if(await Linking.canOpenUrl(url)) {
+			await Linking.openUrl(url);
+		}
+	}
+
+	return (
+		<IconButton iconName={`logo-${social}`} onPress={onPress} {...props}/>
 	)
 }
 

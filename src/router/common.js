@@ -30,6 +30,7 @@ import CreateWithdraw from '../screens/settings/withdraw';
 import FundHistory from '../screens/settings/fundHistory';
 
 import FAQ from '../screens/settings/faq';
+import AboutUs from '../screens/settings/aboutUs';
 
 const innerScreens = (Stack) => {
   return [
@@ -62,7 +63,7 @@ const innerScreens = (Stack) => {
       <Stack.Screen key="CreateWithdraw" name="CreateWithdraw" component={CreateWithdraw} />,
       <Stack.Screen key="FundHistory" name="FundHistory" component={FundHistory} />,
 
-      <Stack.Screen key="FAQ" name="FAQ" component={FAQ} />
+      <Stack.Screen key="AboutUs" name="AboutUs" component={AboutUs} />
   
   ];
 };

@@ -11,7 +11,7 @@ export { VerticalField } from './verticalField';
 export { Icon, IconButton, IconTextButton, GobackIcon, AccountIcon, SearchIcon, 
 	FavoriteIcon, EditIcon, AddIcon,
 	DeleteIcon, CloseIcon, CalendarIcon, 
-	ShowHideButton, ToggleThemeButton, DownloadIcon } from './iconButtons';
+	ShowHideButton, ToggleThemeButton, DownloadIcon, SocialIcon } from './iconButtons';
 
 export { TinyTextButton } from './tinyTextButton';
 

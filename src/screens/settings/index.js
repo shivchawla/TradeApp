@@ -59,6 +59,7 @@ const BottomSetting = ({title, onPress, ...props}) => {
 
 const BottomSectionSettings = () => {
 	const {theme, styles} = useStyles();
+	const navigation = useNavigation();
 
 	const shareApp = async() => {
 
@@ -80,7 +81,7 @@ const BottomSectionSettings = () => {
 	return (
 		<View style={styles.bottomSettingsContainer}>
 			<BottomSetting title="Share the App" onPress={shareApp} />
-			<BottomSetting title="About Us" onPress={""} />
+			<BottomSetting title="About Us" onPress={() => navigation.navigate('AboutUs')} />
 		</View>
 	)
 }
@@ -153,7 +154,8 @@ const useStyles = () => {
 		},
 
 		bottomSettingTitle: {
-			color: theme.grey2
+			color: theme.grey2,
+			fontSize: WP(4.5)
 		}
 
 	});	
