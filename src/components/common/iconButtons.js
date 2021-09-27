@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, Linking } from 'react-native'
+import { StyleSheet, TouchableOpacity, Linking, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -9,7 +9,15 @@ export const Icon = ({iconName, ...props}) => {
 	const {theme, styles} = useStyles();
 
 	return (
-		<Ionicons name={iconName} color={props.iconColor || theme.icon} size={props.iconSize || defaultIconSize} />
+		<>{
+			!!props?.hasBackground ? 
+			<View style={props.backgroundStyle}>
+				<Ionicons name={iconName} color={props.iconColor || theme.icon} size={props.iconSize || defaultIconSize} /> 
+			</View>
+			:
+			<Ionicons name={iconName} color={props.iconColor || theme.icon} size={props.iconSize || defaultIconSize} />
+		}
+		</>
 	)
 }
 
