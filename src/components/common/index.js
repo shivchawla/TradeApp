@@ -29,3 +29,4 @@ export { InfoText } from './infoText';
 export { Checkbox } from './checkbox';
 export { AppIcon } from './appIcon';
 export { OtpInput } from './otpInput';
+export { SwipeButton } from './swipeButton';

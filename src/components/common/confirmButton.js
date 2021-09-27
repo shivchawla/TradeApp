@@ -1,54 +1,53 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
-import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../../theme';
+import { useTheme, StyledText, WP, HP }  from '../../theme';
 
-import SwipeButton from 'jt-swipe-button';
+// import SwipeButton from 'jt-swipe-button';
 
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Icon, SwipeButton } from '../../components/common';
 
-export const ConfirmButton = ({title, onClick, swipe = false, cancel = false, disabled = false,  ...props}) => {
+export const ConfirmButton = ({title, afterTitle, onClick, onSwipeSuccess, swipe = false, cancel = false, disabled = false,  ...props}) => {
 	const {theme, styles} = useStyles();
 
-	const proceedIcon = ({size = WP(10), color = theme.success} = {}) => {
-		return <Ionicons name="chevron-forward" {...{color, size}} />
+	const ProceedIcon = ({size = WP(8)} = {}) => {
+		return <Icon iconName={props?.iconName ?? "arrow-forward"} iconSize={size} iconColor="white"/>
 	}
 
-	const cancelIcon = ({size = WP(5), color = theme.error} = {}) => {
-		return <Ionicons name="close-circle" {...{color, size}} />
+	const CancelIcon = ({size = WP(5)} = {}) => {
+		return <Icon iconName="close-circle"  iconSize={size} iconColor="white"/>
 	}
-
 
 	const ClickableComponent = disabled ? View : TouchableOpacity;
 
+	const color = cancel ? theme.red : props?.color ??  theme.green;
+
 	return (
-		<>
+		<View style={[styles.buttonContainer, props.buttonContainerStyle]}>
 		{swipe ?
+
 			<SwipeButton 
-				containerStyles={{borderRadius: 20, width: WP(95), borderWidth:0}}
-            	height={50}
-            	onSwipeSuccess={onClick}
-            	swipeSuccessThreshold={100}
-            	railBackgroundColor={theme.dark}
-            	railBorderColor={cancel ? theme.error : theme.success}
-            	railFillBorderColor={cancel ? theme.error : theme.success}
-            	railStyles={{borderWidth:0, backgroundColor: theme.success, color: theme.text}}
-            	titleColor={theme.text}
-            	screenReaderEnabled={true}
-            	thumbIconComponent={cancel ? cancelIcon : proceedIcon}
-        	    thumbIconBorderColor={cancel ? theme.error : theme.success}
+				height={60}
+            	onSwipeSuccess={onSwipeSuccess}
+            	swipeSuccessThreshold={95}
+            	swipeTitle={afterTitle}
+            	icon={cancel ? <CancelIcon /> : <ProceedIcon />}
         	    title={title}
+        	    containerStyle={{borderColor: color}}
+        	    iconContainerStyle={{backgroundColor: color}}
+        	    underlayStyle={{borderColor: color, backgroundColor: color}}
+        	    swipeTitleStyle={{color: 'white'}}
+        	    disabled={disabled}
           	/> 
 
           	:
 
-			<View style={[styles.buttonContainer, props.buttonContainerStyle]}>
 				<ClickableComponent style={[styles.button, props.buttonStyle, {...disabled && {backgroundColor: theme.grey9}}]} onPress={disabled ? null : onClick}>
 					<StyledText style={[styles.buttonText,props.buttonTextStyle]}>{title}</StyledText>
 				</ClickableComponent>
-			</View>
+		
 		}
-		</>
+		</View>
 	);
 }
 	

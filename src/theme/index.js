@@ -32,7 +32,7 @@ export const DarkTheme = {
 
 
     error: "#ff5757",
-    success: '#57ff57',
+    success: '#00cc99',
     verified: "#72BB53",
     dark: '#000',
     gryBack: "#CDCDCD",

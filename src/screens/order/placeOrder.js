@@ -79,7 +79,7 @@ const PlaceOrder = (props) => {
 		)
 	}
 
-	const Footer = ({title, ...props}) => {
+	const Footer = ({title, afterTitle, ...props}) => {
 		const onConfirmOrder = async() => {
 			if (await isMarketOpen()) {
 				return sendOrder();
@@ -89,7 +89,7 @@ const PlaceOrder = (props) => {
 			}
 		}
 
-		return <ConfirmButton swipe={true} {...{title}} onClick={onConfirmOrder} buttonStyle={[styles.tradeButton, action == "BUY" ? styles.buyButton : styles.sellButton]}/>
+		return <ConfirmButton swipe={true} {...{title, afterTitle}} onSwipeSuccess={onConfirmOrder} color={action == "BUY" ? theme.green : theme.red}/>
 	}
 
 	const InstructionText = () => {
@@ -126,11 +126,15 @@ const PlaceOrder = (props) => {
 
 	const PlaceOrderBasic = () => {
 		const orderType = 'market';
-		const title = (action || "").toUpperCase() + " " + symbol;
+		const screenTitle = (action || "").toUpperCase() + " " + symbol;
+		
+		const title = "Swipe to " + screenTitle;
+		const afterTitle = "Placing order to " + screenTitle;
+		
 		return (
 			<>
 			{!!action && 
-				<AppView {...{title}} headerRight={<HeaderRight />} footer={<Footer {...{title}}/>} appContainerStyle={styles.appContainer}>
+				<AppView title={screenTitle} headerRight={<HeaderRight />} footer={<Footer {...{title, afterTitle}}/>} appContainerStyle={styles.appContainer}>
 					<TickerDisplay {...{symbol}} style={styles.tickerDisplayContainer} priceStyle={styles.priceStyle} priceChangeStyle={styles.priceChangeStyle}/>
 					<InstructionText />
 					<QuantitySelector {...{isNotional, quantity}}
@@ -154,12 +158,15 @@ const PlaceOrder = (props) => {
 	}
 
 	const PlaceOrderFull = () => {
-		const title = (action || "").toUpperCase() + " " + symbol;
+		const screenTitle = (action || "").toUpperCase() + " " + symbol;
+		
+		const title = "Swipe to " + screenTitle;
+		const afterTitle = "Placing order to " + screenTitle;
 		
 		return (
 			<>
 			{!!action && 
-				<AppView {...{title}} headerRight={<HeaderRight {...{action}}/>} footer={<Footer {...{title, symbol, action}}/>} appContainerStyle={styles.appContainer}>
+				<AppView title={screenTitle} headerRight={<HeaderRight {...{action}}/>} footer={<Footer {...{title, afterTitle}}/>} appContainerStyle={styles.appContainer}>
 					<TickerDisplay {...{symbol}} style={styles.tickerDisplayContainer} priceStyle={styles.priceStyle} priceChangeStyle={styles.priceChangeStyle}/>
 					<View style={styles.orderOptionsContainer}>
 						{orderType == "market" && fractionable 
