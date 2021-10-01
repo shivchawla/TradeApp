@@ -72,7 +72,7 @@ export function useOrders({symbol, status, after, until, limit = 10}, params = {
   const query = {...symbol && {symbols: symbol}, ...status && {status}, ...after && {after}, ...until && {until}, ...limit && {limit}};
   // const queryKey = 'getOrders' + (symbol || '') + (status || 'open');
 
-  const {isError, data: orders, refetch} = useQuery(['getOrders', query], () => getOrders(query), params);
+  const {isError, isLoading, data: orders, refetch} = useQuery(['getOrders', query], () => getOrders(query), params);
 
-  return {isError, orders, getOrders: () => refetch().then(r => r.data)};
+  return {isError, isLoading, orders, getOrders: () => refetch().then(r => r.data)};
 }

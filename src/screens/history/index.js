@@ -51,12 +51,12 @@ const ZeroActivityCount = () => {
 	) 
 }
 
-const ShowHistory = ({field, range}) => {
+const ShowHistory = ({field, range, onLoadingEnd}) => {
 	const {theme, styles} = useStyles();
 
-	const [start, end] = range;
+	const [start, end] = range || [];
 
-	const {accountActivity, getAccountActivity } = useAccountActivity({activity_type: field, after: start, until: end}, {enabled: field != 'all'})
+	const {isLoading: isLoadingActivity, accountActivity, getAccountActivity } = useAccountActivity({activity_type: field, after: start, until: end}, {enabled: field != 'all'})
 	
 	const orderQuery = {
 		status: 'all',
@@ -64,41 +64,43 @@ const ShowHistory = ({field, range}) => {
 		...(start && start != '') && {after: toISODate(start)},
 	}
 
-	const {orders, getOrders} = useOrders(orderQuery);
+	const {isLoading: isLoadingOrders, orders, getOrders} = useOrders(orderQuery);
 
-	// console.log("AccountActivity");
-	// console.log(accountActivity);
+	React.useEffect(() => {
+		if (!isLoadingActivity && !isLoadingOrders) {
+			onLoadingEnd();
+		}
+	}, [isLoadingActivity, isLoadingOrders])	
 
-	// console.log("Orders")
-	// console.log(orders);
-
-	//Now fills are present in both orders and accountActivity
-	//Remove fills from accountActivity 
 
 	const removeFills = (activities) => {
-		return activities.filter(item => item.type != 'fill');
+		return activities.filter(item => item.activity_type != 'FILL');
 	}
 
 	const updateOrderActivity = (orders) => {
 		return orders.map(item => {
-			return {...item, type: 'order'};
+			return {...item, activity_type: 'ORDER'};
 		})
 	}	
 
 	const allActivities = updateOrderActivity(orders || []).concat(removeFills(accountActivity || [])) 
 
+	const isLoading = isLoadingActivity || isLoadingOrders;
+
 	return (
 		<View style={{flex:1}}>
-			{(!!allActivities && allActivities.length > 0) ? 
-				<DisplayActivityList
-					style={styles.activityFlatList} 
-					activitList={allActivities}
-				/>
-				: 
-				<ZeroActivityCount />
+			{!isLoading &&
+				<>
+				{(!!allActivities && allActivities.length > 0) ? 
+					<DisplayActivityList
+						style={styles.activityFlatList} 
+						activityList={allActivities}
+					/>
+					: 
+					<ZeroActivityCount />
+				}
+				</>
 			}
-
-
 		</View>
 	)
 }
@@ -108,6 +110,7 @@ const History = (props) => {
 
 	const [range, setRange] = useState(null);
 	const [field, setField] = useState(null);
+	const [isLoading, setLoading] = useState(true);
 
 	//Period needs to in  form of range tooo... avoid extra state variable
 	const [period, setPeriod] = useState(null)
@@ -124,13 +127,23 @@ const History = (props) => {
 		setPeriod(period);
 	}
 
+	React.useEffect(() => {
+		if (range) {
+			setLoading(true);
+		}
+	}, [range])
+
 	return (
-		<AppView scroll={false} title="History" headerRight={<CalendarIcon onPress={() => setModalVisible(true)}/>}>
+		<AppView isLoading={isLoading} scroll={false} title="History" headerRight={<CalendarIcon onPress={() => setModalVisible(true)}/>}>
 		
 			<HorizontalFieldSelection onSelect={handleFieldSelection} />
 			<HorizontalPeriodSelection onSelect={handlePeriodSelection} />
 
-			<ShowHistory {...{field, range}} />
+			<ShowHistory 
+				{...{field, range}} 
+				onLoadingStart={() => setLoading(true)} 
+				onLoadingEnd={() => {console.log("Set Loading: false"); setLoading(false)}}
+			/>
 
 			<DatePickerModal 
 				isVisible={isModalVisible}

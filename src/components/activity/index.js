@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import { DisplayOrder } from '../order';
@@ -9,6 +9,7 @@ import { useTheme, WP, HP } from '../../theme';
 export const DisplayActivity = ({activity}) => {
 	const {theme, styles} = useStyles();
 	const activityType =  activity?.activity_type;
+	
 	if (activityType == "ORDER") {
 		return <DisplayOrder 
 				order={activity} 
@@ -17,8 +18,11 @@ export const DisplayActivity = ({activity}) => {
 				showOrderType={false}
 				pastTense={true}
 				descriptionStyle={styles.orderStyle}/>
-	} else {
+	} 
+	else if (activityType.startsWith("DIV")) {
 		return <ShowJson json={activity} full={false} />
+	} else {
+		return <></>
 	}
 }
 
@@ -26,11 +30,11 @@ export const DisplayActivityList = ({activityList, ...props}) => {
 	const {theme, styles} = useStyles();
 
 	return (
-		<View style={[styles.activityList, props.containerStyle]}>
+		<ScrollView style={[styles.activityList, props.containerStyle]}>
 			{activityList && activityList.map((item, index) => {
 				return <DisplayActivity key={item.id} activity={item} />	
 			})}
-		</View>
+		</ScrollView>
 	)
 }
 
@@ -43,7 +47,6 @@ const useStyles = () => {
 		},
 		orderStyle: {
 			color: theme.grey5,
-
 		} 
 	});
 

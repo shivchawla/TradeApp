@@ -50,10 +50,10 @@ export function useAccountActivity({activity_type = null, date = '', until = '',
 	const queryKey = ['accountActivity', activity_type, date, until, after].filter(item => item && item != '' );
 	console.log(queryKey);
 	
-	const {isError, error, data: accountActivity, refetch} = useQuery(queryKey, () => getAccountActivity({activity_type, date, until, after}), params);
+	const {isError, isLoading, error, data: accountActivity, refetch} = useQuery(queryKey, () => getAccountActivity({activity_type, date, until, after}), params);
 	if (isError) {
 		console.log(`ERROR (useAccountActivity): ${error}`);
 	}
 
-	return {isError, accountActivity, getAccountActivity: () => refetch().then(r => r.data)};
+	return {isError, isLoading, accountActivity, getAccountActivity: () => refetch().then(r => r.data)};
 }
