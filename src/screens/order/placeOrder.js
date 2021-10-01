@@ -60,7 +60,13 @@ const PlaceOrder = (props) => {
 				addActivity(symbol, response); 
 				navigation.navigate('OrderStatus', {goBack: () => navigation.navigate('StockDetail', {symbol}), order: response});
 			},
-			onError: (err, input) => console.log(err)
+			onError: (err, input) => {
+				if (err.response.status == 403) {
+					navigation.navigate('OrderStatus', {goBack: () => navigation.navigate('PlaceOrder', {symbol}), message: "Insufficient Funds! Order Can't be placed!!"});
+				} else {
+					navigation.navigate('OrderStatus', {goBack: () => navigation.navigate('PlaceOrder', {symbol}), message: "Internal Error!"});
+				}
+			}
 		});
 	}
 

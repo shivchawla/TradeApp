@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { titleCase } from "title-case";
 
-import { AppView, ConfirmButton, ShowJson } from '../../components/common';
+import { AppView, ConfirmButton, ShowJson, Icon, TinyTextButton} from '../../components/common';
 import { useOrderDetail, getLatestTradingDay, getNextTradingDay } from '../../helper';
 import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
 import { ORDER_MORE_FIELDS, AVAILABLE_TO_CANCEL_ORDER_STATUS, OPEN_ORDER_STATUS } from '../../config';
@@ -166,14 +166,14 @@ const HeaderRight = ({symbol}) => {
 }
 
 const OrderStatus = (props) => {
-	const {order, goBack} = props?.route?.params ?? {};
+	const {order, message, goBack} = props?.route?.params ?? {};
 
 	const [orderDetail, setDetail] = useState(null);
 	//Get Order Id and refetch the order (in case the status has changed)
 	const {isError, getOrderDetail} = useOrderDetail(order?.id, {enabled: false})
 
 	React.useEffect(() => {
-		const fetchOrderDetail = async() => {
+		(async() => {
 			if (order?.status == "new" || order?.type == "market") {
 				const orderDetail = await getOrderDetail();
 				if (!!orderDetail) {
@@ -182,18 +182,16 @@ const OrderStatus = (props) => {
 			} else if(!!order) {
 				setDetail(order);
 			}
-		}
-
-		fetchOrderDetail();
+		})();
 
 	}, []);
 
 
 	const {symbol} = orderDetail ?? {};
-	
+	const {theme, styles} = useStyles();
+
 	return (
-		
-		<AppView isLoading={!!!orderDetail} scroll={false} goBack={goBack || true} headerRight={<HeaderRight {...{symbol}}/>} >
+		<AppView isLoading={!!!orderDetail && message == ''} scroll={false} goBack={goBack || true} headerRight={symbol && <HeaderRight {...{symbol}}/>} >
 			{!!orderDetail &&
 				<> 
 				<OrderStatusTop {...{orderDetail}} />
@@ -202,6 +200,14 @@ const OrderStatus = (props) => {
 				<DisplayOutRTH {...{orderDetail}} />
 				<OrderStatusButton {...{orderDetail}} />
 				</>
+			}
+			{message && 
+				<View style={{flex:1, alignItems: 'center'}}>
+					<Icon iconName="close-circle-outline" iconColor={theme.error} iconSize={WP(15)} />
+					<StyledText style={[styles.errorTitle, {marginTop: HP(1)}]}>ERROR</StyledText>
+					<StyledText style={[styles.errorText, {marginTop: HP(30)}]}>{message}</StyledText>
+					<TinyTextButton title="GO BACK" onPress={goBack} buttonStyle={{position: 'absolute', bottom: 20}} buttonTextStyle={{fontSize: WP(5)}}/>
+				</View>
 			}
 		</AppView>
 		
@@ -290,6 +296,14 @@ const useStyles = () => {
 		alertMessage: {
 			marginTop: WP(1),
 			color: theme.grey2
+		},
+		errorText: {
+			color: theme.text,
+			fontSize: WP(4.5)
+		},
+		errorTitle: {
+			color: theme.error,
+			fontSize: WP(6)
 		}
 
 	});
