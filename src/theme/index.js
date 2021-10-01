@@ -64,6 +64,7 @@ export const LightTheme = {
 
     primary: '#FF6624',
     light: '#ffffff',
+    background: '#f4f6fc',
     fldDesc: "#999999",
     border: "#E5E5E5",
     grey: '#F6F6F6',
@@ -88,7 +89,10 @@ export const ThemeProvider = ({children}) => {
 	const systemScheme = useColorScheme();
     // console.log("systemScheme:", systemScheme);
 
-    const [theme, setTheme] = useState(systemScheme == 'dark' ? DarkTheme : LightTheme);
+    // const [theme, setTheme] = useState(systemScheme == 'dark' ? DarkTheme : LightTheme);
+
+    //In v1 of app, keep only dark mode
+    const [theme, setTheme] = useState(DarkTheme);
     
     React.useEffect(() => {
         const manageTheme = async() => {

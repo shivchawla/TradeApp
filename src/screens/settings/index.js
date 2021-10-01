@@ -99,7 +99,7 @@ const Settings = (props) => {
 	}
 	
 	return (
-		<AppView scroll={false} title="Settings" headerRight={<ToggleThemeButton dark={theme.name == 'dark'} onToggle={onToggleTheme} />}>
+		<AppView scroll={false} title="Settings">
 			<TopSectionSettings />
 			<MiddleSectionSettings />
 			<BottomSectionSettings />
