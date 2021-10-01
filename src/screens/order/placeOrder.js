@@ -11,7 +11,7 @@ import { TickerDisplay } from '../../components/market';
 import { QuantitySelector, TifSelector, 
 	NotionalSelector, OrderTypeSelector } from '../../components/order'
 	
-import { usePlaceOrder, useSymbolActivity, isMarketOpen } from '../../helper';
+import { usePlaceOrder, useSymbolActivity, isMarketOpen, useStockEODData } from '../../helper';
 import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
 
 //Preview should be added here
@@ -36,6 +36,30 @@ const PlaceOrder = (props) => {
 	
 	const {isError, placeOrder} = usePlaceOrder();
 	const {addActivity} = useSymbolActivity(symbol);
+
+	const {snapshot, getSnapshot} = useStockEODData(symbol, {enabled: false});
+
+	React.useEffect(() => {
+		if (snapshot && orderType != 'market') {
+
+			const price = snapshot?.latestTrade?.price;
+			
+			if (action == "BUY") {
+				setLimitPrice((price || 0)*0.99);
+				setStopPrice((price || 0)*0.99)
+			} else {
+				setLimitPrice((price || 0)*1.01);
+				setStopPrice((price || 0)*1.02)
+			}
+		}
+	}, [snapshot, orderType])
+
+	React.useEffect(() => {
+		if(action) {
+			getSnapshot();
+		}
+	}, [action])
+	
 
 	const processOrderParams = () => {
 		var params = {symbol, side: action.toLowerCase(), type: orderType, time_in_force: tif};
@@ -74,7 +98,6 @@ const PlaceOrder = (props) => {
 		if (orderType == "limit") {
 			setIsNotional(false);
 			setQuantity(1);
-			setLimitPrice();
 		}
 
 		setOrderType(orderType);
@@ -146,54 +169,57 @@ const PlaceOrder = (props) => {
 	
 	const title = "Swipe to " + screenTitle;
 	const afterTitle = "Placing order to " + screenTitle;
+
+	const formatPrice = (p) => {
+		return (p || 0).toFixed(2);
+	} 
 	
+
+	console.log("Limit price: ", limitPrice);
+
 	return (
-		<>
-		{!!action && 
-			<AppView isLoading={isLoading} title={screenTitle} headerRight={<HeaderRight {...{action}}/>}  appContainerStyle={styles.appContainer} scrollViewStyle={{flexGrow: 1}}>
-				<TickerDisplay {...{symbol}} style={styles.tickerDisplayContainer} priceStyle={styles.priceStyle} priceChangeStyle={styles.priceChangeStyle}/>
-				{!fullView ? 
-					<>
-						<InstructionText />
-						<QuantitySelector {...{isNotional, quantity}}
-							notionalAllowed={fractionable} 
-							onChangeQuantity={(qty) => setQuantity(qty)} 
-							onChangeType={(v) => setIsNotional(v == 'notional')}
-						/>
-					</>
+		<AppView isLoading={isLoading || !action} title={screenTitle} headerRight={<HeaderRight {...{action}}/>}  appContainerStyle={styles.appContainer} scrollViewStyle={{flexGrow: 1}}>
+			<TickerDisplay {...{symbol}} style={styles.tickerDisplayContainer} priceStyle={styles.priceStyle} priceChangeStyle={styles.priceChangeStyle}/>
+			{!fullView ? 
+				<>
+					<InstructionText />
+					<QuantitySelector {...{isNotional, quantity}}
+						notionalAllowed={fractionable} 
+						onChangeQuantity={(qty) => setQuantity(qty)} 
+						onChangeType={(v) => setIsNotional(v == 'notional')}
+					/>
+				</>
 
-					:
+				:
 
-					<View style={styles.orderOptionsContainer}>
-						{orderType == "market" && fractionable 
-							? <NotionalSelector {...{isNotional}} onSelect={(v) => setIsNotional(v.key == 'notional')} />
-							: <HorizontalPickField label="Quantity Type" selectedValue={{key: 'shares', title: 'Shares'}} />
-						}
-						<HorizontalInputField label="Quantity" value={quantity} onChange={(v) => setQuantity(v)} textStyle={styles.quantityFullView}/>
-						<OrderTypeSelector {...{orderType}} onSelect={(v) => updateOrderType(v.key)} />
-						{orderType == "limit" && 
-							<HorizontalInputField label="Limit Price" value={limitPrice} onChange={(v) => setLimitPrice(v)} />
-						}
-						{orderType == "stop" && 
-							<HorizontalInputField label="Stop Price" value={stopPrice} onChange={(v) => setStopPrice(v)} />
-						}
-						{orderType == "stop_limit" && 
-							<>
-							<HorizontalInputField label="Limit Price" value={limitPrice} onChange={(v) => setLimitPrice(v)} />
-							<HorizontalInputField label="Stop Price" value={stopPrice} onChange={(v) => setStopPrice(v)} />
-							</>
-						}
-						<TifSelector {...{tif}} onSelect={(v) => setTif(v.key)} />
-					</View>
-				}
+				<View style={styles.orderOptionsContainer}>
+					{orderType == "market" && fractionable 
+						? <NotionalSelector {...{isNotional}} onSelect={(v) => setIsNotional(v.key == 'notional')} />
+						: <HorizontalPickField label="Quantity Type" selectedValue={{key: 'shares', title: 'Shares'}} />
+					}
+					<HorizontalInputField label="Quantity" value={quantity} onChange={(v) => setQuantity(v)} textStyle={styles.quantityFullView}/>
+					<OrderTypeSelector {...{orderType}} onSelect={(v) => updateOrderType(v.key)} />
+					{orderType == "limit" && 
+						<HorizontalInputField label="Limit Price" value={formatPrice(limitPrice)} onChange={(v) => setLimitPrice(v)} />
+					}
+					{orderType == "stop" && 
+						<HorizontalInputField label="Stop Price" value={formatPrice(stopPrice)} onChange={(v) => setStopPrice(v)} />
+					}
+					{orderType == "stop_limit" && 
+						<>
+						<HorizontalInputField label="Limit Price" value={formatPrice(limitPrice)} onChange={(v) => setLimitPrice(v)} />
+						<HorizontalInputField label="Stop Price" value={formatPrice(stopPrice)} onChange={(v) => setStopPrice(v)} />
+						</>
+					}
+					<TifSelector {...{tif}} onSelect={(v) => setTif(v.key)} />
+				</View>
+			}
 
-				<SwitchView />
-				<Footer {...{title, afterTitle}}/>
-				<AlertBox title="MESSAGE" message="After market hour message" onCancel={() => setAlert(false)} onConfirm={() => {setAlert(false); sendOrder()}} show={showAlert}/> 
-			
-			</AppView>
-		}
-		</>
+			<SwitchView />
+			<Footer {...{title, afterTitle}}/>
+			<AlertBox title="MESSAGE" message="After market hour message" onCancel={() => setAlert(false)} onConfirm={() => {setAlert(false); sendOrder()}} show={showAlert}/> 
+		
+		</AppView>
 	)
 
 }

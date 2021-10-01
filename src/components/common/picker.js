@@ -80,7 +80,7 @@ export const BottomPicker = ({items, selectedValue, onSelect, placeholder = '', 
 				{
 					items.filter(item => item.key != selectedValue.key).map((item, index) => {
 						return (
-							<TouchableOpacity key={item.key} onPress={() => {onSelect(item); setShow(false)}}> 
+							<TouchableOpacity key={index} onPress={() => {onSelect(item); setShow(false)}}> 
 								<StyledText style={styles.pickerItem}>{item.title}</StyledText> 	
 							</TouchableOpacity>
 						)
