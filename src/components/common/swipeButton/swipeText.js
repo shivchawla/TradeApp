@@ -62,7 +62,7 @@ const useStyles = () => {
             alignItems: 'center',
         },
         title: {
-            color: theme.icon,
+            color: theme.text,
             fontSize: WP(5),
             textAlign: 'center',
             marginLeft: WP(10),

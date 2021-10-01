@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 import { FormView, FormField } from '../form';
 import { IdentitySchema } from './meta';

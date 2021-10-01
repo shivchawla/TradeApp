@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import { View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 
-import { WebView } from 'react-native-webview';
 import NetInfo from "@react-native-community/netinfo";
 import PDFView from 'react-native-view-pdf/lib/index';
 

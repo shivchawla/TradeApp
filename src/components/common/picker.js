@@ -17,8 +17,7 @@ const deviceHeight =
 
 export const Picker = ({items, selectedValue, onSelect}) => {
 	const [show, setShow] = useState(false);
-	const styles = useStyles();
-	const {theme} = useTheme();
+	const {theme, styles} = useStyles();
 
 	return (
 		<>{
@@ -56,8 +55,7 @@ export const Picker = ({items, selectedValue, onSelect}) => {
 
 export const BottomPicker = ({items, selectedValue, onSelect, placeholder = '', ...props}) => {
 	const [show, setShow] = useState(false);
-	const styles = useStyles();
-	const {theme} = useTheme();
+	const {theme, styles} = useStyles();
 
 	return (
 		<>
@@ -99,8 +97,7 @@ export const BottomPicker = ({items, selectedValue, onSelect, placeholder = '', 
 }
 
 export const TextInputWithIcon = ({value, onChange, ...props}) => {
-	const styles = useStyles();
-	const {theme} = useTheme();
+	const {theme, styles} = useStyles();
 
 	const [edit, setEdit] = useState(false);
 
@@ -130,7 +127,7 @@ export const TextInputWithIcon = ({value, onChange, ...props}) => {
 }
 
 export const HorizontalPickField = ({label, selectedValue, items, onSelect}) => {
-	const styles = useStyles();
+	const {styles} = useStyles();
 
 	return (
 		<>
@@ -147,7 +144,8 @@ export const HorizontalPickField = ({label, selectedValue, items, onSelect}) => 
 }
 
 export const HorizontalInputField = ({label, value, onChange, ...props}) => {
-	const styles = useStyles();
+	const {styles} = useStyles();
+
 	return (
 		<View style={styles.horizontalPickField}>
 			<StyledText style={styles.horizontalPickLabel}>{label}</StyledText>
@@ -211,6 +209,6 @@ const useStyles = () => {
 		},
 	});
 
-	return styles;
+	return {theme, styles};
 }
 

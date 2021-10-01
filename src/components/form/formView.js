@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 import { ConfirmButton } from '../../components/common';
 import { useTheme, WP, HP, StyledText } from '../../theme';
