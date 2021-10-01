@@ -28,11 +28,13 @@ const PlaceOrder = (props) => {
 	const [limitPrice, setLimitPrice] = useState(null);
 	const [stopPrice, setStopPrice] = useState(null);
 
+	const [isLoading, setLoading] = useState(false);
+
 	const [fullView, setFullView] = useState(false)
 
 	const [showAlert, setAlert] = useState(false);
 	
-	const [isError, mutate] = usePlaceOrder();
+	const {isError, placeOrder} = usePlaceOrder();
 	const {addActivity} = useSymbolActivity(symbol);
 
 	const processOrderParams = () => {
@@ -51,7 +53,9 @@ const PlaceOrder = (props) => {
 	}
 
 	const sendOrder = () => {
-		mutate(processOrderParams(), {
+		setLoading(true);
+
+		placeOrder(processOrderParams(), {
 			onSuccess: (response, input) => {
 				addActivity(symbol, response); 
 				navigation.navigate('OrderStatus', {goBack: () => navigation.navigate('StockDetail', {symbol}), order: response});
@@ -89,7 +93,15 @@ const PlaceOrder = (props) => {
 			}
 		}
 
-		return <ConfirmButton swipe={true} {...{title, afterTitle}} onSwipeSuccess={onConfirmOrder} color={action == "BUY" ? theme.green : theme.red}/>
+		return (
+			<ConfirmButton 
+				swipe={true} 
+				{...{title, afterTitle}}
+				buttonContainerStyle={{position: 'absolute', bottom: 10, alignSelf: 'center'}} 
+				onSwipeSuccess={onConfirmOrder} 
+				color={action == "BUY" ? theme.green : theme.red}
+			/>
+		)
 	}
 
 	const InstructionText = () => {
@@ -123,51 +135,29 @@ const PlaceOrder = (props) => {
 			</TouchableOpacity>
 		)
 	}
+	
+	const screenTitle = (action || "").toUpperCase() + " " + symbol;
+	
+	const title = "Swipe to " + screenTitle;
+	const afterTitle = "Placing order to " + screenTitle;
+	
+	return (
+		<>
+		{!!action && 
+			<AppView isLoading={isLoading} title={screenTitle} headerRight={<HeaderRight {...{action}}/>}  appContainerStyle={styles.appContainer} scrollViewStyle={{flexGrow: 1}}>
+				<TickerDisplay {...{symbol}} style={styles.tickerDisplayContainer} priceStyle={styles.priceStyle} priceChangeStyle={styles.priceChangeStyle}/>
+				{!fullView ? 
+					<>
+						<InstructionText />
+						<QuantitySelector {...{isNotional, quantity}}
+							notionalAllowed={fractionable} 
+							onChangeQuantity={(qty) => setQuantity(qty)} 
+							onChangeType={(v) => setIsNotional(v == 'notional')}
+						/>
+					</>
 
-	const PlaceOrderBasic = () => {
-		const orderType = 'market';
-		const screenTitle = (action || "").toUpperCase() + " " + symbol;
-		
-		const title = "Swipe to " + screenTitle;
-		const afterTitle = "Placing order to " + screenTitle;
-		
-		return (
-			<>
-			{!!action && 
-				<AppView title={screenTitle} headerRight={<HeaderRight />} footer={<Footer {...{title, afterTitle}}/>} appContainerStyle={styles.appContainer}>
-					<TickerDisplay {...{symbol}} style={styles.tickerDisplayContainer} priceStyle={styles.priceStyle} priceChangeStyle={styles.priceChangeStyle}/>
-					<InstructionText />
-					<QuantitySelector {...{isNotional, quantity}}
-						notionalAllowed={fractionable} 
-						onChangeQuantity={(qty) => setQuantity(qty)} 
-						onChangeType={(v) => setIsNotional(v == 'notional')}
-					/>
-					<SwitchView />
+					:
 
-					<AlertBox 
-						title={"MESSAGE"} 
-						message={"After market hour message"} 
-						onCancel={() => setAlert(false)} 
-						onConfirm={() => {setAlert(false); sendOrder()}} 
-						show={showAlert} 
-					/> 
-				</AppView>
-			}
-			</>
-		);
-	}
-
-	const PlaceOrderFull = () => {
-		const screenTitle = (action || "").toUpperCase() + " " + symbol;
-		
-		const title = "Swipe to " + screenTitle;
-		const afterTitle = "Placing order to " + screenTitle;
-		
-		return (
-			<>
-			{!!action && 
-				<AppView title={screenTitle} headerRight={<HeaderRight {...{action}}/>} footer={<Footer {...{title, afterTitle}}/>} appContainerStyle={styles.appContainer}>
-					<TickerDisplay {...{symbol}} style={styles.tickerDisplayContainer} priceStyle={styles.priceStyle} priceChangeStyle={styles.priceChangeStyle}/>
 					<View style={styles.orderOptionsContainer}>
 						{orderType == "market" && fractionable 
 							? <NotionalSelector {...{isNotional}} onSelect={(v) => setIsNotional(v.key == 'notional')} />
@@ -188,25 +178,16 @@ const PlaceOrder = (props) => {
 							</>
 						}
 						<TifSelector {...{tif}} onSelect={(v) => setTif(v.key)} />
-						
-					</View>	
+					</View>
+				}
 
-					<SwitchView />
-
-					<AlertBox title="MESSAGE" message="After market hour message" onCancel={() => setAlert(false)} onConfirm={() => {setAlert(false); sendOrder()}} show={showAlert}/> 
-				</AppView>
-			}
-			</>
-		);
-	}
-
-	return (
-		<>
-		{fullView ? 
-			<PlaceOrderFull {...{symbol, action}} /> 
-			: 
-			<PlaceOrderBasic {...{symbol, action}} />
-		}</>
+				<SwitchView />
+				<Footer {...{title, afterTitle}}/>
+				<AlertBox title="MESSAGE" message="After market hour message" onCancel={() => setAlert(false)} onConfirm={() => {setAlert(false); sendOrder()}} show={showAlert}/> 
+			
+			</AppView>
+		}
+		</>
 	)
 
 }

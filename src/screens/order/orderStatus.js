@@ -192,17 +192,19 @@ const OrderStatus = (props) => {
 	const {symbol} = orderDetail ?? {};
 	
 	return (
-		<>
-		{!!orderDetail &&
-			<AppView scroll={false} goBack={goBack || true} headerRight={<HeaderRight {...{symbol}}/>} >
+		
+		<AppView isLoading={!!!orderDetail} scroll={false} goBack={goBack || true} headerRight={<HeaderRight {...{symbol}}/>} >
+			{!!orderDetail &&
+				<> 
 				<OrderStatusTop {...{orderDetail}} />
 				<OrderStatusSummary {...{orderDetail}} />
 				<OrderStatusMore {...{orderDetail}} />
 				<DisplayOutRTH {...{orderDetail}} />
 				<OrderStatusButton {...{orderDetail}} />
-			</AppView>
-		}
-		</>
+				</>
+			}
+		</AppView>
+		
 	);
 }
 

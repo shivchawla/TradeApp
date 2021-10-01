@@ -32,7 +32,7 @@ export function usePlaceOrder() {
     throw new Error("Invalid Order Parameters");
   });
 
-  return [isError, mutate];
+  return {isError, placeOrder: (params, callbackParams) => mutate(params, callbackParams)};
 }
 
 export function useUpdateOrder() {
