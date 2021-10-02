@@ -2,10 +2,10 @@ import React from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import Modal from 'react-native-modal';
 
-import { useTheme, WP, StyledText } from '../../theme';
+import { useTheme, WP, HP, StyledText } from '../../theme';
 import {deviceWidth, deviceHeight} from '../../utils';
 
-export const AlertBox = ({title, message, show = false, onCancel, cancelText='CANCEL', onConfirm, confirmText = 'OK'}) => {
+export const AlertBox = ({title, message, component, show = false, onCancel, cancelText='CANCEL', onConfirm, confirmText = 'OK'}) => {
 	
 	const {theme, styles} = useStyles();
 
@@ -18,6 +18,8 @@ export const AlertBox = ({title, message, show = false, onCancel, cancelText='CA
 			<View style={styles.modalContent}>
 				{title && <StyledText style={styles.title}>{title}</StyledText>}
 				{message && <StyledText style={styles.message}>{message}</StyledText>}
+				{component && component}
+				
 				<View style={styles.buttonContainer}>
 					{onCancel &&
 						<TouchableOpacity onPress={onCancel} style={styles.cancelButton}>
@@ -59,6 +61,7 @@ const useStyles = () => {
 			// paddingLeft: WP(2),
 			// paddingRight: WP(2),
 			// marginBottom: WP(0)
+			marginTop: HP(2)
 		},
 		cancelButton: {
 			padding: WP(1),

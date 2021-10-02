@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { titleCase } from "title-case";
 
 import { AppView, ConfirmButton, ShowJson, Icon, TinyTextButton} from '../../components/common';
+import { DisplayOutRTH } from '../../components/order';
 import { useOrderDetail, getLatestTradingDay, getNextTradingDay } from '../../helper';
 import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
 import { ORDER_MORE_FIELDS, AVAILABLE_TO_CANCEL_ORDER_STATUS, OPEN_ORDER_STATUS } from '../../config';
@@ -103,57 +104,6 @@ const OrderStatusButton = ({orderDetail}) => {
 	)
 }
 
-const DisplayOutRTH = ({orderDetail}) => {
-	const {theme, styles} = useStyles();
-
-	const isOpen = OPEN_ORDER_STATUS.includes(orderDetail?.status);
-	const [isAfterMarket, setAfterMarket] = useState(null);
-	const [nextMarketOpen, setMarketOpen] = useState(null);
-	
-	React.useEffect(() => {
-		const computeAfterMarket = async() => {
-			const latestTradingDay = await getLatestTradingDay();
-			const nextTradingDay = await getNextTradingDay();
-			;
-			const dayClose = toTimeZoneDate(latestTradingDay.date + ' ' + latestTradingDay.close);
-			const dayOpen = toTimeZoneDate(latestTradingDay.date + ' ' + latestTradingDay.open);
-			
-			const orderTime = toTimeZoneDate(orderDetail?.submitted_at || orderDetail?.created_at);
-			const durationClose = durationBetweenDates(dayClose, orderTime);
-			const durationOpen = durationBetweenDates(orderTime, dayOpen);
-
-			if (durationClose > 0 || durationOpen > 0) {
-				setAfterMarket(true);
-			}
-
-			const nextOpen = toTimeZoneDate(nextTradingDay.date + ' ' + nextTradingDay.open, "Do MMM YYYY hh:mm A");
-			
-			if (durationOpen > 0) {
-				setMarketOpen(dayOpen);
-			} else {
-				setMarketOpen(nextOpen);
-			}
-		}
-
-		computeAfterMarket();
-
-	}, []) 
-
-	console.log("isOpen: ", isOpen);
-	console.log("isAfterMarket: ", isAfterMarket);
-
-	return (
-		<>
-		{(isOpen && isAfterMarket) &&
-			<View style={styles.alertMessageContainer}>
-				<StyledText style={styles.alertMessageTitle}>Order is placed after regular market hours.</StyledText>
-				<StyledText style={styles.alertMessage}>It will be submitted at next market open on {nextMarketOpen} local time</StyledText>
-			</View>
-		}
-		</>
-	)	
-}
-
 const HeaderRight = ({symbol}) => {
 	const navigation = useNavigation();
 	const {theme, styles} = useStyles();
@@ -197,7 +147,7 @@ const OrderStatus = (props) => {
 				<OrderStatusTop {...{orderDetail}} />
 				<OrderStatusSummary {...{orderDetail}} />
 				<OrderStatusMore {...{orderDetail}} />
-				<DisplayOutRTH {...{orderDetail}} />
+				<DisplayOutRTH {...{orderDetail}} containerStyle={styles.alertMessageContainer}/>
 				<OrderStatusButton {...{orderDetail}} />
 				</>
 			}
@@ -282,21 +232,6 @@ const useStyles = () => {
 			bottom: HP(6),
 			alignSelf: 'center'
 		},
-		alertMessageContainer: {
-			backgroundColor: theme.grey9,
-			padding: WP(5),
-			// paddingLeft: WP(3),
-			// paddingRight: WP(3),
-			marginTop: WP(10),
-		},
-		alertMessageTitle: {
-			fontSize: WP(4),
-			color: theme.grey2
-		},
-		alertMessage: {
-			marginTop: WP(1),
-			color: theme.grey2
-		},
 		errorText: {
 			color: theme.text,
 			fontSize: WP(4.5)
@@ -304,6 +239,12 @@ const useStyles = () => {
 		errorTitle: {
 			color: theme.error,
 			fontSize: WP(6)
+		},
+		alertMessageContainer: {
+			marginTop: HP(6),
+			backgroundColor: theme.grey9,
+			borderRadius: WP(2),
+			padding: WP(5)
 		}
 
 	});

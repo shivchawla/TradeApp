@@ -4,15 +4,17 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 
 import { AppView, ConfirmButton, AlertBox,
-	HorizontalPickField, HorizontalInputField,} from '../../components/common';
+	HorizontalPickField, HorizontalInputField} from '../../components/common';
 
 import { TickerDisplay } from '../../components/market';
 
 import { QuantitySelector, TifSelector, 
-	NotionalSelector, OrderTypeSelector } from '../../components/order'
+	NotionalSelector, OrderTypeSelector, DisplayOutRTH} from '../../components/order'
 	
-import { usePlaceOrder, useSymbolActivity, isMarketOpen, useStockEODData } from '../../helper';
+import { usePlaceOrder, useSymbolActivity, isMarketOpen, useStockEODData, getLatestTradingDay, getNextTradingDay } from '../../helper';
 import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
+import { toISODate, toTimeZoneDate, durationBetweenDates } from '../../utils';
+
 
 //Preview should be added here
 const PlaceOrder = (props) => {
@@ -130,7 +132,7 @@ const PlaceOrder = (props) => {
 			if (await isMarketOpen()) {
 				return sendOrder();
 			} else {
-				console.log("Will Show Alert Now");
+				// console.log("Will Show Alert Now");
 				setAlert(true);
 			}
 		}
@@ -188,7 +190,7 @@ const PlaceOrder = (props) => {
 	} 
 	
 
-	console.log("Limit price: ", limitPrice);
+	// console.log("Limit price: ", limitPrice);
 
 	return (
 		<AppView isLoading={isLoading || !action} title={screenTitle} headerRight={<HeaderRight {...{action}}/>}  appContainerStyle={styles.appContainer} scrollViewStyle={{flexGrow: 1}}>
@@ -230,7 +232,12 @@ const PlaceOrder = (props) => {
 
 			<SwitchView />
 			<Footer {...{title, afterTitle}}/>
-			<AlertBox title="MESSAGE" message="After market hour message" onCancel={() => setAlert(false)} onConfirm={() => {setAlert(false); sendOrder()}} show={showAlert}/> 
+			<AlertBox 
+				title="MESSAGE" 
+				component={<DisplayOutRTH orderDetail={{created_at: toISODate()}} containerStyle={{marginBottom: HP(2)}}/>}
+				onCancel={() => setAlert(false)} 
+				onConfirm={() => {setAlert(false); sendOrder()}} 
+				show={showAlert}/> 
 		
 		</AppView>
 	)
@@ -301,8 +308,7 @@ const useStyles = () => {
 	
 		bottomPickerTitle: {
 			// textAlign: ''
-		}
-		
+		},
 	});
 
 	return {theme, styles};
