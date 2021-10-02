@@ -39,11 +39,16 @@ const PlaceOrder = (props) => {
 
 	const {snapshot, getSnapshot} = useStockEODData(symbol, {enabled: false});
 
-	React.useEffect(() => {
+	const updateLimitPrice = async(forceUpdate = false) => {
+
+		if (forceUpdate) {
+			await getSnapshot();
+		}
+
 		if (snapshot && orderType != 'market') {
 
 			const price = snapshot?.latestTrade?.price;
-			
+
 			if (action == "BUY") {
 				setLimitPrice((price || 0)*0.99);
 				setStopPrice((price || 0)*0.99)
@@ -52,14 +57,22 @@ const PlaceOrder = (props) => {
 				setStopPrice((price || 0)*1.02)
 			}
 		}
-	}, [snapshot, orderType])
+	}
 
 	React.useEffect(() => {
-		if(action) {
-			getSnapshot();
+		if (orderType != 'market') {
+			updateLimitPrice();
 		}
+	}, [orderType])
+
+	React.useEffect(() => {
+		(async() => {
+			if(action) {
+				updateLimitPrice(true);
+			}
+		})()
 	}, [action])
-	
+
 
 	const processOrderParams = () => {
 		var params = {symbol, side: action.toLowerCase(), type: orderType, time_in_force: tif};

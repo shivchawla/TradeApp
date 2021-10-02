@@ -57,6 +57,10 @@ export const BottomPicker = ({items, selectedValue, onSelect, placeholder = '', 
 	const [show, setShow] = useState(false);
 	const {theme, styles} = useStyles();
 
+	console.log("Items: ", (items.length));
+	console.log(items);
+	console.log("Height: ", items.length*7);
+
 	return (
 		<>
 		{!!selectedValue &&
@@ -75,7 +79,7 @@ export const BottomPicker = ({items, selectedValue, onSelect, placeholder = '', 
 			isVisible={show} 
 			onBackdropPress={() => setShow(false)}
 			style={styles.bottomPickerOptionsModal}>
-			<View style={styles.bottomPickerOptionsContainer}>
+			<View style={[styles.bottomPickerOptionsContainer, {height: HP(items.length*7)}]}>
 				<StyledText style={styles.bottomPickerTitle}>Select Value</StyledText>
 				{
 					items.filter(item => item.key != selectedValue.key).map((item, index) => {
@@ -180,15 +184,23 @@ const useStyles = () => {
 		},
 		pickerItem: {
 			fontSize: WP(6),
+			color: theme.grey,
+			marginBottom: HP(2)
 		},
 		bottomPickerOptionsModal: {
 			justifyContent: 'flex-end',
-			margin: 0
+			margin: 0,
 		},
 		bottomPickerOptionsContainer: {
-			height: HP(25),
 			backgroundColor: theme.grey10,
-			padding: WP(5)
+			padding: WP(5),
+			borderTopLeftRadius: 20,
+			borderTopRightRadius: 20
+		},
+		bottomPickerTitle: {
+			fontSize: WP(5),
+			color: theme.grey5,
+			marginBottom: HP(2)
 		},
 		horizontalPickField: {
 			flexDirection: 'row',
