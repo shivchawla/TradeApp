@@ -13,7 +13,7 @@ import { QuantitySelector, TifSelector,
 	
 import { usePlaceOrder, useSymbolActivity, isMarketOpen, useStockEODData, getLatestTradingDay, getNextTradingDay } from '../../helper';
 import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
-import { toISODate, toTimeZoneDate, durationBetweenDates } from '../../utils';
+import { toISODate, toTimeZoneDate, durationBetweenDates, formatValue } from '../../utils';
 
 
 //Preview should be added here
@@ -52,11 +52,11 @@ const PlaceOrder = (props) => {
 			const price = snapshot?.latestTrade?.price;
 
 			if (action == "BUY") {
-				setLimitPrice((price || 0)*0.99);
-				setStopPrice((price || 0)*0.99)
+				setLimitPrice(formatValue((price || 0)*0.99));
+				setStopPrice(formatValue((price || 0)*0.99));
 			} else {
-				setLimitPrice((price || 0)*1.01);
-				setStopPrice((price || 0)*1.02)
+				setLimitPrice(formatValue((price || 0)*1.01));
+				setStopPrice(formatValue((price || 0)*1.02));
 			}
 		}
 	}
@@ -186,7 +186,9 @@ const PlaceOrder = (props) => {
 	const afterTitle = "Placing order to " + screenTitle;
 
 	const formatPrice = (p) => {
-		return (p || 0).toFixed(2);
+		console.log("Format Price");
+		console.log(p);
+		return formatValue(p);
 	} 
 	
 
@@ -215,15 +217,15 @@ const PlaceOrder = (props) => {
 					<HorizontalInputField label="Quantity" value={quantity} onChange={(v) => setQuantity(v)} textStyle={styles.quantityFullView}/>
 					<OrderTypeSelector {...{orderType}} onSelect={(v) => updateOrderType(v.key)} />
 					{orderType == "limit" && 
-						<HorizontalInputField label="Limit Price" value={formatPrice(limitPrice)} onChange={(v) => setLimitPrice(v)} />
+						<HorizontalInputField label="Limit Price" value={limitPrice} onChange={(v) => setLimitPrice(v)} />
 					}
 					{orderType == "stop" && 
-						<HorizontalInputField label="Stop Price" value={formatPrice(stopPrice)} onChange={(v) => setStopPrice(v)} />
+						<HorizontalInputField label="Stop Price" value={stopPrice} onChange={(v) => setStopPrice(v)} />
 					}
 					{orderType == "stop_limit" && 
 						<>
-						<HorizontalInputField label="Limit Price" value={formatPrice(limitPrice)} onChange={(v) => setLimitPrice(v)} />
-						<HorizontalInputField label="Stop Price" value={formatPrice(stopPrice)} onChange={(v) => setStopPrice(v)} />
+						<HorizontalInputField label="Limit Price" value={limitPrice} onChange={(v) => setLimitPrice(v)} />
+						<HorizontalInputField label="Stop Price" value={stopPrice} onChange={(v) => setStopPrice(v)} />
 						</>
 					}
 					<TifSelector {...{tif}} onSelect={(v) => setTif(v.key)} />

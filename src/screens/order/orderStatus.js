@@ -140,6 +140,8 @@ const OrderStatus = (props) => {
 	const {symbol} = orderDetail ?? {};
 	const {theme, styles} = useStyles();
 
+    const isOpen = OPEN_ORDER_STATUS.includes(orderDetail?.status);
+
 	return (
 		<AppView isLoading={!!!orderDetail && message == ''} scroll={false} goBack={goBack || true} headerRight={symbol && <HeaderRight {...{symbol}}/>} >
 			{!!orderDetail &&
@@ -147,7 +149,7 @@ const OrderStatus = (props) => {
 				<OrderStatusTop {...{orderDetail}} />
 				<OrderStatusSummary {...{orderDetail}} />
 				<OrderStatusMore {...{orderDetail}} />
-				<DisplayOutRTH {...{orderDetail}} containerStyle={styles.alertMessageContainer}/>
+				{isOpen && <DisplayOutRTH {...{orderDetail}} containerStyle={styles.alertMessageContainer}/>}
 				<OrderStatusButton {...{orderDetail}} />
 				</>
 			}
