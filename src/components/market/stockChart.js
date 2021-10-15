@@ -10,7 +10,7 @@ import {NDaysAgoISODate, NWeeksAgoISODate, yearStartISODate,
 	currentISODate, toISODate, durationBetweenDates, getRoundedCurrentTime} from '../../utils'
 
 import {useStockHistoricalData, useStockIntradayData, 
-	useCalendar, isMarketOpen, getLatestTradingDay, } from '../../helper';
+	useCalendar, isMarketOpen, getLatestTradingDay, useStockEODData } from '../../helper';
 
 //Special function to filter 5 day 30Min Bars 
 //Because some bars lie outside the RTH (that needs to be filtered out)
@@ -50,6 +50,7 @@ const StockChartIntraday = ({symbol, ...props}) => {
 	const [intradayBars, setBars] = useState([])
 
 	const {getIntradayBars} = useStockIntradayData(symbol, query, {enabled: false});
+	const {snapshot} = useStockEODData(symbol);
 
 	React.useEffect(() => {
 		const manageBars = async() => {
@@ -134,7 +135,7 @@ const StockChartIntraday = ({symbol, ...props}) => {
 	}, [query])
 
 	return (
-		<LineChart data={intradayBars} {...props} />	
+		<LineChart base={snapshot?.prevDailyBar?.closePrice} data={intradayBars} {...props} />	
 	)
 }
 
