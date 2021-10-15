@@ -49,8 +49,8 @@ const useStyles = () => {
 			width: '100%', 
 			marginBottom: WP(5),
 			justifyContent: 'center',
-			position:'absolute',
-			top:0,
+			// position:'absolute', ???
+			// top:0, ???
 			padding: WP(5),
 			backgroundColor: theme.background,
 

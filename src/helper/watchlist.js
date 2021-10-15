@@ -14,7 +14,7 @@ const validateWatchlist = (watclistParams) => {
 }
 
 export const useAllWatchlist = (params = {}) => {
-	const {isError, error, data: watchlists, refetch} = useQuery(['getAllWatchlist'], () => getAllWatchlist(), params);
+	const {isError, error, data: watchlists, refetch} = useQuery(['getAllWatchlist'], () => getAllWatchlist(params?.populate ?? false), params);
 	if (isError) {
 		console.log("Error fetching all watchlists: ", error);
 	}
@@ -24,7 +24,7 @@ export const useAllWatchlist = (params = {}) => {
 
 
 export const useWatchlist = (watchlist_id, params={}) => {
-	const {isError, error, data: watchlist, refetch} = useQuery(['getAllWatchlist', watchlist_id], () => getWatchlist(watchlist_id), params);
+	const {isError, error, data: watchlist, refetch} = useQuery(['getWatchlist', watchlist_id], () => getWatchlist(watchlist_id), params);
 	if (isError) {
 		console.log("Error fetching all watchlist: ", error);
 	}
