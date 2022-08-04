@@ -13,7 +13,7 @@ const CustomModal = ({isVisible, onHide, navigation}) => {
   const CustomAction = ({iconName, title, description, onPress}) => {
       return (
         <TouchableOpacity style={styles.customAction} onPress={onPress}>
-              <Icon {...{iconName}} hasBackground={true} backgroundStyle={{padding: WP(2), backgroundColor: theme.grey8, borderRadius: 5}}/>
+              <CustomIcon {...{iconName}} hasBackground={true} backgroundStyle={{padding: WP(2), backgroundColor: theme.grey8, borderRadius: 5}}/>
               <View style={styles.customActionTextContainer}>
                 <StyledText style={styles.customActionTitle}>{title}</StyledText>
                 <StyledText style={styles.customActionDescription}>{description}</StyledText>

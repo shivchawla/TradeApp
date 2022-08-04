@@ -3,7 +3,7 @@ import { TextInput, View, StyleSheet, TouchableOpacity } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import get from 'lodash/get';
 
-import { Icon, FullViewModal } from '../../components/common';
+import { CustomIcon, FullViewModal } from '../../components/common';
 import { useTheme, WP, HP, StyledText } from '../../theme';
 import { currentISODate, toISODate, startOfDayLocal } from '../../utils';
 
@@ -38,8 +38,8 @@ export const FormDateField = ({field, placeholder, ...props}) => {
 					{!!displayDate && <StyledText style={styles.labelStyle}>{placeholder}</StyledText>}
 					<StyledText style={[styles.pickerValue, props.valueStyle, {...!!!displayDate && {color: theme.grey7}}]}>{displayDate || placeholder}</StyledText>
 				</View>
-				{show ? <Icon iconName="chevron-up" iconColor={theme.grey3} iconSize={WP(5)} />
-				 : <Icon iconName="chevron-down" iconColor={theme.grey3} iconSize={WP(5)} />
+				{show ? <CustomIcon iconName="chevron-up" iconColor={theme.grey3} iconSize={WP(5)} />
+				 : <CustomIcon iconName="chevron-down" iconColor={theme.grey3} iconSize={WP(5)} />
 				}
 			</TouchableOpacity>
 			{error && <StyledText style={styles.errorText}>{error}</StyledText>}

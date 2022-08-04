@@ -1,11 +1,13 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, Linking, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import Icon from 'react-native-vector-icons/Ionicons';
 import { useTheme, WP, defaultIconSize, StyledText } from '../../theme';
 
-export const Icon = ({iconName, ...props}) => {
+//Create varianle for backward compatibility
+const Ionicons = Icon;
+
+export const CustomIcon = ({iconName, ...props}) => {
 	const {theme, styles} = useStyles();
 
 	return (

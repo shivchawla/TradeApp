@@ -8,7 +8,7 @@ export { LineChart } from './linechart';
 export { HorizontalScrollMenu } from './horizontalScrollMenu';
 export { VerticalField } from './verticalField';
 
-export { Icon, IconButton, IconTextButton, GobackIcon, AccountIcon, SearchIcon, 
+export { CustomIcon, IconButton, IconTextButton, GobackIcon, AccountIcon, SearchIcon, 
 	FavoriteIcon, EditIcon, AddIcon,
 	DeleteIcon, CloseIcon, CalendarIcon, 
 	ShowHideButton, ToggleThemeButton, DownloadIcon, SocialIcon } from './iconButtons';

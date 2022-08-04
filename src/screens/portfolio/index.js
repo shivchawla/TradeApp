@@ -62,6 +62,7 @@ const getPnL = (history) => {
 
 const PortfolioHeader = ({portfolioHistory}) => {
 	const {theme, styles} = useStyles();
+	const navigation = useNavigation();
 
 	return (
 		<>

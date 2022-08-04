@@ -29,7 +29,7 @@ const Language = ({locale, selected, onSelect, ...props}) => {
 		        ></Image>
 		        <StyledText style={styles.flagText}>{t('language:' + code)}</StyledText>
     		</View>
-    		{selected && <Icon iconName="checkmark-outline" />}
+    		{selected && <CustomIcon iconName="checkmark-outline" />}
     	</TouchableOpacity>
 	)
 }

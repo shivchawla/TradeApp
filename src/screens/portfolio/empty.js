@@ -6,7 +6,7 @@ const EmptyScreen = () => {
 	return (
 		<AppView>
 			<SwipeButton 
-				icon={<Icon iconName="arrow-forward" iconColor="white" iconSize={WP(8)}/>}
+				icon={<CustomIcon iconName="arrow-forward" iconColor="white" iconSize={WP(8)}/>}
 				title="Swipe to place order" 
 				swipeTitle="Submitting order"
 				/>	

@@ -1,7 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, View, StyleSheet, Switch } from 'react-native';
 
-import { Icon, InfoText } from '../common';
+import { CustomIcon, InfoText } from '../common';
 
 import {useTheme, WP, HP, StyledText} from '../../theme';
 
@@ -11,12 +11,12 @@ export const HorizontalSetting = ({title, value, onPress, hasIcon = true, leftIc
 	return (
 		<TouchableOpacity activeOpacity={0.8} onPress={onPress} style={styles.horizontalSettingContainer}>
 			<View style={styles.flexContainer}>
-				{leftIcon && <Icon iconName={leftIcon} iconSize={WP(4)} iconColor={theme.grey2}/>}
+				{leftIcon && <CustomIcon iconName={leftIcon} iconSize={WP(4)} iconColor={theme.grey2}/>}
 				<StyledText style={[styles.horizontalSettingTitle, {...leftIcon && {marginLeft: WP(2)}}]}>{title}</StyledText>
 			</View>
 			<View style={styles.flexContainer}>
 				{value && <StyledText style={styles.horizontalSettingValue}>{value}</StyledText> }
-				{hasIcon && <Icon iconName="chevron-forward" iconSize={WP(4)} iconColor={theme.grey2} />}
+				{hasIcon && <CustomIcon iconName="chevron-forward" iconSize={WP(4)} iconColor={theme.grey2} />}
 			</View>
 		</TouchableOpacity>
 	)

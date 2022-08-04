@@ -17,7 +17,7 @@ export const InfoText = ({text, info, ...props}) => {
 	return (
 		<TouchableOpacity onPress={() => setModalVisible(true)} style={styles.container}>
 			<StyledText style={[styles.text, props.textStyle]}>{text}</StyledText>
-			<Icon iconName="information-circle-outline" iconSize={WP(4)}/>
+			<CustomIcon iconName="information-circle-outline" iconSize={WP(4)}/>
 
 			<Modal 
 				isVisible={isVisible} 

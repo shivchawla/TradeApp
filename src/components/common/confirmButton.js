@@ -5,17 +5,17 @@ import { useTheme, StyledText, WP, HP }  from '../../theme';
 
 // import SwipeButton from 'jt-swipe-button';
 
-import { Icon, SwipeButton } from '../../components/common';
+import { CustomIcon, SwipeButton } from '../../components/common';
 
 export const ConfirmButton = ({title, afterTitle, onClick, onSwipeSuccess, swipe = false, cancel = false, disabled = false,  ...props}) => {
 	const {theme, styles} = useStyles();
 
 	const ProceedIcon = ({size = WP(8)} = {}) => {
-		return <Icon iconName={props?.iconName ?? "arrow-forward"} iconSize={size} iconColor="white"/>
+		return <CustomIcon iconName={props?.iconName ?? "arrow-forward"} iconSize={size} iconColor="white"/>
 	}
 
 	const CancelIcon = ({size = WP(5)} = {}) => {
-		return <Icon iconName="close-circle"  iconSize={size} iconColor="white"/>
+		return <CustomIcon iconName="close-circle"  iconSize={size} iconColor="white"/>
 	}
 
 	const ClickableComponent = disabled ? View : TouchableOpacity;

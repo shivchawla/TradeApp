@@ -31,8 +31,8 @@ export const FormCountryField = ({field, placeholder, ...props}) => {
 					{!!selectedValue && <StyledText style={styles.labelStyle}>{placeholder}</StyledText> }	
 					<StyledText style={[styles.pickerValue, props.valueStyle]}>{selectedValue ?? placeholder}</StyledText> 
 				</View>
-				{show ? <Icon iconName="chevron-up" iconColor={theme.grey3} iconSize={WP(5)} />
-				 : <Icon iconName="chevron-down" iconColor={theme.grey3} iconSize={WP(5)} />
+				{show ? <CustomIcon iconName="chevron-up" iconColor={theme.grey3} iconSize={WP(5)} />
+				 : <CustomIcon iconName="chevron-down" iconColor={theme.grey3} iconSize={WP(5)} />
 				}
 			</TouchableOpacity>
 		)

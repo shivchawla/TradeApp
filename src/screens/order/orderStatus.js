@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { titleCase } from "title-case";
 
-import { AppView, ConfirmButton, ShowJson, Icon, TinyTextButton} from '../../components/common';
+import { AppView, ConfirmButton, ShowJson, CustomIcon, TinyTextButton} from '../../components/common';
 import { DisplayOutRTH } from '../../components/order';
 import { useOrderDetail, getLatestTradingDay, getNextTradingDay } from '../../helper';
 import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
@@ -155,7 +155,7 @@ const OrderStatus = (props) => {
 			}
 			{message && 
 				<View style={{flex:1, alignItems: 'center'}}>
-					<Icon iconName="close-circle-outline" iconColor={theme.error} iconSize={WP(15)} />
+					<CustomIcon iconName="close-circle-outline" iconColor={theme.error} iconSize={WP(15)} />
 					<StyledText style={[styles.errorTitle, {marginTop: HP(1)}]}>ERROR</StyledText>
 					<StyledText style={[styles.errorText, {marginTop: HP(30)}]}>{message}</StyledText>
 					<TinyTextButton title="GO BACK" onPress={goBack} buttonStyle={{position: 'absolute', bottom: 20}} buttonTextStyle={{fontSize: WP(5)}}/>
