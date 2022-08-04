@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import {View, StyleSheet, TouchableOpacity, Dimensions, TextInput } from 'react-native';
 
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Ionicons';
+const Ionicons  = Icon;
 import Modal from 'react-native-modal';
 
 import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';

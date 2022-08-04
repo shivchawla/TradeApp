@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import { View, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import DraggableFlatList, {RenderItemParams} from "react-native-draggable-flatlist";
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Ionicons';
+const Ionicons  = Icon;
 import Modal from 'react-native-modal';
 
 import { useFocusEffect } from '@react-navigation/native';

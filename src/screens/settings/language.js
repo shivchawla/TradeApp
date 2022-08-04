@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { TouchableOpacity, StyleSheet, View, Image } from "react-native";
 
-import { AppView, Icon } from '../../components/common';
+import { AppView, CustomIcon} from '../../components/common';
 
 import { useTheme, WP, HP, StyledText } from '../../theme';
 import { locales } from '../../locales';

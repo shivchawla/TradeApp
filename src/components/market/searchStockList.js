@@ -1,7 +1,8 @@
 import React, {useState, useEffect, useMemo} from 'react';
 import {ScrollView, View, StyleSheet, TextInput, FlatList, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Ionicons';
+const Ionicons  = Icon;
 
 import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
 import { ConfirmButton } from '../common';

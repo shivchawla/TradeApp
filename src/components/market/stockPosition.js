@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Ionicons';
+const Ionicons  = Icon;
 import {useFocusEffect} from '@react-navigation/native';
 
 import { VerticalField, PnLText, Collapsible } from '../common';

@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import { SafeAreaView, ScrollView, View, Image,
 	StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, Modal} from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Ionicons';
+const Ionicons  = Icon;
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 import { useNavigation, useFocusEffect, useIsFocused } from '@react-navigation/native';

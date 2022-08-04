@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View, TouchableOpacity, StyleSheet, Share, Platform} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-import { AppView, IconTextButton, ToggleThemeButton, Icon } from '../../components/common';
+import { AppView, IconTextButton, ToggleThemeButton, CustomIcon} from '../../components/common';
 import { HorizontalSetting } from '../../components/settings';
 
 import { useTheme, WP, HP, StyledText } from '../../theme';
