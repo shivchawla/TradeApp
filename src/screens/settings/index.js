@@ -38,7 +38,7 @@ const MiddleSectionSettings = () => {
 
 	return (
 		<View style={styles.middleSettingsContainer}>
-			<HorizontalSetting title="NOTIFICATIONS" leftIcon="notifications-outline" onPress={""} />
+			<HorizontalSetting title="NOTIFICATIONS" leftIcon="notifications-outline" onPress={() => navigation.navigate("Notifications")} />
 			<HorizontalSetting title="USER" leftIcon="person-outline" onPress={() => navigation.navigate("UserSettings")} />
 			<HorizontalSetting title="HELP" leftIcon="help-circle-outline" onPress={() => navigation.navigate("FAQ")} />
 			<HorizontalSetting title="LANGUAGE" leftIcon="language" value={currentLanguage} onPress={() => navigation.navigate("SelectLanguage")} />

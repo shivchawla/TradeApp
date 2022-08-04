@@ -28,7 +28,9 @@ export const formatValue = (value, {upperCase = true, titleCase = false, lowerCa
 			} else {
 				return output.toFixed(2);
 			}
-		} catch (e) { console.log(e); }
+		} catch (e) { 
+			return '--' 
+		}
 
 		if (upperCase) {
 			return value.toUpperCase();

@@ -14,8 +14,9 @@ axios.defaults.headers.common['Authorization'] = `Basic ${Base64.encode(apiKey +
 // const account_id = '9703c0b1-67bf-492d-aeff-95c108299188';
 
 const getAccountId = async() => {
-	const alpacaAccount = await getAlpacaAccount();
-	return alpacaAccount?.account?.id;
+	return '9703c0b1-67bf-492d-aeff-95c108299188';	
+	// const alpacaAccount = await getAlpacaAccount();
+	// return alpacaAccount?.account?.id;
 }
 
 export const getClock = async() => {
@@ -138,9 +139,21 @@ export const getBrokerageAccount = async() => {
 	return await axios.get(`/v1/accounts/${await getAccountId()}`).then(r => r.data)	
 } 
 
-export const getAllWatchlist = async() => {
-	console.log("Get All Watchlists");
-	return await axios.get(`/v1/trading/accounts/${await getAccountId()}/watchlists`).then(r => r.data)	
+export const getAllWatchlist = async(populate = false) => {
+	// console.log("Get All Watchlists");
+	// console.log("Populate: ", populate);
+	
+	const allWatchlists = await axios.get(`/v1/trading/accounts/${await getAccountId()}/watchlists`).then(r => r.data)	
+	if (!populate) {
+		return allWatchlists
+	} else {
+		// console.log("Poulating All watchlists")
+		return await Promise.all(allWatchlists.map(async (watchlist) => {
+		    var wl = await getWatchlist(watchlist.id);
+		    // console.log(wl);
+		    return wl;
+	  	}));
+	}
 }
 
 export const getWatchlist = async(watchlist_id) => {

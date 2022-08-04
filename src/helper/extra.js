@@ -7,9 +7,9 @@ export const useLoading = (loading) => {
 		setLoading(true);
 
 		try{
-			console.log("Calling Function");
+			// console.log("Calling Function");
 			const value = await func();
-			console.log("Ending Function Call: ", keep);
+			// console.log("Ending Function Call: ", keep);
 			if (!keep) {
 				setLoading(false);
 			}
@@ -17,8 +17,8 @@ export const useLoading = (loading) => {
 
 		} catch(err) {
 			setLoading(false);
-			console.log("Caught Error");
-			console.log(err);
+			// console.log("Caught Error");
+			// console.log(err);
 			throw(err);
 		}
 	}

@@ -37,7 +37,17 @@ export const findUserInDb = async(email) => {
 	}
 }
 
-export const updateUserInDb = async(email, userAccount) => {
+const addUserInDb = async(email, data) => {
+	return firestore().collection(USER_DB)
+	.add({
+		email,
+	    ...data
+	})
+}
+
+
+export const updateUserInDb = async(email, data) => {
+
 	try{
 		return firestore().collection(USER_DB)
 		.where('email','==', email)
@@ -46,10 +56,13 @@ export const updateUserInDb = async(email, userAccount) => {
 		.then(querySnapshot => {
 			
 			if (querySnapshot.size < 1) {
+				addUserInDb(email, data)
 				return null;
 			}
 
-		    return querySnapshot.docs[0].update({account: userAccount.account})
+			console.log(data);
+			console.log(querySnapshot.docs[0]);
+		    return querySnapshot.docs[0].ref.update(data)
 		})
 	} catch(err) {
 		console.log("There is an Error");
@@ -58,13 +71,6 @@ export const updateUserInDb = async(email, userAccount) => {
 	}
 }
 
-export const addUserInDb = async(email, userAccount) => {
-	return firestore().collection(USER_DB)
-	.add({
-		email,
-	    account: userAccount.account
-	})
-}
 
 export const addDepositInDb = async(email, deposit) => {
 	await firestore().collection(DEPOSIT_DB)

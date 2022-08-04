@@ -32,7 +32,7 @@ export function usePlaceOrder() {
     throw new Error("Invalid Order Parameters");
   });
 
-  return {isError, placeOrder: (params, callbackParams) => mutate(params, callbackParams)};
+  return {isError, placeOrder: async(params, callbackParams) => mutate(params, callbackParams)};
 }
 
 export function useUpdateOrder() {
@@ -45,24 +45,24 @@ export function useUpdateOrder() {
     throw new Error("Invalid Order Parameters");
   });
 
-  return {isError, updateOrder: (params, callbackParams) => mutate(params, callbackParams)};
+  return {isError, updateOrder: async(params, callbackParams) => mutate(params, callbackParams)};
 }
 
 
 export function useCancelOrder() {
   const {isError, mutate} = useMutation(orderId => cancelOrder(orderId));
-  return {isError, cancelOrder: (orderId, callbackParams) => mutate(orderId, callbackParams)};
+  return {isError, cancelOrder: async(orderId, callbackParams) => mutate(orderId, callbackParams)};
 }
 
 export function useCancelAllOrders() {
   const {isError, mutate} = useMutation(() => cancelAllOrders());
-  return {isError, cancelAllOrders: (callbackParams) => mutate(null, callbackParams)};
+  return {isError, cancelAllOrders: async(callbackParams) => mutate(null, callbackParams)};
 }
 
 
 export function useOrderDetail(orderId, params={}) {
-  const {isError, error, data: orderDetail, refetch} = useQuery(['getOrder', orderId], () => getOrder(orderId), params);
-  return {isError, orderDetail, getOrderDetail: () => refetch().then(r => r.data)};
+  const {isError, error, data: orderDetail, refetch} = useQuery(['getOrder', orderId], async() => getOrder(orderId), params);
+  return {isError, orderDetail, getOrderDetail: async() => refetch().then(r => r.data)};
 }
 
 
@@ -72,7 +72,7 @@ export function useOrders({symbol, status, after, until, limit = 10}, params = {
   const query = {...symbol && {symbols: symbol}, ...status && {status}, ...after && {after}, ...until && {until}, ...limit && {limit}};
   // const queryKey = 'getOrders' + (symbol || '') + (status || 'open');
 
-  const {isError, isLoading, data: orders, refetch} = useQuery(['getOrders', query], () => getOrders(query), params);
+  const {isError, isLoading, data: orders, refetch} = useQuery(['getOrders', query], async() => getOrders(query), params);
 
-  return {isError, isLoading, orders, getOrders: () => refetch().then(r => r.data)};
+  return {isError, isLoading, orders, getOrders: async() => refetch().then(r => r.data)};
 }

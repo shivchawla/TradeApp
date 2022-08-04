@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
-import {removeStorageData} from './store';
+import messaging from '@react-native-firebase/messaging';
+
+import {removeStorageData, addNotification} from './store';
 
 import { setupTradingDays } from './clock';
 
@@ -8,26 +10,37 @@ import { setupTradingDays } from './clock';
 //If above condition is not met, fetch calendar and save current(last) & next trading day
 export const useAppStartup = () => {
 
-		const [isLoading, setLoading] = useState(true);    
-		
-		React.useEffect(() => {
+	const [isLoading, setLoading] = useState(true);    
+	
+	React.useEffect(() => {
 
-			(async() => {
+		const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+  			// Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+	    	console.log('A new FCM message arrived!', remoteMessage);
+	    	addNotification(remoteMessage)
+	    });
 
-				console.log("Setting Up App");
-				
-				console.log("Removing the subscription List - on Mount");
-				removeStorageData('subscriptionList');
+	    messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+		  	console.log('Message handled in the background!', remoteMessage);
+		  	addNotification(remoteMessage)
+		});
 
-				// await signIn('shiv.chawla@yandex.com', 'Password');
-		 
-				await setupTradingDays();
+		(async() => {
 
-				setLoading(false);
+			// console.log("Setting Up App");
+			
+			// console.log("Removing the subscription List - on Mount");
+			removeStorageData('subscriptionList');
 
-			})()
+			await setupTradingDays();
 
-		}, []);
+			setLoading(false);
 
-		return {isLoading}
+		})()
+
+	    return unsubscribe;
+
+	}, []);
+
+	return {isLoading}
 }

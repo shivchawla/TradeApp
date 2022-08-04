@@ -8,8 +8,8 @@ import { currentISODate, toISODate, yearStartISODate, dayStartISODate, dayEndISO
 import { useClock } from './clock';
 
 export function useStockEODData(symbol, params = {}) {
-  const {isLoading, error, data: snapshot, refetch} = useQuery(['stockSnapshot', symbol], () => getSnapshot(symbol), params);
-  return {isLoading, snapshot, getSnapshot:() => refetch().then(r => r.data)};
+  const {isLoading, error, data: snapshot, refetch} = useQuery(['stockSnapshot', symbol], async() => getSnapshot(symbol), params);
+  return {isLoading, snapshot, getSnapshot: async() => refetch().then(r => r.data)};
 }
 
 export function useStockHistoricalData(symbol, {start = yearStartISODate(), end = dayEndISODate(), timeframe = '1Day'} = {}, params = {}) {
@@ -18,7 +18,7 @@ export function useStockHistoricalData(symbol, {start = yearStartISODate(), end 
   // console.log(query);
 
   const {isLoading, error, data: bars, refetch} = useQuery(['stockHistorical', {symbol, start, end, timeframe}], () => getHistoricalData(symbol, query), params)
-  return {bars, getBars: () => refetch().then(r => r.data)};
+  return {bars, getBars: async() => refetch().then(r => r.data)};
 }
 
 export function useStockIntradayData(symbol, {start = dayStartISODate(), end = dayEndISODate(), timeframe = '30Min'} = {}, params = {}) {
@@ -27,7 +27,7 @@ export function useStockIntradayData(symbol, {start = dayStartISODate(), end = d
   // console.log(query);
 
   const {isLoading, error, data: intradayBars, refetch} = useQuery(['stockIntraday', {symbol, start, end, timeframe}], () => getHistoricalData(symbol, query), params);
-  return {intradayBars, getIntradayBars:() => refetch().then(r => r.data)};
+  return {intradayBars, getIntradayBars: async() => refetch().then(r => r.data)};
 }
 
 
@@ -37,9 +37,9 @@ export function useStockList(params={}) {
   console.log(clock);
   const cacheTime = !!clock?.next_open ? duration(clock.next_open) : null;
   const staleTime = cacheTime;
-  const {isError, error, data: stockList, refetch} = useQuery(['stockList', clock?.next_open ?? ''], () => clock ? getStocks() : [], {...params, ...cacheTime && {cacheTime}, ...staleTime && {staleTime}});
+  const {isError, error, data: stockList, refetch} = useQuery(['stockList', clock?.next_open ?? ''], async() => clock ? getStocks() : [], {...params, ...cacheTime && {cacheTime}, ...staleTime && {staleTime}});
 
-  return {isError, stockList, getStockList: () => refetch().then(r => r.data)}; 
+  return {isError, stockList, getStockList: async() => refetch().then(r => r.data)}; 
 }
 
 export function useAssetData(symbol, params = {}) {
@@ -60,18 +60,18 @@ export function useAssetData(symbol, params = {}) {
   // console.log("CacheTime ", cacheTime);
   // console.log("StaleTime ", staleTime);
 
-  const {isLoading, error, data: asset, refetch} = useQuery(['assetData', symbol], () => getAssetData(symbol), params); 
+  const {isLoading, error, data: asset, refetch} = useQuery(['assetData', symbol], async() => getAssetData(symbol), params); 
   // {...cacheTime && {cacheTime}, ...staleTime && {staleTime}});
   
-  return {asset, getAsset: () => refetch().then(r => r.data)};
+  return {asset, getAsset: async() => refetch().then(r => r.data)};
 }
 
 export function useStockNews(symbol, params={}) {
-  const {isLoading, isError, error, data: news, refetch} = useQuery(['stockNews', symbol], () => getSeekingAlphaNews(symbol), params); 
+  const {isLoading, isError, error, data: news, refetch} = useQuery(['stockNews', symbol], async() => getSeekingAlphaNews(symbol), params); 
   if(isError) {
     console.log("[ERROR] UseStockNews");
     console.log(error);
   }
 
-  return {news, getNews: () => refetch().then(r => r.data)};
+  return {news, getNews: async() => refetch().then(r => r.data)};
 }

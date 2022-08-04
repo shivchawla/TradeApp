@@ -31,20 +31,20 @@ const Tabs = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 const homeTabs = () => {
-		const {theme} = useTheme();
-		const tabBarOptions = {
-			showLabel: false, 
-			activeTintColor:theme.tabTint, 
-			style: {
-				backgroundColor: theme.tabBackground,
-			}};
+	const {theme} = useTheme();
+	const tabBarOptions = {
+		showLabel: false, 
+		activeTintColor:theme.tabTint, 
+		style: {
+			backgroundColor: theme.tabBackground,
+		}};
 
-		return (
-		  <Tabs.Navigator {...{tabBarOptions}} tabBar={props => <CustomTabBar {...props} />}>
-		    <Tabs.Screen name="Portfolio" component={Portfolio} />
-		  	<Tabs.Screen name="Market" component={Market} />
-		  </Tabs.Navigator>
-		)
+	return (
+	  <Tabs.Navigator {...{tabBarOptions}} tabBar={props => <CustomTabBar {...props} />}>
+	    <Tabs.Screen name="Portfolio" component={Portfolio} />
+	  	<Tabs.Screen name="Market" component={Market} />
+	  </Tabs.Navigator>
+	)
 }
 
 const TradingStack = () => {

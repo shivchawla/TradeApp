@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 
 import NetInfo from "@react-native-community/netinfo";
-import PDFView from 'react-native-view-pdf/lib/index';
+// import PDFView from 'react-native-view-pdf/lib/index';
 
 import { ConfirmButton, Checkbox } from '../../components/common';
 
@@ -30,7 +30,7 @@ export const Agreement = React.forwardRef(({field, uri, title, onAgree, ...props
 		<>	
 
 			<View style={{flex: 1 }}>
-				<PDFView
+				<View
 					fadeInDuration={250.0}
 					style={{ flex: 0.9 }}
 					resource={uri}

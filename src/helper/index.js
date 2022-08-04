@@ -57,3 +57,5 @@ export { useLoading } from './extra';
 
 export { useFunds } from './funds';
 export { useStorage } from './storage';
+export { useNotifications } from './notifications';
+

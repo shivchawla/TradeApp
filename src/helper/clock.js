@@ -22,7 +22,7 @@ export function useCalendar({start = NDaysAgoISODate(5, "YYYY-MM-DD"), end = cur
 
 	const query = {...start && {start}, ...end && {end}};
 	// console.log(query);
-	const {isError, data: calendar, refetch} = useQuery(['calendar', query], () => getCalendar(query), {refetchOnMount: false, ...params});
+	const {isError, data: calendar, refetch} = useQuery(['calendar', query], async() => getCalendar(query), {refetchOnMount: false, ...params});
 	return {calendar, getCalendar: () => refetch().then(r => r.data)}; 
 }
 

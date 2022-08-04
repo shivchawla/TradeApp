@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import { AppState } from 'react-native';
 
 import auth from '@react-native-firebase/auth';
+import messaging from '@react-native-firebase/messaging';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {useQuery} from 'react-query';
 import queryString from 'query-string';
@@ -9,7 +10,7 @@ import queryString from 'query-string';
 import {getCurrentUser, updateCurrentUser, 
 	getAlpacaAccount, updateAlpacaAccount, updateAuthMetaData, getAuthMetaData} from './store';
 
-import { currentISODate, toISODate } from '../utils';
+import { currentISODate, toISODate, duration } from '../utils';
 
 import {findUserInDb, addUserInDb, updateUserInDb,
 	signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut as firebaseSignOut, 
@@ -37,12 +38,12 @@ const useAuthHelper = () => {
 
 		const handleDynamicLink = async(link) => {
 			// Handle dynamic link inside your own application
-		    console.log("Received Dynamic Link: ", link)
+		    // console.log("Received Dynamic Link: ", link)
 		    if (link?.url) {
 		    	const parsed = queryString.parse(link?.url);
 		    	const mode = parsed?.mode;
 		    	const oobCode = parsed?.oobCode;
-		    	console.log("Code: ", oobCode);
+		    	// console.log("Code: ", oobCode);
 
 		    	if(mode == "verifyEmail") {
 		    		//Apply oob code
@@ -92,17 +93,17 @@ const useAuthHelper = () => {
 			} else {
 				try{
 					//If Email is not verified, refetch from aut
-					console.log("Check the user from auth - After reload");
+					// console.log("Check the user from auth - After reload");
 					await reloadUser();
 					let updatedUser = await getUser();
 
-					console.log("Updated User");
-					console.log(updatedUser);
+					// console.log("Updated User");
+					// console.log(updatedUser);
 
 					onNewCurrentUser({...updatedUser._user});
 
 				} catch(err) {
-					console.log(err);
+					// console.log(err);
 					setLoadingAuth(false);
 				}
 			}
@@ -118,10 +119,10 @@ const useAuthHelper = () => {
 	React.useEffect(() => {
 		(async() => {
 			if (currentUser) {
-				console.log("Current User Change Effect");
-				console.log(currentUser);
+				// console.log("Current User Change Effect");
+				// console.log(currentUser);
 				await updateCurrentUser(currentUser);
-
+				
 				//Check Auth Meta as well to make user Account is fetched
 
 				if (currentUser?.emailVerified && 
@@ -129,8 +130,15 @@ const useAuthHelper = () => {
 					currentUser?.authMeta?.phoneAuth && 
 					!!!currentUser?.authMeta?.pending) {
 					
-					console.log(currentUser?.email);
-					const account = await getUserFromDb(currentUser?.email);
+					// console.log(currentUser?.email);
+					const userDb = await getUserFromDb(currentUser?.email);
+					
+					if (userDb) {
+						//check for validity of FCM token
+						await checkFCMToken(userDb);
+					}
+					
+					const account = userDb?.account;
 					// console.log("Found Account");
 					// console.log(account);
 					// console.log("Setting User Account");
@@ -161,22 +169,43 @@ const useAuthHelper = () => {
 
 	}, [userAccount])
 
+	const checkFCMToken = async(userDb) => {
+		const token = userDb?.fcmInfo?.token;
+		const lastUpdated = userDb?.fcmInfo?.lastUpdated;
+
+		let needsUpdate = true;
+		if(token && lastUpdated) {
+			const timePassed = duration(lastUpdated);
+			if (timePassed < 30*24*60*60*1000) {
+				needsUpdate = false;
+			}
+		} 
+		
+		console.log("Is Token update needed: ", needsUpdate);
+		if (needsUpdate) {
+			//Add FCM token to 
+			const fcmToken = await messaging().getToken();
+			console.log(currentUser?.email);
+			await updateUserInDb(currentUser?.email, {fcmInfo: {token: fcmToken, lastUpdated: new Date()}});
+		}
+	}
+
 	const getUserFromDb = async (email) => {
 		// console.log("Getting User");
 		return await findUserInDb(email)
 	};
 
 	const onNewCurrentUser = async(user) => {
-		console.log("onNewCurrentUser");
-		console.log(user);
+		// console.log("onNewCurrentUser");
+		// console.log(user);
 
 		if (user) {
 			const authMeta = await getAuthMetaData();
-			console.log("Auth Meta Data");
-			console.log(authMeta);
+			// console.log("Auth Meta Data");
+			// console.log(authMeta);
 
-			console.log("User Argument");
-			console.log(user);
+			// console.log("User Argument");
+			// console.log(user);
 
 			// console.log("Appended User")
 			// console.log({...user._user})
@@ -190,9 +219,9 @@ const useAuthHelper = () => {
 	const signInEmail = async (email, password) => {
 		setLoadingAuth(true);
 
-		console.log("signInEmail")
-		console.log("Email: ", email);
-		console.log("Password: ", password);
+		// console.log("signInEmail")
+		// console.log("Email: ", email);
+		// console.log("Password: ", password);
 
 		const userCredential = await signInWithEmailAndPassword(email, password);
 		// console.log("Signed In");
@@ -203,7 +232,7 @@ const useAuthHelper = () => {
 
 	const linkEmail = async ({email, password}, {sendEmail = true} = {}) => {
 
-		console.log("Linking Email")
+		// console.log("Linking Email")
 		setLoadingAuth(true);
 
 		// console.log("liningEmailToUser")
@@ -275,8 +304,8 @@ const useAuthHelper = () => {
 	const signUpEmail = async ({email, password}, {sendEmail=true, linkTo= null}) => {
 		setLoadingAuth(true);
 		
-		console.log("Email: ", email);
-		console.log("Password: ", password);
+		// console.log("Email: ", email);
+		// console.log("Password: ", password);
 		let userCredential = await createUserWithEmailAndPassword(email, password);
 
     	if(sendEmail) {
@@ -341,18 +370,12 @@ const useAuthHelper = () => {
 	} 
 
 	const updateUserAccount = async(userAccount) => {
-		const account = await getAlpacaAccount();
-		if (account) {
-			await updateUserInDb(currentUser?.email, userAccount);	
-		} else {
-			await addUserInDb(currentUser?.email, userAccount);	
-		}
-
+		await updateUserInDb(currentUser?.email, {account: userAccount.account});	
 		setUserAccount(userAccount);
 	}
 
 	const sendSignInLink = async(email) => {
-		console.log("Sending link auth to: ", email);
+		// console.log("Sending link auth to: ", email);
 		return await sendSignInLinkToEmail(email, {
 			url:'https://fincript-dev.firebaseapp.com',	
 			handleCodeInApp: true,

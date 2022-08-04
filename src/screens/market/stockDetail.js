@@ -70,7 +70,7 @@ const WatchlistsModal = ({watchlists, symbol, updateLists}) => {
 	
 	return (
 		<>
-		<View style={{padding: WP(5), height: '100%', flex: 1, borderWidth:1, borderColor: 'white'}}>
+		<View style={{padding: WP(5), flex: 1}}>
 			{(watchlists || []).map((item, index) => {
 				return (
 					<View key={index} style={{flexDirection: 'row', width: '100%', marginBottom: HP(3)}}>

@@ -4,7 +4,7 @@ import { SafeAreaView, ScrollView, View, Image,
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { useNavigation, useFocusEffect, useIsFocused } from '@react-navigation/native';
 import { BarIndicator } from 'react-native-indicators';
 
 import { StyledText, useTheme, WP, defaultIconSize, HP } from '../../theme';
@@ -36,7 +36,8 @@ export const AppView = ({scroll = true, footer, hasHeader = true, header, isLoad
 	const {theme, styles} = useStyles();
 
 	const [showModal, setShowModal] = useState(isLoading);
-
+	const scrollRef = React.useRef();
+	
 	//This sets showModal based on prop change 
 	React.useEffect(() => {
 		setShowModal(isLoading);
@@ -53,6 +54,7 @@ export const AppView = ({scroll = true, footer, hasHeader = true, header, isLoad
 		}, [])
 	)
 
+	
 	//Check for ZERO padding
 	const hasPadding = (props?.padding ?? '') !== '';
 	
@@ -67,7 +69,7 @@ export const AppView = ({scroll = true, footer, hasHeader = true, header, isLoad
 			{scroll ? 
 				<View style={styles.scrollAppContainer}>
 					{hasHeader || header ? header ? header : <AppHeader {...props}/> : <></>}
-					<KeyboardAwareScrollView enableOnAndroid={true} contentContainerStyle={[styles.scrollView, props.scrollViewStyle, {...hasPadding && {paddingLeft: WP(props.padding), paddingRight: WP(props.padding)}}]} showsVerticalScrollIndicator={false}>
+					<KeyboardAwareScrollView innerRef={(r) => scrollRef.current = r} enableOnAndroid={true} contentContainerStyle={[styles.scrollView, props.scrollViewStyle, {...hasPadding && {paddingLeft: WP(props.padding), paddingRight: WP(props.padding)}}]} showsVerticalScrollIndicator={false}>
 						{props.children}
 					</KeyboardAwareScrollView>
 					{footer && <View style={[styles.footerContainer, props.footerContainerStyle]}>{footer}</View>}

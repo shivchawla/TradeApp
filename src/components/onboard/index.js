@@ -26,7 +26,7 @@ export const AnyForm = React.forwardRef(({type, initialData, agreements, onSubmi
 		{type == "disclosure" && <DisclosureForm ref={ref} initialValues={initialData?.[type] || {}} onSubmit={onSubmit}/>}	
 		{type == "employment" && <EmploymentForm ref={ref} initialValues={initialData?.[type] || {}} onSubmit={onSubmit}/>}	
 		{type == "trustedContact" && <TrustedContactForm ref={ref} initialValues={initialData?.[type] || {}} onSubmit={onSubmit}/>}	
-		{isAgreement && <Agreement uri={agreements[type]} ref={ref} onAgree={onSubmit}/>}	
+		{/* {isAgreement && <Agreement uri={agreements[type]} ref={ref} onAgree={onSubmit}/>}	 */}
 		</>
 	)
 })

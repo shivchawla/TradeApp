@@ -93,29 +93,29 @@ const fetchSession = async(inquiryId) => {
 }
 
 export const usePersonaInquiries = (refId, params={}) => {
-	const {isLoading, data: inquiries, refetch} = useQuery(['fetchInquiries', refId], () => fetchInquiries(refId), params);
-	const getInquiries = () => refetch().then(r => r.data);
+	const {isLoading, data: inquiries, refetch} = useQuery(['fetchInquiries', refId], async() => fetchInquiries(refId), params);
+	const getInquiries = async() => refetch().then(r => r.data);
 
 	return {isLoading, inquiries, getInquiries};
 }
 
 export const usePersonaInquiry = (inqId, params={}) => {
-	const {isLoading, data: inquiry, refetch} = useQuery(['fetchInquiry', inqId], () => fetchInquiry(inqId), params);
-	const getInquiry = () => refetch().then(r => r.data);
+	const {isLoading, data: inquiry, refetch} = useQuery(['fetchInquiry', inqId], async() => fetchInquiry(inqId), params);
+	const getInquiry = async() => refetch().then(r => r.data);
 
 	return {isLoading, inquiry, getInquiry};
 }
 
 export const usePersonaDocument = (docId, params={}) => {
-	const {isLoading, data: document, refetch} = useQuery(['fetchDocument', docId], () => fetchDocument(docId), params);
+	const {isLoading, data: document, refetch} = useQuery(['fetchDocument', docId], async() => fetchDocument(docId), params);
 	const getDocument = () => refetch().then(r => r.data);
 
 	return {isLoading, document, getDocument};
 }
 
 export const usePersonaSession = (inquiryId, params={}) => {
-	const {isLoading, data: session, refetch} = useQuery(['fetchSession', inquiryId], () => fetchSession(inquiryId), params);
-	const getSession = () => refetch().then(r => r.data);
+	const {isLoading, data: session, refetch} = useQuery(['fetchSession', inquiryId], async() => fetchSession(inquiryId), params);
+	const getSession = async() => refetch().then(r => r.data);
 
 	return {isLoading, session, getSession};
 }

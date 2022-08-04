@@ -51,34 +51,97 @@ const CancelOrderButton = ({onPress}) => {
 	)
 }
 
+const getLatestEquity = (history) => {
+	return (history?.equity || []).slice(-1)[0];
+}
+
+const getPnL = (history) => {
+	return (history?.profit_loss || []).slice(-1)[0];
+}
+
+
+const PortfolioHeader = ({portfolioHistory}) => {
+	const {theme, styles} = useStyles();
+
+	return (
+		<>
+		<AppHeader headerLeft={<AccountIcon />} headerRight={<SearchIcon onPress={() => navigation.navigate("SearchStock")} iconColor={theme.greyIcon}/>} title="Portfolio" goBack={false} />
+		<View style={styles.portfolioHeader}>
+			<VerticalField 
+				label="Total Balance" 
+				labelTop={false} 
+				value={getLatestEquity(portfolioHistory)} 
+				valuePrefix='$ '
+				valueStyle={{fontSize: WP(6), fontWeight: '700'}}
+			/>
+			<View>
+				<HorizontalField
+					label="Chg. (1M)"
+					value={formatValue(getPnL(portfolioHistory))}
+					isPnL={true}
+				/>
+				<HorizontalField
+					label="Chg. (1D)"
+					value={formatValue(getPnL(portfolioHistory))}
+					isPnL={true}
+				/> 
+			</View>
+		</View>
+		</>
+	)
+}
+
+const AccountSummary = ({tradingAccount}) => {
+	const {theme, styles} = useStyles();
+
+	return (
+		<View style={styles.accountSummaryContainer}>
+		{tradingAccount && Object.keys(ACCOUNT_SUMMARY_FIELDS).map((key, index) => {
+			return (
+				<VerticalField 
+					{...{key}}  
+					label={ACCOUNT_SUMMARY_FIELDS[key]} 
+					value={tradingAccount[key]}
+					containerStyle={styles.accountSummaryField} 
+				/>
+			) 
+		})
+		}		
+		</View>
+	)	
+}
+
 const Portfolio = (props) => {
 	const navigation = useNavigation();
 	const {theme, styles} = useStyles();
 
-	const {portfolio, getPortfolio} = useStockPortfolioData(); 
-	const {tradingAccount, getTradingAccount} = useTradingAccountData();
-	const {portfolioHistory, getPortfolioHistory} = usePortfolioHistory();
-	const {orders, getOrders} = useOrders({status: 'all', limit: 10});
-	const {accountActivity, getAccountActivity } = useAccountActivity({activity_type: 'DIV', limit: 10});
+	const {portfolio, getPortfolio} = useStockPortfolioData({enabled: false}); 
+	const {tradingAccount, getTradingAccount} = useTradingAccountData({enabled: false});
+	const {portfolioHistory, getPortfolioHistory} = usePortfolioHistory({enabled: false});
+	const {orders, getOrders} = useOrders({status: 'all', limit: 10}, {enabled: false});
+	const {accountActivity, getAccountActivity } = useAccountActivity({activity_type: 'DIV', limit: 10}, {enabled: false});
 	
 	const {cancelAllOrders} = useCancelAllOrders();
 	const [relevantActivity, setActivity] = useState(null);
 
 	React.useEffect(() => {
-		if (!!accountActivity && !!orders) {
-			var allExceptNewOrders = orders.filter(item => item.status != "new").map(item => {return {...item, activity_type: 'ORDER'}});
-			setActivity([...accountActivity, ...allExceptNewOrders].slice(0, 10));
-		}
+		(async() => {
+			if (!!accountActivity && !!orders) {
+				var allExceptNewOrders = orders.filter(item => item.status != "new").map(item => {return {...item, activity_type: 'ORDER'}});
+				setActivity([...accountActivity, ...allExceptNewOrders].slice(0, 10));
+			}
+		})()
 	}, [accountActivity, orders]);
-
 
 	useFocusEffect(
 		React.useCallback(() => {
-			getPortfolio();
-			getTradingAccount();
-			getPortfolioHistory();
-			getOrders();
-			getAccountActivity();
+			(() => {
+				getPortfolio();
+				getTradingAccount();
+				getPortfolioHistory();
+				getOrders();
+				getAccountActivity();
+			})();
 		}, [])
 	);
 
@@ -89,72 +152,12 @@ const Portfolio = (props) => {
 		})
 	}
 
-	const getLatestEquity = (history) => {
-		return (history?.equity || []).slice(-1)[0];
-	}
-
-	const getPnL = (history) => {
-		return (history?.profit_loss || []).slice(-1)[0];
-	}
-
-
-	const PortfolioHeader = () => {
-		return (
-			<>
-			<AppHeader headerLeft={<AccountIcon />} headerRight={<SearchIcon onPress={() => navigation.navigate("SearchStock")} iconColor={theme.greyIcon}/>} title="Portfolio" goBack={false} />
-			<View style={styles.portfolioHeader}>
-				<VerticalField 
-					label="Total Balance" 
-					labelTop={false} 
-					value={getLatestEquity(portfolioHistory)} 
-					valuePrefix='$ '
-					valueStyle={{fontSize: WP(6), fontWeight: '700'}}
-				/>
-				<View>
-					<HorizontalField
-						label="Chg. (1M)"
-						value={formatValue(getPnL(portfolioHistory))}
-						isPnL={true}
-					/>
-					<HorizontalField
-						label="Chg. (1D)"
-						value={formatValue(getPnL(portfolioHistory))}
-						isPnL={true}
-					/> 
-				</View>
-			</View>
-			</>
-		)
-	}
-
-	const AccountSummary = () => {
-		return (
-			<View style={styles.accountSummaryContainer}>
-			{tradingAccount && Object.keys(ACCOUNT_SUMMARY_FIELDS).map((key, index) => {
-				return (
-					<VerticalField 
-						{...{key}}  
-						label={ACCOUNT_SUMMARY_FIELDS[key]} 
-						value={tradingAccount[key]}
-						containerStyle={styles.accountSummaryField} 
-					/>
-				) 
-			})
-			}		
-			</View>
-		)	
-	}
-
-
 	const loading = !!!portfolioHistory;
-
-	console.log("Portfolio Screen");
-	console.log("Portfolio Loading: ", loading);
 
 	const pendingOrders = orders && orders.filter(item => item.status == "new");
 
 	return (
-		<AppView isLoading={loading} header={<PortfolioHeader />} title="Portfolio">
+		<AppView isLoading={loading} header={<PortfolioHeader {...{portfolioHistory}}/>} title="Portfolio">
 			<Collapsible 
 				title="PERFORMANCE" 
 				content={<PnLGraph />}  
@@ -164,7 +167,7 @@ const Portfolio = (props) => {
 			{tradingAccount && 
 				<Collapsible 
 					title="ACCOUNT SUMMARY" 
-					content={<AccountSummary />} 
+					content={<AccountSummary {...{tradingAccount}} />} 
 					containerStyle={{}}
 				/>
 			}

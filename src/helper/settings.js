@@ -8,11 +8,11 @@ export const useTradeConfig = (params = {}) => {
 		updateTradeConfig(updateParams)
 	})
 
-	const {isError, data: tradeConfig, refetch} = useQuery('tradeConfig', () => getTradeConfig(), params)
+	const {isError, data: tradeConfig, refetch} = useQuery('tradeConfig', async() => getTradeConfig(), params)
 
 	return {
 		tradeConfig, 
-		getTradeConfig: () => refetch().then(r => r.data),
-		updateTradeConfig: (params, callbackParams) => mutate(params, callbackParams)
+		getTradeConfig: async() => refetch().then(r => r.data),
+		updateTradeConfig: async(params, callbackParams) => mutate(params, callbackParams)
 	}
 } 

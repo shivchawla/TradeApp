@@ -12,23 +12,23 @@ export const useDocuments = ({start = yearStartISODate("YYYY-MM-DD"), end = curr
 	console.log({start, end, type})
 	
 	const queryKey = type ? ['useDocuments', start, end] : ['useDocuments', start, end, type]; 
-	const {isLoading, isError, error, data: documents, refetch} = useQuery(queryKey, () => getDocuments({start, end, type}), params)
+	const {isLoading, isError, error, data: documents, refetch} = useQuery(queryKey, async() => getDocuments({start, end, type}), params)
 
 	if (isError) {
 		console.log("Error [useDocuments]: ", error);
 	}
 
-	return {documents, getDocuments: () => refetch().then(r => r.data)}
+	return {documents, getDocuments: async() => refetch().then(r => r.data)}
 
 }
 
 
 export const useDownloadDocument = ({id, fileName}, params = {}) => {
-	const {isLoading, error, isError, data: document, refetch} = useQuery(['downloadDocument', id], () => getDocument(id, fileName), params)
+	const {isLoading, error, isError, data: document, refetch} = useQuery(['downloadDocument', id], async() => getDocument(id, fileName), params)
 	if (isError) {
 		console.log("Error [useDownloadDocument]: ", error);
 	}
 
-	return {document, downloadDocument: () => refetch().then(r => {console.log(r.data); return r.data})};
+	return {document, downloadDocument: async() => refetch().then(r => {console.log(r.data); return r.data})};
 }
 

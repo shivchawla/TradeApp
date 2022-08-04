@@ -81,7 +81,6 @@ export const LightTheme = {
     red:'red',
 }
 
-
 const ThemeContext = React.createContext(null);
 	
 export const ThemeProvider = ({children}) => {
@@ -90,22 +89,23 @@ export const ThemeProvider = ({children}) => {
     // console.log("systemScheme:", systemScheme);
 
     // const [theme, setTheme] = useState(systemScheme == 'dark' ? DarkTheme : LightTheme);
-
     //In v1 of app, keep only dark mode
     const [theme, setTheme] = useState(DarkTheme);
     
     React.useEffect(() => {
-        const manageTheme = async() => {
+        (async() => {
             let scheme = await getCurrentTheme();
             if (!scheme) {
                 await setCurrentTheme(systemScheme);
                 scheme = systemScheme;  
             }
 
-            setTheme(scheme == 'dark' ? DarkTheme : LightTheme)
-        }
+            // setTheme(scheme == 'dark' ? DarkTheme : LightTheme)
 
-        manageTheme(); 
+            //In v1 of app, keep only dark mode
+            setTheme(DarkTheme);
+
+        })()
     }, []);
 
     const updateTheme = async(scheme) => {

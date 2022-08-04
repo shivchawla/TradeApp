@@ -14,22 +14,22 @@ const validateWatchlist = (watclistParams) => {
 }
 
 export const useAllWatchlist = (params = {}) => {
-	const {isError, error, data: watchlists, refetch} = useQuery(['getAllWatchlist'], () => getAllWatchlist(params?.populate ?? false), params);
+	const {isError, error, data: watchlists, refetch} = useQuery(['getAllWatchlist'], async() => getAllWatchlist(params?.populate ?? false), params);
 	if (isError) {
 		console.log("Error fetching all watchlists: ", error);
 	}
 
-	return {isError, watchlists, getAllWatchlist: () => refetch().then(r => r.data)}
+	return {isError, watchlists, getAllWatchlist: async() => refetch().then(r => r.data)}
 }
 
 
 export const useWatchlist = (watchlist_id, params={}) => {
-	const {isError, error, data: watchlist, refetch} = useQuery(['getWatchlist', watchlist_id], () => getWatchlist(watchlist_id), params);
+	const {isError, error, data: watchlist, refetch} = useQuery(['getWatchlist', watchlist_id], async() => getWatchlist(watchlist_id), params);
 	if (isError) {
 		console.log("Error fetching all watchlist: ", error);
 	}
 
-	return {isError, watchlist, getWatchlist: () => refetch().then(r => r.data)}
+	return {isError, watchlist, getWatchlist: async() => refetch().then(r => r.data)}
 }
 
 
@@ -42,18 +42,18 @@ export const useCreateWatchlist = () => {
     	throw new Error("Invalid Watchlist Parameters");
 	});
 
-  return {isError, createWatchlist: (params, callbackParams) => mutate(params, callbackParams)};
+  return {isError, createWatchlist: async(params, callbackParams) => mutate(params, callbackParams)};
 
 }
 
 export const useDeleteWatchlist = () => {
 	const {isError, mutate} = useMutation(watchlistId => deleteWatchlist(watchlistId))
-	return {isError, deleteWatchlist: (params, callbackParams) => mutate(params, callbackParams)};
+	return {isError, deleteWatchlist: async(params, callbackParams) => mutate(params, callbackParams)};
 }
 
 
 export const useUpdateWatchlist = () => {
 	const {isError, mutate} = useMutation(({watchlistId, watchlistParams})  => updateWatchlist(watchlistId, watchlistParams))
-	return {isError, updateWatchlist: (params, callbackParams) => mutate(params, callbackParams)};
+	return {isError, updateWatchlist: async(params, callbackParams) => mutate(params, callbackParams)};
 }
 

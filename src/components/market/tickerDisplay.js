@@ -28,23 +28,23 @@ export const TickerDisplay = ({symbol, ...props}) => {
 
 	useFocusEffect(
 		React.useCallback(() => {
-			console.log("Subscribe on Focus: ", symbol);
-			getClock().then(clock => {if(clock?.is_open) {subscribe(symbol)}});
-			// subscribe(symbol);
+			(async() => {
+				await getClock().then(clock => {if(clock?.is_open) {subscribe(symbol)}});
+			})()
 			
 			//On unFocus
 			return () => {		
-				console.log("Unsubscribe on unfocus");
+				// console.log("Unsubscribe on unfocus");
 				unsubscribe(symbol);
 			}
 
 		}, [])
 	);
 
-	React.useEffect(() => {
-		console.log("Rt Data changed: ", symbol);
-		console.log(rtData);
-	}, [rtData])
+	// React.useEffect(() => {
+	// 	console.log("Rt Data changed: ", symbol);
+	// 	console.log(rtData);
+	// }, [rtData])
 
 	// console.log("RT DATA");
 	// console.log(rtData);
