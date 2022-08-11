@@ -1,28 +1,27 @@
-import React, {useState, useRef} from 'react';
-import { View, Text, StyleSheet, Pressable, TextInput } from 'react-native';
+import React, {useState} from 'react';
+import { View, StyleSheet} from 'react-native';
+import { useTranslation } from 'react-i18next';
 
-import { AppView, ConfirmButton, TinyTextButton, AppIcon} from '../../components/common';
+import { AppView, TinyTextButton, AppIcon} from '../../components/common';
 import { ForgotPasswordForm } from '../../components/auth';
-import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
+import { useTheme, StyledText, WP, HP }  from '../../theme';
 import { useAuth } from '../../helper';
 
 //Add logic to save auth state to temp storage
 const ForgotPassword = (props) => {
 
-	const {theme, styles} = useStyles();
-
+	const {styles} = useStyles();
 	const [error , setError] = useState(null);
-
 	const {navigation} = props;
-
-	const {currentUser, userAccount, sendSignInLink} = useAuth();
+	const {t} = useTranslation();
+	const {sendSignInLink} = useAuth();
 	
 	const onForgotPassword = async ({email}) => {
 		console.log("onForgotPassword Pressed")
 		try {
 			await sendSignInLink(email);
 			navigation.navigate('AuthInfo', {
-				message: `We have sent an email to ${email}. Please click on the link in the email to signIn and reset your password`
+				message: `${t('auth:forgotPwd.instructionOne')} ${email}. ${t('auth:forgotPwd.instructionTwo')}`
 			});
 
 		} catch(error) {
@@ -32,23 +31,37 @@ const ForgotPassword = (props) => {
 	}
 		
 	return (
-		<AppView goBack={false} scroll={false} staticViewStyle={styles.screenContentStyle}>
-			<AppIcon logoContainerStyle={styles.logoContainer} logoStyle={{height: 70}} titleStyle={styles.title}/>
-			<StyledText style={styles.screenTitle}>FORGOT PASSWORD</StyledText>
+		<AppView goBack={false} scroll={false} scrollViewStyle={styles.screenContentStyle} keyboardMode="overlap">
+			
+			<AppIcon logoContainerStyle={styles.logoContainer} 
+				logoStyle={styles.logoStyle} 
+			/>
+
+			<View style={styles.leftContainer}>
+				<StyledText style={styles.screenTitle}>{t('auth:forgotPwd.title')}</StyledText>
+				<StyledText style={styles.screenDesc}>{t('auth:forgotPwd.description')}</StyledText>
+			</View>	
 
 			<ForgotPasswordForm  
 				onSubmit={onForgotPassword}
 				onError={setError}
-				buttonTitle="SUBMIT"
+				buttonTitle={t('auth:forgotPwd.submit')}
 				error={error} 
 				submitButtonContainerStyle={styles.submitButtonContainer}
 				submitButtonStyle={styles.submitButton}
+				submitButtonTextStyle={styles.submitText}
 				formContainerStyle={styles.formContainer}
 			/>
+
+			<View style={styles.tinyButtonContainer}>
+				<StyledText style={styles.createAccountText}>{t('auth:forgotPwd.signInQuestion')}</StyledText>
+				<TinyTextButton title={t('auth:signIn.title').toUpperCase()} onPress={() => navigation.navigate('SignIn')} />
+			</View>
 			
 			<View style={styles.tinyButtonContainer}>
-		   		<TinyTextButton title="CREATE ACCOUNT" onPress={() => navigation.navigate('SignUp')} />
-	   		</View>
+				<StyledText style={styles.createAccountText}>{t('auth:forgotPwd.signUpQuestion')}</StyledText>
+				<TinyTextButton title={t('auth:createAccount.title')} onPress={() => navigation.navigate('SignUp')} />
+			</View>
 	   </AppView>
 	);
 }
@@ -65,27 +78,47 @@ const useStyles = () => {
 		},
 		formContainer: {
 			flex:0, 
-			// marginBottom: HP()
+		},
+		leftContainer:{
+			marginTop: HP(5),
+			marginBottom: HP(8),
+			alignItems: 'flex-start',
+			width: '100%',
+			paddingLeft: WP(5)	
+		},
+		logoStyle: {
+			width: WP(50), 
+			marginBottom: HP(1)
 		},
 		submitButtonContainer:{
 			position: 'relative', 
 			marginBottom: HP(5)
 		},
 		submitButton: {
-			width: '60%', 
+			width: '90%', 
 			marginTop: WP(0),
+			borderRadius: 5,
+			height: 40
 		},
-		// tinyButtonContainer: {
-		// 	marginTop: HP(10)
-		// },
+		submitText: {
+			fontSize: WP(6)
+		},
+		tinyButtonContainer: {
+			marginTop: HP(5),
+			alignItems: 'center'
+		},
 		logoContainer: {
-			marginBottom: HP(5), 
+			paddingLeft: WP(5),
+			width: '100%',
+			alignItems: 'flex-start',
 		},
 		screenTitle: {
 			fontWeight: 'bold',
-			fontSize: WP(6),
+			fontSize: WP(7),
 			color: theme.icon,
-			marginBottom: HP(5)
+		},
+		screenDesc: {
+			fontSize: WP(4),
 		},
 	})
 
