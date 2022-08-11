@@ -106,7 +106,7 @@ const SignIn = (props) => {
 	}
 			
 	return (
-		<AppView isLoading={isLoading} goBack={false} scroll={false} staticViewStyle={styles.screenContentStyle}>
+		<AppView isLoading={isLoading} goBack={false} scroll={false} scrollViewStyle={styles.screenContentStyle} keyboardMode="overlap">
 			
 			<AppIcon logoContainerStyle={styles.logoContainer} 
 				logoStyle={styles.logoStyle} 
@@ -159,7 +159,8 @@ const useStyles = () => {
 			justifyContent: 'center',
 		},
 		leftContainer:{
-			marginBottom: HP(5),
+			marginTop: HP(3),
+			marginBottom: HP(3),
 			alignItems: 'flex-start',
 			width: '100%',
 			paddingLeft: WP(5)	
@@ -188,8 +189,8 @@ const useStyles = () => {
 			paddingLeft: WP(5),
 			width: '100%',
 			alignItems: 'flex-start',
-			position: 'absolute',
-			top: 10
+			// position: 'absolute',
+			// top: 10
 		},
 		logoStyle: {
 			width: WP(50), 
