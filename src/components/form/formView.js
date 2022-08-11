@@ -20,6 +20,7 @@ export const FormView = ({onSubmit, children, buttonTitle="Next", showButton = t
 				<ConfirmButton 
 					buttonContainerStyle={[{position: 'absolute', bottom: 10}, styles.buttonContainer, props.submitButtonContainerStyle]} 
 					buttonStyle={[{width: '90%'}, props.submitButtonStyle]} 
+					buttonTextStyle={props.submitButtonTextStyle}
 					title={buttonTitle} 
 					onClick={onSubmit} 
 				/>

@@ -6,7 +6,9 @@
 	"auth": {
 		"signIn": {
 			"title": "Sign In",
-			"submit": "Sign In"
+			"description": "Enter your email and pasword",
+			"submit": "Sign In",
+			"signUpQuestion": "Don't have an account?"
 		},
 		"signOut": {
 			"title": "Sign Out"

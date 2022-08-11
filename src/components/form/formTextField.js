@@ -49,7 +49,7 @@ export const FormTextField = ({field, placeholder, handler, setCustomError = nul
 		if (isPhone) {
 			handleChangeNumber(valueWithoutCode || '');
 		}
-	}, [callingCode])
+	}, [callingCode])	
 
 	const FlagButton = () => {
 		return (
@@ -97,7 +97,6 @@ export const FormTextField = ({field, placeholder, handler, setCustomError = nul
 			</View>
 			{!!instructionText && <StyledText style={styles.instructionText}>{instructionText}</StyledText>}
 			{error && <StyledText style={styles.errorText}>{error}</StyledText>}
-
 		</View>
 	)
 }
@@ -112,9 +111,9 @@ const useStyles = () => {
 		},
 		inputContainer: {
 			borderWidth: 1,
+			borderRadius: 5,
 			borderColor: theme.grey5,
 			paddingLeft: WP(3),
-
 		},
 		textInput: {
 			color: theme.text,

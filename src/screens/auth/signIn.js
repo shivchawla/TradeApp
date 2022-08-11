@@ -73,7 +73,6 @@ const SignIn = (props) => {
 		} catch(err) {
 
 		}
-
 	}
 
 	const onSignInEmail = async ({email, password}) => {
@@ -107,14 +106,16 @@ const SignIn = (props) => {
 	}
 			
 	return (
-		<AppView isLoading={isLoading} goBack={false} scroll={false} staticViewStyle={styles.screenContentStyle}>
+		<AppView isLoading={isLoading} goBack={false} scroll={false} scrollViewStyle={styles.screenContentStyle} keyboardMode="overlap">
 			
-			<AppIcon 
-				logoContainerStyle={styles.logoContainer} 
+			<AppIcon logoContainerStyle={styles.logoContainer} 
 				logoStyle={styles.logoStyle} 
-				titleStyle={styles.screenTitle}
-				titleBelow={t('auth:signIn.title')}
 			/>
+
+			<View style={styles.leftContainer}>
+				<StyledText style={styles.screenTitle}>{t('auth:signIn.title')}</StyledText>
+				<StyledText style={styles.screenDesc}>{t('auth:signIn.description')}</StyledText>
+			</View>	
 
 			<View style={{marginBottom: HP(5), alignItems: 'center', width: '100%'}}>
 			{!!!phoneAuth ? 
@@ -125,6 +126,7 @@ const SignIn = (props) => {
 					error={error} 
 					submitButtonContainerStyle={styles.submitButtonContainer}
 					submitButtonStyle={styles.submitButton}
+					submitButtonTextStyle={styles.submitText}
 					formContainerStyle={styles.formContainer}
 				/>
 				:
@@ -139,7 +141,8 @@ const SignIn = (props) => {
 			</View>
 
 			<View style={styles.tinyButtonContainer}>
-		   		<TinyTextButton title={t('auth:createAccount.title')} onPress={() => navigation.navigate('SignUp')} />
+				<StyledText style={styles.createAccountText}>{t('auth:signIn.signUpQuestion')}</StyledText>
+				<TinyTextButton title={t('auth:createAccount.title')} onPress={() => navigation.navigate('SignUp')} />
 	   		</View>
 	   </AppView>
 	);
@@ -156,38 +159,54 @@ const useStyles = () => {
 			justifyContent: 'center',
 		},
 		leftContainer:{
-			
+			marginTop: HP(3),
+			marginBottom: HP(3),
+			alignItems: 'flex-start',
+			width: '100%',
+			paddingLeft: WP(5)	
 		},
 		formContainer: {
-			flex:0, 
+			flex: 0, 
 		},
 		submitButtonContainer:{
 			position: 'relative', 
 			marginBottom: HP(5)
 		},
 		submitButton: {
-			width: '60%', 
+			width: '90%', 
 			marginTop: WP(0),
+			borderRadius: 5,
+			height: 40
+		},
+		submitText: {
+			fontSize: WP(6)
 		},
 		tinyButtonContainer: {
 			// position: 'absolute',
 			// bottom: 50
 		},
 		logoContainer: {
-			marginBottom: HP(5),
+			paddingLeft: WP(5),
 			width: '100%',
-			padding: WP(5),
-			alignItems: 'flex-start'
+			alignItems: 'flex-start',
+			// position: 'absolute',
+			// top: 10
 		},
 		logoStyle: {
-			height: 70, 
-			width: 70, 
+			width: WP(50), 
 			marginBottom: HP(1)
 		},
 		screenTitle: {
 			fontWeight: 'bold',
 			fontSize: WP(8),
 			color: theme.icon,
+		},
+		screenDesc: {
+			fontSize: WP(4),
+
+		},
+		createAccountText: {
+			color: theme.grey3
 		}
 	})
 
