@@ -14,7 +14,13 @@
 			"title": "Sign Out"
 		},
 		"forgotPwd": {
-			"title": "Forgot Password?"
+			"title": "Forgot Password?",
+			"description": "Enter your email to receive instructions",
+			"submit": "Submit",
+			"signUpQuestion": "Don't have an account?",
+			"signInQuestion": "Back to Sign In",
+			"instructionOne": "We have sent an email to ",
+			"instructionTwo": "Please click the link in the email to signIn and reset your password."
 		},
 		"createAccount": {
 			"title": "CREATE ACCOUNT"
