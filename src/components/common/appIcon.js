@@ -4,15 +4,17 @@ import {View, Image, StyleSheet} from 'react-native';
 import {useTheme, HP, WP, StyledText} from '../../theme';
 
 const appIcon = require("../../assets/images/app-logo.png");
+const appIconDark = require("../../assets/images/app-logo-dark.png");
 
 export const AppIcon = ({titleBelow = '', ...props}) => {
 
 	const {theme, styles} = useStyles();
 	
 	return (
+		
 		<View style={[styles.appLogoContainer, props.logoContainerStyle]}>
 			<Image
-				source={appIcon}
+				source={theme.name == 'light' ? appIcon : appIconDark}
 				resizeMode="contain"
 				style={[styles.appLogo, props.logoStyle]}
 			/>
@@ -26,11 +28,13 @@ const useStyles = () => {
 
 	const styles = StyleSheet.create({
 		appLogoContainer: {
-			width: WP(100)
+			width: WP(100),
 		},
 		appLogo: {
-			height: 100,	
-			width: 100,
+			// height: 100,	
+			// width: 100,
+			// borderColor: 'white',
+			// borderWidth: 1
 		},
 		title: {
 

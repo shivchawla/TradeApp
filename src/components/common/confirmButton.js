@@ -43,7 +43,7 @@ export const ConfirmButton = ({title, afterTitle, onClick, onSwipeSuccess, swipe
           	:
 
 				<ClickableComponent style={[styles.button, props.buttonStyle, {...disabled && {backgroundColor: theme.grey9}}]} onPress={disabled ? null : onClick}>
-					<StyledText style={[styles.buttonText,props.buttonTextStyle]}>{title}</StyledText>
+					<StyledText style={[styles.buttonText, props.buttonTextStyle]}>{title}</StyledText>
 				</ClickableComponent>
 		
 		}
