@@ -40,7 +40,7 @@ export const DarkTheme = {
     selectedColor: '#000000',
     
     inActiveTab: "#FEC0A5",
-    background: '#171e26' ,
+    background: '#16161e' ,
     tabBackground: '#171e26',
     tabTint: '#ffac33',
     selectedBorder: '#ffac33',

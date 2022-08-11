@@ -17,6 +17,7 @@ const initialize = async() => {
     defaultNS: 'common',
 
     debug: false,
+    keySeparator: ".",
 
     // cache: {
     //   enabled: true

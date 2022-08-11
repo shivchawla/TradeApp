@@ -1,24 +1,28 @@
-import React, {useState, useRef} from 'react';
-import { View, Text, StyleSheet, Pressable, TextInput } from 'react-native';
+import React, {useState} from 'react';
+import { View, StyleSheet} from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 
 import { AppView, ConfirmButton, TinyTextButton, AppIcon, OtpInput} from '../../components/common';
 import { SignInForm } from '../../components/auth';
-import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
+import { useTheme, StyledText, WP, HP }  from '../../theme';
 import { useAuth, useLoading } from '../../helper';
+import { ACCOUNT_STATUS, SCREEN_NAMES } from '../../config';
 
 //Add logic to save auth state to temp storage
 const SignIn = (props) => {
 
+	const {t} = useTranslation();
+
 	const {navigation} = props;
-	const {phoneAuth, auto} = props?.route?.params ?? {};
+	const {phoneAuth} = props?.route?.params ?? {};
 
 	const {isLoading, updateLoading, loadingFunc} = useLoading(false); 
 
 	const {theme, styles} = useStyles();
 	const [error , setError] = useState(null);
 
-	const {currentUser, verifiedUser,  userAccount, confirmPhone, signInEmail, signOut, signInPhone, submitPhoneCode} = useAuth();
+	const {currentUser, verifiedUser,  userAccount, confirmPhone, signInEmail, signInPhone, submitPhoneCode} = useAuth();
 
 	const [otp, setOtp] = useState('');
 
@@ -36,9 +40,9 @@ const SignIn = (props) => {
 		// console.log(currentUser);
 
 		if (verifiedUser && !!userAccount?.account && 
-				userAccount?.account?.status == 'ACTIVE') {
+				userAccount?.account?.status == ACCOUNT_STATUS.ACTIVE) {
 
-			navigation.navigate('Trading')	
+			navigation.navigate(SCREEN_NAMES.Trading)	
 		} 
 
 		//What to do in other status message
@@ -80,42 +84,44 @@ const SignIn = (props) => {
 			console.log(error);
 			console.log(error.code);
 		  	if (error.code == "auth/user-not-found") {
-		  		setError("User not registered! Please sign up");
+		  		setError(t('auth:error.userNotFound'));
 		  	}
 
 		  	if (error.code == "auth/wrong-password") {
-		  		setError("Incorrect Email/Password");
+				setError(t('auth:error.incorrectEmailPwd'));  
 		  	}
 
 		  	if (error.code == "auth/invalid-email") {
-		  		setError("Incorrect Email/Password");
+				setError(t('auth:error.incorrectEmailPwd'));
 		  	}
 
 		  	if (error.code == "auth/user-disabled") {
-		  		setError("Accout has been disabled. Please contact Customer care!");
+				setError(t('auth:error.userDisabled'));
 		  	}
 
 		  	//My error
 		  	if (error.code == "auth/email-not-verified") {
-		  		navigation.navigate('AuthInfo', {type:'email-not-verified', message: 'The email is not verified. Please verify by your emial by clicking the link in the email.'})	
+		  		navigation.navigate('AuthInfo', {type:'email-not-verified', message: t('auth:error.verifyEmail')})	
 		  	}
-
 		}
 	}
-		
-	const signInMsg = "Successfully signed in!";
-
+			
 	return (
 		<AppView isLoading={isLoading} goBack={false} scroll={false} staticViewStyle={styles.screenContentStyle}>
-			<AppIcon logoContainerStyle={styles.logoContainer} logoStyle={{height: 70}} titleStyle={styles.title}/>
-			<StyledText style={styles.screenTitle}>SIGN IN</StyledText>
+			
+			<AppIcon 
+				logoContainerStyle={styles.logoContainer} 
+				logoStyle={styles.logoStyle} 
+				titleStyle={styles.screenTitle}
+				titleBelow={t('auth:signIn.title')}
+			/>
 
 			<View style={{marginBottom: HP(5), alignItems: 'center', width: '100%'}}>
 			{!!!phoneAuth ? 
 				<SignInForm
 					onSubmit={onSignInEmail}
 					onError={setError}
-					buttonTitle="SUBMIT"
+					buttonTitle={t('auth:signIn.submit')}
 					error={error} 
 					submitButtonContainerStyle={styles.submitButtonContainer}
 					submitButtonStyle={styles.submitButton}
@@ -123,17 +129,17 @@ const SignIn = (props) => {
 				/>
 				:
 				<View style={{alignItems: 'center'}}>
-					<StyledText style={{marginBottom: HP(5), color: theme.grey3}}> Verify your phone number to complete the Sign-In </StyledText>
-					{!!!confirmPhone && <TinyTextButton title="Send Code" onPress={onSignInPhone}/>}
+					<StyledText style={{marginBottom: HP(5), color: theme.grey3}}> {t('auth:phoneVerificationMsg')} </StyledText>
+					{!!!confirmPhone && <TinyTextButton title={t('auth:sendCode')} onPress={onSignInPhone}/>}
 					{confirmPhone && <OtpInput code={otp} onCodeChange={setOtp} containerStyle={{marginBottom: HP(5)}}/>}
-					{confirmPhone && <ConfirmButton title="SUBMIT OTP" onClick={onSubmitCode} buttonContainerStyle={{marginBottom: HP(5)}} buttonStyle={{width: '70%'}} />}
-					{confirmPhone && <TinyTextButton title="Send Code Again" buttonTextStyle={{color: theme.grey5}} onPress={onSignInPhone}/>}
+					{confirmPhone && <ConfirmButton title={t('auth:submitOtp')} onClick={onSubmitCode} buttonContainerStyle={{marginBottom: HP(5)}} buttonStyle={{width: '70%'}} />}
+					{confirmPhone && <TinyTextButton title={t('auth:sendCodeAgain')} buttonTextStyle={{color: theme.grey5}} onPress={onSignInPhone}/>}
 				</View>	
 			}
 			</View>
 
 			<View style={styles.tinyButtonContainer}>
-		   		<TinyTextButton title="CREATE ACCOUNT" onPress={() => navigation.navigate('SignUp')} />
+		   		<TinyTextButton title={t('auth:createAccount.title')} onPress={() => navigation.navigate('SignUp')} />
 	   		</View>
 	   </AppView>
 	);
@@ -149,9 +155,11 @@ const useStyles = () => {
 			alignItems: 'center',
 			justifyContent: 'center',
 		},
+		leftContainer:{
+			
+		},
 		formContainer: {
 			flex:0, 
-			// marginBottom: HP()
 		},
 		submitButtonContainer:{
 			position: 'relative', 
@@ -166,13 +174,20 @@ const useStyles = () => {
 			// bottom: 50
 		},
 		logoContainer: {
-			marginBottom: HP(5), 
+			marginBottom: HP(5),
+			width: '100%',
+			padding: WP(5),
+			alignItems: 'flex-start'
+		},
+		logoStyle: {
+			height: 70, 
+			width: 70, 
+			marginBottom: HP(1)
 		},
 		screenTitle: {
 			fontWeight: 'bold',
-			fontSize: WP(6),
+			fontSize: WP(8),
 			color: theme.icon,
-			marginBottom: HP(10)
 		}
 	})
 

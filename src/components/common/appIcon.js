@@ -26,13 +26,11 @@ const useStyles = () => {
 
 	const styles = StyleSheet.create({
 		appLogoContainer: {
-			justifyContent: 'center',
-			alignItems: 'center'
+			width: WP(100)
 		},
 		appLogo: {
 			height: 100,	
-			justifyContent: 'center',
-			alignItems: 'center'
+			width: 100,
 		},
 		title: {
 

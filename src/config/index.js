@@ -144,3 +144,11 @@ export const BANK_ACCOUNT_TYPES = [
   {key:"checking", title: "Checkings Account"}
 ];
 
+
+export const ACCOUNT_STATUS = {
+  'ACTIVE': 'ACTIVE'
+};
+
+export const SCREEN_NAMES = {
+  'Trading': 'Trading'
+}

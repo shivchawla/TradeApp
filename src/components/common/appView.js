@@ -1,8 +1,5 @@
 import React, {useState} from 'react';
-import { SafeAreaView, ScrollView, View, Image,
-	StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, Modal} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-const Ionicons  = Icon;
+import {View, StyleSheet, KeyboardAvoidingView} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 import { useNavigation, useFocusEffect, useIsFocused } from '@react-navigation/native';
@@ -14,8 +11,7 @@ import { FullViewModal } from './';
 
 export const AppHeader = ({title, goBack = true, ...props}) => {
 	const showHeader = title || goBack;
-	const navigation = useNavigation();
-	const {theme, styles} = useStyles();
+	const {styles} = useStyles();
 
 	return (
 		<>
@@ -33,7 +29,6 @@ export const AppHeader = ({title, goBack = true, ...props}) => {
 
 export const AppView = ({scroll = true, footer, hasHeader = true, header, isLoading = false, ...props}) => {
 
-	const Component = scroll ? ScrollView : View;
 	const {theme, styles} = useStyles();
 
 	const [showModal, setShowModal] = useState(isLoading);
