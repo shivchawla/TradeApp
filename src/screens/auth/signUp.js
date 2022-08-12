@@ -1,21 +1,18 @@
 import React, {useState} from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native'
+import { useTranslation } from 'react-i18next';
 
-import { useAuth, setStorageData, useLoading } from '../../helper';
+import { useAuth, useLoading } from '../../helper';
 import { AppView, ConfirmButton, TinyTextButton, AppIcon, OtpInput } from '../../components/common';
 import { SignUpForm } from '../../components/auth';
-
 import { useTheme, StyledText, WP, HP }  from '../../theme';
 
 const SignUp = (props) => {
 
-	const {currentUser, signUpPhone, linkEmail, confirmPhone, submitPhoneCode, resetPhoneAuth, resetAuth, signOut} = useAuth();
-	// console.log(props?.route?.params?.signUpType);
-
+	const {signUpPhone, linkEmail, confirmPhone, submitPhoneCode, resetPhoneAuth, resetAuth} = useAuth();
 	const [signUpType, setSignUpType] = useState(props?.route?.params?.signUpType || 'phone');
 	const [error, setError] = useState(null);
-	const [signedUp, setSignedUp] = useState(false);
 	const {isLoading, updateLoading, loadingFunc} = useLoading(false); 
 	
 	const [phoneCredentials, setPhoneCredentials] = useState(null);
@@ -23,14 +20,13 @@ const SignUp = (props) => {
 
 	const [otp, setOtp] = useState(null); 
 	const {navigation} = props
+	const {t} = useTranslation();
 
 	useFocusEffect(React.useCallback(() => {
-		// console.log("useFocusEffect");
 		updateLoading(false);
 
 		return () => updateLoading(false);
 	}, []))
-
 
 	// It's already handled in AuthStack
 	// React.useEffect(() => {
@@ -54,7 +50,7 @@ const SignUp = (props) => {
 				updateLoading(false);
 			}
 		}
-
+		
 		handleChangePhoneCredentials()
 
 	}, [phoneCredentials])
@@ -81,7 +77,6 @@ const SignUp = (props) => {
 	const onSignUpPhone = async ({phoneNumber}) => {
 		console.log("On SignUp - Phone");
 		console.log(phoneNumber);
-
 		setError(null);
 
 		try {
@@ -89,7 +84,6 @@ const SignUp = (props) => {
 		} catch (error) {
 			setError(error.code);
 		}
-
 	}
 
 	const onSignUpEmail = async ({email, password}) => {
@@ -123,26 +117,29 @@ const SignUp = (props) => {
 		}
 	}
 	
-	const {theme, styles} = useStyles();
-
-	// console.log(isLoading);
+	const {styles} = useStyles();
 
 	return (
-		<AppView isLoading={isLoading} goBack={false} scroll={false} staticViewStyle={styles.screenContentStyle} showLogo={true}>
-			<AppIcon logoContainerStyle={styles.logoContainer} logoStyle={{height: 70}} titleStyle={styles.title}/>
-			<StyledText style={styles.screenTitle}>SIGN UP</StyledText>
+		<AppView isLoading={isLoading} goBack={false} scroll={false} scrollViewStyle={styles.screenContentStyle} showLogo={true} keyboardMode="overlap">
+			<AppIcon logoContainerStyle={styles.logoContainer} logoStyle={styles.logoStyle} />
+			
+			<View style={styles.leftContainer}>
+				<StyledText style={styles.screenTitle}>{t('auth:createAccount.title')}</StyledText>
+				<StyledText style={styles.screenDesc}>{t('auth:createAccount.description')}</StyledText>
+			</View>	
+
 			<View style={styles.stepTextContainer}>
 				{/*<View style={{flexDirection: 'row', alignItems: 'center'}}>*/}
-					{signUpType == "phone" && <StyledText style={styles.currentStepText}>Register Phone</StyledText>}
-					{/*{signUpType == "email" && <View style={styles.circle}></View>}*/}
-				{/*</View>*/}
-				{signUpType == "email" && <StyledText style={styles.currentStepText}>Register Email</StyledText>}
+					{(signUpType == "phone" && !confirmPhone) && <StyledText style={styles.currentStepText}>{t('auth:createAccount.registerPhone')}</StyledText>}
+					{(signUpType == "phone" && confirmPhone) && <StyledText style={styles.currentStepText}>{t('auth:createAccount.submitOtp')}</StyledText>}
+					{signUpType == "email" && <StyledText style={styles.currentStepText}>{t('auth:createAccount.registerEmail')}</StyledText>}
 			</View>
 
 			<View style={{marginBottom: HP(5), alignItems: 'center', width: '100%'}}>
-				{((signUpType == "phone" && !confirmPhone) || signUpType == "email") && <SignUpForm 
+				{((signUpType == "phone" && !confirmPhone) || signUpType == "email") && 
+				<SignUpForm 
 					type={signUpType}
-					buttonTitle={signUpType == "phone" ? confirmPhone ? 'CONFIRM OTP' : 'SEND OTP' : 'CREATE ACCOUNT'} 
+					buttonTitle={signUpType == "phone" ? confirmPhone ? t('auth:createAccount.confirmOtp') : t('auth:createAccount.sendOtp') : t('auth:createAccount.title')} 
 					disabled={!!(signUpType == "phone" && confirmPhone)} 
 					onSubmit={signUpType == "phone" ? onSignUpPhone : onSignUpEmail}
 					onError={setError}
@@ -161,14 +158,15 @@ const SignUp = (props) => {
 					}
 					<View key="otpContainer" style={{alignItems: 'center'}}>
 						<OtpInput code={otp} onCodeChange={(code) => setOtp(code)} onFocus={() => setError('')} />
-						<ConfirmButton title="SUBMIT OTP" onClick={onSubmitOtp} buttonContainerStyle={{marginTop: HP(10)}} buttonStyle={styles.submitButton}/>
+						<ConfirmButton title={t('auth:createAccount.submitOtp')} onClick={onSubmitOtp} buttonContainerStyle={{marginTop: HP(10)}} buttonStyle={styles.submitButton}/>
 					</View>
 					</>
 				}
 			</View>
 
 			<View style={styles.tinyButtonContainer}>
-				<TinyTextButton title="SIGN IN" onPress={() => {resetAuth(); navigation.navigate('SignIn')}} />
+				<StyledText style={styles.createAccountText}>{t('auth:createAccount.signInQuestion')}</StyledText>
+				<TinyTextButton title={t('auth:signIn.title')} onPress={() => {resetAuth(); navigation.navigate('SignIn')}} />
 			</View>
 
 		</AppView>
@@ -183,9 +181,15 @@ const useStyles = () => {
 			alignItems: 'center',
 			justifyContent: 'center',
 		},
+		leftContainer:{
+			marginTop: HP(3),
+			marginBottom: HP(3),
+			alignItems: 'flex-start',
+			width: '100%',
+			paddingLeft: WP(5)	
+		},
 		formContainer: {
 			flex:0, 
-			// marginBottom: HP(5)
 		},
 		submitButtonContainer:{
 			position: 'relative', 
@@ -193,14 +197,19 @@ const useStyles = () => {
 			// top: 0
 		},
 		submitButton: {
-			width: '70%', 
+			width: '90%', 
 			marginTop: WP(0),
-		},
-		tinyButtonContainer: {
-			// marginTop: HP(10)
+			borderRadius: 5,
+			height: 40
 		},
 		logoContainer: {
-			marginBottom: HP(5), 
+			paddingLeft: WP(5),
+			width: '100%',
+			alignItems: 'flex-start',
+		},
+		logoStyle: {
+			width: WP(50), 
+			marginBottom: HP(1)
 		},
 		screenTitle: {
 			fontWeight: 'bold',
@@ -208,12 +217,16 @@ const useStyles = () => {
 			color: theme.icon
 		},
 		stepTextContainer: {
-			marginBottom: HP(5),
+			width: '100%',
+			alignItems: 'flex-start',
+			marginTop: HP(3),
+			marginBottom: HP(2),
+			paddingLeft: WP(5)	
 		},
 		currentStepText: {
-			color: theme. grey5,
+			color: theme.grey1,
 			fontSize: WP(4),
-			marginTop: HP(1)
+			marginTop: HP(1),
 		},
 		error: {
 			color: theme.error,
@@ -228,6 +241,13 @@ const useStyles = () => {
 			marginLeft: WP(2),
 			justifyContent: 'center',
 			alignItems: 'center'
+		},
+		tinyButtonContainer: {
+			marginTop: HP(10),
+			alignItems: 'center'
+		},
+		createAccountText: {
+			color: theme.grey3
 		}
 	})
 
