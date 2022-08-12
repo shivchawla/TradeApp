@@ -7,6 +7,7 @@ import { useAuth, useLoading } from '../../helper';
 import { AppView, ConfirmButton, TinyTextButton, AppIcon, OtpInput } from '../../components/common';
 import { SignUpForm } from '../../components/auth';
 import { useTheme, StyledText, WP, HP }  from '../../theme';
+import { AuthLayout, AuthFooterDefault } from './authLayout';
 
 const SignUp = (props) => {
 
@@ -120,13 +121,7 @@ const SignUp = (props) => {
 	const {styles} = useStyles();
 
 	return (
-		<AppView isLoading={isLoading} goBack={false} scroll={false} scrollViewStyle={styles.screenContentStyle} showLogo={true} keyboardMode="overlap">
-			<AppIcon logoContainerStyle={styles.logoContainer} logoStyle={styles.logoStyle} />
-			
-			<View style={styles.leftContainer}>
-				<StyledText style={styles.screenTitle}>{t('auth:createAccount.title')}</StyledText>
-				<StyledText style={styles.screenDesc}>{t('auth:createAccount.description')}</StyledText>
-			</View>	
+		<AuthLayout {...isLoading} header={{title: t('auth:createAccount.title'), description: t('auth:createAccount.description')}}>
 
 			<View style={styles.stepTextContainer}>
 				{/*<View style={{flexDirection: 'row', alignItems: 'center'}}>*/}
@@ -164,12 +159,13 @@ const SignUp = (props) => {
 				}
 			</View>
 
-			<View style={styles.tinyButtonContainer}>
-				<StyledText style={styles.createAccountText}>{t('auth:createAccount.signInQuestion')}</StyledText>
-				<TinyTextButton title={t('auth:signIn.title')} onPress={() => {resetAuth(); navigation.navigate('SignIn')}} />
-			</View>
-
-		</AppView>
+			<AuthFooterDefault 
+				footerText={t('auth:createAccount.signInQuestion')} 
+				buttonTitle={t('auth:signIn.title')}
+				onPress={() => {resetAuth(); navigation.navigate('SignIn')}}
+			/>	
+			
+		</AuthLayout>
 	);
 }
 
@@ -177,17 +173,6 @@ const useStyles = () => {
 	const {theme} = useTheme();
 
 	const styles = StyleSheet.create({
-		screenContentStyle: {
-			alignItems: 'center',
-			justifyContent: 'center',
-		},
-		leftContainer:{
-			marginTop: HP(3),
-			marginBottom: HP(3),
-			alignItems: 'flex-start',
-			width: '100%',
-			paddingLeft: WP(5)	
-		},
 		formContainer: {
 			flex:0, 
 		},
@@ -201,20 +186,6 @@ const useStyles = () => {
 			marginTop: WP(0),
 			borderRadius: 5,
 			height: 40
-		},
-		logoContainer: {
-			paddingLeft: WP(5),
-			width: '100%',
-			alignItems: 'flex-start',
-		},
-		logoStyle: {
-			width: WP(50), 
-			marginBottom: HP(1)
-		},
-		screenTitle: {
-			fontWeight: 'bold',
-			fontSize: WP(6),
-			color: theme.icon
 		},
 		stepTextContainer: {
 			width: '100%',

@@ -8,6 +8,7 @@ import { SignInForm } from '../../components/auth';
 import { useTheme, StyledText, WP, HP }  from '../../theme';
 import { useAuth, useLoading } from '../../helper';
 import { ACCOUNT_STATUS, SCREEN_NAMES } from '../../config';
+import { AuthLayout, AuthFooterDefault } from './authLayout';
 
 //Add logic to save auth state to temp storage
 const SignIn = (props) => {
@@ -104,47 +105,39 @@ const SignIn = (props) => {
 		  	}
 		}
 	}
-			
+	
 	return (
-		<AppView isLoading={isLoading} goBack={false} scroll={false} scrollViewStyle={styles.screenContentStyle} keyboardMode="overlap">
-			
-			<AppIcon logoContainerStyle={styles.logoContainer} 
-				logoStyle={styles.logoStyle} 
-			/>
+		<AuthLayout {...isLoading} header={{title: t('auth:signIn.title'), description: t('auth:signIn.description')}}>
 
-			<View style={styles.leftContainer}>
-				<StyledText style={styles.screenTitle}>{t('auth:signIn.title')}</StyledText>
-				<StyledText style={styles.screenDesc}>{t('auth:signIn.description')}</StyledText>
-			</View>	
-
-			<View style={{marginBottom: HP(5), alignItems: 'center', width: '100%'}}>
-			{!!!phoneAuth ? 
-				<SignInForm
-					onSubmit={onSignInEmail}
-					onError={setError}
-					buttonTitle={t('auth:signIn.submit')}
-					error={error} 
-					submitButtonContainerStyle={styles.submitButtonContainer}
-					submitButtonStyle={styles.submitButton}
-					submitButtonTextStyle={styles.submitText}
-					formContainerStyle={styles.formContainer}
-				/>
-				:
-				<View style={{alignItems: 'center'}}>
-					<StyledText style={{marginBottom: HP(5), color: theme.grey3}}> {t('auth:phoneVerificationMsg')} </StyledText>
-					{!!!confirmPhone && <TinyTextButton title={t('auth:sendCode')} onPress={onSignInPhone}/>}
-					{confirmPhone && <OtpInput code={otp} onCodeChange={setOtp} containerStyle={{marginBottom: HP(5)}}/>}
-					{confirmPhone && <ConfirmButton title={t('auth:submitOtp')} onClick={onSubmitCode} buttonContainerStyle={{marginBottom: HP(5)}} buttonStyle={{width: '70%'}} />}
-					{confirmPhone && <TinyTextButton title={t('auth:sendCodeAgain')} buttonTextStyle={{color: theme.grey5}} onPress={onSignInPhone}/>}
-				</View>	
-			}
+			<View style={{ marginBottom: HP(5), alignItems: 'center', width: '100%' }}>
+				{!!!phoneAuth ?
+					<SignInForm
+						onSubmit={onSignInEmail}
+						onError={setError}
+						buttonTitle={t('auth:signIn.submit')}
+						error={error}
+						submitButtonContainerStyle={styles.submitButtonContainer}
+						submitButtonStyle={styles.submitButton}
+						submitButtonTextStyle={styles.submitText}
+						formContainerStyle={styles.formContainer} />
+					:
+					<View style={{ alignItems: 'center' }}>
+						<StyledText style={{ marginBottom: HP(5), color: theme.grey3 }}> {t('auth:phoneVerificationMsg')} </StyledText>
+						{!!!confirmPhone && <TinyTextButton title={t('auth:sendCode')} onPress={onSignInPhone} />}
+						{confirmPhone && <OtpInput code={otp} onCodeChange={setOtp} containerStyle={{ marginBottom: HP(5) }} />}
+						{confirmPhone && <ConfirmButton title={t('auth:submitOtp')} onClick={onSubmitCode} buttonContainerStyle={{ marginBottom: HP(5) }} buttonStyle={{ width: '70%' }} />}
+						{confirmPhone && <TinyTextButton title={t('auth:sendCodeAgain')} buttonTextStyle={{ color: theme.grey5 }} onPress={onSignInPhone} />}
+					</View>}
 			</View>
+			
+			<AuthFooterDefault 
+				footerText={t('auth:signIn.signUpQuestion')} 
+				buttonTitle={t('auth:createAccount.title')}
+				onPress={() => {navigation.navigate('SignUp')}}
+			/>		
+			
+		</AuthLayout>
 
-			<View style={styles.tinyButtonContainer}>
-				<StyledText style={styles.createAccountText}>{t('auth:signIn.signUpQuestion')}</StyledText>
-				<TinyTextButton title={t('auth:createAccount.title')} onPress={() => navigation.navigate('SignUp')} />
-	   		</View>
-	   </AppView>
 	);
 }
 
@@ -154,17 +147,6 @@ const useStyles = () => {
 	const {theme} = useTheme();
 
 	const styles = StyleSheet.create({
-		screenContentStyle: {
-			alignItems: 'center',
-			justifyContent: 'center',
-		},
-		leftContainer:{
-			marginTop: HP(3),
-			marginBottom: HP(3),
-			alignItems: 'flex-start',
-			width: '100%',
-			paddingLeft: WP(5)	
-		},
 		formContainer: {
 			flex: 0, 
 		},
@@ -180,34 +162,7 @@ const useStyles = () => {
 		},
 		submitText: {
 			fontSize: WP(6)
-		},
-		tinyButtonContainer: {
-			// position: 'absolute',
-			// bottom: 50
-		},
-		logoContainer: {
-			paddingLeft: WP(5),
-			width: '100%',
-			alignItems: 'flex-start',
-			// position: 'absolute',
-			// top: 10
-		},
-		logoStyle: {
-			width: WP(50), 
-			marginBottom: HP(1)
-		},
-		screenTitle: {
-			fontWeight: 'bold',
-			fontSize: WP(8),
-			color: theme.icon,
-		},
-		screenDesc: {
-			fontSize: WP(4),
-
-		},
-		createAccountText: {
-			color: theme.grey3
-		}
+		}	
 	})
 
 	return {theme, styles};

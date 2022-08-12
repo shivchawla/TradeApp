@@ -6,6 +6,8 @@ import { AppView, TinyTextButton, AppIcon} from '../../components/common';
 import { ForgotPasswordForm } from '../../components/auth';
 import { useTheme, StyledText, WP, HP }  from '../../theme';
 import { useAuth } from '../../helper';
+import { AuthLayout, AuthFooterDefault } from './authLayout';
+
 
 //Add logic to save auth state to temp storage
 const ForgotPassword = (props) => {
@@ -31,17 +33,7 @@ const ForgotPassword = (props) => {
 	}
 		
 	return (
-		<AppView goBack={false} scroll={false} scrollViewStyle={styles.screenContentStyle} keyboardMode="overlap">
-			
-			<AppIcon logoContainerStyle={styles.logoContainer} 
-				logoStyle={styles.logoStyle} 
-			/>
-
-			<View style={styles.leftContainer}>
-				<StyledText style={styles.screenTitle}>{t('auth:forgotPwd.title')}</StyledText>
-				<StyledText style={styles.screenDesc}>{t('auth:forgotPwd.description')}</StyledText>
-			</View>	
-
+		<AuthLayout header={{title: t('auth:forgotPwd.title'), description: t('auth:forgotPwd.description')}}>
 			<ForgotPasswordForm  
 				onSubmit={onForgotPassword}
 				onError={setError}
@@ -53,16 +45,18 @@ const ForgotPassword = (props) => {
 				formContainerStyle={styles.formContainer}
 			/>
 
-			<View style={styles.tinyButtonContainer}>
-				<StyledText style={styles.createAccountText}>{t('auth:forgotPwd.signInQuestion')}</StyledText>
-				<TinyTextButton title={t('auth:signIn.title').toUpperCase()} onPress={() => navigation.navigate('SignIn')} />
-			</View>
-			
-			<View style={styles.tinyButtonContainer}>
-				<StyledText style={styles.createAccountText}>{t('auth:forgotPwd.signUpQuestion')}</StyledText>
-				<TinyTextButton title={t('auth:createAccount.title')} onPress={() => navigation.navigate('SignUp')} />
-			</View>
-	   </AppView>
+			<AuthFooterDefault 
+				footerText={t('auth:forgotPwd.signInQuestion')} 
+				buttonTitle={t('auth:signIn.title').toUpperCase()}
+				onPress={() => {navigation.navigate('SignIn')}}
+			/>
+
+			<AuthFooterDefault 
+				footerText={t('auth:forgotPwd.signUpQuestion')} 
+				buttonTitle={t('auth:createAccount.title').toUpperCase()}
+				onPress={() => {navigation.navigate('SignUp')}}
+			/>
+	   </AuthLayout>
 	);
 }
 
@@ -72,23 +66,8 @@ const useStyles = () => {
 	const {theme} = useTheme();
 
 	const styles = StyleSheet.create({
-		screenContentStyle: {
-			alignItems: 'center',
-			justifyContent: 'center',
-		},
 		formContainer: {
-			flex:0, 
-		},
-		leftContainer:{
-			marginTop: HP(5),
-			marginBottom: HP(8),
-			alignItems: 'flex-start',
-			width: '100%',
-			paddingLeft: WP(5)	
-		},
-		logoStyle: {
-			width: WP(50), 
-			marginBottom: HP(1)
+			flex: 0, 
 		},
 		submitButtonContainer:{
 			position: 'relative', 
@@ -102,24 +81,7 @@ const useStyles = () => {
 		},
 		submitText: {
 			fontSize: WP(6)
-		},
-		tinyButtonContainer: {
-			marginTop: HP(5),
-			alignItems: 'center'
-		},
-		logoContainer: {
-			paddingLeft: WP(5),
-			width: '100%',
-			alignItems: 'flex-start',
-		},
-		screenTitle: {
-			fontWeight: 'bold',
-			fontSize: WP(7),
-			color: theme.icon,
-		},
-		screenDesc: {
-			fontSize: WP(4),
-		},
+		}
 	})
 
 	return {theme, styles};
