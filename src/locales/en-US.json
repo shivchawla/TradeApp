@@ -23,7 +23,15 @@
 			"instructionTwo": "Please click the link in the email to signIn and reset your password."
 		},
 		"createAccount": {
-			"title": "CREATE ACCOUNT"
+			"title": "Create Account",
+			"description": "Enter your phone number to begin",
+			"submit": "Submit",
+			"registerPhone": "Step 1: Register Phone",
+			"registerEmail": "Step2: Register Email",
+			"confirmOtp": "Confirm OTP",
+			"sendOtp": "Send OTP",
+			"submitOtp": "Submit OTP",
+			"signInQuestion": "Do you already have account? Sign-in instead."
 		},
 		"sendCode":"Send Code",
 		"phoneVerificationMsg":"Verify your phone number to complete the Sign-In",
