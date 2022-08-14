@@ -1,24 +1,21 @@
 import React, {useState} from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
-
-import { AppView } from '../../components/common';
+import { useTranslation } from 'react-i18next';
+import { AppView, AppIcon } from '../../components/common';
 import { useTheme, HP, WP, StyledText} from '../../theme';
-
-const appIcon = require("../../assets/images/app-logo.png");
 
 const Splash = () => {
 
 	const {theme, styles} = useStyles();	
+	const {t} = useTranslation();
 	
 	return (
 		<AppView goBack={false} scroll={false} appContainerStyle={styles.containerStyle} staticViewStyle={styles.staticView}>
-			<Image
-				source={appIcon}
-				resizeMode="contain"
-				style={styles.image}
+			<AppIcon 
+            	logoContainerStyle={styles.logoContainer} 
+            	logoStyle={styles.logoStyle} 
 			/>
-			<StyledText style={styles.bold}>FINCRIPT</StyledText>  
-			<StyledText style={styles.tagline}>Invest with us</StyledText>  
+			<StyledText style={styles.tagline}>{t('company:tagline')}</StyledText>  
 		</AppView> 
 	);
 	
@@ -29,30 +26,29 @@ const useStyles = () => {
 
 	const styles = StyleSheet.create({
 		containerStyle: {
-			// alignItems: 'center', 
+			alignItems: 'center', 
 		},
 		staticView: {
 			justifyContent: 'center',
 			alignItems: 'center', 
 		},
 		bold: {
-			// fontFamily: "roboto-regular",
 			color: "#fff",
 			fontSize: WP(9),
 			fontWeight:'bold',
-			marginTop: HP(2)
 		},
 		tagline :{
-			// fontFamily: "roboto-regular",
 			color: "#fff",
 			fontSize: WP(5),
-			marginTop: HP(0)
+			marginTop: HP(2)
 		},
-
-		image: {
-			// marginTop: 50,
-			height: 100
-		}
+		logoContainer: {
+			width: '100%',
+		},
+		logoStyle: {
+			width: WP(50),
+			height:30
+		},
 	});	
 
 	return {theme, styles}

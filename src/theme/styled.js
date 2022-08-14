@@ -4,8 +4,19 @@ import { useTheme, WP } from './index'
 
 export const StyledText = ({children, style, ...props}) => {
 	const styles = useStyles();
+	
+	const mergedStyle = [{}].concat(style).reduce((obj, item) => {
+		return {...obj, ...item};
+	});
+	let fontFamily = 'JosefinSans-Regular';
+
+	if (mergedStyle && mergedStyle?.fontWeight) {
+		fontFamily = (mergedStyle?.fontWeight == '700' || mergedStyle?.fontWeight == 'bold') ? 'JosefinSans-Bold' : 'JosefinSans-Regular';
+		delete mergedStyle['fontWeight'];
+	}
+
 	return (
-		<Text {...props} style={[styles.text, style]}>{children}</Text>
+		<Text {...props} style={[styles.text, mergedStyle, {fontFamily}]}>{children}</Text>
 	)
 }
 
@@ -20,11 +31,10 @@ const useStyles = () => {
 	const styles = StyleSheet.create({
 		text : {
 			color: theme.text,
-			fontFamily: 'Roboto'
+			fontFamily: 'JosefinSans-Regular',
+			// fontWeight: '400'
 		},
 		paddedView: {
-			// paddingLeft: WP(3),
-			// paddingRight: WP(3),
 			width: '100%',
 			justifyContent: 'center',
 			alignItems: 'center'
