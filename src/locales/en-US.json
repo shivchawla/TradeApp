@@ -3,10 +3,13 @@
 		"en": "English",
 		"es": "Spanish"
 	},
+	"company": {
+		"tagline": "Invest from anywhere "
+	},
 	"auth": {
 		"signIn": {
 			"title": "Sign In",
-			"description": "Enter your email and pasword",
+			"description": "Enter your e-mail and password",
 			"submit": "Sign In",
 			"signUpQuestion": "Don't have an account?"
 		},

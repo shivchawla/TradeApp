@@ -87,6 +87,8 @@ const useStyles = () => {
 			paddingLeft: WP(5),
 			width: '100%',
 			alignItems: 'flex-start',
+			marginTop: HP(4),
+			marginBottom: HP(4),
 		},
 		logoStyle: {
 			width: WP(50), 

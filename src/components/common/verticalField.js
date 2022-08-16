@@ -5,9 +5,9 @@ import { PnLText } from './';
 import * as Theme from '../../theme';
 import { formatValue} from '../../utils';
 
-const { useTheme, StyledText, WP, Typography} = Theme;
+const { useTheme, StyledText, WP, HP, Typography} = Theme;
 
-export const VerticalField = ({label, value, changeValue = 0, isPnL = false, labelTop = true, valuePrefix = '', ...props}) => {
+export const VerticalField = ({label, value, changeValue = 0, isPnL = false, labelTop = true, valuePrefix = '', isNumber = false, ...props}) => {
 	
 	const styles = useStyles();
 
@@ -17,7 +17,7 @@ export const VerticalField = ({label, value, changeValue = 0, isPnL = false, lab
 			{isPnL ? 
 				<PnLText {...{value, changeValue}} {...{valueStyle: props.valueStyle, changeStyle: props.changeStyle}} />
 				:
-				<StyledText style={[styles.value, props.valueStyle]}>{valuePrefix + formatValue(value)}
+				<StyledText {...{isNumber}} style={[styles.value, props.valueStyle, {...isNumber && {paddingTop: HP(0.5)}}]}>{valuePrefix + formatValue(value)}
 				</StyledText>
 			}
 			{!labelTop && <StyledText style={[styles.label, props.labelStyle]}>{label}</StyledText>}
@@ -31,8 +31,6 @@ const useStyles = () => {
 	const styles = StyleSheet.create({
 		container: {
 			width:'50%',
-			// paddingLeft: WP(5),
-			// marginBottom: WP(5)
 		},
 		label: {
 			fontWeight: '400',
@@ -41,7 +39,7 @@ const useStyles = () => {
 		},
 		value: {
 			fontSize: Typography.fourPointFive, 
-			color: theme.positionValue
+			color: theme.positionValue,
 		}
 	})
 

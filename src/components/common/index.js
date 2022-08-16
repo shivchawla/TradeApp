@@ -30,3 +30,4 @@ export { Checkbox } from './checkbox';
 export { AppIcon } from './appIcon';
 export { OtpInput } from './otpInput';
 export { SwipeButton } from './swipeButton';
+export { ShowMoreContainer } from './showMoreContainer';

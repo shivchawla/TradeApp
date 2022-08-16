@@ -2,10 +2,31 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useTheme, WP } from './index'
 
-export const StyledText = ({children, style, ...props}) => {
+export const StyledText = ({children, style, isNumber = false, ...props}) => {
 	const styles = useStyles();
+	
+	let mergedStyle = [{}].concat(style).reduce((obj, item) => {
+		return {...obj, ...item};
+	});
+
+	let fontFamilyRegular = 'JosefinSans-Regular';
+	let fontFamilyBold = 'JosefinSans-Bold';
+	// mergedStyle = {...mergedStyle, borderColor: 'white', borderWidth: 1}
+
+	if(isNumber) {
+		fontFamilyRegular = 'Rubik-Regular';
+		fontFamilyBold = 'Rubik-Regular';
+	}
+
+	let fontFamily = fontFamilyRegular;
+
+	if (mergedStyle && mergedStyle?.fontWeight) {
+		fontFamily = ['700', 'bold'].includes(mergedStyle?.fontWeight) ? fontFamilyBold : fontFamilyRegular; 
+		delete mergedStyle['fontWeight'];
+	}
+
 	return (
-		<Text {...props} style={[styles.text, style]}>{children}</Text>
+		<Text {...props} style={[styles.text, mergedStyle, {fontFamily}]}>{children}</Text>
 	)
 }
 
@@ -20,11 +41,8 @@ const useStyles = () => {
 	const styles = StyleSheet.create({
 		text : {
 			color: theme.text,
-			fontFamily: 'Roboto'
 		},
 		paddedView: {
-			// paddingLeft: WP(3),
-			// paddingRight: WP(3),
 			width: '100%',
 			justifyContent: 'center',
 			alignItems: 'center'

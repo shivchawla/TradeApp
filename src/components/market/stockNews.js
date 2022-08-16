@@ -7,7 +7,7 @@ import { useTheme, WP, HP, StyledText } from '../../theme';
 import { useStockNews } from '../../helper';
 import { newsUrl } from '../../config';
 
-const ShowNews = ({news, symbol}) => {
+const ShowNews = ({news, symbol, showMore = true}) => {
 
 	const {theme, styles} = useStyles(); 
 	const navigation = useNavigation();
@@ -39,7 +39,7 @@ const ShowNews = ({news, symbol}) => {
 				return <NewsItem key={index} {...{item}} />
 			})
 			}
-			{news.length > numItems && 
+			{(news.length > numItems && showMore) && 
 				<View style={styles.buttonContainer}>
 					<TouchableOpacity style={styles.showMoreButton} onPress={() => setNumItems(numItems + 5)}>
 						<StyledText style={styles.showMoreText}>MORE NEWS</StyledText>
@@ -50,7 +50,7 @@ const ShowNews = ({news, symbol}) => {
 	)
 } 
 
-export const StockNews = ({symbol, ...props}) => {
+export const StockNews = ({symbol, showMore = true, ...props}) => {
 
 	const {news, getNews} = useStockNews(symbol);
 
@@ -63,10 +63,7 @@ export const StockNews = ({symbol, ...props}) => {
 	return (
 		<>
 		{!!news?.data && news.data.length > 0 &&
-		<Collapsible		
-			title="NEWS"
-			content={<ShowNews news={news.data} {...{symbol}} />}
-		/>
+			<ShowNews news={news.data} {...{symbol, showMore}} />
 		}
 		</>
 	)

@@ -31,10 +31,7 @@ const useStyles = () => {
 			width: WP(100),
 		},
 		appLogo: {
-			// height: 100,	
-			// width: 100,
-			// borderColor: 'white',
-			// borderWidth: 1
+			height: 30,	
 		},
 		title: {
 

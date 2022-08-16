@@ -152,3 +152,6 @@ export const ACCOUNT_STATUS = {
 export const SCREEN_NAMES = {
   'Trading': 'Trading'
 }
+
+export const MAX_ACTIVITY_COUNT_HOME = 3;
+export const MAX_POSITIONS_COUNT_HOME = 1;
