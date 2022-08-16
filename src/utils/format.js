@@ -18,6 +18,7 @@ export const priceChangeFromRealtime = ({p} = {}, {prevDailyBar = {}} = {}) => {
 
 export const formatValue = (value, {upperCase = true, titleCase = false, lowerCase = false} = {}) => {
 	var output = value;
+	let dollarUSLocale = Intl.NumberFormat('en-US');
 
 	if (value) {
 		try {
@@ -26,9 +27,11 @@ export const formatValue = (value, {upperCase = true, titleCase = false, lowerCa
 			if(decimals == 0) {
 				return value;
 			} else {
-				return output.toFixed(2);
+				return dollarUSLocale.format(output.toFixed(2), {style: 'currency', maximumSignificantDigits: 2})
+				// return output.toFixed(2);
 			}
 		} catch (e) { 
+			console.log(e);
 			return '--' 
 		}
 

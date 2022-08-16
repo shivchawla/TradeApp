@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {View, StyleSheet, PanResponder} from 'react-native';
-import {LineChart as SVGLineChart} from 'react-native-svg-charts';
+import {LineChart as SVGLineChart, Path} from 'react-native-svg-charts';
 import {Line} from 'react-native-svg';
 import {useDebounce, useThrottle, useThrottleFn} from 'react-use';
 
@@ -73,12 +73,21 @@ export const LineChart = ({data, size, hasTooltip = false, base = null, baseline
   		const color = value != '--' ? value >= (base || data[0]) ? theme.green : theme.red : theme.text;
   		return (
   			<View style={styles.priceTextContainer}>
-  				<StyledText style={[styles.priceText, {color}]}>{value}</StyledText>
-  				<StyledText style={[styles.priceText, {marginLeft: WP(1), color}]}>{changeValue}</StyledText>
+  				<StyledText isNumber={true} style={[styles.priceText, {color}]}>{value}</StyledText>
+  				<StyledText isNumber={true} style={[styles.priceText, {marginLeft: WP(1), color}]}>{changeValue}</StyledText>
 			</View>
 		)
   	}
 
+	  const Shadow = ({ line, color }) => (
+		<Path
+			key={'shadow'}
+			d={line}
+			fill={'none'}
+			strokeWidth={2}
+			stroke={color}
+		/>
+	)
   	
  	const panResponder = React.useRef(
 	    PanResponder.create({
@@ -138,12 +147,13 @@ export const LineChart = ({data, size, hasTooltip = false, base = null, baseline
 			<SVGLineChart
 	            style={[getSize(size), props.chartStyle]}
 	            data={ data }
-	            svg={{ stroke: getColor(data) }}
+	            svg={{ stroke: getColor(data), strokeWidth: 10, strokeOpacity: 0.05}}
 	            contentInset={ { bottom: 0, top: 30 } }
 	        >
 	        {baseline && <HorizontalLine />}
 	        {hasTooltip && trigger && <VerticalLine />}
 	        {hasTooltip && trigger && <PriceText />}
+			<Shadow color={getColor(data)}/>
 	        </SVGLineChart>
         </View>
 	);

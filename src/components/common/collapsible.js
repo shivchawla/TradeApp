@@ -4,25 +4,31 @@ import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import {ShowHideButton} from './';
 import {useTheme, StyledText, WP, HP} from '../../theme';
 
-export const Collapsible = ({title, content, summary = null, summaryInline = false, endButton = null, show = true, ...props}) => {
+export const Collapsible = ({title, content, summary = null, summaryInline = false, endButton = null, show = true, enabled=true, ...props}) => {
 	const {theme, styles} = useStyles();
 	const [showDetail, setShow] = useState(show);
 
+	const ToggleButton = () => enabled && <ShowHideButton iconColor={theme.grey3} containerStyle={styles.contentToggleIcon} {...{showDetail}} onToggle={() => setShow(!showDetail)} />;
+	
 	return (
 		<>
 		<View style={styles.headerContainer}>
 			<View style={styles.contentHeader}>
+				{enabled ? 
 				<TouchableOpacity activeOpacity={1} onPress={() => setShow(!showDetail)}>
 					<StyledText style={styles.contentTitle}>{title}</StyledText>
 				</TouchableOpacity>
+				: <StyledText style={styles.contentTitle}>{title}</StyledText>
+				}
+
 				{(summaryInline && summary) 
 					? 
 					<View style={{flexDirection: 'row'}}>
 						<View style={styles.summaryContainer}>{summary}</View>
-						<ShowHideButton iconColor={theme.grey3} containerStyle={styles.contentToggleIcon} {...{showDetail}} onToggle={() => setShow(!showDetail)} />
+						<ToggleButton />
 					</View>
 					: 
-					<ShowHideButton iconColor={theme.grey3} containerStyle={styles.contentToggleIcon} {...{showDetail}} onToggle={() => setShow(!showDetail)} />
+					<ToggleButton />
 				}
 			</View>
 		</View>

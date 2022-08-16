@@ -1,25 +1,29 @@
- import React, {useState} from 'react';
+ import React, {useEffect, useState} from 'react';
 import { View, StyleSheet, TouchableOpacity} from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import { InView } from 'react-native-intersection-observer'
 
 import {AppView, AppHeader, PnLText, 
 	LineChart, VerticalField,
-	AccountIcon, SearchIcon, Collapsible, Clickable } from '../../components/common';
+	AccountIcon, SearchIcon, Collapsible, Clickable, ShowMoreContainer } from '../../components/common';
 
 import { PortfolioDisplay, PnLGraph	 } from '../../components/portfolio';
 import { DisplayOrderList } from '../../components/order';
 import { DisplayActivityList } from '../../components/activity';
+import { StockNews } from '../../components/market';
 
 import * as Theme from '../../theme';
 import { useStockPortfolioData, useTradingAccountData, 
 	usePortfolioHistory, useOrders, useCancelAllOrders, useAccountActivity } from '../../helper';
 
 import {formatValue} from '../../utils';
-import {ACCOUNT_SUMMARY_FIELDS} from '../../config';
+import {ACCOUNT_SUMMARY_FIELDS, MAX_ACTIVITY_COUNT_HOME, MAX_POSITIONS_COUNT_HOME} from '../../config';
+import { t } from 'i18next';
 
 const {useTheme, WP, HP, StyledText} = Theme;
 
-const HorizontalField = ({label, value, isPnL=false, ...props}) => {
+const HorizontalField = ({label, value, isPnL=false, isNumber = false, ...props}) => {
 	const {theme, styles} = useStyles();
 
 	return (
@@ -27,26 +31,27 @@ const HorizontalField = ({label, value, isPnL=false, ...props}) => {
 			<StyledText style={styles.pnlHeaderLabel}>{label}: </StyledText>
 			{isPnL ? 
 				<PnLText {...{value}} {...{valueStyle: styles.pnlHeaderValue}} />
-				: <StyledText style={styles.pnlHeaderValue}>{value}</StyledText>
+				: <StyledText {...{isNumber}} style={styles.pnlHeaderValue}>{value}</StyledText>
 			}
 		</View>
 	)
 }
 
 const ShowMoreButton = ({onPress}) => {
-	const {theme, styles} = useStyles();
+	const {styles} = useStyles();
+	const {t} = useTranslation();
 	return (
 		<Clickable onPress={onPress}>
-			<StyledText style={styles.showMoreText}>SHOW MORE</StyledText>
+			<StyledText style={styles.showMoreText}>{t('common:showMore')}</StyledText>
 		</Clickable>
 	)
 }
 
 const CancelOrderButton = ({onPress}) => {
-	const {theme, styles} = useStyles();
+	const {styles} = useStyles();
 	return (
 		<Clickable onPress={onPress}>
-			<StyledText style={styles.cancelOrderText}>CANCEL ALL</StyledText>
+			<StyledText style={styles.cancelOrderText}>{t('common:cancelAll')}</StyledText>
 		</Clickable>
 	)
 }
@@ -59,18 +64,25 @@ const getPnL = (history) => {
 	return (history?.profit_loss || []).slice(-1)[0];
 }
 
+const PortfolioNews = ({symbols}) => {
+	return symbols.map(symbol => <StockNews {...{symbol}} showMore={false}/>)
+}
 
-const PortfolioHeader = ({portfolioHistory}) => {
+const PortfolioHeader = ({portfolioHistory, ...props}) => {
 	const {theme, styles} = useStyles();
 	const navigation = useNavigation();
+	const {t} = useTranslation();
+
+	console.log(props.bottomHeaderStyle)
 
 	return (
 		<>
-		<AppHeader headerLeft={<AccountIcon />} headerRight={<SearchIcon onPress={() => navigation.navigate("SearchStock")} iconColor={theme.greyIcon}/>} title="Portfolio" goBack={false} />
-		<View style={styles.portfolioHeader}>
+		{!props.hideTop && <AppHeader headerLeft={<AccountIcon />} headerRight={<SearchIcon onPress={() => navigation.navigate("SearchStock")} iconColor={theme.greyIcon}/>} title={t('screens:portfolio')} goBack={false} headerContainerStyle={props.topHeaderStyle}/>}
+		<View style={[styles.portfolioHeader, props.bottomHeaderStyle]}>
 			<VerticalField 
 				label="Total Balance" 
-				labelTop={false} 
+				labelTop={false}
+				isNumber={true} 
 				value={getLatestEquity(portfolioHistory)} 
 				valuePrefix='$ '
 				valueStyle={{fontSize: WP(6), fontWeight: '700'}}
@@ -103,6 +115,7 @@ const AccountSummary = ({tradingAccount}) => {
 					{...{key}}  
 					label={ACCOUNT_SUMMARY_FIELDS[key]} 
 					value={tradingAccount[key]}
+					isNumber={true}
 					containerStyle={styles.accountSummaryField} 
 				/>
 			) 
@@ -125,14 +138,20 @@ const Portfolio = (props) => {
 	const {cancelAllOrders} = useCancelAllOrders();
 	const [relevantActivity, setActivity] = useState(null);
 
+	const [screenOffset, setScreenOffset] = useState(0);
+
 	React.useEffect(() => {
 		(async() => {
 			if (!!accountActivity && !!orders) {
 				var allExceptNewOrders = orders.filter(item => item.status != "new").map(item => {return {...item, activity_type: 'ORDER'}});
-				setActivity([...accountActivity, ...allExceptNewOrders].slice(0, 10));
+				setActivity([...accountActivity, ...allExceptNewOrders].slice(0, MAX_ACTIVITY_COUNT_HOME));
+			}
+
+			if (!portfolio) {
+
 			}
 		})()
-	}, [accountActivity, orders]);
+	}, [accountActivity, orders, portfolio]);
 
 	useFocusEffect(
 		React.useCallback(() => {
@@ -157,31 +176,58 @@ const Portfolio = (props) => {
 
 	const pendingOrders = orders && orders.filter(item => item.status == "new");
 
+	const performanceViewRef = React.useRef();
+
+	// const onScroll = (e) => {
+	// 	console.log("WTF - onLayout");
+	// 	console.log(e.nativeEvent.contentOffset);
+	// 	setScreenOffset(e?.nativeEvent?.contentOffset?.y || 0)
+	// }
+
+	// useEffect(() => {
+	// 	console.log(screenOffset);
+	// }, [screenOffset])
+
+	// const bottomHeaderStyle = {...(screenOffset > 10) && {
+	// 		borderBottomColor: theme.grey5,
+	// 		borderBottomWidth: 2,
+	// 		backgroundColor: theme.grey9
+	// 	}, 
+	// };
+
+	// const topHeaderStyle={...(screenOffset > 100) && {height: 0}};
+	// console.log(bottomHeaderStyle);
+
+	// const hideTop = screenOffset > 50;
+
+	const Header = () => <PortfolioHeader {...{portfolioHistory}} />
 	return (
-		<AppView isLoading={loading} header={<PortfolioHeader {...{portfolioHistory}}/>} title="Portfolio">
-			<Collapsible 
+		<AppView title="Portfolio"  isLoading={loading} header={<Header />}>
+			<Collapsible
 				title="PERFORMANCE" 
 				content={<PnLGraph />}  
-				show={true}
+				enabled={false}
+				ref={performanceViewRef}
 			/>
 
 			{tradingAccount && 
-				<Collapsible 
+				<ShowMoreContainer 
 					title="ACCOUNT SUMMARY" 
-					content={<AccountSummary {...{tradingAccount}} />} 
+					content={<AccountSummary {...{tradingAccount}} />}
+					onShowMore={() => navigation.navigate('AccountSummary')} 
 					containerStyle={{}}
 				/>
 			}
 			
 			{portfolio && 
-				<Collapsible 
-					title="POSITIONS" 
+				<ShowMoreContainer 
+					title="TOP POSITIONS" 
 					containerStyle={{paddingLeft: WP(2)}}
-					content={<PortfolioDisplay {...{portfolio, orders}}/>} 
+					content={<PortfolioDisplay {...{portfolio, orders}} displayCount={MAX_POSITIONS_COUNT_HOME}/>} 
 				/>
 			}
 			{(pendingOrders && pendingOrders.length > 0) && 
-				<Collapsible title="PENDING ORDERS" 
+				<ShowMoreContainer title="PENDING ORDERS" 
 					containerStyle={{marginTop: HP(2)}}
 					content={<DisplayOrderList orders={pendingOrders}/>}
 					endButton={<CancelOrderButton onPress={cancelOrders}/>}
@@ -189,10 +235,18 @@ const Portfolio = (props) => {
 				/>
 			}
 			{(relevantActivity && relevantActivity.length > 0) && 
-				<Collapsible 
+				<ShowMoreContainer 
 					title="RECENT ACTIVITY" 
 					content={<DisplayActivityList activityList={relevantActivity}/>}
 					endButton={<ShowMoreButton onPress={() => navigation.navigate('History')} />} 
+				/>
+			}
+
+			{portfolio &&
+				<ShowMoreContainer 
+					title="PORTFOLIO NEWS" 
+					containerStyle={{marginBottom: HP(4)}}
+					content={<PortfolioNews symbols={portfolio.map(pos => pos.symbol)}/>} 
 				/>
 			}
 		</AppView>
@@ -206,11 +260,17 @@ const useStyles = () => {
 		portfolioHeader: {
 			flexDirection: 'row',
 			justifyContent: 'space-between',
-			// borderBottomWidth:1,
-			// borderColor: theme.grey5,
 			padding: WP(2),
 			paddingTop: WP(2),
-			width: '100%'
+			width: '100%',
+			shadowColor: "#fff",
+			shadowOpacity: 1,
+			shadowRadius: 5,
+			shadowOffset: {
+				height: 11,
+				width: 0
+			},
+			elevation: 5
 		},
 		portfolioFieldLabel: {
 			fontSize: WP(4.5)

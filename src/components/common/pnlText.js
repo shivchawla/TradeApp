@@ -18,8 +18,8 @@ export const PnLText = ({value = 0, changeValue = 0, withBracket = true, isPct =
 
 	return (
 		<View style={[styles.pnlTextContainer, props.containerStyle, {justifyContent}]}>
-			{!!value && <StyledText style={[styles.valueText, props.valueStyle, {color: valueColor}]}> {formattedValue}</StyledText>}
-			{!!changeValue && <StyledText style={[styles.changeText, props.changeStyle, {color: changeValueColor}]}> {formatChangeValue}</StyledText>}
+			{!!value && <StyledText isNumber={true} style={[styles.valueText, props.valueStyle, {color: valueColor}]}> {formattedValue}</StyledText>}
+			{!!changeValue && <StyledText isNumber={true} style={[styles.changeText, props.changeStyle, {color: changeValueColor}]}> {formatChangeValue}</StyledText>}
 		</View>
 	);
 }

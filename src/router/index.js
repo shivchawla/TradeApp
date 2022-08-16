@@ -30,19 +30,24 @@ enableScreens();
 const Tabs = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-const homeTabs = () => {
+const HomeTabs = () => {
 	const {theme} = useTheme();
-	const tabBarOptions = {
-		showLabel: false, 
-		activeTintColor:theme.tabTint, 
-		style: {
+	const screenOptions = {
+		tabBarShowLabel: true, 
+		headerShown: false,
+		tabBarActiveTintColor:theme.tabTint, 
+		tabBarstyle: {
 			backgroundColor: theme.tabBackground,
 		}};
 
 	return (
-	  <Tabs.Navigator {...{tabBarOptions}} tabBar={props => <CustomTabBar {...props} />}>
-	    <Tabs.Screen name="Portfolio" component={Portfolio} />
-	  	<Tabs.Screen name="Market" component={Market} />
+	  <Tabs.Navigator {...{screenOptions}} tabBar={props => <CustomTabBar {...props} />}>
+		<Tabs.Screen name="Home" component={Portfolio}/>
+		<Tabs.Screen name="Portfolio" component={Portfolio}/>
+		<Tabs.Screen name="Trade" component={Market} />
+		<Tabs.Screen name="Market" component={Market} />
+	  	<Tabs.Screen name="Explore" component={Market} />
+		  
 	  </Tabs.Navigator>
 	)
 }
@@ -50,9 +55,9 @@ const homeTabs = () => {
 const TradingStack = () => {
 	return (
 		<Stack.Navigator screenOptions={{headerShown: false}}>
-			<Stack.Screen name="Home" component={homeTabs} />
-      {innerScreens(Stack)}
-	    <Stack.Screen name="Settings" component={Settings} />    
+			<Stack.Screen name="Home" component={HomeTabs} />
+      		{innerScreens(Stack)}
+	    	<Stack.Screen name="Settings" component={Settings} />    
 		</Stack.Navigator>
      )
 }

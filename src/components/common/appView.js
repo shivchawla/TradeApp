@@ -27,7 +27,7 @@ export const AppHeader = ({title, goBack = true, ...props}) => {
 	);
 }
 
-export const AppView = ({scroll = true, footer, hasHeader = true, header, isLoading = false, keyboardMode="", ...props}) => {
+export const AppView = ({scroll = true, footer, hasHeader = true, header, isLoading = false, keyboardMode="", onScroll, ...props}) => {
 
 	const {theme, styles} = useStyles();
 
@@ -65,7 +65,7 @@ export const AppView = ({scroll = true, footer, hasHeader = true, header, isLoad
 			{(scroll || keyboardMode == "overlap") ? 
 				<View style={styles.scrollAppContainer}>
 					{hasHeader || header ? header ? header : <AppHeader {...props}/> : <></>}
-					<KeyboardAwareScrollView innerRef={(r) => scrollRef.current = r} enableOnAndroid={true} contentContainerStyle={[styles.scrollView, props.scrollViewStyle, {...hasPadding && {paddingLeft: WP(props.padding), paddingRight: WP(props.padding)}}]} showsVerticalScrollIndicator={false}>
+					<KeyboardAwareScrollView innerRef={(r) => scrollRef.current = r} enableOnAndroid={true} contentContainerStyle={[styles.scrollView, props.scrollViewStyle, {...hasPadding && {paddingLeft: WP(props.padding), paddingRight: WP(props.padding)}}]} showsVerticalScrollIndicator={false} {...{onScroll}}>
 						{props.children}
 					</KeyboardAwareScrollView>
 					{footer && <View style={[styles.footerContainer, props.footerContainerStyle]}>{footer}</View>}

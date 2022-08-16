@@ -56,6 +56,32 @@ export const CustomTabBar = ({ state, descriptors, navigation }) => {
 
   const [isModalVisible, setModalVisible] = useState(false);
   
+  const getIcon = (routeName) => {
+    switch(routeName) {
+      case "Home":
+          return "newspaper";
+      case "Portfolio":
+          return "pie-chart";
+      case "Market":
+          return "analytics";
+      case "Explore":
+          return "compass";  
+    }
+  }
+
+  const getIconStyle = (routeName) => {
+      switch(routeName) {
+        case "Home":
+            return {marginRight: WP(0)}
+        case "Portfolio":
+          return {marginRight: WP(0)}
+        case "Market":
+          return {marginLeft: WP(0)}
+        case "Explore":
+          return {marginLeft: WP(0)}
+      }
+  }
+
   return (
     <View style={styles.tabBar}>
       {state.routes.map((route, index) => {
@@ -68,7 +94,7 @@ export const CustomTabBar = ({ state, descriptors, navigation }) => {
             ? options.title
             : route.name;
 
-        const icon = route.name == "Market" ? "stats-chart" : "pie-chart";
+        const icon = getIcon(route.name);
             
         const isFocused = state.index === index;
 
@@ -101,7 +127,7 @@ export const CustomTabBar = ({ state, descriptors, navigation }) => {
             testID={options.tabBarTestID}
             onPress={onPress}
             onLongPress={onLongPress}
-            style={{ flex: 1, alignItems: 'center', ...(index%2 == 0) ? {marginRight: WP(20)} : {marginLeft: WP(20)}}}
+            style={{ flex: 1, alignItems: 'center', ...getIconStyle(route.name)}}
           >
         
             <Ionicons name={icon} color={isFocused ? theme.light : theme.grey7} size={WP(7)} />
@@ -131,7 +157,7 @@ const useStyles = () => {
       alignItems: 'center',
       backgroundColor: theme.background,
       borderTopWidth:1,
-      borderColor: theme.grey7,
+      borderColor: theme.grey10,
       width: WP(100)
     },
     quickActionButton: {
@@ -147,7 +173,7 @@ const useStyles = () => {
       // justifyContent: 'center', 
       minHeight: 320 + 50, 
       height: HP(40) + 50,
-      backgroundColor: theme.grey10,
+      backgroundColor: theme.background,
       width: WP(100),
       borderTopRightRadius: 25,
       borderTopLeftRadius: 25,
@@ -168,7 +194,7 @@ const useStyles = () => {
     },
     closeButton: {
       padding: WP(2),
-      backgroundColor: theme.icon,
+      backgroundColor: theme.white,
     },
     customAction: {
       margin: WP(5),

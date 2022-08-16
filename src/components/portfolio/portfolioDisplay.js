@@ -12,7 +12,7 @@ import { OPEN_ORDER_STATUS } from '../../config';
 import * as Theme from '../../theme';
 const {useTheme, WP, StyledText} = Theme;
 
-export const PortfolioDisplay = ({portfolio, orders = []}) => {
+export const PortfolioDisplay = ({portfolio, orders = [], displayCount = -1}) => {
 
 	const {theme, styles} = useStyles();
 
@@ -59,7 +59,7 @@ export const PortfolioDisplay = ({portfolio, orders = []}) => {
 		<View style= {styles.portfolioDisplayContainer}>
 			{/*<StyledText style={styles.portfolioDisplayTitle}>POSITIONS</StyledText>*/}
 			<PortfolioDisplayHeader />
-			{portfolio.map((item, index) => {
+			{portfolio.slice(0, displayCount).map((item, index) => {
 				return <DisplayPosition key={index} position={item} />
 			})
 			}

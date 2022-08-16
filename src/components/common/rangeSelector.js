@@ -12,7 +12,7 @@ export const RangeSelector = ({items, onSelect, selectedIndex}) => {
 			{items.map((item, index) => {
 				return (
 					<TouchableOpacity key={item} style={{...index==selectedIndex && styles.selectedRange}} activeOpacity={1.0} onPress={() => onSelect(index)}>
-						<StyledText style={styles.rangeText}>{item}</StyledText>
+						<StyledText style={[styles.rangeText, {...index==selectedIndex && styles.selectedRangeText}]}>{item}</StyledText>
 					</TouchableOpacity>
 				)
 			})}
@@ -35,12 +35,15 @@ const useStyles = () => {
 		},
 		selectedRange: {
 			borderWidth:1,
-			borderColor: theme.green,
+			borderColor: theme.icon,
 			paddingLeft: WP(2),
 			paddingRight: WP(2)
 		},
+		selectedRangeText: {
+			color: theme.icon
+		},
 		rangeText: {
-			color: theme.green
+			color: theme.grey2
 		}
 	});
 

@@ -2,16 +2,26 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useTheme, WP } from './index'
 
-export const StyledText = ({children, style, ...props}) => {
+export const StyledText = ({children, style, isNumber = false, ...props}) => {
 	const styles = useStyles();
 	
-	const mergedStyle = [{}].concat(style).reduce((obj, item) => {
+	let mergedStyle = [{}].concat(style).reduce((obj, item) => {
 		return {...obj, ...item};
 	});
-	let fontFamily = 'JosefinSans-Regular';
+
+	let fontFamilyRegular = 'JosefinSans-Regular';
+	let fontFamilyBold = 'JosefinSans-Bold';
+	// mergedStyle = {...mergedStyle, borderColor: 'white', borderWidth: 1}
+
+	if(isNumber) {
+		fontFamilyRegular = 'Rubik-Regular';
+		fontFamilyBold = 'Rubik-Regular';
+	}
+
+	let fontFamily = fontFamilyRegular;
 
 	if (mergedStyle && mergedStyle?.fontWeight) {
-		fontFamily = (mergedStyle?.fontWeight == '700' || mergedStyle?.fontWeight == 'bold') ? 'JosefinSans-Bold' : 'JosefinSans-Regular';
+		fontFamily = ['700', 'bold'].includes(mergedStyle?.fontWeight) ? fontFamilyBold : fontFamilyRegular; 
 		delete mergedStyle['fontWeight'];
 	}
 
@@ -31,8 +41,6 @@ const useStyles = () => {
 	const styles = StyleSheet.create({
 		text : {
 			color: theme.text,
-			fontFamily: 'JosefinSans-Regular',
-			// fontWeight: '400'
 		},
 		paddedView: {
 			width: '100%',
