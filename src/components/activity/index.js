@@ -19,7 +19,7 @@ export const DisplayActivity = ({activity}) => {
 				pastTense={true}
 				descriptionStyle={styles.orderStyle}/>
 	} 
-	else if (activityType.startsWith("DIV")) {
+	else if (activityType?.startsWith("DIV")) {
 		return <ShowJson json={activity} full={false} />
 	} else {
 		return <></>

@@ -7,13 +7,12 @@ import {useTheme, WP, StyledText} from '../../theme';
 
 import {CloseIcon} from './iconButtons';
 
-export const FullViewModal = ({isVisible = false, opacity = 1.0, animation="slide", onClose, title, ...props}) => {
-	
+export const FullViewModal = React.memo(({isVisible = false, opacity = 1.0, animation="slideInUp", onClose, title, ...props}) => {
 	const {theme, styles} = useStyles();
-
 	return (
-		<Modal 
-			animationType={animation} 
+		<Modal
+			animationIn={animation} 
+			animationOut="fadeOut" 
 			backdropOpacity={opacity}
 			backdropColor={theme.background}
 			style={styles.modal}
@@ -27,7 +26,7 @@ export const FullViewModal = ({isVisible = false, opacity = 1.0, animation="slid
 			</View>
 		</Modal>
 	)
-}
+})
 
 
 const useStyles = () => {
