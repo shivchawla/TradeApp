@@ -30,25 +30,17 @@ export const HorizontalButtonGroup = ({
 }) => {
   const { styles } = useStyles();
   const [selected, setSelected] = useState(firstSelected ? 0 : -1)
-  console.log('Rendering HorizontalButtonGroup: ', firstSelected);
-  console.log("On Render: ", selected);
 
   React.useEffect(() => {
-    console.log("Selected changed :", selected);
     if (selected != null && selected != -1) {
-      console.log(selected);
-      console.log(Object.keys(items)[selected]);
       onSelect(Object.keys(items)[selected])
     } else {
-      console.log("Undo Selected: ", selected);
       onSelect();
     }
   }, [selected]);
 
   const onPress = (index, key) => {
-    console.log("On Pressed: ", selected, index, key);
     if (index !== selected) {
-      console.log("Calling On Select")
       setSelected(index);
     } else if(undoSelection) {
       setSelected(-1)
