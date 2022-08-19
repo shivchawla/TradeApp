@@ -1,4 +1,6 @@
 import moment from 'moment-timezone';
+import moment_bd from 'moment-business-days';
+
 
 const tradingTimeZone = 'America/New_York';
 const startHour = 9;
@@ -6,6 +8,7 @@ const startMinute = 30;
 
 const endHour = 16;
 const endMinute = 0;
+
 
 export const startOfDayLocal = (d, fmt) => moment(d).local().hour(0).minute(0).second(0).utc().format(fmt);
 export const currentISODate = (fmt) => moment.tz(tradingTimeZone).utc().format(fmt);
@@ -15,13 +18,14 @@ export const NMonthsAgoISODate = (wks, fmt) => moment.tz(tradingTimeZone).subtra
 export const NYearsAgoISODate = (wks, fmt) => moment.tz(tradingTimeZone).subtract(wks, 'years').utc().format(fmt);
 
 export const NDaysAfterISODate = (days, fmt) => moment.tz(tradingTimeZone).add(days, 'days').utc().format(fmt);
+export const NBusinessDaysAfterISODate = (days, fmt) => moment_bd(moment.tz(tradingTimeZone)).businessAdd(days).utc().format(fmt);
+export const NBusinessDaysBeforeISODate = (days, fmt) => moment_bd(moment.tz(tradingTimeZone)).businessSubtract(days).utc().format(fmt);
 export const NWeeksAfterISODate = (wks, fmt) => moment.tz(tradingTimeZone).add(wks, 'weeks').utc().format(fmt);
 
 export const currentTimeZoneDate = (fmt) => moment.tz().format(fmt);
 export const toTimeZoneDate = (d, fmt) => moment.tz(d, tradingTimeZone).local().format(fmt);
 export const toISODate = (d, fmt) => moment.tz(d, tradingTimeZone).utc().format(fmt);
 export const yearStartISODate = () => moment.tz(tradingTimeZone).startOf('year').hour(startHour).minute(startMinute).utc().format();
-
 
 //???THIS IS TRICKY AS MARKET NOT ALWAYS CLOSE AT SAME TIME (24th December or other corner cases)
 export const dayStartISODate = (d) => moment(d).tz(tradingTimeZone).hour(startHour).minute(startMinute).second(0).utc().format();

@@ -3,7 +3,7 @@ import { Dimensions } from 'react-native';
 export {
 	currentISODate, toISODate, yearStartISODate, startOfDayLocal, 
 	NDaysAgoISODate, NWeeksAgoISODate, NMonthsAgoISODate, NYearsAgoISODate, 
-	NDaysAfterISODate, NWeeksAfterISODate,
+	NDaysAfterISODate, NBusinessDaysAfterISODate, NBusinessDaysBeforeISODate, NWeeksAfterISODate,
 	dayStartISODate, dayEndISODate, duration,
 	latestDayStartFromCalendar, toTimeZoneDate, 
 	currentTimeZoneDate, durationBetweenDates, getRoundedCurrentTime} from './date';
