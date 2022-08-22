@@ -251,8 +251,7 @@ const PlaceOrder = (props) => {
 const useStyles = () => {
 	const { theme } = useTheme();
     const { HP, WP } = useDimensions();
-    const { fontSize, fontWeight } = useTypography();
-
+    const Typography = useTypography();
 
 	const styles = StyleSheet.create({
 		tradeButton: {
@@ -272,7 +271,7 @@ const useStyles = () => {
 			borderRadius: WP(2)
 		},
 		switchButtonText: {
-			fontWeight: Typography.bold
+			fontWeight: Typography.fontWeight.bold
 		},
 		tickerDisplayContainer: {
 			flexDirection: 'row', 

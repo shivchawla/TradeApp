@@ -72,8 +72,7 @@ export const StockNews = ({symbol, showMore = true, ...props}) => {
 const useStyles = () => {
 	const { theme } = useTheme();
     const { HP, WP } = useDimensions();
-    const { fontSize, fontWeight } = useTypography();
-
+    const Typography = useTypography();
 
 	const styles = StyleSheet.create({
 		newsContainer: {

@@ -120,8 +120,7 @@ export const StockOrders = ({symbol, orders}) => {
 const useStyles = () => {
 	const { theme } = useTheme();
     const { HP, WP } = useDimensions();
-    const { fontSize, fontWeight } = useTypography();
-
+    const Typography = useTypography();
 
 	const styles = StyleSheet.create({
 		ordersContainer: {
@@ -151,7 +150,7 @@ const useStyles = () => {
 			justifyContent: 'center'
 		},
 		ordersHeaderTitle: {
-			fontSize: Typography.five,
+			fontSize: Typography.fontSize.five,
 			color: theme.darkgrey,
 
 			paddingLeft: WP(2),
@@ -178,11 +177,11 @@ const useStyles = () => {
 		},
 		ordersFieldLabel: {
 			fontWeight: '400',
-			fontSize: Typography.four, 
+			fontSize: Typography.fontSize.four, 
 			color: theme.light
 		},
 		ordersFieldValue: {
-			fontSize: Typography.four, 
+			fontSize: Typography.fontSize.four, 
 			color: theme.verydarkgrey
 		}
 

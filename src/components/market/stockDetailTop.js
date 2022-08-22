@@ -43,9 +43,8 @@ export const StockDetailTop = ({symbol}) => {
 const useStyles = () => {
 	const { theme } = useTheme();
     const { HP, WP } = useDimensions();
-    const { fontSize, fontWeight } = useTypography();
-	
-
+    const Typography = useTypography();
+    
 	const styles = StyleSheet.create({
 		stockDetailTopContainer: {
 			flexDirection: 'row',
@@ -54,7 +53,7 @@ const useStyles = () => {
 			padding: WP(2)
 		},
 		price :{
-			fontSize: Typography.four
+			fontSize: Typography.fontSize.four
 		}
 	});
 

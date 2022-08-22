@@ -85,8 +85,7 @@ export const WithdrawForm = ({onSubmit, onError, ...props}) => {
 const useStyles = () => {
 	const { theme } = useTheme();
     const { HP, WP } = useDimensions();
-    const { fontSize, fontWeight } = useTypography();
-
+    const Typography = useTypography();
 
 	const styles = StyleSheet.create({
 		formikContainer: {

@@ -12,8 +12,7 @@ const AddWatchlist = (props) => {
 	const styles = useStyles(); 
 	const { theme } = useTheme();
     const { HP, WP } = useDimensions();
-    const { fontSize, fontWeight } = useTypography();
-
+    const Typography = useTypography();
 	const {watchlists} = props.route.params;
 	const [name, setName] = useState("");
 	const {createWatchlist} = useCreateWatchlist();
@@ -64,8 +63,7 @@ const AddWatchlist = (props) => {
 const useStyles = () => {
 	const { theme } = useTheme();
     const { HP, WP } = useDimensions();
-    const { fontSize, fontWeight } = useTypography();
-
+    const Typography = useTypography();
 
 	const styles = StyleSheet.create({
 		nameContainer: {

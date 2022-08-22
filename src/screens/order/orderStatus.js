@@ -170,8 +170,7 @@ const OrderStatus = (props) => {
 const useStyles = () => {
 	const { theme } = useTheme();
     const { HP, WP } = useDimensions();
-    const { fontSize, fontWeight } = useTypography();
-
+    const Typography = useTypography();
 
 	const styles = StyleSheet.create({
 		topContainerStyle: {
@@ -179,10 +178,10 @@ const useStyles = () => {
 			marginTop: WP(5)
 		},
 		topSymbol: {
-			fontSize: Typography.six
+			fontSize: Typography.fontSize.six
 		},
 		topOrderType: {
-			fontSize: Typography.fourPointFive,
+			fontSize: Typography.fontSize.fourPointFive,
 			color: theme.light,
 		},
 		summaryContainerStyle: {
@@ -198,11 +197,11 @@ const useStyles = () => {
 			marginTop: WP(2)
 		},
 		qty: {
-			fontSize: Typography.fourPointFive,
+			fontSize: Typography.fontSize.fourPointFive,
 			color: theme.light
 		},
 		orderId: {
-			fontSize: Typography.threePointFive,
+			fontSize: Typography.fontSize.threePointFive,
 			color:theme.darkgrey,
 			marginTop: WP(2)
 		},
@@ -216,7 +215,7 @@ const useStyles = () => {
 			alignItems: 'center'
 		},
 		horizontalFieldLabel: {
-			fontSize: Typography.four,
+			fontSize: Typography.fontSize.four,
 			color: theme.light,
 			justifyContent: 'center'
 		},
@@ -224,13 +223,13 @@ const useStyles = () => {
 
 		},
 		horizontalFieldValue: {
-			fontSize: Typography.four,
+			fontSize: Typography.fontSize.four,
 			color: theme.light,
 			width: WP(35),
 			textAlign: 'right'
 		},
 		viewSymbol: {
-			fontSize: Typography.four,
+			fontSize: Typography.fontSize.four,
 			color: theme.green
 		},
 		orderButton :{

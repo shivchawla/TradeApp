@@ -41,8 +41,7 @@ const EditWatchlist = (props) => {
 	const styles = useStyles();
 	const { theme } = useTheme();
     const { HP, WP, deviceWidth, deviceHeight } = useDimensions();
-    const { fontSize, fontWeight } = useTypography();
-	
+    const Typography = useTypography();	
 	  
 	const {watchlistId} = props.route.params;
 	const {watchlist, getWatchlist} = useWatchlist(watchlistId);
@@ -194,8 +193,7 @@ const EditWatchlist = (props) => {
 const useStyles = () => {
 	const { theme } = useTheme();
     const { HP, WP } = useDimensions();
-    const { fontSize, fontWeight } = useTypography();
-	
+    const Typography = useTypography();	
 
 	const styles = StyleSheet.create({
 		draggableList: {

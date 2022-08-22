@@ -11,8 +11,7 @@ export const HorizontalScrollMenu = ({items, isPadded = true, scroll = true, ...
 	const styles = useStyles();
 	const { theme } = useTheme();
     const { HP, WP } = useDimensions();
-    const { fontSize, fontWeight } = useTypography();
-	
+    const Typography = useTypography();	
 	const [selectedIndex, setIndex] = useState(0);
 
 	const MenuButton = ({index, label, onPress}) => {
@@ -49,8 +48,7 @@ export const HorizontalScrollMenu = ({items, isPadded = true, scroll = true, ...
 const useStyles = () => {
 	const { theme } = useTheme();
     const { HP, WP } = useDimensions();
-    const { fontSize, fontWeight } = useTypography();
-	
+    const Typography = useTypography();	
 	
 	const styles = StyleSheet.create({
 		container: {

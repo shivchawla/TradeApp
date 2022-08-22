@@ -99,8 +99,7 @@ const useStyles = () => {
 	
 	const { theme } = useTheme();
     const { HP, WP } = useDimensions();
-    const { fontSize, fontWeight } = useTypography();
-
+    const Typography = useTypography();
 
 	const styles = StyleSheet.create({
 		marketDataContainer: {
@@ -108,7 +107,7 @@ const useStyles = () => {
 			paddingTop: WP(2),
 		},
 		marketDataTitle: {
-			fontSize: Typography.five,
+			fontSize: Typography.fontSize.five,
 			color: theme.darkgrey,
 			paddingLeft: WP(2),
 		},
@@ -127,7 +126,7 @@ const useStyles = () => {
 			justifyContent:'space-between'
 		},
 		fieldLabel: {
-			fontSize: Typography.four, 
+			fontSize: Typography.fontSize.four, 
 			color: theme.positionLabel,
 			textAlign: 'left' 		
 		},

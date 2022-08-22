@@ -8,8 +8,7 @@ import { useTheme, useDimensions, useTypography, StyledText } from '../../theme'
 export const Checkbox = ({value, title='', onToggle, disabled = false, ...props}) => {
 	const { theme } = useTheme();
     const { HP, WP } = useDimensions();
-    const { fontSize, fontWeight } = useTypography();
-
+    const Typography = useTypography();
 
 	const Component = disabled ? View : TouchableOpacity;
 	

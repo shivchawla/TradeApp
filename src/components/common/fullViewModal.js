@@ -32,8 +32,7 @@ export const FullViewModal = React.memo(({isVisible = false, opacity = 1.0, anim
 const useStyles = () => {
 	const { theme } = useTheme();
     const { HP, WP } = useDimensions();
-    const { fontSize, fontWeight } = useTypography();
-	
+    const Typography = useTypography();	
 	
 	const styles = StyleSheet.create({
 		modal: {

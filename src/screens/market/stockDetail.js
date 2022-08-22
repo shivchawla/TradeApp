@@ -91,6 +91,7 @@ const StockDetail = (props) => {
 	const {symbol} = props.route.params;
 	const {navigation} = props;
 	const {styles} = useStyles();
+	const { HP, WP } = useDimensions();
 
 	const [showWatchlistModal, setWatchlistModalVisible] = useState(false);
 	const [isFavorite, setIsFavorite] = useState(false);
@@ -190,8 +191,7 @@ const StockDetail = (props) => {
 const useStyles = () => {
 	const { theme } = useTheme();
     const { HP, WP } = useDimensions();
-    const { fontSize, fontWeight } = useTypography();
-
+    const Typography = useTypography();
 
 	const styles = StyleSheet.create({
 		chartContainer: {

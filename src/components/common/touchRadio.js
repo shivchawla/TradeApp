@@ -8,8 +8,7 @@ import { useTheme, useDimensions, useTypography, StyledText } from '../../theme'
 export const TouchRadio = ({selected, title='', onToggle, ...props}) => {
 	const { theme } = useTheme();
     const { HP, WP } = useDimensions();
-    const { fontSize, fontWeight } = useTypography();
-
+    const Typography = useTypography();
 	return (
 		<TouchableOpacity onPress={onToggle} style={props.style}>
 			{selected ?
@@ -32,8 +31,7 @@ export const TouchRadio = ({selected, title='', onToggle, ...props}) => {
 export const TouchRadioGroup = ({items, selectedIndex = 0, onSelect, ...props}) => {
 	const { theme } = useTheme();
     const { HP, WP } = useDimensions();
-    const { fontSize, fontWeight } = useTypography();
-
+    const Typography = useTypography();
 
 	const onClick = (index) => {
 		// console.log("onClick: ", index);

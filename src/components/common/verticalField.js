@@ -28,19 +28,19 @@ export const VerticalField = ({label, value, changeValue = 0, isPnL = false, lab
 const useStyles = () => {
 	const { theme } = useTheme();
     const { HP, WP } = useDimensions();
-    const { fontSize, fontWeight } = useTypography();
-
+    const Typography = useTypography();
+    
 	const styles = StyleSheet.create({
 		container: {
 			width:'50%',
 		},
 		label: {
 			fontWeight: '400',
-			fontSize: fontSize.four, 
+			fontSize: Typography.fontSize.four, 
 			color: theme.positionLabel, 
 		},
 		value: {
-			fontSize: fontSize.fourPointFive, 
+			fontSize: Typography.fontSize.fourPointFive, 
 			color: theme.positionValue,
 		}
 	})

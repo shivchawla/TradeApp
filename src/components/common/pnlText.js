@@ -29,8 +29,7 @@ export const PnLText = ({value = 0, changeValue = 0, withBracket = true, isPct =
 const useStyles = () => {
 	const { theme } = useTheme();
     const { HP, WP } = useDimensions();
-    const { fontSize, fontWeight } = useTypography();
-
+    const Typography = useTypography();
 
 	const styles = StyleSheet.create({
 		pnlTextContainer: {

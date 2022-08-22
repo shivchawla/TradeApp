@@ -140,8 +140,7 @@ export const StockPosition = ({symbol, position}) => {
 const useStyles = () => {
 	const { theme } = useTheme();
     const { HP, WP } = useDimensions();
-    const { fontSize, fontWeight } = useTypography();
-
+    const Typography = useTypography();
 
 	const styles = StyleSheet.create({
 		positionContainer: {
@@ -163,7 +162,7 @@ const useStyles = () => {
 			justifyContent: 'center'
 		},
 		positionHeaderTitle: {
-			fontSize: Typography.five,
+			fontSize: Typography.fontSize.five,
 			color: theme.darkgrey,
 			paddingLeft: WP(2),
 		},
@@ -186,11 +185,11 @@ const useStyles = () => {
 		},
 		positionFieldLabel: {
 			fontWeight: '400',
-			fontSize: Typography.four, 
+			fontSize: Typography.fontSize.four, 
 			color: theme.positionLabel, 
 		},
 		positionFieldValue: {
-			fontSize: Typography.fourPointFive, 
+			fontSize: Typography.fontSize.fourPointFive, 
 			color: theme.positionValue
 		}
 	});
