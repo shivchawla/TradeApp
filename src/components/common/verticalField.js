@@ -26,7 +26,8 @@ export const VerticalField = ({label, value, changeValue = 0, isPnL = false, lab
 }
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		container: {

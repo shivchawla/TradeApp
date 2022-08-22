@@ -1,5 +1,3 @@
-import { Dimensions } from 'react-native';
-
 export {
 	currentISODate, toISODate, yearStartISODate, startOfDayLocal, 
 	NDaysAgoISODate, NWeeksAgoISODate, NMonthsAgoISODate, NYearsAgoISODate, 
@@ -31,16 +29,6 @@ export const removeArray = (arr, value, key) => {
 		}
 	})
 }
-
-export const deviceWidth = Dimensions.get('window').width;
-export const deviceHeight =
-  Platform.OS === 'ios'
-    ? Dimensions.get('window').height
-    : require('react-native-extra-dimensions-android').get(
-        'REAL_WINDOW_HEIGHT',
-      );
-
-
 
 export const generateName = (names = [], keyword = 'Random') => {
 	var found = false;

@@ -3,7 +3,7 @@ import {View, StyleSheet} from 'react-native';
 import {useNavigation } from '@react-navigation/native'
 
 import { AppView, TinyTextButton, AppIcon } from '../../components/common';
-import { useTheme, StyledText, WP, HP }  from '../../theme';
+import { useTheme, StyledText }  from '../../theme';
 
 const AuthLogo = () => {
 
@@ -54,7 +54,8 @@ export const AuthLayout = ({children, isLoading, ...props}) => {
 }
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		screenContentStyle: {

@@ -7,7 +7,7 @@ import { titleCase } from "title-case";
 import { AppView, ConfirmButton, ShowJson, CustomIcon, TinyTextButton} from '../../components/common';
 import { DisplayOutRTH } from '../../components/order';
 import { useOrderDetail, getLatestTradingDay, getNextTradingDay } from '../../helper';
-import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
+import { useTheme, StyledText }  from '../../theme';
 import { ORDER_MORE_FIELDS, AVAILABLE_TO_CANCEL_ORDER_STATUS, OPEN_ORDER_STATUS } from '../../config';
 import { toTimeZoneDate, durationBetweenDates } from '../../utils';
 
@@ -167,7 +167,8 @@ const OrderStatus = (props) => {
 }
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		topContainerStyle: {

@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import { useNavigation } from '@react-navigation/native';
 
 import { FormView, FormTextField } from '../form';
-import { useTheme, WP, HP } from '../../theme';
+import { useTheme } from '../../theme';
 import { TinyTextButton } from '../../components/common';
 
 const ForgotPasswordSchema = Yup.object().shape({
@@ -37,7 +37,8 @@ export const ForgotPasswordForm = React.forwardRef(({onSubmit, onError, ...props
 
 const useStyles = () => {
 	
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		tinyButtonContainer: {

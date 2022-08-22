@@ -1,8 +1,7 @@
 import React, {use} from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
 
-import * as Theme  from '../../theme';
-const { useTheme, StyledText, WP, HP} = Theme;
+import {useTheme, StyledText}  from '../../theme';
 
 export const RangeSelector = ({items, onSelect, selectedIndex}) => {
 	const {theme, styles} = useStyles();
@@ -22,7 +21,8 @@ export const RangeSelector = ({items, onSelect, selectedIndex}) => {
 }
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		rangeSelector: {

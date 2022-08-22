@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
-import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../../theme';
+import { useTheme, StyledText }  from '../../theme';
 
 export const ShowJson = ({json, full = true}) => {
 

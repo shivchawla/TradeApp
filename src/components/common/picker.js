@@ -1,24 +1,20 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, TouchableOpacity, Dimensions, TextInput } from 'react-native';
+import {View, StyleSheet, TouchableOpacity, useWindowDimensions, TextInput } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 const Ionicons  = Icon;
 import Modal from 'react-native-modal';
 
-import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
-
-const deviceWidth = Dimensions.get('window').width;
-const deviceHeight =
-  Platform.OS === 'ios'
-    ? Dimensions.get('window').height
-    : require('react-native-extra-dimensions-android').get(
-        'REAL_WINDOW_HEIGHT',
-      );
-  
+import { useTheme, StyledText }  from '../../theme';
 
 export const Picker = ({items, selectedValue, onSelect}) => {
 	const [show, setShow] = useState(false);
 	const {theme, styles} = useStyles();
+
+	// const {width: deviceWidth, height: deviceHeight} = useWindowDimensions();
+	const deviceHeight = theme.HP(100);
+	const deviceWidth = theme.WP(100);
+
 
 	return (
 		<>{
@@ -62,6 +58,11 @@ export const BottomPicker = ({items, selectedValue, onSelect, placeholder = '', 
 	console.log(items);
 	console.log("Height: ", items.length*7);
 
+	// const {width: deviceWidth, height: deviceHeight} = useWindowDimensions();
+	const deviceHeight = theme.HP(100);
+	const deviceWidth = theme.WP(100);
+
+	
 	return (
 		<>
 		{!!selectedValue &&
@@ -165,7 +166,8 @@ export const HorizontalInputField = ({label, value, onChange, ...props}) => {
 
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		pickerContainer: {

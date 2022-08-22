@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { DisplayOrder } from '../order';
 import { ShowJson } from '../common';
-import { useTheme, WP, HP } from '../../theme';
+import { useTheme } from '../../theme';
 
 export const DisplayActivity = ({activity}) => {
 	const {theme, styles} = useStyles();
@@ -39,7 +39,8 @@ export const DisplayActivityList = ({activityList, ...props}) => {
 }
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		activityList: {

@@ -4,7 +4,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 import { FormView, FormDateField, FormTextField, FormCountryField, CountrySchema } from '../form';
-import { useTheme, WP, HP } from '../../theme';
+import { useTheme } from '../../theme';
 
 import { ContactSchema } from './meta';
 
@@ -44,7 +44,8 @@ export const ContactForm = React.forwardRef(({onSubmit, initialValues = {}, setC
 
 const useStyles = () => {
 	
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 	});

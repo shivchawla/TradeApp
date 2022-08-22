@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import { useNavigation } from '@react-navigation/native';
 
 import { FormView, FormTextField } from '../form';
-import { useTheme, WP, HP } from '../../theme';
+import { useTheme } from '../../theme';
 import { TinyTextButton } from '../../components/common';
 
 const SigninSchema = Yup.object().shape({
@@ -48,7 +48,8 @@ export const SignInForm = React.forwardRef(({onSubmit, onError, ...props}, ref) 
 
 const useStyles = () => {
 	
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		tinyButtonContainer: {

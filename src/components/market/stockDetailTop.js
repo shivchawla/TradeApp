@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 
 import { useStockEODData, useStockRealtimeData } from  '../../helper';
-import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
+import { useTheme, StyledText }  from '../../theme';
 
 import { TickerDisplay } from './';
 
@@ -41,7 +41,9 @@ export const StockDetailTop = ({symbol}) => {
 }
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+	
+
 	const styles = StyleSheet.create({
 		stockDetailTopContainer: {
 			flexDirection: 'row',

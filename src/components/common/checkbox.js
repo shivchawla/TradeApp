@@ -6,7 +6,8 @@ const Ionicons  = Icon;
 import { StyledText, useTheme, WP } from '../../theme';
 
 export const Checkbox = ({value, title='', onToggle, disabled = false, ...props}) => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const Component = disabled ? View : TouchableOpacity;
 	

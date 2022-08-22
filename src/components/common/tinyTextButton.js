@@ -13,7 +13,8 @@ export const TinyTextButton = ({title, onPress, ...props}) => {
 }
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 	
 	const styles = StyleSheet.create({
 		tinyButton: {

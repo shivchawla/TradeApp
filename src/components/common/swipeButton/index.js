@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, Dimensions, Animated, PanResponder, GestureResponderEvent, PanResponderGestureState, StyleSheet, StyleProp, ViewStyle } from 'react-native';
+import { Text, View, Animated, PanResponder, GestureResponderEvent, PanResponderGestureState, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 
 import {DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_BORDER_RADIUS, DEFAULT_COMPLETE_THRESHOLD_PERCENTAGE} from './constants';
 
@@ -132,7 +132,8 @@ export const SwipeButton = ({title, swipeTitle, icon, disabled, onSwipeSuccess, 
 
 const useStyles = () => {
 
-    const {theme} = useTheme();
+    const {theme, HP, WP, Typography} = useTheme();
+
     
     const styles = StyleSheet.create({
         container: {

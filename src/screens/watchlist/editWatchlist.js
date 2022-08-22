@@ -12,11 +12,10 @@ import { AppView, ConfirmButton, TouchRadio,
 import { SearchStockWatchlist, StockName } from '../../components/market';
 import { useWatchlist, useDeletewatchlist, useUpdateWatchlist } from '../../helper';
 import {useTheme, WP, StyledText} from '../../theme';
-import { diffArray, removeArray, deviceWidth, deviceHeight } from '../../utils'
+import { diffArray, removeArray } from '../../utils'
 
 
 const WatchlistItem = ({stock, onSelectionChanged, onDrag}) => {
-	const {theme} = useTheme();
 	const styles = useStyles();
 	const [selected, setSelect] = useState(null);
 
@@ -39,7 +38,8 @@ const WatchlistItem = ({stock, onSelectionChanged, onDrag}) => {
 
 const EditWatchlist = (props) => {
 	const styles = useStyles();
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+	
 	  
 	const {watchlistId} = props.route.params;
 	const {watchlist, getWatchlist} = useWatchlist(watchlistId);
@@ -49,6 +49,8 @@ const EditWatchlist = (props) => {
 	const [showFooter, setShowFooter] = useState(false);
 	const [isModalVisible, setModalVisible] = useState(false);
 	const {updateWatchlist} = useUpdateWatchlist();
+
+	const {width: deviceWidth, height: deviceHeight} = useWindowDimensions();
 
 	const watchlistRef = React.useRef();
 
@@ -189,7 +191,8 @@ const EditWatchlist = (props) => {
 }
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+	
 
 	const styles = StyleSheet.create({
 		draggableList: {

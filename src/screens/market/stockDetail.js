@@ -5,7 +5,7 @@ import { AppView, FavoriteIcon, Collapsible, FullViewModal, Checkbox, ConfirmBut
 import { StockChart, TradeButtons, StockPosition, 
 	StockOrders, StockDetailTop, StockMarketData, StockNews } from '../../components/market';
 
-import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
+import { useTheme, StyledText }  from '../../theme';
 import { useAssetData, useAllWatchlist, useUpdateWatchlist, useLoading } from  '../../helper';
 
 const WatchlistsModal = ({watchlists, symbol, updateLists}) => {
@@ -187,7 +187,8 @@ const StockDetail = (props) => {
 }
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		chartContainer: {

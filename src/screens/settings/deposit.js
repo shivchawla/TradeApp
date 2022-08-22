@@ -12,7 +12,7 @@ import DocumentPicker from 'react-native-document-picker';
 import { AppView, ConfirmButton, TinyTextButton, IconTextButton, Checkbox } from '../../components/common';
 import { DepositForm } from '../../components/funds';
 import { SUPPORTED_BANKS, BANK_ACCOUNT_TYPES } from '../../config'
-import { useTheme, StyledText, WP, HP }  from '../../theme';
+import { useTheme, StyledText }  from '../../theme';
 import { currentISODate } from '../../utils';
 import { useFunds, useStorage } from '../../helper'
 
@@ -222,7 +222,8 @@ const CreateDeposit = (props) => {
 export default CreateDeposit;
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		formContainer: {

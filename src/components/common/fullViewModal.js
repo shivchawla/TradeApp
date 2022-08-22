@@ -1,14 +1,14 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, useWindowDimensions } from 'react-native';
 import Modal from 'react-native-modal';
-
-import {deviceHeight, deviceWidth} from '../../utils';
-import {useTheme, WP, StyledText} from '../../theme'; 
+import {useTheme, StyledText} from '../../theme'; 
 
 import {CloseIcon} from './iconButtons';
 
 export const FullViewModal = React.memo(({isVisible = false, opacity = 1.0, animation="slideInUp", onClose, title, ...props}) => {
 	const {theme, styles} = useStyles();
+	const {width: deviceWidth, height: deviceHeight} = useWindowDimensions();
+
 	return (
 		<Modal
 			animationIn={animation} 
@@ -30,7 +30,8 @@ export const FullViewModal = React.memo(({isVisible = false, opacity = 1.0, anim
 
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+	
 	
 	const styles = StyleSheet.create({
 		modal: {

@@ -1,20 +1,24 @@
-import { Dimensions, PixelRatio } from 'react-native';
+import { useWindowDimensions, PixelRatio, Dimensions } from 'react-native';
 
-const widthPercentageToDP = widthPercent => {
-    const screenWidth = Dimensions.get('window').width;
-    // Convert string input to decimal number
-    const elemWidth = parseFloat(widthPercent);
-    return PixelRatio.roundToNearestPixel(screenWidth * elemWidth / 100);
-};
+export const useDimensions = () => {
+    const screenWidth = useWindowDimensions().width;
+    const screenHeight = useWindowDimensions().height;
 
-const heightPercentageToDP = heightPercent => {
-    const screenHeight = Dimensions.get('window').height;
-    // Convert string input to decimal number
-    const elemHeight = parseFloat(heightPercent);
-    return PixelRatio.roundToNearestPixel(screenHeight * elemHeight / 100);
-};
+    const widthPercentageToDP = widthPercent => {    
+        // Convert string input to decimal number
+        const elemWidth = parseFloat(widthPercent);
+        return PixelRatio.roundToNearestPixel(screenWidth * elemWidth / 100);
+    };
 
-export {
-    widthPercentageToDP as WP,
-    heightPercentageToDP as HP
-};
+    const heightPercentageToDP = heightPercent => {
+        // Convert string input to decimal number
+        const elemHeight = parseFloat(heightPercent);
+        return PixelRatio.roundToNearestPixel(screenHeight * elemHeight / 100);
+    };
+
+    return {
+        WP: widthPercentageToDP,
+        HP: heightPercentageToDP
+    };  
+}
+

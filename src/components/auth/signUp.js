@@ -4,7 +4,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 import { FormView, FormTextField } from '../form';
-import { useTheme, WP, HP, StyledText } from '../../theme';
+import { useTheme, StyledText } from '../../theme';
 
 const EmailSignUpSchema = Yup.object().shape({
    email: Yup.string().email('Please enter valid email').required('Email is required'),
@@ -86,7 +86,8 @@ export const SignUpForm = ({type, ...props}) => {
 
 const useStyles = () => {
 	
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 	});

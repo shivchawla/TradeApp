@@ -31,7 +31,9 @@ const Tabs = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 const HomeTabs = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+	
+	
 	const screenOptions = {
 		tabBarShowLabel: true, 
 		headerShown: false,

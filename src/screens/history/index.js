@@ -10,7 +10,7 @@ import {
 
 import { DisplayActivityList } from '../../components/activity';
 
-import { useTheme, WP, HP, StyledText } from '../../theme';
+import { useTheme, StyledText } from '../../theme';
 import { NBusinessDaysBeforeISODate, toISODate } from '../../utils';
 import { useAccountActivity, useOrders } from '../../helper';
 
@@ -215,7 +215,7 @@ const History = (props) => {
 };
 
 const useStyles = () => {
-  const { theme } = useTheme();
+  const { theme, HP, WP, Typography } = useTheme();
 
   const styles = StyleSheet.create({
     buttonGroupContainer: {

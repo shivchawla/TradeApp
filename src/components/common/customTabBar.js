@@ -1,15 +1,18 @@
 import React, {useState} from 'react';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, useWindowDimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 const Ionicons  = Icon;
 import Modal from 'react-native-modal';
 
 import { CloseIcon, CustomIcon} from './iconButtons';
-import { useTheme, WP, HP, StyledText } from '../../theme';
-import { deviceWidth, deviceHeight } from '../../utils';
+import { useTheme, StyledText } from '../../theme';
 
 const CustomModal = ({isVisible, onHide, navigation}) => {
   const {theme, styles} = useStyles();
+
+  // const {width: deviceWidth, height: deviceHeight} = useWindowDimensions();
+  const deviceHeight = theme.HP(100);
+  const deviceWidth = theme.WP(100);
 
   const CustomAction = ({iconName, title, description, onPress}) => {
       return (
@@ -148,7 +151,8 @@ export const CustomTabBar = ({ state, descriptors, navigation }) => {
 }
 
 const useStyles = () => {
-  const {theme} = useTheme();
+  const {theme, HP, WP, Typography} = useTheme();
+  
   
   const styles = StyleSheet.create({
     tabBar: {
@@ -162,7 +166,7 @@ const useStyles = () => {
     },
     quickActionButton: {
       position: 'absolute',
-      left: (deviceWidth - 25)/2,
+      left: (WP(100) - 25)/2,
     },
     modal: {
       justifyContent: 'flex-end',

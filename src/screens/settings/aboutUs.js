@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { AppView, AppIcon, SocialIcon, TinyTextButton } from '../../components/common';
 import { HorizontalSetting } from '../../components/settings';
 
-import { useTheme, WP, HP, StyledText } from '../../theme';
+import { useTheme, StyledText } from '../../theme';
 
 const AboutUs = (props) => {
 	const {theme, styles} = useStyles();
@@ -41,7 +41,8 @@ const AboutUs = (props) => {
 }
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		screenTitle: {

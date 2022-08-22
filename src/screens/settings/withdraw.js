@@ -10,7 +10,7 @@ import {useNetInfo} from "@react-native-community/netinfo";
 import { AppView, ConfirmButton, TinyTextButton, IconTextButton, Checkbox } from '../../components/common';
 import { WithdrawForm } from '../../components/funds';
 import { SUPPORTED_BANKS, BANK_ACCOUNT_TYPES } from '../../config'
-import { useTheme, StyledText, WP, HP }  from '../../theme';
+import { useTheme, StyledText }  from '../../theme';
 import { currentISODate } from '../../utils';
 import { useFunds } from '../../helper'
 
@@ -153,7 +153,8 @@ const CreateWithdraw = (props) => {
 export default CreateWithdraw;
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		formContainer: {

@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {View, TextInput, StyleSheet} from 'react-native';
 
 import {useTheme, HP, WP} from '../../theme';
-import {deviceHeight, deviceWidth} from '../../utils';
 
 export const OtpInput = ({code, onCodeChange, onCodeFinish, codeCount = 6, onFocus, ...props}) => {
 	
@@ -10,6 +9,8 @@ export const OtpInput = ({code, onCodeChange, onCodeFinish, codeCount = 6, onFoc
 
 	const inputCodeRef = React.useRef(new Array());
 	const [codes, setCodes] = useState(new Array());
+
+	const {width: deviceWidth, height: deviceHeight} = useWindowDimensions();
 
 	React.useEffect(() => {
 		setCodes(Array.from({...(code||'').split(''), length: codeCount}, (v,i) => v || ''));
@@ -83,7 +84,8 @@ export const OtpInput = ({code, onCodeChange, onCodeFinish, codeCount = 6, onFoc
 
 const useStyles = () => {
 
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 	
 	const styles = StyleSheet.create({
 		form: {

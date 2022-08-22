@@ -4,7 +4,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import get from 'lodash/get';
 
 import { CustomIcon, FullViewModal } from '../../components/common';
-import { useTheme, WP, HP, StyledText } from '../../theme';
+import { useTheme, StyledText } from '../../theme';
 import { currentISODate, toISODate, startOfDayLocal } from '../../utils';
 
 export const FormDateField = ({field, placeholder, ...props}) => {
@@ -59,7 +59,8 @@ export const FormDateField = ({field, placeholder, ...props}) => {
 
 const useStyles = () => {
 
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		fieldContainer: {

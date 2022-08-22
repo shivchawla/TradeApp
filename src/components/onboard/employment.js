@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import { FormView, FormBottomPicker, FormTextField, 
 	FormCountryField, CountrySchema } from '../form';
 
-import { useTheme, WP, HP } from '../../theme';
+import { useTheme } from '../../theme';
 
 import { EmploymentSchema, EMPLOYMENT_POSITIONS } from './meta';
 
@@ -88,7 +88,8 @@ export const EmploymentForm = React.forwardRef(({onSubmit, initialValues = {}, s
 
 const useStyles = () => {
 	
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 	});

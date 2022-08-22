@@ -7,7 +7,7 @@ const Ionicons  = Icon;
 import { titleCase } from "title-case";
 
 import { ShowJson, Clickable } from '../common';
-import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
+import { useTheme, StyledText }  from '../../theme';
 import { CANCEL_ORDER_STATUS } from '../../config';
 
 export const DisplayOrder = ({order, showSymbol = false, showIcon = false, showOrderType = true, showStatus = true, pastTense = false,  ...props}) => {
@@ -84,7 +84,8 @@ export const DisplayOrderList = ({orders, ...props}) => {
 
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		container :{

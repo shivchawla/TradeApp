@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { AppView, AppIcon } from '../../components/common';
-import { useTheme, HP, WP, StyledText} from '../../theme';
+import { useTheme, StyledText} from '../../theme';
 
 const Splash = () => {
 
@@ -22,7 +22,7 @@ const Splash = () => {
 }
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
 
 	const styles = StyleSheet.create({
 		containerStyle: {

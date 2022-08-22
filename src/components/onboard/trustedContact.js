@@ -5,7 +5,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 import { FormView, FormTextField } from '../form';
-import { useTheme, WP, HP } from '../../theme';
+import { useTheme } from '../../theme';
 import {TrustedContactSchema} from './meta';
 
 export const TrustedContactForm = React.forwardRef(({onSubmit, initialValues = {}, setCustomError,  ...props}, ref) => {
@@ -38,7 +38,8 @@ export const TrustedContactForm = React.forwardRef(({onSubmit, initialValues = {
 
 const useStyles = () => {
 	
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 	});

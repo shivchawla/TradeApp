@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { AppView, ConfirmButton } from '../../components/common';
 import { HorizontalSetting } from '../../components/settings';
 
-import { useTheme, WP, HP, StyledText } from '../../theme';
+import { useTheme, StyledText } from '../../theme';
 import { useAuth } from '../../helper'
 
 const UserSettings = (props) => {
@@ -37,7 +37,8 @@ const UserSettings = (props) => {
 }
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		settingsContainer: {

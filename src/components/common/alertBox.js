@@ -1,13 +1,15 @@
 import React from 'react';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, useWindowDimensions } from 'react-native';
 import Modal from 'react-native-modal';
 
-import { useTheme, WP, HP, StyledText } from '../../theme';
-import {deviceWidth, deviceHeight} from '../../utils';
+import { useTheme, StyledText } from '../../theme';
 
 export const AlertBox = ({title, message, component, show = false, onCancel, cancelText='CANCEL', onConfirm, confirmText = 'OK'}) => {
 	
 	const {theme, styles} = useStyles();
+	// const {width: deviceWidth, height: deviceHeight} = useWindowDimensions();
+	const deviceHeight = theme.HP(100);
+	const deviceWidth = theme.WP(100);
 
 	return (
 		<Modal 
@@ -40,7 +42,8 @@ export const AlertBox = ({title, message, component, show = false, onCancel, can
 
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+	
 
 	const styles = StyleSheet.create({
 		modalContent: {

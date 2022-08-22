@@ -2,7 +2,6 @@
 // import {wsUrl, apiKey, apiSecret} from './';
 import React, {useState} from 'react';
 import {useQuery} from 'react-query';
-import {useWS} from '../config/webSocket'
 import { getSnapshot, getHistoricalData, getStocks, getAssetData, getSeekingAlphaNews } from  './api'; 
 import { currentISODate, toISODate, yearStartISODate, dayStartISODate, dayEndISODate, duration} from '../utils';
 import { useClock } from './clock';

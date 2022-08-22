@@ -5,10 +5,10 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { useNavigation, useFocusEffect, useIsFocused } from '@react-navigation/native';
 import { BarIndicator } from 'react-native-indicators';
 
-import { StyledText, useTheme, WP, defaultIconSize, HP } from '../../theme';
+import { StyledText, useTheme} from '../../theme';
 import { GobackIcon } from './iconButtons';
-import { FullViewModal } from './';
-
+import { FullViewModal } from './fullViewModal';
+ 
 export const AppHeader = ({ title, goBack = true, ...props }) => {
   const showHeader = React.useMemo(() => title || goBack, [title, goBack]);
   const { styles } = useStyles();
@@ -43,7 +43,8 @@ export const AppView = ({
   onScroll,
   ...props
 }) => {
-  const { theme, styles } = useStyles();
+  const { WP } = useTheme(); 
+  const { styles } = useStyles();
 
   // console.log("Scroll: ", scroll);
   // console.log(props.children);
@@ -129,7 +130,7 @@ export const AppView = ({
 };
 
 const useStyles = () => {
-  const { theme } = useTheme();
+  const { theme, HP, WP, Typography } = useTheme();
 
   const styles = StyleSheet.create({
     scrollAppContainer: {

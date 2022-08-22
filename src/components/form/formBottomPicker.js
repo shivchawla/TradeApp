@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import get from 'lodash/get';
 
 import { BottomPicker } from '../common';
-import { useTheme, WP, HP, StyledText } from '../../theme';
+import { useTheme, StyledText } from '../../theme';
 
 export const FormBottomPicker = ({items, field, placeholder, ...props}) => {
 
@@ -33,7 +33,8 @@ export const FormBottomPicker = ({items, field, placeholder, ...props}) => {
 }
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		fieldContainer: {

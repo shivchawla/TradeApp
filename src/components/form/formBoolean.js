@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import get from 'lodash/get';
 
 import { TouchRadioGroup } from '../common';
-import { useTheme, WP, HP, StyledText } from '../../theme'; 
+import { useTheme, StyledText } from '../../theme'; 
 
 export const FormBooleanField = ({items = ['NO', 'YES'], title, field, ...props}) => {
 
@@ -40,7 +40,8 @@ export const FormBooleanField = ({items = ['NO', 'YES'], title, field, ...props}
 
 const useStyles = () => {
 
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		text: {

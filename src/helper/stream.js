@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import useWebSocket, {ReadyState} from 'react-use-websocket';
-import { useDebounce } from 'react-use';
+import useDebounce from 'react-use/lib/useDebounce';
 import { Mutex } from 'async-mutex';
 
 import { setStorageData, getStorageData } from './store';

@@ -6,7 +6,8 @@ const Ionicons  = Icon;
 import { StyledText, useTheme, WP } from '../../theme';
 
 export const TouchRadio = ({selected, title='', onToggle, ...props}) => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 	return (
 		<TouchableOpacity onPress={onToggle} style={props.style}>
 			{selected ?
@@ -27,7 +28,8 @@ export const TouchRadio = ({selected, title='', onToggle, ...props}) => {
 
 
 export const TouchRadioGroup = ({items, selectedIndex = 0, onSelect, ...props}) => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const onClick = (index) => {
 		// console.log("onClick: ", index);

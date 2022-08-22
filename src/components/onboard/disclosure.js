@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 
 import { TouchRadioGroup } from '../common'
 import { FormView, FormBooleanField } from '../form';
-import { useTheme, WP, HP } from '../../theme';
+import { useTheme } from '../../theme';
 
 import { DisclosureSchema } from './meta'
 
@@ -68,7 +68,8 @@ export const DisclosureForm = React.forwardRef(({onSubmit, initialValues = {}, s
 
 const useStyles = () => {
 
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		booleanField: {

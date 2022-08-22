@@ -14,7 +14,8 @@ import {useTheme, WP, StyledText} from '../../theme';
 
 const WatchlistEdit = ({watchlist, onSelectionChanged, onDrag}) => {
 	const styles = useStyles();
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 	const navigation = useNavigation();
 	const [selected, setSelect] = useState(null);
 
@@ -137,7 +138,8 @@ const ManageWatchlist = (props) => {
 
 const useStyles = () => {
 
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		watchlistEditRow: {

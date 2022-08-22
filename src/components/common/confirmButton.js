@@ -1,11 +1,10 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
-import { useTheme, StyledText, WP, HP }  from '../../theme';
+import { useTheme, StyledText }  from '../../theme';
 
-// import SwipeButton from 'jt-swipe-button';
-
-import { CustomIcon, SwipeButton } from '../../components/common';
+import { CustomIcon} from './iconButtons';
+import { SwipeButton } from './swipeButton';
 
 export const ConfirmButton = ({title, afterTitle, onClick, onSwipeSuccess, swipe = false, cancel = false, disabled = false,  ...props}) => {
 	const {theme, styles} = useStyles();
@@ -53,7 +52,8 @@ export const ConfirmButton = ({title, afterTitle, onClick, onSwipeSuccess, swipe
 	
 const useStyles = () => {
 
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		buttonContainer: {

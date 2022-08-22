@@ -2,7 +2,6 @@
 import { View, StyleSheet, TouchableOpacity} from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { InView } from 'react-native-intersection-observer'
 
 import {AppView, AppHeader, PnLText, 
 	LineChart, VerticalField,
@@ -254,7 +253,8 @@ const Portfolio = (props) => {
 }
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 	
 	const styles = StyleSheet.create({
 		portfolioHeader: {

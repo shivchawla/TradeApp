@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { useTheme, HP, WP, StyledText } from '../../theme';
+import { useTheme, StyledText } from '../../theme';
 import { FormMeta } from './meta';
 
 export const OnboardHeader = ({step, ...props}) => {
@@ -29,7 +29,8 @@ export const OnboardHeader = ({step, ...props}) => {
 
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		headerContainer: {

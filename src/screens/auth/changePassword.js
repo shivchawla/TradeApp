@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 
 import {AppView, ConfirmButton} from '../../components/common';
 
-import { useTheme, StyledText, WP, HP }  from '../../theme';
+import { useTheme, StyledText }  from '../../theme';
 import { useAuth } from '../../helper';
 
 const ChangePasswordSchema = Yup.object().shape({
@@ -133,7 +133,8 @@ export default ChangePassword;
 
 const useStyles = () => {
 
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		formikContainer: {

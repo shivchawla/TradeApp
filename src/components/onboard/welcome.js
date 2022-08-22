@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { AppIcon, ConfirmButton } from '../common';
-import { useTheme, StyledText, HP, WP } from '../../theme';
+import { useTheme, StyledText } from '../../theme';
 
 export const Welcome = ({onNext}) => {
 	
@@ -29,7 +29,8 @@ export const Welcome = ({onNext}) => {
 }
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		title: {

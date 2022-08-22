@@ -3,7 +3,7 @@ import { TouchableOpacity, StyleSheet, View} from "react-native";
 import { useTranslation } from 'react-i18next';
 
 import { AppView, CalendarIcon, DatePickerModal, HorizontalButtonGroup } from '../../components/common';
-import { useTheme, WP, HP, StyledText } from '../../theme';
+import { useTheme, StyledText } from '../../theme';
 import { useFunds } from '../../helper';
 import { NMonthsAgoISODate, currentISODate, toTimeZoneDate} from '../../utils';
 
@@ -109,7 +109,8 @@ const FundHistory = (props) => {
 
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		documentList: {

@@ -3,7 +3,7 @@ import { View, TouchableOpacity, StyleSheet, Linking } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 import { ShowJson, Collapsible } from '../common';
-import { useTheme, WP, HP, StyledText } from '../../theme'; 
+import { useTheme, StyledText } from '../../theme'; 
 import { useStockNews } from '../../helper';
 import { newsUrl } from '../../config';
 
@@ -70,7 +70,8 @@ export const StockNews = ({symbol, showMore = true, ...props}) => {
 }
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		newsContainer: {

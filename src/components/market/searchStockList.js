@@ -4,7 +4,7 @@ import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 const Ionicons  = Icon;
 
-import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
+import { useTheme, StyledText }  from '../../theme';
 import { ConfirmButton } from '../common';
 
 import { StockName, SingleStock } from './';
@@ -56,7 +56,8 @@ const useStockSearch = () => {
 }
 
 const SearchStockBasic = ({renderItem}) => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 	const styles = useStyles();
 
 	const {stocks, setKeyword} = useStockSearch()
@@ -79,7 +80,8 @@ const SearchStockBasic = ({renderItem}) => {
 } 
 
 export const SearchStockList = ({onPressToOrder = false}) => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 	const styles = useStyles();
 
 	const navigation = useNavigation();
@@ -108,7 +110,8 @@ export const SearchStockList = ({onPressToOrder = false}) => {
 
 
 export const SearchStockWatchlist = React.forwardRef(({initialStocks, onSave}, ref) => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 	const styles = useStyles();
 
 	const [selectedStocks, setSelected] = useState(initialStocks ?? []);
@@ -174,7 +177,8 @@ export const SearchStockWatchlist = React.forwardRef(({initialStocks, onSave}, r
 })
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		listContainer: {

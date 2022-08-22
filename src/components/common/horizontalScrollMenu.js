@@ -1,15 +1,16 @@
 import React, {useState} from 'react';
 import {View, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
 
-import {AppView, PnLText, LineChart} from './';
+import AppView from './appView';
+import PnlText from './pnlText';
+import { LineChart } from './linechart';
 
-import * as Theme from '../../theme';
-
-const {useTheme, WP, StyledText} = Theme;
+import {useTheme, StyledText} from '../../theme';
 
 export const HorizontalScrollMenu = ({items, isPadded = true, scroll = true, ...props }) => {
 	const styles = useStyles();
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+	
 	
 	const [selectedIndex, setIndex] = useState(0);
 
@@ -45,7 +46,8 @@ export const HorizontalScrollMenu = ({items, isPadded = true, scroll = true, ...
 
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+	
 	
 	const styles = StyleSheet.create({
 		container: {

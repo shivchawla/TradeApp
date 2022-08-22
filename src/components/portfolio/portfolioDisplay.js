@@ -70,7 +70,8 @@ export const PortfolioDisplay = ({portfolio, orders = [], displayCount = -1}) =>
 
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 	
 	const styles = StyleSheet.create({
 		portfolioDisplayContainer: {

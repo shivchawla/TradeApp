@@ -24,7 +24,8 @@ export const AppIcon = ({titleBelow = '', ...props}) => {
 }
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		appLogoContainer: {

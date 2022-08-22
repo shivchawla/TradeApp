@@ -5,7 +5,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 import { AppView, AccountIcon, SearchIcon, HorizontalScrollMenu, AddIcon} from '../../components/common';
 import { SingleStock } from '../../components/market';
-import { useTheme, WP } from '../../theme' 
+import { useTheme } from '../../theme' 
 
 import {defaultStocks} from '../../config';
 import { useAllWatchlist, useCreateWatchlist, useWatchlist, useDeletewatchlist, getWatchlistOrder } from '../../helper';
@@ -117,7 +117,8 @@ const Market = (props) => {
 }
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		watchlistContainer: {

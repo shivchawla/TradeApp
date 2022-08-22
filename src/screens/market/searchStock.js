@@ -4,7 +4,7 @@ import { View, StyleSheet } from 'react-native';
 import { AppView } from '../../components/common';
 import { SearchStockList } from '../../components/market';
 
-import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
+import { useTheme, StyledText }  from '../../theme';
 
 const SearchStock = (props) => {
 	const styles = useStyles();
@@ -17,7 +17,8 @@ const SearchStock = (props) => {
 }
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		chartContainer: {

@@ -41,7 +41,8 @@ export const SwitchSetting = ({title, description, value, onSwitch, showAlert = 
 }
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		horizontalSettingContainer: {

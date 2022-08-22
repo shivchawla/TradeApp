@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import { FormView, FormDateField, FormTextField, 
 	FormBottomPicker, FormCountryField, CountrySchema } from '../form';
 
-import { useTheme, WP, HP } from '../../theme';
+import { useTheme } from '../../theme';
 
 import { TaxInfoSchema, TaxInfoMeta, FUND_SOURCES } from './meta';
 
@@ -53,7 +53,8 @@ export const TaxInfoForm = React.forwardRef(({onSubmit, initialValues = {}, setC
 
 const useStyles = () => {
 	
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 	});

@@ -118,7 +118,8 @@ export const StockOrders = ({symbol, orders}) => {
 }
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		ordersContainer: {

@@ -5,7 +5,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { StockChart, TickerDisplay, StockName } from './'; 
 
 import { useAssetData } from  '../../helper';
-import { useTheme, StyledText, WP, HP } from '../../theme';
+import { useTheme, StyledText } from '../../theme';
 
 import {formatName} from '../../utils';
 
@@ -40,7 +40,8 @@ export const SingleStock = ({symbol, onClick, detail = false}) => {
 }
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		singleStockRow: {

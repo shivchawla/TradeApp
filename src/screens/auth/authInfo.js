@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Pressable, TextInput } from 'react-native';
 
 import { AppView, ConfirmButton, TinyTextButton, AppIcon} from '../../components/common';
 import { SignInForm } from '../../components/auth';
-import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
+import { useTheme, StyledText }  from '../../theme';
 import { useAuth, useLoading } from '../../helper';
 
 //Add logic to save auth state to temp storage
@@ -62,7 +62,8 @@ const AuthInfo = (props) => {
 export default AuthInfo;
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		screenContentStyle: {

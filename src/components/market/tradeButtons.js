@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
-import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
+import { useTheme, StyledText }  from '../../theme';
 
 const SingleButton = ({title, onClick, ...props}) => {
 	const styles = useStyles();
@@ -26,7 +26,8 @@ export const TradeButtons = ({ticker, onBuy, onSell, ...props}) => {
 
 const useStyles = () => {
 
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 	
 	const styles = StyleSheet.create({
 		buttonContainer: {

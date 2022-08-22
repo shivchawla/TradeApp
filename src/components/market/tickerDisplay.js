@@ -3,7 +3,7 @@ import {View, StyleSheet} from 'react-native';
 
 import { priceChangeFromSnapshot, priceChangeFromRealtime } from '../../utils';
 import { useStockEODData, useStockRealtimeData, useClock } from  '../../helper';
-import { useTheme, StyledText, WP, HP }  from '../../theme';
+import { useTheme, StyledText }  from '../../theme';
 import { useFocusEffect } from '@react-navigation/native';
 
 const PriceChange = ({price, changeValue, changePct, ...props}) => {
@@ -64,7 +64,8 @@ export const TickerDisplay = ({symbol, ...props}) => {
 }
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		price: {

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { AppView, TinyTextButton } from '../../components/common';
 import { SwitchSetting } from '../../components/settings';
-import { useTheme, WP, HP, StyledText } from '../../theme';
+import { useTheme, StyledText } from '../../theme';
 import { useTradeConfig } from '../../helper';
 
 const TradeSettings = (props) => {
@@ -96,7 +96,8 @@ const TradeSettings = (props) => {
 
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 	
 	const styles = StyleSheet.create({
 		switchSettingContainer: {

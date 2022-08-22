@@ -13,7 +13,7 @@ import { QuantitySelector, TifSelector,
 	NotionalSelector, OrderTypeSelector, DisplayOutRTH} from '../../components/order'
 	
 import { usePlaceOrder, useSymbolActivity, isMarketOpen, useStockEODData, getLatestTradingDay, getNextTradingDay } from '../../helper';
-import { useTheme, StyledText, Typography, WP, HP }  from '../../theme';
+import { useTheme, StyledText }  from '../../theme';
 import { toISODate, toTimeZoneDate, durationBetweenDates, formatValue } from '../../utils';
 
 
@@ -248,7 +248,8 @@ const PlaceOrder = (props) => {
 }
 
 const useStyles = () => {
-	const {theme} = useTheme();
+	const {theme, HP, WP, Typography} = useTheme();
+
 
 	const styles = StyleSheet.create({
 		tradeButton: {
