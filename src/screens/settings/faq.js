@@ -2,9 +2,11 @@ import React from 'react';
 import { WebView } from 'react-native-webview';
 
 import {AppView} from '../../components/common';
-import {HP, WP, useTheme, StyledText} from '../../theme';
+import {useDimensions} from '../../theme';
 
 const FAQ = () => {
+
+	const { HP, WP } = useDimensions();
 
 	const INJECTED_JAVASCRIPT =  `(function() {
 		document.getElementsByTagName("header")[0].style.display="none";

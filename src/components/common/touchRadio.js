@@ -3,10 +3,12 @@ import {View, StyleSheet, TouchableOpacity,} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 const Ionicons  = Icon;
 
-import { StyledText, useTheme, WP } from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme';
 
 export const TouchRadio = ({selected, title='', onToggle, ...props}) => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 	return (
 		<TouchableOpacity onPress={onToggle} style={props.style}>
@@ -28,7 +30,9 @@ export const TouchRadio = ({selected, title='', onToggle, ...props}) => {
 
 
 export const TouchRadioGroup = ({items, selectedIndex = 0, onSelect, ...props}) => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const onClick = (index) => {

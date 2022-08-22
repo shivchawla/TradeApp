@@ -5,7 +5,7 @@ import { AppView, FavoriteIcon, Collapsible, FullViewModal, Checkbox, ConfirmBut
 import { StockChart, TradeButtons, StockPosition, 
 	StockOrders, StockDetailTop, StockMarketData, StockNews } from '../../components/market';
 
-import { useTheme, StyledText }  from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText }  from '../../theme';
 import { useAssetData, useAllWatchlist, useUpdateWatchlist, useLoading } from  '../../helper';
 
 const WatchlistsModal = ({watchlists, symbol, updateLists}) => {
@@ -16,6 +16,7 @@ const WatchlistsModal = ({watchlists, symbol, updateLists}) => {
 	const [orgObj, setOrgObj] = useState({});
 	const [watchlistsWithSymbol, setWatchlistWithSymbol] = useState({});
 	const [dirty, setDirty] = useState(false);
+	const { HP, WP } = useDimensions();
 
 	React.useEffect(() => {
 		
@@ -187,7 +188,9 @@ const StockDetail = (props) => {
 }
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

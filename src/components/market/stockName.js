@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
-import {useTheme, StyledText} from '../../theme'
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme'
 
 import {formatName} from '../../utils';
 import { useAssetData } from  '../../helper';
@@ -36,7 +36,9 @@ export const StockName = ({symbol, stock, ...props}) => {
 }
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

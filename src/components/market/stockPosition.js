@@ -5,12 +5,11 @@ const Ionicons  = Icon;
 import {useFocusEffect} from '@react-navigation/native';
 
 import { VerticalField, PnLText, Collapsible } from '../common';
-import * as Theme  from '../../theme';
 import { POSITION_FIELDS, POSITION_SUMMARY_FIELDS } from '../../config';
 import { useStockPositionData } from '../../helper';
 import { formatValue, formatPctValue } from '../../utils';
 
-const { useTheme, StyledText, Typography, WP, HP } = Theme;
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme';
 
 const formatPositionToArray = (position, KEYS = []) => {
 	return KEYS.map(key => {
@@ -139,7 +138,9 @@ export const StockPosition = ({symbol, position}) => {
 }
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

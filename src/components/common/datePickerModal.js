@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 
-import VerticalField from './verticalField'
-import FullViewModal from './fullViewModal';
-import ConfirmButton from './confirmButton';
-import DateRangePicker from './dateRangePicker';
+import { VerticalField } from './verticalField'
+import { FullViewModal } from './fullViewModal';
+import { ConfirmButton } from './confirmButton';
+import { DateRangePicker } from './dateRangePicker';
 
-import {useTheme} from '../../theme';
+import {useTheme, useDimensions, useTypography, StyledText} from '../../theme';
 import {currentISODate} from '../../utils';
 
 export const DatePickerModal = ({isVisible, onClose, onSelectRange}) => {
@@ -15,6 +15,7 @@ export const DatePickerModal = ({isVisible, onClose, onSelectRange}) => {
 	const [end, setEnd] = useState('');
 
 	const {theme, styles} = useStyles();
+	const { HP, WP } = useDimensions();
 
 	return (
 		<FullViewModal 
@@ -59,8 +60,9 @@ export const DatePickerModal = ({isVisible, onClose, onSelectRange}) => {
 
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
-
+	const { theme } = useTheme();
+	const { HP, WP } = useDimensions();
+	const { fontSize, fontWeight } = useTypography();
 	
 	const styles = StyleSheet.create({
 		modalContent:{

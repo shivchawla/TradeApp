@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View, TextInput, StyleSheet} from 'react-native';
 
-import {useTheme, HP, WP} from '../../theme';
+import {useTheme, useDimensions, useTypography, StyledText} from '../../theme';
 
 export const OtpInput = ({code, onCodeChange, onCodeFinish, codeCount = 6, onFocus, ...props}) => {
 	
@@ -10,7 +10,7 @@ export const OtpInput = ({code, onCodeChange, onCodeFinish, codeCount = 6, onFoc
 	const inputCodeRef = React.useRef(new Array());
 	const [codes, setCodes] = useState(new Array());
 
-	const {width: deviceWidth, height: deviceHeight} = useWindowDimensions();
+	const {deviceWidth, deviceHeight} = useDimensions();
 
 	React.useEffect(() => {
 		setCodes(Array.from({...(code||'').split(''), length: codeCount}, (v,i) => v || ''));
@@ -84,7 +84,9 @@ export const OtpInput = ({code, onCodeChange, onCodeFinish, codeCount = 6, onFoc
 
 const useStyles = () => {
 
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 	
 	const styles = StyleSheet.create({

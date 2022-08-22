@@ -1,20 +1,16 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, TouchableOpacity, useWindowDimensions, TextInput } from 'react-native';
+import {View, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 const Ionicons  = Icon;
 import Modal from 'react-native-modal';
 
-import { useTheme, StyledText }  from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText }  from '../../theme';
 
 export const Picker = ({items, selectedValue, onSelect}) => {
 	const [show, setShow] = useState(false);
 	const {theme, styles} = useStyles();
-
-	// const {width: deviceWidth, height: deviceHeight} = useWindowDimensions();
-	const deviceHeight = theme.HP(100);
-	const deviceWidth = theme.WP(100);
-
+	const { HP, WP, width: deviceWidth, height: deviceHeight } = useDimensions();
 
 	return (
 		<>{
@@ -53,15 +49,7 @@ export const Picker = ({items, selectedValue, onSelect}) => {
 export const BottomPicker = ({items, selectedValue, onSelect, placeholder = '', ...props}) => {
 	const [show, setShow] = useState(false);
 	const {theme, styles} = useStyles();
-
-	console.log("Items: ", (items.length));
-	console.log(items);
-	console.log("Height: ", items.length*7);
-
-	// const {width: deviceWidth, height: deviceHeight} = useWindowDimensions();
-	const deviceHeight = theme.HP(100);
-	const deviceWidth = theme.WP(100);
-
+	const { HP, WP, width: deviceWidth, height: deviceHeight } = useDimensions();
 	
 	return (
 		<>
@@ -76,7 +64,7 @@ export const BottomPicker = ({items, selectedValue, onSelect, placeholder = '', 
 
 		<Modal 
 			deviceWidth={deviceWidth}
-  		deviceHeight={deviceHeight}
+  			deviceHeight={deviceHeight}
 			animationType="slide" 
 			isVisible={show} 
 			onBackdropPress={() => setShow(false)}
@@ -166,7 +154,9 @@ export const HorizontalInputField = ({label, value, onChange, ...props}) => {
 
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

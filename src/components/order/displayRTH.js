@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View, StyleSheet, TouchableOpacity } from 'react-native';
 	
 import { getLatestTradingDay, getNextTradingDay } from '../../helper';
-import { StyledText, WP, HP, useTheme }  from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText }  from '../../theme';
 import { toTimeZoneDate, durationBetweenDates } from '../../utils';
 
 export const DisplayOutRTH = ({orderDetail, ...props}) => {
@@ -53,7 +53,9 @@ export const DisplayOutRTH = ({orderDetail, ...props}) => {
 }
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

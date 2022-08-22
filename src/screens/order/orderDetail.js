@@ -4,7 +4,7 @@ import get from 'lodash/get';
 import { useNavigation, StackActions } from '@react-navigation/native'; 
 
 import { useCancelOrder, useOrderDetail } from '../../helper';
-import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../../theme';
+import { useTheme, StyledText}  from '../../theme';
 
 import {AppView, ShowJson} from '../../components/common';
 

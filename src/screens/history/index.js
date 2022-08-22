@@ -10,7 +10,7 @@ import {
 
 import { DisplayActivityList } from '../../components/activity';
 
-import { useTheme, StyledText } from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme';
 import { NBusinessDaysBeforeISODate, toISODate } from '../../utils';
 import { useAccountActivity, useOrders } from '../../helper';
 
@@ -173,6 +173,7 @@ const History = (props) => {
   const [range, setRange] = useState(null);
   const [field, setField] = useState(null);
   const [isLoading, setLoading] = useState(true);
+  const { HP, WP } = useDimensions();
 
   const handleFieldSelection = (field) => {
       console.log('Handle Field Selection: ', field);
@@ -215,7 +216,9 @@ const History = (props) => {
 };
 
 const useStyles = () => {
-  const { theme, HP, WP, Typography } = useTheme();
+      const { theme } = useTheme();
+    const { HP, WP} = useDimensions();
+    const {fontSize, fontWeight} = useTypography();
 
   const styles = StyleSheet.create({
     buttonGroupContainer: {

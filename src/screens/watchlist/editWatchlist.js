@@ -11,12 +11,13 @@ import { AppView, ConfirmButton, TouchRadio,
 	CloseIcon, DeleteIcon, SearchIcon } from '../../components/common';
 import { SearchStockWatchlist, StockName } from '../../components/market';
 import { useWatchlist, useDeletewatchlist, useUpdateWatchlist } from '../../helper';
-import {useTheme, WP, StyledText} from '../../theme';
+import {useTheme, useDimensions, useTypography, StyledText} from '../../theme';
 import { diffArray, removeArray } from '../../utils'
 
 
 const WatchlistItem = ({stock, onSelectionChanged, onDrag}) => {
 	const styles = useStyles();
+	const {HP, WP} = useDimensions();
 	const [selected, setSelect] = useState(null);
 
 	React.useEffect(() => {
@@ -38,7 +39,9 @@ const WatchlistItem = ({stock, onSelectionChanged, onDrag}) => {
 
 const EditWatchlist = (props) => {
 	const styles = useStyles();
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP, deviceWidth, deviceHeight } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 	
 	  
 	const {watchlistId} = props.route.params;
@@ -49,8 +52,6 @@ const EditWatchlist = (props) => {
 	const [showFooter, setShowFooter] = useState(false);
 	const [isModalVisible, setModalVisible] = useState(false);
 	const {updateWatchlist} = useUpdateWatchlist();
-
-	const {width: deviceWidth, height: deviceHeight} = useWindowDimensions();
 
 	const watchlistRef = React.useRef();
 
@@ -191,7 +192,9 @@ const EditWatchlist = (props) => {
 }
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 	
 
 	const styles = StyleSheet.create({

@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 
 import { FormView, FormTextField, FormBottomPicker } from '../form';
 
-import { useTheme, StyledText }  from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText }  from '../../theme';
 import { BANK_CURRENCIES, SUPPORTED_BANKS, BANK_ACCOUNT_TYPES} from '../../config';
 
 const DepositSchema = Yup.object().shape({
@@ -87,7 +87,9 @@ export const DepositForm = ({onSubmit, onError, ...props}) => {
 }
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

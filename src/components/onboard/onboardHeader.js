@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { useTheme, StyledText } from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme';
 import { FormMeta } from './meta';
 
 export const OnboardHeader = ({step, ...props}) => {
@@ -29,7 +29,9 @@ export const OnboardHeader = ({step, ...props}) => {
 
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

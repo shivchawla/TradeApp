@@ -3,12 +3,13 @@ import { TextInput, View, StyleSheet, TouchableOpacity } from 'react-native';
 import get from 'lodash/get';
 import CountryPicker, {Flag} from 'react-native-country-picker-modal';
 
-import { useTheme, StyledText } from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme';
 
 export const FormTextField = ({field, placeholder, handler, setCustomError = null, ref = null, disabled = false, instructionText='', isPhone = false, ...props}) => {
 	const { handleChange, handleBlur, handleSubmit, values, errors, touched, setErrors} = handler;
 
 	const {theme, styles} = useStyles();
+	const {HP, WP} = useDimensions();
 	const value = get(values, field);
 	const error = get(errors, field);
 	const [showCountry, setShowCountry] = useState(false)
@@ -102,7 +103,9 @@ export const FormTextField = ({field, placeholder, handler, setCustomError = nul
 }
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

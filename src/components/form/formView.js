@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
 import { ConfirmButton } from '../../components/common';
-import { useTheme, StyledText } from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme';
 
 export const FormView = ({onSubmit, children, buttonTitle="Next", showButton = true, ...props}) => {
 	
@@ -30,7 +30,9 @@ export const FormView = ({onSubmit, children, buttonTitle="Next", showButton = t
 } 
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

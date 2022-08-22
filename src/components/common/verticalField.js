@@ -2,14 +2,14 @@ import React, {useState} from 'react';
 import { View, StyleSheet } from 'react-native';
 
 import { PnLText } from './';
-import * as Theme from '../../theme';
 import { formatValue} from '../../utils';
 
-const { useTheme, StyledText, WP, HP, Typography} = Theme;
+import { useTheme, useDimensions, useTypography, StyledText} from '../../theme';
 
 export const VerticalField = ({label, value, changeValue = 0, isPnL = false, labelTop = true, valuePrefix = '', isNumber = false, ...props}) => {
 	
 	const styles = useStyles();
+	const { HP } = useDimensions();
 
 	return (
 		<View style={[styles.container, props.containerStyle]}>
@@ -26,8 +26,9 @@ export const VerticalField = ({label, value, changeValue = 0, isPnL = false, lab
 }
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
-
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 	const styles = StyleSheet.create({
 		container: {
@@ -35,11 +36,11 @@ const useStyles = () => {
 		},
 		label: {
 			fontWeight: '400',
-			fontSize: Typography.four, 
+			fontSize: fontSize.four, 
 			color: theme.positionLabel, 
 		},
 		value: {
-			fontSize: Typography.fourPointFive, 
+			fontSize: fontSize.fourPointFive, 
 			color: theme.positionValue,
 		}
 	})

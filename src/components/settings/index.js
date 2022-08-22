@@ -3,10 +3,11 @@ import { TouchableOpacity, View, StyleSheet, Switch } from 'react-native';
 
 import { CustomIcon, InfoText } from '../common';
 
-import {useTheme, WP, HP, StyledText} from '../../theme';
+import {useTheme, useDimensions, useTypography, StyledText} from '../../theme';
 
 export const HorizontalSetting = ({title, value, onPress, hasIcon = true, leftIcon, ...props}) => {
 	const {theme, styles} = useStyles();
+	const { HP, WP } = useDimensions();
 
 	return (
 		<TouchableOpacity activeOpacity={0.8} onPress={onPress} style={styles.horizontalSettingContainer}>
@@ -41,7 +42,9 @@ export const SwitchSetting = ({title, description, value, onSwitch, showAlert = 
 }
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

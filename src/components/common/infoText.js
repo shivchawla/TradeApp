@@ -1,20 +1,17 @@
 import React, {useState} from 'react';
-import { View, TouchableOpacity, StyleSheet, useWindowDimensions } from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import Modal from 'react-native-modal';
 
 import { CustomIcon } from './iconButtons';
 
-import { useTheme, StyledText } from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme';
 
 export const InfoText = ({text, info, ...props}) => {
 
 	const [isVisible, setModalVisible] = useState(false);
-
 	const {theme, styles} = useStyles();
 
-	// const {width: deviceWidth, height: deviceHeight} = useWindowDimensions();
-	const deviceHeight = theme.HP(100);
-	const deviceWidth = theme.WP(100);
+	const {HP, WP, deviceWidth, deviceHeight} = useDimensions();
 
 	return (
 		<TouchableOpacity onPress={() => setModalVisible(true)} style={styles.container}>
@@ -37,8 +34,9 @@ export const InfoText = ({text, info, ...props}) => {
 }
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
-	
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 	const styles = StyleSheet.create({
 		container:{

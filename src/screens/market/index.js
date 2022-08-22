@@ -5,13 +5,14 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 import { AppView, AccountIcon, SearchIcon, HorizontalScrollMenu, AddIcon} from '../../components/common';
 import { SingleStock } from '../../components/market';
-import { useTheme } from '../../theme' 
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme' 
 
 import {defaultStocks} from '../../config';
 import { useAllWatchlist, useCreateWatchlist, useWatchlist, useDeletewatchlist, getWatchlistOrder } from '../../helper';
 
 const ShowWatchlist = ({watchlistId}) => {
 
+	const {HP, WP} = useDimensions();
 	const navigation = useNavigation();
 	const {watchlist} = useWatchlist(watchlistId);
 
@@ -33,6 +34,7 @@ const ShowWatchlist = ({watchlistId}) => {
 const SelectWatchlist = ({watchlists}) => {
 
 	const {styles} = useStyles();
+	const { HP, WP } = useDimensions();
 
 	const items = watchlists.map(item => {
 		return {key: item.id, label: item.name, component: () => <ShowWatchlist {...{watchlistId: item.id}}/>}
@@ -56,6 +58,7 @@ const Market = (props) => {
 	const [watchlists, setWatchlists] = useState(null);
 
 	const {theme, styles} = useStyles();
+	const {HP, WP} = useDimensions();
 
 	const navigation = useNavigation();
 
@@ -117,7 +120,9 @@ const Market = (props) => {
 }
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

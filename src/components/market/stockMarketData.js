@@ -4,12 +4,13 @@ import {View, StyleSheet} from 'react-native';
 import { Collapsible } from  '../../components/common';
 import { NDaysAgoISODate, NWeeksAgoISODate } from '../../utils';
 import { useStockEODData, useStockHistoricalData } from  '../../helper';
-import { useTheme, StyledText, Typography, WP, HP, getPnLColor }  from '../../theme';
+import { useTheme, StyledText}  from '../../theme';
 import { MARKET_DATA_FIELDS } from '../../config';
 
 const DisplayMarketData = ({data}) => {
 	const styles = useStyles();
-
+	const { getPnLColor } = useTheme();
+	
 	const FieldContainer = ({field, value}) => {
 		return (
 			<View style={styles.marketDataFieldContainer}> 
@@ -96,7 +97,9 @@ export const StockMarketData = ({symbol}) => {
 
 const useStyles = () => {
 	
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

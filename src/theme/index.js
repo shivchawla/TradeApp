@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useTheme, ThemeProvider } from './provider'
+import { useDimensions } from './responsive';
+import { useTypography } from './typography';
 
 const StyledText = ({children, style, isNumber = false, ...props}) => {
 	const styles = useStyles();
@@ -36,7 +38,9 @@ const PaddedView = ({children, style}) => {
 }
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 	
 
 	const styles = StyleSheet.create({
@@ -53,4 +57,4 @@ const useStyles = () => {
 	return styles;
 }
 
-export {StyledText, useTheme, ThemeProvider}
+export {StyledText, useTheme, ThemeProvider, useDimensions, useTypography}

@@ -18,7 +18,9 @@ export const useDimensions = () => {
 
     return {
         WP: widthPercentageToDP,
-        HP: heightPercentageToDP
+        HP: heightPercentageToDP,
+        deviceWidth: screenWidth,
+        deviceheight: screenHeight,
     };  
 }
 

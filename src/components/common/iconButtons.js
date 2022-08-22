@@ -2,22 +2,23 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, Linking, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { useTheme, WP, defaultIconSize, StyledText } from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme';
 
 //Create varianle for backward compatibility
 const Ionicons = Icon;
 
 export const CustomIcon = ({iconName, ...props}) => {
 	const {theme, styles} = useStyles();
+	const { DefaultIconSize } = useTypography();
 
 	return (
 		<>{
 			!!props?.hasBackground ? 
 			<View style={props.backgroundStyle}>
-				<Ionicons name={iconName} color={props.iconColor || theme.icon} size={props.iconSize || defaultIconSize} /> 
+				<Ionicons name={iconName} color={props.iconColor || theme.icon} size={props.iconSize || DefaultIconSize} /> 
 			</View>
 			:
-			<Ionicons name={iconName} color={props.iconColor || theme.icon} size={props.iconSize || defaultIconSize} />
+			<Ionicons name={iconName} color={props.iconColor || theme.icon} size={props.iconSize || DefaultIconSize} />
 		}
 		</>
 	)
@@ -25,20 +26,22 @@ export const CustomIcon = ({iconName, ...props}) => {
 
 export const IconButton = ({iconName, onPress, opacity=0.8,  ...props}) => {
 	const {theme, styles} = useStyles();
+	const { DefaultIconSize } = useTypography();
 
 	return (
 		<TouchableOpacity activeOpacity={opacity} style={props.containerStyle} onPress={onPress}>
-			<Ionicons name={iconName} color={props.iconColor || theme.icon} size={props.iconSize || defaultIconSize} />
+			<Ionicons name={iconName} color={props.iconColor || theme.icon} size={props.iconSize || DefaultIconSize} />
 		</TouchableOpacity>
 	)
 }
 
 export const IconTextButton = ({iconName, image, title, onPress, opacity = 0.8, ...props}) => {
 	const {theme, styles} = useStyles();
-
+	const { DefaultIconSize } = useTypography();
+	
 	return (
 		<TouchableOpacity activeOpacity={opacity} style={props.containerStyle} onPress={onPress}>
-			{iconName && <Ionicons name={iconName} color={props.iconColor || theme.icon} size={props.iconSize || defaultIconSize} />} 
+			{iconName && <Ionicons name={iconName} color={props.iconColor || theme.icon} size={props.iconSize || DefaultIconSize} />} 
 			{image && <Image source={image} style={[styles.imageIcon, props.imageIconStyle]} />}
 			<StyledText style={props.textStyle}>{title}</StyledText>
 		</TouchableOpacity>
@@ -162,7 +165,9 @@ export const SocialIcon = ({social, ...props}) => {
 
 const useStyles = () => {
 
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 	
 	const styles = StyleSheet.create({

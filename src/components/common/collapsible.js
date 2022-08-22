@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 
 import {ShowHideButton} from './iconButtons';
-import {useTheme, StyledText} from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme';
 
 export const Collapsible = ({title, content, summary = null, summaryInline = false, endButton = null, show = true, enabled=true, ...props}) => {
 	const {theme, styles} = useStyles();
@@ -42,7 +42,9 @@ export const Collapsible = ({title, content, summary = null, summaryInline = fal
 }
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

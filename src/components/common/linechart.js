@@ -3,8 +3,7 @@ import {View, StyleSheet, PanResponder} from 'react-native';
 import {LineChart as SVGLineChart, Path} from 'react-native-svg-charts';
 import {Line} from 'react-native-svg';
 
-import * as Theme  from '../../theme';
-const { useTheme, WP, HP, StyledText } = Theme;
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme';
 
 export const LineChart = ({data, size, hasTooltip = false, base = null, baseline= false, ...props}) => {
 	const {theme, styles} = useStyles();
@@ -158,7 +157,9 @@ export const LineChart = ({data, size, hasTooltip = false, base = null, baseline
 }
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

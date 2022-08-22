@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { GestureResponderHandlers, Animated, StyleSheet } from 'react-native';
-import {useTheme, WP, HP} from '../../../theme';
+import {useTheme, useDimensions, useTypography, StyledText} from '../../../theme';
 
 const SwipeButtonCircle = ({ icon, opacity, panHandlers, translateX, height, borderRadius, ...props }) => {
     
@@ -42,7 +42,9 @@ export default SwipeButtonCircle;
 
 const useStyles = () => {
 
-    const {theme, HP, WP, Typography} = useTheme();
+    const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
     const styles = StyleSheet.create({

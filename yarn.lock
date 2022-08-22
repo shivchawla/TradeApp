@@ -4617,6 +4617,11 @@ internal-slot@^1.0.3:
     has "^1.0.3"
     side-channel "^1.0.4"
 
+intl@^1.2.5:
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/intl/-/intl-1.2.5.tgz#82244a2190c4e419f8371f5aa34daa3420e2abde"
+  integrity sha512-rK0KcPHeBFBcqsErKSpvZnrOmWOj+EmDkyJ57e90YWaQNqbcivcqmKDlHEeNprDWOsKzPsh1BfSpPQdDvclHVw==
+
 invariant@2.2.4, invariant@^2.2.4:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
@@ -6184,6 +6189,11 @@ modal-react-native-web@0.2.0:
   integrity sha512-sC0/jL3ZL4bGtv1VS43TnrH7/FHUqgb7IU3VYWNDzuR223fYlpG5Gc974GsTP172Vi+lnnBL/G70xONmaggxeQ==
   dependencies:
     warning "^4.0.1"
+
+moment-business-days@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/moment-business-days/-/moment-business-days-1.2.0.tgz#6172f9f38dbf443c2f859baabeabbd2935f63d65"
+  integrity sha512-QJlceLfMSxy/jZSOgJYCKeKw+qGYHj8W0jMa/fYruyoJ85+bJuLRiYv5DIaflyuRipmYRfD4kDlSwVYteLN+Jw==
 
 moment-timezone@^0.5.34:
   version "0.5.34"

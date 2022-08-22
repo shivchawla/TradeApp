@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 
 import { AppView, ConfirmButton, GobackIcon, TinyTextButton, Checkbox } from '../../components/common';
-import { useTheme, StyledText } from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme';
 
 import { AnyForm, Welcome, OnboardHeader, OnboardSummary } from '../../components/onboard';
 
@@ -171,7 +171,9 @@ const Onboard = (props) => {
 
 const useStyles = () => {
 	
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

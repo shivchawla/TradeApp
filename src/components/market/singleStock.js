@@ -5,12 +5,13 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { StockChart, TickerDisplay, StockName } from './'; 
 
 import { useAssetData } from  '../../helper';
-import { useTheme, StyledText } from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme';
 
 import {formatName} from '../../utils';
 
 export const SingleStock = ({symbol, onClick, detail = false}) => {
 	const {theme, styles} = useStyles();
+	const { HP, WP } = useDimensions();
 	
 	const PlainView = () => {
 		return (
@@ -40,7 +41,9 @@ export const SingleStock = ({symbol, onClick, detail = false}) => {
 }
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

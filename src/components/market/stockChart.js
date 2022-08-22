@@ -2,8 +2,7 @@ import React, {useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {LineChart, RangeSelector} from '../common';
 
-import * as Theme  from '../../theme';
-const { useTheme, StyledText, WP, HP} = Theme;
+import { useTheme, useDimensions, useTypography, StyledText} from '../../theme';
 
 import {NDaysAgoISODate, NWeeksAgoISODate, yearStartISODate,
 	NMonthsAgoISODate, NYearsAgoISODate, 
@@ -283,7 +282,9 @@ export const StockChart = ({type, hasSelector = false, ...props}) => {
 
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { useTheme } from './index'
+import { useTheme, useDimensions, useTypography, StyledText } from './index'
 
 export const StyledText = ({children, style, isNumber = false, ...props}) => {
 	const styles = useStyles();
@@ -36,7 +36,9 @@ export const PaddedView = ({children, style}) => {
 }
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 	
 
 	const styles = StyleSheet.create({

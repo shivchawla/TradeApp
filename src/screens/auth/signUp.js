@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth, useLoading } from '../../helper';
 import { AppView, ConfirmButton, TinyTextButton, AppIcon, OtpInput } from '../../components/common';
 import { SignUpForm } from '../../components/auth';
-import { useTheme, StyledText }  from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText }  from '../../theme';
 import { AuthLayout, AuthFooterDefault } from './authLayout';
 
 const SignUp = (props) => {
@@ -170,7 +170,9 @@ const SignUp = (props) => {
 }
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

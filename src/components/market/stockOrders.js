@@ -8,7 +8,7 @@ import { titleCase } from "title-case";
 
 import { ShowJson, Collapsible  } from '../common';
 import { DisplayOrder } from '../order';
-import { useTheme, StyledText, Typography, WP, HP, Colors, getPnLColor }  from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText}  from '../../theme';
 import { OPEN_ORDER_STATUS } from '../../config';
 import { useOrders, useLatestTradingDay, useSymbolActivity } from '../../helper';
 
@@ -118,7 +118,9 @@ export const StockOrders = ({symbol, orders}) => {
 }
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

@@ -3,7 +3,7 @@ import { TouchableOpacity, StyleSheet, View, Image } from "react-native";
 
 import { AppView, CustomIcon} from '../../components/common';
 
-import { useTheme, StyledText } from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme';
 import { locales } from '../../locales';
 import { useTranslation } from 'react-i18next';
 
@@ -69,7 +69,9 @@ const SelectLanguage = (props) => {
 
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

@@ -8,7 +8,7 @@ countries.registerLocale(require("i18n-iso-countries/langs/es.json"));
 
 import { Icon } from '../../components/common';
 
-import { useTheme, StyledText } from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme';
 
 export const FormCountryField = ({field, placeholder, ...props}) => {
 	
@@ -52,7 +52,9 @@ export const FormCountryField = ({field, placeholder, ...props}) => {
 
 const useStyles = () => {
 
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

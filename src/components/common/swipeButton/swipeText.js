@@ -1,8 +1,7 @@
 import React from 'react';
 import { View, Text, TextProps, StyleProp, TextStyle, ViewProps, ViewStyle, StyleSheet } from 'react-native';
 import { DEFAULT_HEIGHT } from './constants';
-import {useTheme, WP, HP} from '../../../theme';
-
+import {useTheme, useDimensions, useTypography, StyledText} from '../../../theme';
 
 export const SwipeButtonText = ({title, ...props}) => {
     
@@ -54,7 +53,9 @@ export const AfterSwipeButtonText = ({title, ...props}) => {
 
 const useStyles = () => {
 
-    const {theme, HP, WP, Typography} = useTheme();
+    const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
     const styles = StyleSheet.create({

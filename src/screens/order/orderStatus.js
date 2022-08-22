@@ -7,7 +7,7 @@ import { titleCase } from "title-case";
 import { AppView, ConfirmButton, ShowJson, CustomIcon, TinyTextButton} from '../../components/common';
 import { DisplayOutRTH } from '../../components/order';
 import { useOrderDetail, getLatestTradingDay, getNextTradingDay } from '../../helper';
-import { useTheme, StyledText }  from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText }  from '../../theme';
 import { ORDER_MORE_FIELDS, AVAILABLE_TO_CANCEL_ORDER_STATUS, OPEN_ORDER_STATUS } from '../../config';
 import { toTimeZoneDate, durationBetweenDates } from '../../utils';
 
@@ -78,6 +78,7 @@ const OrderStatusMore = ({orderDetail}) => {
 
 const OrderButton = ({title, onClick}) => {
 	const {theme, styles} = useStyles();
+	const { HP, WP } = useDimensions();
 	
 	return (
 		<TouchableOpacity onPress={onClick} activeOpacity={0.8} style={styles.orderButton}>
@@ -167,7 +168,9 @@ const OrderStatus = (props) => {
 }
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

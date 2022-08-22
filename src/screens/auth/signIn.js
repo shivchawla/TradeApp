@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { AppView, ConfirmButton, TinyTextButton, AppIcon, OtpInput} from '../../components/common';
 import { SignInForm } from '../../components/auth';
-import { useTheme, StyledText }  from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText }  from '../../theme';
 import { useAuth, useLoading } from '../../helper';
 import { ACCOUNT_STATUS, SCREEN_NAMES } from '../../config';
 import { AuthLayout, AuthFooterDefault } from './authLayout';
@@ -144,7 +144,9 @@ const SignIn = (props) => {
 export default SignIn;
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { AppView, TinyTextButton, AppIcon} from '../../components/common';
 import { ForgotPasswordForm } from '../../components/auth';
-import { useTheme, StyledText }  from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText }  from '../../theme';
 import { useAuth } from '../../helper';
 import { AuthLayout, AuthFooterDefault } from './authLayout';
 
@@ -63,7 +63,9 @@ const ForgotPassword = (props) => {
 export default ForgotPassword;
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

@@ -7,12 +7,13 @@ const Ionicons  = Icon;
 import { titleCase } from "title-case";
 
 import { ShowJson, Clickable } from '../common';
-import { useTheme, StyledText }  from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText }  from '../../theme';
 import { CANCEL_ORDER_STATUS } from '../../config';
 
 export const DisplayOrder = ({order, showSymbol = false, showIcon = false, showOrderType = true, showStatus = true, pastTense = false,  ...props}) => {
 	const {theme, styles} = useStyles();
 	const navigation = useNavigation();
+	const {WP, HP} = useDimensions();
 
 	const getShareQty = (qty) => {
 		return qty ? qty > 1 ? `${qty} Shares` : '1 Share' : '';
@@ -84,7 +85,9 @@ export const DisplayOrderList = ({orders, ...props}) => {
 
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

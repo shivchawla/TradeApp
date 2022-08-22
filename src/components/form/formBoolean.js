@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import get from 'lodash/get';
 
 import { TouchRadioGroup } from '../common';
-import { useTheme, StyledText } from '../../theme'; 
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme'; 
 
 export const FormBooleanField = ({items = ['NO', 'YES'], title, field, ...props}) => {
 
@@ -23,6 +23,7 @@ export const FormBooleanField = ({items = ['NO', 'YES'], title, field, ...props}
 	// console.log("Passed Index:", value ? "YES" : "NO");
 
 	const {theme, styles} = useStyles();
+	const { HP, WP } = useDimensions();
 
 	return (
 		<View style={[{width: '100%'}, props.style, {...props.horizontal && {flexDirection: 'row', justifyContent: 'space-between'}}]}>
@@ -40,8 +41,9 @@ export const FormBooleanField = ({items = ['NO', 'YES'], title, field, ...props}
 
 const useStyles = () => {
 
-	const {theme, HP, WP, Typography} = useTheme();
-
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 	const styles = StyleSheet.create({
 		text: {

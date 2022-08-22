@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 
-import { StyledText, useTheme, WP } from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme';
 
 export const TinyTextButton = ({title, onPress, ...props}) => {
 	const {theme, styles} = useStyles();
@@ -13,7 +13,9 @@ export const TinyTextButton = ({title, onPress, ...props}) => {
 }
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 	
 	const styles = StyleSheet.create({

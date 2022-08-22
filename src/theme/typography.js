@@ -1,8 +1,14 @@
 import { useDimensions } from './responsive'
+import { useTheme } from './provider'
 
 export const useTypography = () => {
     const {HP , WP} = useDimensions();
-    
+    const {theme} = useTheme();
+
+    const getPnLColor = (value) => {        
+        return value > 0 ? theme.green : theme.red;
+    }
+
     const fontSize = {
         six: WP(6),
         five: WP(5),
@@ -22,5 +28,5 @@ export const useTypography = () => {
 
     const DefaultIconSize = WP(7);
 
-    return {fontSize, fontWeight, DefaultIconSize};
+    return {fontSize, fontWeight, DefaultIconSize, getPnLColor};
 }

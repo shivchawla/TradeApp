@@ -1,13 +1,14 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
-import { useTheme, StyledText }  from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText }  from '../../theme';
 
 import { CustomIcon} from './iconButtons';
 import { SwipeButton } from './swipeButton';
 
 export const ConfirmButton = ({title, afterTitle, onClick, onSwipeSuccess, swipe = false, cancel = false, disabled = false,  ...props}) => {
 	const {theme, styles} = useStyles();
+	const { HP, WP } = useDimensions();
 
 	const ProceedIcon = ({size = WP(8)} = {}) => {
 		return <CustomIcon iconName={props?.iconName ?? "arrow-forward"} iconSize={size} iconColor="white"/>
@@ -52,8 +53,9 @@ export const ConfirmButton = ({title, afterTitle, onClick, onSwipeSuccess, swipe
 	
 const useStyles = () => {
 
-	const {theme, HP, WP, Typography} = useTheme();
-
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 	const styles = StyleSheet.create({
 		buttonContainer: {

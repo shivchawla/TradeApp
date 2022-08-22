@@ -5,12 +5,13 @@ import AppView from './appView';
 import PnlText from './pnlText';
 import { LineChart } from './linechart';
 
-import {useTheme, StyledText} from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme';
 
 export const HorizontalScrollMenu = ({items, isPadded = true, scroll = true, ...props }) => {
 	const styles = useStyles();
-	const {theme, HP, WP, Typography} = useTheme();
-	
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 	
 	const [selectedIndex, setIndex] = useState(0);
 
@@ -46,7 +47,9 @@ export const HorizontalScrollMenu = ({items, isPadded = true, scroll = true, ...
 
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 	
 	
 	const styles = StyleSheet.create({

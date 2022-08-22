@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 
 import {AppView, ConfirmButton} from '../../components/common';
 
-import { useTheme, StyledText }  from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText }  from '../../theme';
 import { useAuth } from '../../helper';
 
 const ChangePasswordSchema = Yup.object().shape({
@@ -133,7 +133,9 @@ export default ChangePassword;
 
 const useStyles = () => {
 
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

@@ -1,11 +1,12 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import {useTheme, WP, HP, StyledText, getPnLColor, } from '../../theme'
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme'
 
 import {formatPctValue, formatValue} from '../../utils';
 
 export const PnLText = ({value = 0, changeValue = 0, withBracket = true, isPct = true, isNotional = false, ...props}) => {
-	const {theme, styles} = useStyles();
+	const { theme, styles } = useStyles();
+	const { getPnLColor } = useTypography();
 
 	const valueColor = getPnLColor(value);
 	const changeValueColor = getPnLColor(changeValue);
@@ -26,7 +27,9 @@ export const PnLText = ({value = 0, changeValue = 0, withBracket = true, isPct =
 
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

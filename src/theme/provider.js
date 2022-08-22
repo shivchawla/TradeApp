@@ -3,9 +3,6 @@ import {useColorScheme} from 'react-native';
 
 import {getCurrentTheme, setCurrentTheme} from '../helper';
 
-import { useDimensions } from './responsive';
-import { useTypography } from './typography';
-
 export const DarkTheme = {
     name: 'dark',
 
@@ -93,10 +90,6 @@ export const ThemeProvider = ({children}) => {
     //In v1 of app, keep only dark mode
     const [theme, setTheme] = useState(DarkTheme);
 
-    const {WP, HP} = useDimensions();
-
-    const Typography = useTypography();
-    
     React.useEffect(() => {
         (async() => {
             let scheme = await getCurrentTheme();
@@ -118,12 +111,8 @@ export const ThemeProvider = ({children}) => {
         setTheme(scheme == 'dark' ? DarkTheme : LightTheme)
     }
 
-    const getPnLColor = (value) => {        
-        return value > 0 ? theme.green : theme.red;
-    }
-
 	return(
-		<ThemeContext.Provider value={{theme, updateTheme, WP, HP, Typography}}>
+		<ThemeContext.Provider value={{theme, updateTheme}}>
 		{children}
 		</ThemeContext.Provider>
 	)

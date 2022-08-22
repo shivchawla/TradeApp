@@ -1,18 +1,15 @@
 import React, {useState} from 'react';
-import { View, TouchableOpacity, StyleSheet, useWindowDimensions } from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 const Ionicons  = Icon;
 import Modal from 'react-native-modal';
 
 import { CloseIcon, CustomIcon} from './iconButtons';
-import { useTheme, StyledText } from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme';
 
 const CustomModal = ({isVisible, onHide, navigation}) => {
   const {theme, styles} = useStyles();
-
-  // const {width: deviceWidth, height: deviceHeight} = useWindowDimensions();
-  const deviceHeight = theme.HP(100);
-  const deviceWidth = theme.WP(100);
+  const { HP, WP, deviceWidth, deviceHeight } = useDimensions();
 
   const CustomAction = ({iconName, title, description, onPress}) => {
       return (
@@ -56,6 +53,7 @@ const CustomModal = ({isVisible, onHide, navigation}) => {
 export const CustomTabBar = ({ state, descriptors, navigation }) => {
   
   const {theme, styles} = useStyles();
+  const { HP, WP } = useDimensions();
 
   const [isModalVisible, setModalVisible] = useState(false);
   
@@ -151,8 +149,9 @@ export const CustomTabBar = ({ state, descriptors, navigation }) => {
 }
 
 const useStyles = () => {
-  const {theme, HP, WP, Typography} = useTheme();
-  
+  const { theme } = useTheme();
+  const { HP, WP } = useDimensions();
+  const { fontSize, fontWeight } = useTypography();
   
   const styles = StyleSheet.create({
     tabBar: {

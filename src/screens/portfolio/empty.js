@@ -1,8 +1,11 @@
 import React from 'react';
 import {AppView, SwipeButton, Icon} from '../../components/common';
-import {WP} from '../../theme';
+import {useDimensions} from '../../theme';
 
 const EmptyScreen = () => {
+	const { HP, WP } = useDimensions();
+
+
 	return (
 		<AppView>
 			<SwipeButton 

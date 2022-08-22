@@ -3,7 +3,7 @@ import {View, StyleSheet } from 'react-native';
 
 import { Picker, HorizontalPickField, TextInputWithIcon } from '../../components/common';
 	
-import { useTheme, StyledText }  from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText }  from '../../theme';
 
 export const QuantitySelector = ({quantity, isNotional, onChangeQuantity, onChangeType, notionalAllowed = true}) => {
 	const {theme, styles} = useStyles();
@@ -60,7 +60,9 @@ export const NotionalSelector = ({isNotional, onSelect}) => {
 
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

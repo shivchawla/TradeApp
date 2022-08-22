@@ -4,8 +4,7 @@ import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { LineChart, RangeSelector } from '../common';
 import { usePortfolioHistory, getLatestTradingDay } from '../../helper';
 
-import * as Theme  from '../../theme';
-const { useTheme, StyledText, WP, HP} = Theme;
+import { useTheme, useDimensions, useTypography, StyledText} from '../../theme';
 
 import {yearStartISODate, currentISODate, 
 	toISODate, durationBetweenDates, getRoundedCurrentTime} from '../../utils'
@@ -122,7 +121,9 @@ export const PnLGraph = (props) => {
 }
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 	const styles = StyleSheet.create({
 		outerContainer: {

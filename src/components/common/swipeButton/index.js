@@ -5,7 +5,7 @@ import {DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_BORDER_RADIUS, DEFAULT_COMPLETE_T
 
 import SwipeButtonCircle from './swipeCircle';
 import { SwipeButtonText, AfterSwipeButtonText } from './swipeText';
-import {useTheme, WP, HP} from '../../../theme';
+import {useTheme, useDimensions, useTypography, StyledText} from '../../../theme';
 
 export const SwipeButton = ({title, swipeTitle, icon, disabled, onSwipeSuccess, onSwipeEnd, onSwipeStart, ...props}) => {
 
@@ -132,7 +132,9 @@ export const SwipeButton = ({title, swipeTitle, icon, disabled, onSwipeSuccess, 
 
 const useStyles = () => {
 
-    const {theme, HP, WP, Typography} = useTheme();
+    const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
     
     const styles = StyleSheet.create({

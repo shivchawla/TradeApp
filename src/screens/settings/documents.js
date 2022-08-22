@@ -5,7 +5,7 @@ import * as RNFS from 'react-native-fs';
 
 import { AppView, CalendarIcon, 
 	DatePickerModal, ShowJson, DownloadIcon } from '../../components/common';
-import { useTheme, StyledText } from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme';
 import { useDocuments, useDownloadDocument } from '../../helper';
 import { NMonthsAgoISODate, currentISODate, toTimeZoneDate} from '../../utils';
 
@@ -114,7 +114,9 @@ const DownloadDocument = (props) => {
 }
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

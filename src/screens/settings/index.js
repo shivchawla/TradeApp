@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { AppView, IconTextButton, ToggleThemeButton, CustomIcon} from '../../components/common';
 import { HorizontalSetting } from '../../components/settings';
 
-import { useTheme, StyledText } from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme';
 import { useTranslation } from 'react-i18next';
 
 const TopSetting = ({iconName, title, onPress, ...props}) => {
@@ -108,7 +108,9 @@ const Settings = (props) => {
 }
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { DisplayOrder } from '../order';
 import { ShowJson } from '../common';
-import { useTheme } from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme';
 
 export const DisplayActivity = ({activity}) => {
 	const {theme, styles} = useStyles();
@@ -39,7 +39,9 @@ export const DisplayActivityList = ({activityList, ...props}) => {
 }
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

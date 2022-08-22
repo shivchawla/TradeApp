@@ -5,7 +5,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { useNavigation, useFocusEffect, useIsFocused } from '@react-navigation/native';
 import { BarIndicator } from 'react-native-indicators';
 
-import { StyledText, useTheme} from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme';
 import { GobackIcon } from './iconButtons';
 import { FullViewModal } from './fullViewModal';
  
@@ -43,8 +43,8 @@ export const AppView = ({
   onScroll,
   ...props
 }) => {
-  const { WP } = useTheme(); 
-  const { styles } = useStyles();
+  const { WP } = useDimensions(); 
+  const { theme, styles } = useStyles();
 
   // console.log("Scroll: ", scroll);
   // console.log(props.children);
@@ -55,17 +55,13 @@ export const AppView = ({
   const scrollRef = React.useRef();
 
   //This sets showModal based on prop change
-  React.useEffect(() => {
-    setShowModal(isLoading);
-  }, [isLoading]);
+  React.useEffect(() => setShowModal(isLoading), [isLoading]);
 
   //On Blur, any modal should be turned off
   useFocusEffect(
     React.useCallback(() => {
       //Blur Effect
-      return () => {
-        setShowModal(false);
-      };
+      return () => setShowModal(false);
     }, [])
   );
 
@@ -130,7 +126,9 @@ export const AppView = ({
 };
 
 const useStyles = () => {
-  const { theme, HP, WP, Typography } = useTheme();
+      const { theme } = useTheme();
+    const { HP, WP} = useDimensions();
+    const {fontSize, fontWeight} = useTypography();
 
   const styles = StyleSheet.create({
     scrollAppContainer: {

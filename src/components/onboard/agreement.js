@@ -6,7 +6,7 @@ import NetInfo from "@react-native-community/netinfo";
 
 import { ConfirmButton, Checkbox } from '../../components/common';
 
-import { useTheme, StyledText } from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme';
 
 export const Agreement = React.forwardRef(({field, uri, title, onAgree, ...props}, ref) => {
 
@@ -54,7 +54,9 @@ export const Agreement = React.forwardRef(({field, uri, title, onAgree, ...props
 })
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

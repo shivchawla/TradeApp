@@ -12,7 +12,6 @@ import { DisplayOrderList } from '../../components/order';
 import { DisplayActivityList } from '../../components/activity';
 import { StockNews } from '../../components/market';
 
-import * as Theme from '../../theme';
 import { useStockPortfolioData, useTradingAccountData, 
 	usePortfolioHistory, useOrders, useCancelAllOrders, useAccountActivity } from '../../helper';
 
@@ -20,7 +19,7 @@ import {formatValue} from '../../utils';
 import {ACCOUNT_SUMMARY_FIELDS, MAX_ACTIVITY_COUNT_HOME, MAX_POSITIONS_COUNT_HOME} from '../../config';
 import { t } from 'i18next';
 
-const {useTheme, WP, HP, StyledText} = Theme;
+import {useTheme, useDimensions, useTypography, StyledText} from '../../theme';
 
 const HorizontalField = ({label, value, isPnL=false, isNumber = false, ...props}) => {
 	const {theme, styles} = useStyles();
@@ -64,15 +63,15 @@ const getPnL = (history) => {
 }
 
 const PortfolioNews = ({symbols}) => {
-	return symbols.map(symbol => <StockNews {...{symbol}} showMore={false}/>)
+	return symbols.map(symbol => <StockNews key={symbol} {...{symbol}} showMore={false}/>)
 }
 
 const PortfolioHeader = ({portfolioHistory, ...props}) => {
 	const {theme, styles} = useStyles();
+	const {WP} = useDimensions();
+
 	const navigation = useNavigation();
 	const {t} = useTranslation();
-
-	console.log(props.bottomHeaderStyle)
 
 	return (
 		<>
@@ -84,7 +83,7 @@ const PortfolioHeader = ({portfolioHistory, ...props}) => {
 				isNumber={true} 
 				value={getLatestEquity(portfolioHistory)} 
 				valuePrefix='$ '
-				valueStyle={{fontSize: WP(6), fontWeight: '700'}}
+				valueStyle={styles.latestEquityText}
 			/>
 			<View>
 				<HorizontalField
@@ -127,6 +126,7 @@ const AccountSummary = ({tradingAccount}) => {
 const Portfolio = (props) => {
 	const navigation = useNavigation();
 	const {theme, styles} = useStyles();
+	const {WP, HP} = useDimensions();
 
 	const {portfolio, getPortfolio} = useStockPortfolioData({enabled: false}); 
 	const {tradingAccount, getTradingAccount} = useTradingAccountData({enabled: false});
@@ -175,8 +175,6 @@ const Portfolio = (props) => {
 
 	const pendingOrders = orders && orders.filter(item => item.status == "new");
 
-	const performanceViewRef = React.useRef();
-
 	// const onScroll = (e) => {
 	// 	console.log("WTF - onLayout");
 	// 	console.log(e.nativeEvent.contentOffset);
@@ -206,7 +204,6 @@ const Portfolio = (props) => {
 				title="PERFORMANCE" 
 				content={<PnLGraph />}  
 				enabled={false}
-				ref={performanceViewRef}
 			/>
 
 			{tradingAccount && 
@@ -253,7 +250,9 @@ const Portfolio = (props) => {
 }
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 	
 	const styles = StyleSheet.create({
@@ -295,6 +294,9 @@ const useStyles = () => {
 		},
 		cancelOrderText: {
 			color: theme.red
+		},
+		latestEquityText: {
+			fontSize: WP(6), fontWeight: '700'
 		}
 	});
 

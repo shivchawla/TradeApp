@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { AppView, AppIcon, SocialIcon, TinyTextButton } from '../../components/common';
 import { HorizontalSetting } from '../../components/settings';
 
-import { useTheme, StyledText } from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme';
 
 const AboutUs = (props) => {
 	const {theme, styles} = useStyles();
@@ -41,7 +41,9 @@ const AboutUs = (props) => {
 }
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

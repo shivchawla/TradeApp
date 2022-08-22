@@ -4,14 +4,15 @@ import { useNavigation } from '@react-navigation/native';
 
 import { AppView, TextInputWithIcon, TinyTextButton} from '../../components/common';
 import { generateName } from '../../utils';
-import { useTheme, StyledText } from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme';
 import { useCreateWatchlist } from '../../helper';
 
 const AddWatchlist = (props) => {
 
 	const styles = useStyles(); 
-	const {theme, HP, WP, Typography} = useTheme();
-
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 	const {watchlists} = props.route.params;
 	const [name, setName] = useState("");
@@ -61,7 +62,9 @@ const AddWatchlist = (props) => {
 }
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

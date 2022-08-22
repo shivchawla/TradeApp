@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import { useNavigation } from '@react-navigation/native';
 
 import { FormView, FormTextField } from '../form';
-import { useTheme } from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme';
 import { TinyTextButton } from '../../components/common';
 
 const SigninSchema = Yup.object().shape({
@@ -22,7 +22,7 @@ export const SignInForm = React.forwardRef(({onSubmit, onError, ...props}, ref) 
 		validationSchema: SigninSchema,
 		initialValues: { email: 'shivchawla2001@gmail.com', password: 'Password'},
 		validateOnChange: false,
-        validateOnBlur: false,
+     	validateOnBlur: false,
 		onSubmit: onSubmit
 	});
 
@@ -39,7 +39,7 @@ export const SignInForm = React.forwardRef(({onSubmit, onError, ...props}, ref) 
 	   		<TinyTextButton 
 	   			title="Forgot Password ?" 
 	   			onPress={() => navigation.navigate('ForgotPassword')}
-	   			buttonTextStyle={{fontSize: WP(3.5), color: theme.grey5}}
+	   			buttonTextStyle={styles.buttonTextStyle}
    			/>
    		</View>
 		</FormView>
@@ -48,14 +48,19 @@ export const SignInForm = React.forwardRef(({onSubmit, onError, ...props}, ref) 
 
 const useStyles = () => {
 	
-	const {theme, HP, WP, Typography} = useTheme();
-
+	const { theme } = useTheme();
+ 	const { HP, WP } = useDimensions();
+ 	const { fontSize, fontWeight } = useTypography();
 
 	const styles = StyleSheet.create({
 		tinyButtonContainer: {
 			width: '90%',
 			alignItems: 'flex-end',
 			marginTop: -15,
+		},
+		buttonTextStyle: {
+			fontSize: WP(3.5), 
+			color: theme.grey5
 		}
 	});
 

@@ -10,11 +10,13 @@ import { AppView, TinyTextButton, EditIcon,
 	ConfirmButton, TouchRadio, DeleteIcon} from '../../components/common';
 import { useAllWatchlist, useDeleteWatchlist, getWatchlistOrder, setWatchlistOrder } from '../../helper';
 
-import {useTheme, WP, StyledText} from '../../theme';
+import {useTheme, useDimensions, useTypography, StyledText} from '../../theme';
 
 const WatchlistEdit = ({watchlist, onSelectionChanged, onDrag}) => {
 	const styles = useStyles();
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+	const { HP, WP } = useDimensions();
+	const { fontSize, fontWeight } = useTypography();
 
 	const navigation = useNavigation();
 	const [selected, setSelect] = useState(null);
@@ -138,7 +140,9 @@ const ManageWatchlist = (props) => {
 
 const useStyles = () => {
 
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

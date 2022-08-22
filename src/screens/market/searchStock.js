@@ -4,7 +4,7 @@ import { View, StyleSheet } from 'react-native';
 import { AppView } from '../../components/common';
 import { SearchStockList } from '../../components/market';
 
-import { useTheme, StyledText }  from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText }  from '../../theme';
 
 const SearchStock = (props) => {
 	const styles = useStyles();
@@ -17,7 +17,9 @@ const SearchStock = (props) => {
 }
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

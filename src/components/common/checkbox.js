@@ -3,10 +3,12 @@ import {View, StyleSheet, TouchableOpacity,} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 const Ionicons  = Icon;
 
-import { StyledText, useTheme, WP } from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme';
 
 export const Checkbox = ({value, title='', onToggle, disabled = false, ...props}) => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const Component = disabled ? View : TouchableOpacity;

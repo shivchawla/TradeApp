@@ -1,7 +1,7 @@
 import React, {useState} from  'react'
 import {View, Image, StyleSheet} from 'react-native';
 
-import {useTheme, HP, WP, StyledText} from '../../theme';
+import {useTheme, useDimensions, useTypography, StyledText} from '../../theme';
 
 const appIcon = require("../../assets/images/app-logo.png");
 const appIconDark = require("../../assets/images/app-logo-dark.png");
@@ -24,7 +24,9 @@ export const AppIcon = ({titleBelow = '', ...props}) => {
 }
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

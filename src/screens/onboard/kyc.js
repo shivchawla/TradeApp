@@ -2,7 +2,7 @@ import React, {useState, useCallback} from 'react';
 import { View, TouchableOpacity, StyleSheet} from 'react-native';
 
 import { AppView, ConfirmButton, AppIcon, TinyTextButton } from '../../components/common';
-import { useTheme, StyledText } from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme';
 
 import { usePersonaSession, usePersonaInquiry, usePersonaInquiries,  
 	useOnboarding, useCreateBrokerageAccount, 
@@ -244,7 +244,9 @@ const StartKyc = (props) => {
 }
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 	const styles = StyleSheet.create({
 		screenContentStyle: {

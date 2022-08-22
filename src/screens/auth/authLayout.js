@@ -3,7 +3,7 @@ import {View, StyleSheet} from 'react-native';
 import {useNavigation } from '@react-navigation/native'
 
 import { AppView, TinyTextButton, AppIcon } from '../../components/common';
-import { useTheme, StyledText }  from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText }  from '../../theme';
 
 const AuthLogo = () => {
 
@@ -54,7 +54,9 @@ export const AuthLayout = ({children, isLoading, ...props}) => {
 }
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({

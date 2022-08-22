@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ScrollView, View, StyleSheet, TouchableOpacity } from 'react-native';
 
-import { useTheme, StyledText } from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme';
 
 const HorizontalButton = React.memo(({isSelected, item, onPress, ...props}) => (
     <TouchableOpacity 
@@ -78,7 +78,9 @@ export const HorizontalButtonGroup = ({
 };
 
 const useStyles = () => {
-  const { theme, HP, WP, Typography } = useTheme();
+      const { theme } = useTheme();
+    const { HP, WP} = useDimensions();
+    const {fontSize, fontWeight} = useTypography();
 
   const styles = StyleSheet.create({
     buttonGroupContainer: {

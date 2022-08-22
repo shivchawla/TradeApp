@@ -9,12 +9,12 @@ import { TickerDisplay } from '../market';
 import { formatValue } from '../../utils';
 import { OPEN_ORDER_STATUS } from '../../config';
 
-import * as Theme from '../../theme';
-const {useTheme, WP, StyledText} = Theme;
+import {useTheme, useDimensions, useTypography, StyledText} from '../../theme';
 
 export const PortfolioDisplay = ({portfolio, orders = [], displayCount = -1}) => {
 
 	const {theme, styles} = useStyles();
+	const { HP, WP } = useDimensions();
 
 	const PortfolioDisplayHeader = () => {
 		return (
@@ -70,7 +70,9 @@ export const PortfolioDisplay = ({portfolio, orders = [], displayCount = -1}) =>
 
 
 const useStyles = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 	
 	const styles = StyleSheet.create({

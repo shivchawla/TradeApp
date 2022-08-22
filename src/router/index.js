@@ -8,7 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import NetInfo from "@react-native-community/netinfo";
 
 import { AuthProvider, useAppStartup, useAuth, useBrokerageAccountData } from '../helper';
-import { useTheme, ThemeProvider, StyledText } from  '../theme';
+import { useTheme, useDimensions, useTypography, ThemeProvider, StyledText } from  '../theme';
 import { WebsocketProvider } from  '../helper';
 
 import { CustomTabBar } from '../components/common';
@@ -31,7 +31,9 @@ const Tabs = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 const HomeTabs = () => {
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 	
 	
 	const screenOptions = {

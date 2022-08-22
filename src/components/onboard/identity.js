@@ -7,7 +7,7 @@ import { FormView, FormField } from '../form';
 import { IdentitySchema } from './meta';
 
 import { ConfirmButton } from '../../components/common';
-import { useTheme, StyledText } from '../../theme';
+import { useTheme, useDimensions, useTypography, StyledText } from '../../theme';
 import { FormMeta } from './meta';
 
 export const IdentityForm = React.forwardRef(({onSubmit, initialValues, setCustomError,  ...props}, ref) => {
@@ -48,7 +48,9 @@ export const IdentityForm = React.forwardRef(({onSubmit, initialValues, setCusto
 
 const useStyles = () => {
 	
-	const {theme, HP, WP, Typography} = useTheme();
+	const { theme } = useTheme();
+    const { HP, WP } = useDimensions();
+    const { fontSize, fontWeight } = useTypography();
 
 
 	const styles = StyleSheet.create({
