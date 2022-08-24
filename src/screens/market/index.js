@@ -10,38 +10,89 @@ import { useTheme, useDimensions, useTypography, StyledText } from '../../theme'
 import {defaultStocks} from '../../config';
 import { useAllWatchlist, useCreateWatchlist, useWatchlist, useDeletewatchlist, getWatchlistOrder } from '../../helper';
 
+
+const ShowAllStocks = ({assets}) => {
+
+	console.log("Render ShowAllStocks: ", assets);
+	const navigation = useNavigation();
+
+	const toStockDetail = React.useCallback((symbol) => {
+		navigation.navigate('StockDetail', {symbol});
+	}, [])
+
+	const listStocks = React.useMemo(() => assets && assets.map(({symbol}) => {	
+		return <SingleStock key={symbol} {...{symbol}} onClick={() => toStockDetail(symbol)} />
+	}), [assets]);
+
+
+	// This is imporatant; Stabilize the component for same object/array to prevent multiple rendering
+	// Commented code below leads to multiple rendering 
+
+	// return (
+	// 	<>
+	// 		{assets && assets.map(({symbol}) => {	
+	// 			return <SingleStock key={symbol} {...{symbol}} />
+	// 		})}
+	// 	</>
+	// )
+
+	return (
+		<>
+			{listStocks}
+		</>
+	)
+
+}
+
 const ShowWatchlist = ({watchlistId}) => {
 
-	const {HP, WP} = useDimensions();
-	const navigation = useNavigation();
-	const {watchlist} = useWatchlist(watchlistId);
+	console.log("Render ShowWatchlist: ", watchlistId);
 
-	const toStockDetail = (symbol) => {
-		navigation.navigate('StockDetail', {symbol});
-	}
+	const {HP, WP} = useDimensions();
+	const {watchlist} = useWatchlist(watchlistId);
+	const [assets, setAssets] = useState(null);
+	const isLoading = !(watchlist && watchlist.assets.length > 0);
+
+	React.useEffect(() => {
+
+		if (watchlist) {	
+			setAssets(watchlist?.assets || []);
+		}
+
+	}, [watchlist])
 
 	return (
 		<View style={{marginTop: WP(5)}}>
-		{watchlist && watchlist.assets.length > 0 &&
-			watchlist.assets.map(({symbol}, index) => {	
-				return <SingleStock key={symbol} {...{symbol}} onClick={() => toStockDetail(symbol)}/>
-			})
-		}
+			{assets && <ShowAllStocks {...{assets}} />}
 		</View>
 	)
 }
 
 const SelectWatchlist = ({watchlists}) => {
 
+	console.log("Render SelectWatchlist");
+
 	const {styles} = useStyles();
 	const { HP, WP } = useDimensions();
+	// const [items, setItems] = useState([]);
 
-	const items = watchlists.map(item => {
-		return {key: item.id, label: item.name, component: () => <ShowWatchlist {...{watchlistId: item.id}}/>}
-	})
+	//Form 1
+	const items = React.useMemo(() => watchlists.map(item => {
+		return {key: item.id, label: item.name, component: React.memo(() => <ShowWatchlist {...{watchlistId: item.id}}/>)}
+	}), [watchlists]);
 
-	return (
-		<HorizontalScrollMenu {...{items}} 
+
+	//Form 2
+	//Form 1 and 2 should be same but Form 1 is smalled (crucial to use useMemo to prevent rendering)
+	
+	// React.useEffect(() => {
+	// 	setItems(watchlists.map(item => {
+	// 		return {key: item.id, label: item.name, component: React.memo(() => <ShowWatchlist {...{watchlistId: item.id}}/>)}
+	// 	}))
+	// }, [watchlists])
+
+	return items && items.length > 0 && 
+		(<HorizontalScrollMenu {...{items}} 
 			selectContainerStyle={styles.selectContainer} 
 			menuButtonStyle={styles.menuButton}
 			selectedMenuStyle={{padding: WP(3)}}
@@ -51,6 +102,8 @@ const SelectWatchlist = ({watchlists}) => {
 
 
 const Market = (props) => {
+
+	console.log("*********Render Market**********");	
 
 	const {isError, getAllWatchlist} = useAllWatchlist();
 	const {createWatchlist} = useCreateWatchlist();
@@ -80,6 +133,7 @@ const Market = (props) => {
 	}
 
 	const manageWatchlists = async() => {
+
 		const watchlists = await getAllWatchlist();
 
 		if (!!!watchlists || watchlists.length == 0) {
