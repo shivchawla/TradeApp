@@ -58,7 +58,7 @@ export const formatPctValue = (changeValue) => {
 
 
 export const formatName = (name) => {
-	const RSTRING = ['Common Stock', 'Class C Capital Stock', 'Series 1', ',','oration', 'Class A', 'Class B', 'Class C']
+	const RSTRING = ['SPDR', 'Common Stock', 'Class C Capital Stock', 'Series 1', ',','oration', 'Class A', 'Class B', 'Class C']
 
 	var output = name 
 	RSTRING.forEach(rStr => {

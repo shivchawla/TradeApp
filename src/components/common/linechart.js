@@ -10,6 +10,7 @@ export const LineChart = ({data, size, hasTooltip = false, base = null, baseline
 	
 	const [locationX, setX] = useState(null);
 	const [trigger, setTrigger] = useState(false);	
+	const {HP, WP} = useDimensions(); 
 
 	const getColor = (values = []) => {
 		const filteredValues = values.filter(item => item);// Remove the NULL
@@ -137,20 +138,21 @@ export const LineChart = ({data, size, hasTooltip = false, base = null, baseline
 	    })
   	).current;
 
-  	// console.log("locationX: ", locationX);
+  	/**Important to note that shawdow is actual line and actual chart is shadow**/
+  	/* IN case of small size, remove shadow and keep only the line */
 
 	return (
 		<View style={[styles.chartContainer, props.chartContainerStyle]} {...panResponder.panHandlers}>
 			<SVGLineChart
 	            style={[getSize(size), props.chartStyle]}
 	            data={ data }
-	            svg={{ stroke: getColor(data), strokeWidth: 10, strokeOpacity: 0.05}}
-	            contentInset={ { bottom: 0, top: 30 } }
+	            svg={{ stroke: getColor(data), strokeWidth: size != 'S' ? 10 : 1 , strokeOpacity: size != 'S' ? 0.05 : 1}}
+	            contentInset={ { bottom: 5, top: 5 } }
 	        >
 	        {baseline && <HorizontalLine />}
 	        {hasTooltip && trigger && <VerticalLine />}
 	        {hasTooltip && trigger && <PriceText />}
-			<Shadow color={getColor(data)}/>
+			{size != 'S' && <Shadow color={getColor(data)}/>}
 	        </SVGLineChart>
         </View>
 	);
@@ -164,7 +166,9 @@ const useStyles = () => {
 	const styles = StyleSheet.create({
 		chartContainer: {
 			width: '90%',
-			alignSelf: 'center'
+			alignSelf: 'center',
+			// borderColor: 'white',
+			// borderWidth: 1,
 		},
 		chartStyle: {
 			paddingTop: HP(5)

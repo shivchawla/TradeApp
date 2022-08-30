@@ -2,35 +2,22 @@ import React, {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import { useTheme, useDimensions, useTypography, StyledText } from '../../theme'
 
-import {formatName} from '../../utils';
-import { useAssetData } from  '../../helper';
+import {formatName, formatValue} from '../../utils';
+import { useAssetData, useStockPositionData } from  '../../helper';
 
-export const StockName = ({symbol, stock, ...props}) => {
+export const StockName = ({symbol, showPosition = false, ...props}) => {
 
 	const styles = useStyles();
-	const {getAsset} = useAssetData(symbol, {enabled: false});
-	const [asset, setAsset] = useState(null);
-
-	React.useEffect(() => {
-
-		const fetchAsset = async() => {
-			if (!!!asset) {
-				if (!!stock) {
-					setAsset(stock)
-				} else {
-					setAsset(await getAsset(symbol));
-				}
-			}
-		}
-
-		fetchAsset();
-
-	}, []);
+	const {asset} = useAssetData(symbol);
+	// const [asset, setAsset] = useState(null);
+	const {position} = useStockPositionData(symbol, {enabled: showPosition});
+	// console.log(position);
 
 	return (
 		<View style={[styles.stockNameContainer, props?.containerStyle]}>
 			<StyledText style={styles.stockSymbol}>{!!asset ? asset.symbol : '---'}</StyledText>
 			<StyledText style={styles.stockName}>{!!asset ? formatName(asset.name): '---'}</StyledText>
+			{position && <StyledText style={styles.quantity}>{formatValue(position.qty)} Shares</StyledText>}
 		</View>
 	);
 }
@@ -47,6 +34,10 @@ const useStyles = () => {
 		stockSymbol: {
 			color: theme.text
 		},
+		quantity: {
+			fontSize: WP(3.5),
+			color: theme.grey4
+		}
 	})
 
 	return styles;

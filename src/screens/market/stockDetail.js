@@ -37,8 +37,8 @@ const WatchlistsModal = ({watchlists, symbol, updateLists}) => {
 
 	React.useEffect(() => {
 
-		console.log("UseEffect watchlistsWithSymbol");
-		console.log(watchlistsWithSymbol);
+		// console.log("UseEffect watchlistsWithSymbol");
+		// console.log(watchlistsWithSymbol);
 		
 		if (watchlistsWithSymbol) {
 			

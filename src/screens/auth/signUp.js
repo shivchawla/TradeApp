@@ -22,6 +22,7 @@ const SignUp = (props) => {
 	const [otp, setOtp] = useState(null); 
 	const {navigation} = props
 	const {t} = useTranslation();
+	const {HP} = useDimensions();
 
 	useFocusEffect(React.useCallback(() => {
 		updateLoading(false);

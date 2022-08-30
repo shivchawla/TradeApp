@@ -3,25 +3,26 @@ import { View, Text, StyleSheet } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
 import { StockChart, TickerDisplay, StockName } from './'; 
-
-import { useAssetData } from  '../../helper';
 import { useTheme, useDimensions, useTypography, StyledText } from '../../theme';
 
 import {formatName} from '../../utils';
 
 export const SingleStock = ({symbol, onClick, detail = false}) => {
+
+	// console.log("Single Stock: ", symbol);
+
 	const {theme, styles} = useStyles();
 	const { HP, WP } = useDimensions();
-	
-	const PlainView = () => {
+
+	const PlainView = React.memo(() => {
 		return (
 			<View style={styles.singleStockRow}>
-				<StockName {...{symbol}} containerStyle={{width: '30%'}}/>
-				<StockChart {...{symbol, size: "S", timeframe: "5Day"}} chartStyle={{width: WP(25), height: HP(6)}} chartContainerStyle={{width: '30%'}}/>
+				<StockName {...{symbol}} showPosition={true} containerStyle={{width: '30%'}}/>
+				<StockChart {...{symbol, size: "S", timeframe: "10Day"}} chartStyle={{width: WP(25), height: HP(6)}} chartContainerStyle={{width: '30%'}}/>
 				<TickerDisplay {...{symbol}} style={{width: '30%'}} priceStyle={{textAlign: 'right'}} priceChangeStyle={{textAlign: 'right'}} />
 			</View>
 		); 
-	}
+	}, [symbol])
 
 	return (
 		<>
@@ -51,6 +52,7 @@ const useStyles = () => {
 			justifyContent: 'space-between',
 			width: '100%',
 			alignItems: 'center',
+
 			marginTop: WP(5)
 		},
 		priceChangeContainer:{

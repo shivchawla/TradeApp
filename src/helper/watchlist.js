@@ -8,6 +8,8 @@ import {getAllWatchlist, getWatchlist, createWatchlist,
 import { currentISODate, toISODate, yearStartISODate, dayStartISODate, dayEndISODate, duration} from '../utils';
 import { useClock } from './clock';
 
+import {getWatchlistOrder, setWatchlistOrder} from './store'
+
 
 const validateWatchlist = (watclistParams) => {
 	return true;
@@ -33,7 +35,7 @@ export const useWatchlist = (watchlist_id, params={}) => {
 }
 
 
-export const useCreateWatchlist = () => {
+export const useCreateWatchlist = (watchlistParams = {}) => {
 	const {isError, mutate} = useMutation(watchlistParams => {
 	    if (validateWatchlist(watchlistParams)) {
 	      return createWatchlist(watchlistParams);
@@ -46,14 +48,70 @@ export const useCreateWatchlist = () => {
 
 }
 
-export const useDeleteWatchlist = () => {
+export const useDeleteWatchlist = (watchlistId) => {
 	const {isError, mutate} = useMutation(watchlistId => deleteWatchlist(watchlistId))
 	return {isError, deleteWatchlist: async(params, callbackParams) => mutate(params, callbackParams)};
 }
 
 
-export const useUpdateWatchlist = () => {
+export const useUpdateWatchlist = (watchlistId, watchlistParams={}) => {
 	const {isError, mutate} = useMutation(({watchlistId, watchlistParams})  => updateWatchlist(watchlistId, watchlistParams))
 	return {isError, updateWatchlist: async(params, callbackParams) => mutate(params, callbackParams)};
 }
 
+
+const WatchlistContext = React.createContext(null);
+	
+export const WatchlistProvider = ({children}) => {
+
+	const {watchlists} = useAllWatchlist();
+	const {createWatchlist} = useCreateWatchlist();
+	const [orderedWatchlists, setOrderedWatchlists] = useState([])
+
+	const getOrderedWatchlist = async(wls) => {
+		if (wls) {
+			const orderedNames = await getWatchlistOrder().then(out => out ? out.filter(it => it) : null); //Filter out null
+			if (orderedNames && orderedNames.length > 0) {
+				return orderedNames.map(name => wls.find(item => item.name == name));
+			} else {
+				return wls;
+			}
+		}
+	};
+
+	const updateWatchlistOrder = (wls) => {
+		setOrderedWatchlists(wls);
+	}
+
+	React.useEffect(() => {
+		//Update the order in LOCAL STORE
+		setWatchlistOrder(orderedWatchlists.map(item => item.name));
+	}, [orderedWatchlists])
+
+	React.useEffect(() => {
+
+		const onChangeWatchlist = async() => {
+			if (!!!watchlists || watchlists.length == 0) {
+				createWatchlist({name: "Default", symbols: defaultStocks}, {
+					onSuccess: (response, input) => {
+						setOrderedWatchlists([response]); 
+					},
+					onError: (err, input) => console.log(err)
+				});
+			} else {
+				setOrderedWatchlists(await getOrderedWatchlist(watchlists));
+			}
+		}
+
+		onChangeWatchlist();
+
+	}, [watchlists])
+
+	return (
+		<WatchlistContext.Provider value={{watchlists, orderedWatchlists, updateWatchlistOrder}}>
+			{children}
+		</WatchlistContext.Provider>
+	)
+};
+
+export const useWatchlistHelper = () => React.useContext(WatchlistContext);

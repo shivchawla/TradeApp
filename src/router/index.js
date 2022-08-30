@@ -9,7 +9,7 @@ import NetInfo from "@react-native-community/netinfo";
 
 import { AuthProvider, useAppStartup, useAuth, useBrokerageAccountData } from '../helper';
 import { useTheme, useDimensions, useTypography, ThemeProvider, StyledText } from  '../theme';
-import { WebsocketProvider } from  '../helper';
+import { WebsocketProvider, WatchlistProvider } from  '../helper';
 
 import { CustomTabBar } from '../components/common';
 
@@ -31,6 +31,9 @@ const Tabs = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 const HomeTabs = () => {
+
+	console.log("Render HomeTabs");
+	
 	const { theme } = useTheme();
     const { HP, WP } = useDimensions();
     const Typography = useTypography();	
@@ -50,12 +53,12 @@ const HomeTabs = () => {
 		<Tabs.Screen name="Trade" component={Market} />
 		<Tabs.Screen name="Market" component={Market} />
 	  	<Tabs.Screen name="Explore" component={Market} />
-		  
 	  </Tabs.Navigator>
 	)
 }
 
 const TradingStack = () => {
+	console.log("Render TradingStack");
 	return (
 		<Stack.Navigator screenOptions={{headerShown: false}}>
 			<Stack.Screen name="Home" component={HomeTabs} />
@@ -66,6 +69,8 @@ const TradingStack = () => {
 }
 
 const Routes = () => {
+
+	console.log("Render Routes");
 	
 	const [hasInternet, setHasInternet] = useState(true);
 	const [isLoading , setIsLoading] = useState(true);	
@@ -129,7 +134,9 @@ const Router = (props) => {
 		<WebsocketProvider>
 			<ThemeProvider>
 				<AuthProvider>
-					<Routes/>
+					<WatchlistProvider>
+						<Routes/>
+					</WatchlistProvider>
 				</AuthProvider>
 			</ThemeProvider>
 		</WebsocketProvider>

@@ -7,12 +7,26 @@ import { LineChart } from './linechart';
 
 import { useTheme, useDimensions, useTypography, StyledText } from '../../theme';
 
-export const HorizontalScrollMenu = ({items, isPadded = true, scroll = true, ...props }) => {
+//Added onSelect on initialSelected props
+//to handle cases of watchlist
+//it looks complicated ... CAN BE IMPROVED!!
+export const HorizontalScrollMenu = ({items, isPadded = true, scroll = true, onSelect, ...props }) => {
+
 	const styles = useStyles();
 	const { theme } = useTheme();
     const { HP, WP } = useDimensions();
     const Typography = useTypography();	
-	const [selectedIndex, setIndex] = useState(0);
+	const [selectedIndex, setIndex] = useState(props?.initialSelected ?? 0);
+
+	React.useEffect(() => {
+		onSelect(selectedIndex);
+	}, [selectedIndex])
+
+
+	//Added useEffect on prop (initialSelected).. Doesn't work if used with expanded props
+	React.useEffect(() => {
+		setIndex(props.initialSelected);
+	}, [props.initialSelected])
 
 	const MenuButton = ({index, label, onPress}) => {
 		return (
@@ -22,7 +36,7 @@ export const HorizontalScrollMenu = ({items, isPadded = true, scroll = true, ...
 		)
 	}
 
-	const Component = items[selectedIndex].component;
+	const Component = items?.[selectedIndex ?? 0]?.component ;
 
 	return (
 		<View style={[styles.container, props.containerStyle]}>	

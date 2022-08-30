@@ -9,14 +9,14 @@ import { useFocusEffect } from '@react-navigation/native';
 const PriceChange = ({price, changeValue, changePct, ...props}) => {
 	const {theme, styles} = useStyles();
 
-	const getColor = (chg) => {
+	const getColor = React.useCallback((chg) => {
 		return chg > 0 ? theme.green : theme.red;
-	}
+	}, [])
 
 	return (
 		<View style={[styles.priceChangeContainer, props.style]}>
-			<StyledText style={[styles.price, props.priceStyle]}>{!!price ? price.toFixed(2) : '--'}</StyledText>
-			<StyledText style={[styles.priceChange, props.priceChangeStyle, {color: getColor(changeValue)}]}>{!!changeValue ? changeValue.toFixed(2) : '--'} ({!!changePct ? changePct.toFixed(2)+'%' : '--'})</StyledText>
+			<StyledText isNumber={true} style={[styles.price, props.priceStyle]}>{!!price ? price.toFixed(2) : '--'}</StyledText>
+			<StyledText isNumber={true} style={[styles.priceChange, props.priceChangeStyle, {color: getColor(changeValue)}]}>{!!changeValue ? changeValue.toFixed(2) : '--'} ({!!changePct ? changePct.toFixed(2)+'%' : '--'})</StyledText>
 		</View>
 	);
 }
@@ -40,17 +40,6 @@ export const TickerDisplay = ({symbol, ...props}) => {
 
 		}, [])
 	);
-
-	// React.useEffect(() => {
-	// 	console.log("Rt Data changed: ", symbol);
-	// 	console.log(rtData);
-	// }, [rtData])
-
-	// console.log("RT DATA");
-	// console.log(rtData);
-
-	// console.log("Snapshot");
-	// console.log(snapshot);
 
 	return (
 		<>

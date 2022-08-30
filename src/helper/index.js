@@ -38,7 +38,7 @@ export { setStorageData, getStorageData, removeStorageData,
 	setWatchlistOrder, getWatchlistOrder } from './store';
 
 export {useAllWatchlist, useWatchlist, useCreateWatchlist, 
-	useDeleteWatchlist, useUpdateWatchlist} from './watchlist';
+	useDeleteWatchlist, useUpdateWatchlist, WatchlistProvider, useWatchlistHelper} from './watchlist';
 
 export { useAppStartup } from './app';
 

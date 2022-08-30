@@ -14,6 +14,7 @@ import { AuthLayout, AuthFooterDefault } from './authLayout';
 const SignIn = (props) => {
 
 	const {t} = useTranslation();
+	const {HP, WP} = useDimensions();
 
 	const {navigation} = props;
 	const {phoneAuth} = props?.route?.params ?? {};

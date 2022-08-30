@@ -8,7 +8,7 @@ const Ionicons  = Icon;
 
 import { AppView, TinyTextButton, EditIcon, 
 	ConfirmButton, TouchRadio, DeleteIcon} from '../../components/common';
-import { useAllWatchlist, useDeleteWatchlist, getWatchlistOrder, setWatchlistOrder } from '../../helper';
+import { useWatchlistHelper, useAllWatchlist, useDeleteWatchlist, getWatchlistOrder, setWatchlistOrder } from '../../helper';
 
 import {useTheme, useDimensions, useTypography, StyledText} from '../../theme';
 
@@ -49,38 +49,13 @@ const WatchlistEdit = ({watchlist, onSelectionChanged, onDrag}) => {
 }
 
 const ManageWatchlist = (props) => {
+	
 	const styles = useStyles();
 	const navigation = useNavigation();
-	
-	const {isError, watchlists, getAllWatchlist} = useAllWatchlist();
-	const [orderedWatchlists, setOrderedWatchlist] = useState(null);
 
+	const {watchlists, orderedWatchlists, updateWatchlistOrder} = useWatchlistHelper();
 	const [selectedWatchlists, setSelected] = useState([]);
 	const {deleteWatchlist} = useDeleteWatchlist();
-
-	useFocusEffect(
-		React.useCallback(() => {
-			getAllWatchlist();
-
-			//Blur Effect -- BUT doesn't work as expected....still flashing!!
-			return () => setSelected([]);
-		}, [])
-	);
-
-	const updateWatchlistOrder = async() => {
-		if (watchlists) {
-			const orderedNames = await getWatchlistOrder();
-			if (orderedNames ) {
-				setOrderedWatchlist(orderedNames.map(name => watchlists.find(item => item.name == name)));
-			} else {
-				setOrderedWatchlist(watchlists);
-			}
-		}
-	}
-
-	React.useEffect(() => {
-		updateWatchlistOrder();
-	}, [watchlists])
 
 	const updateSelection = (watchlist, selected) => {
 		if (selected) {
@@ -121,9 +96,11 @@ const ManageWatchlist = (props) => {
 	}
 
 	const handleDragEnd = async(data) => {
-		await setWatchlistOrder(data.map(item => item.name))
-		updateWatchlistOrder()
+		updateWatchlistOrder(data)
 	}
+
+	// console.log("orderedWatchlists");
+	// console.log(orderedWatchlists);	
 
 	return (
 		<AppView title="Manage Watchlists" scroll={false} headerRight={<HeaderRight />}>
