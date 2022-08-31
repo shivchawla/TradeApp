@@ -15,8 +15,8 @@ export const StockName = ({symbol, showPosition = false, ...props}) => {
 
 	return (
 		<View style={[styles.stockNameContainer, props?.containerStyle]}>
-			<StyledText style={styles.stockSymbol}>{!!asset ? asset.symbol : '---'}</StyledText>
-			<StyledText style={styles.stockName}>{!!asset ? formatName(asset.name): '---'}</StyledText>
+			<StyledText style={[styles.stockSymbol, props.symbolStyle]}>{!!asset ? asset.symbol : '---'}</StyledText>
+			<StyledText style={[styles.stockName, props.nameStyle]}>{!!asset ? formatName(asset.name): '---'}</StyledText>
 			{position && <StyledText style={styles.quantity}>{formatValue(position.qty)} Shares</StyledText>}
 		</View>
 	);

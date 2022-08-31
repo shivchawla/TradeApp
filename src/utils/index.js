@@ -10,8 +10,12 @@ export { priceChangeFromSnapshot, priceChangeFromRealtime,
 	formatValue, formatPctValue, formatName } from './format'; 
 
 Number.prototype.countDecimals = function () {
-    if(Math.floor(this.valueOf()) === this.valueOf()) return 0;
-    return this.toString().split(".")[1].length || 0; 
+	if(this.valueOf()) {
+	    if(Math.floor(this.valueOf()) === this.valueOf()) return 0;
+	    return this.toString().split(".")[1].length || 0;
+    } else {
+    	return 0;
+    } 
 }
 
 export const diffArray = (arr1, arr2) => {

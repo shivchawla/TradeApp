@@ -15,7 +15,7 @@ export function useStockPositionData(symbol, params={}) {
 }
 
 export function useStockPortfolioData(params={}) {
-  console.log("useStockPortfolioData");
+  // console.log("useStockPortfolioData");
   const {isError, error, data: portfolio, refetch} = useQuery(['stockPortfolio'], async() => getStockPortfolio(), params);
   if (isError) {
     console.log(`ERROR (useStockPortfolioData): ${error}`);

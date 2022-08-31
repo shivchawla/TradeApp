@@ -13,10 +13,18 @@ const PriceChange = ({price, changeValue, changePct, ...props}) => {
 		return chg > 0 ? theme.green : theme.red;
 	}, [])
 
+	let changeText = '';
+
+	if(props.showPctOnly) {
+		changeText = !!changePct ? changePct.toFixed(2)+'%' : '--'
+	} else {
+		changeText = (!!changeValue ? changeValue.toFixed(2) : '--') + ` (${(!!changePct ? changePct.toFixed(2)+'%' : '--')})`;
+	}
+
 	return (
-		<View style={[styles.priceChangeContainer, props.style]}>
+		<View style={[styles.priceChangeContainer, props.style, {...props.vertical && {flexDirection: 'column'}}]}>
 			<StyledText isNumber={true} style={[styles.price, props.priceStyle]}>{!!price ? price.toFixed(2) : '--'}</StyledText>
-			<StyledText isNumber={true} style={[styles.priceChange, props.priceChangeStyle, {color: getColor(changeValue)}]}>{!!changeValue ? changeValue.toFixed(2) : '--'} ({!!changePct ? changePct.toFixed(2)+'%' : '--'})</StyledText>
+			<StyledText isNumber={true} style={[styles.priceChange, props.priceChangeStyle, {color: getColor(changeValue)}]}>{changeText}</StyledText>
 		</View>
 	);
 }

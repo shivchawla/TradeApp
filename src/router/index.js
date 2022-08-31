@@ -14,6 +14,7 @@ import { WebsocketProvider, WatchlistProvider } from  '../helper';
 import { CustomTabBar } from '../components/common';
 
 import Splash from '../screens/splash';
+import Home from '../screens/home';
 import Market from '../screens/market';
 import History from '../screens/history';
 import OrdersTrades from '../screens/order/ordersTrades';
@@ -49,10 +50,9 @@ const HomeTabs = () => {
 	return (
 	  <Tabs.Navigator {...{screenOptions}} tabBar={props => <CustomTabBar {...props} />}>
 		<Tabs.Screen name="Home" component={Portfolio}/>
-		<Tabs.Screen name="Portfolio" component={Portfolio}/>
-		<Tabs.Screen name="Trade" component={Market} />
+		<Tabs.Screen name="Portfolio" component={Home}/>
 		<Tabs.Screen name="Market" component={Market} />
-	  	<Tabs.Screen name="Explore" component={Market} />
+	  	<Tabs.Screen name="Explore" component={Splash} />
 	  </Tabs.Navigator>
 	)
 }

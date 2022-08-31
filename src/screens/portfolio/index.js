@@ -1,4 +1,4 @@
- import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { View, StyleSheet, TouchableOpacity} from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -7,69 +7,64 @@ import {AppView, AppHeader, PnLText,
 	LineChart, VerticalField,
 	AccountIcon, SearchIcon, Collapsible, Clickable, ShowMoreContainer } from '../../components/common';
 
-import { PortfolioDisplay, PnLGraph	 } from '../../components/portfolio';
+import { PortfolioDisplay } from '../../components/portfolio';
 import { DisplayOrderList } from '../../components/order';
 import { DisplayActivityList } from '../../components/activity';
 import { StockNews } from '../../components/market';
 
-import { useStockPortfolioData, useTradingAccountData, 
-	usePortfolioHistory, useOrders, useCancelAllOrders, useAccountActivity } from '../../helper';
+import { useStockPortfolioData, usePortfolioHistory, useOrders } from '../../helper';
 
 import {formatValue} from '../../utils';
-import {ACCOUNT_SUMMARY_FIELDS, MAX_ACTIVITY_COUNT_HOME, MAX_POSITIONS_COUNT_HOME} from '../../config';
 import { t } from 'i18next';
 
 import {useTheme, useDimensions, useTypography, StyledText} from '../../theme';
 
-const HorizontalField = ({label, value, isPnL=false, isNumber = false, ...props}) => {
+const HorizontalField = ({label, value, changeValue,  isPnL=false, isNumber = false, ...props}) => {
 	const {theme, styles} = useStyles();
 
 	return (
-		<View style={{flexDirection: 'row'}}>
+		<View style={styles.horizontalField}>
 			<StyledText style={styles.pnlHeaderLabel}>{label}: </StyledText>
 			{isPnL ? 
-				<PnLText {...{value}} {...{valueStyle: styles.pnlHeaderValue}} />
-				: <StyledText {...{isNumber}} style={styles.pnlHeaderValue}>{value}</StyledText>
+				<PnLText {...{value, changeValue}} {...{valueStyle: styles.pnlHeaderValue, changeStyle: styles.pnlHeaderValue}} />
+				: <StyledText {...{isNumber, changeValue}} style={styles.pnlHeaderValue}>{value}</StyledText>
 			}
 		</View>
 	)
 }
 
-const ShowMoreButton = ({onPress}) => {
-	const {styles} = useStyles();
-	const {t} = useTranslation();
-	return (
-		<Clickable onPress={onPress}>
-			<StyledText style={styles.showMoreText}>{t('common:showMore')}</StyledText>
-		</Clickable>
-	)
+const getTotalCost = (portfolio = []) => {
+	const totalCost = portfolio ? portfolio.reduce((tv, position) => tv + parseFloat(position.cost_basis), 0) : 0;
+	console.log("Total Cost: ". totalCost);
+	return totalCost;
 }
 
-const CancelOrderButton = ({onPress}) => {
-	const {styles} = useStyles();
-	return (
-		<Clickable onPress={onPress}>
-			<StyledText style={styles.cancelOrderText}>{t('common:cancelAll')}</StyledText>
-		</Clickable>
-	)
+const getCurrentPnL = (portfolio = []) => {
+	return portfolio.reduce((tv, position) => tv + parseFloat(position.unrealized_pl), 0);
+}
+
+const getCurrentPnLChange = (portfolio = []) => {
+	const totalCost = getTotalCost(portfolio);
+	return totalCost > 0 ? getCurrentPnL(portfolio)/totalCost : 0;
 }
 
 const getLatestEquity = (history) => {
 	return (history?.equity || []).slice(-1)[0];
 }
 
-const getPnL = (history) => {
+const getDailyPnL = (history) => {
 	return (history?.profit_loss || []).slice(-1)[0];
 }
 
-const PortfolioNews = ({symbols}) => {
-	return symbols.map(symbol => <StockNews key={symbol} {...{symbol}} showMore={false}/>)
+
+const getDailyPnLChange = (history, portfolio = []) => {
+	const totalCost = getTotalCost(portfolio);
+	return totalCost > 0 ? getDailyPnL(history)/totalCost : 0;
 }
 
-const PortfolioHeader = ({portfolioHistory, ...props}) => {
+const PortfolioHeader = ({portfolioHistory, portfolio, ...props}) => {
 	const {theme, styles} = useStyles();
-	const {WP} = useDimensions();
-
+	const {HP, WP} = useDimensions();
 	const navigation = useNavigation();
 	const {t} = useTranslation();
 
@@ -78,22 +73,26 @@ const PortfolioHeader = ({portfolioHistory, ...props}) => {
 		{!props.hideTop && <AppHeader headerLeft={<AccountIcon />} headerRight={<SearchIcon onPress={() => navigation.navigate("SearchStock")} iconColor={theme.greyIcon}/>} title={t('screens:portfolio')} goBack={false} headerContainerStyle={props.topHeaderStyle}/>}
 		<View style={[styles.portfolioHeader, props.bottomHeaderStyle]}>
 			<VerticalField 
-				label="Total Balance" 
-				labelTop={false}
+				label="Portfolio Value" 
+				labelTop={true}
 				isNumber={true} 
 				value={getLatestEquity(portfolioHistory)} 
 				valuePrefix='$ '
+				containerStyle={{width: WP(45)}}
 				valueStyle={styles.latestEquityText}
+				labelStyle={{fontSize:WP(4.5), color: theme.grey1}}
 			/>
 			<View>
 				<HorizontalField
-					label="Chg. (1M)"
-					value={formatValue(getPnL(portfolioHistory))}
+					label="Today's PnL"
+					value={formatValue(getDailyPnL(portfolioHistory))}
+					changeValue={getDailyPnLChange(portfolioHistory, portfolio)}
 					isPnL={true}
 				/>
 				<HorizontalField
-					label="Chg. (1D)"
-					value={formatValue(getPnL(portfolioHistory))}
+					label="Total PnL"
+					value={getCurrentPnL(portfolio)}
+					changeValue={getCurrentPnLChange(portfolio)}
 					isPnL={true}
 				/> 
 			</View>
@@ -102,148 +101,38 @@ const PortfolioHeader = ({portfolioHistory, ...props}) => {
 	)
 }
 
-const AccountSummary = ({tradingAccount}) => {
-	const {theme, styles} = useStyles();
-
-	return (
-		<View style={styles.accountSummaryContainer}>
-		{tradingAccount && Object.keys(ACCOUNT_SUMMARY_FIELDS).map((key, index) => {
-			return (
-				<VerticalField 
-					{...{key}}  
-					label={ACCOUNT_SUMMARY_FIELDS[key]} 
-					value={tradingAccount[key]}
-					isNumber={true}
-					containerStyle={styles.accountSummaryField} 
-				/>
-			) 
-		})
-		}		
-		</View>
-	)	
-}
-
 const Portfolio = (props) => {
 	const navigation = useNavigation();
 	const {theme, styles} = useStyles();
 	const {WP, HP} = useDimensions();
 
 	const {portfolio, getPortfolio} = useStockPortfolioData({enabled: false}); 
-	const {tradingAccount, getTradingAccount} = useTradingAccountData({enabled: false});
 	const {portfolioHistory, getPortfolioHistory} = usePortfolioHistory({enabled: false});
 	const {orders, getOrders} = useOrders({status: 'all', limit: 10}, {enabled: false});
-	const {accountActivity, getAccountActivity } = useAccountActivity({activity_type: 'DIV', limit: 10}, {enabled: false});
 	
-	const {cancelAllOrders} = useCancelAllOrders();
-	const [relevantActivity, setActivity] = useState(null);
-
-	const [screenOffset, setScreenOffset] = useState(0);
-
-	React.useEffect(() => {
-		(async() => {
-			if (!!accountActivity && !!orders) {
-				var allExceptNewOrders = orders.filter(item => item.status != "new").map(item => {return {...item, activity_type: 'ORDER'}});
-				setActivity([...accountActivity, ...allExceptNewOrders].slice(0, MAX_ACTIVITY_COUNT_HOME));
-			}
-
-			if (!portfolio) {
-
-			}
-		})()
-	}, [accountActivity, orders, portfolio]);
-
 	useFocusEffect(
 		React.useCallback(() => {
 			(() => {
 				getPortfolio();
-				getTradingAccount();
 				getPortfolioHistory();
 				getOrders();
-				getAccountActivity();
 			})();
 		}, [])
 	);
 
-	const cancelOrders = () => {
-		cancelAllOrders({
-			onSuccess: (response, input) => getOrders(),
-			onError: (err, input) => console.log(err)
-		})
-	}
-
-	const loading = !!!portfolioHistory;
+	const loading = !portfolio || !portfolioHistory || !orders;
 
 	const pendingOrders = orders && orders.filter(item => item.status == "new");
 
-	// const onScroll = (e) => {
-	// 	console.log("WTF - onLayout");
-	// 	console.log(e.nativeEvent.contentOffset);
-	// 	setScreenOffset(e?.nativeEvent?.contentOffset?.y || 0)
-	// }
+	const Header = () => <PortfolioHeader {...{portfolioHistory, portfolio}}/>
 
-	// useEffect(() => {
-	// 	console.log(screenOffset);
-	// }, [screenOffset])
-
-	// const bottomHeaderStyle = {...(screenOffset > 10) && {
-	// 		borderBottomColor: theme.grey5,
-	// 		borderBottomWidth: 2,
-	// 		backgroundColor: theme.grey9
-	// 	}, 
-	// };
-
-	// const topHeaderStyle={...(screenOffset > 100) && {height: 0}};
-	// console.log(bottomHeaderStyle);
-
-	// const hideTop = screenOffset > 50;
-
-	const Header = () => <PortfolioHeader {...{portfolioHistory}} />
 	return (
-		<AppView title="Portfolio"  isLoading={loading} header={<Header />}>
-			<Collapsible
-				title="PERFORMANCE" 
-				content={<PnLGraph />}  
-				enabled={false}
-			/>
-
-			{tradingAccount && 
-				<ShowMoreContainer 
-					title="ACCOUNT SUMMARY" 
-					content={<AccountSummary {...{tradingAccount}} />}
-					onShowMore={() => navigation.navigate('AccountSummary')} 
-					containerStyle={{}}
-				/>
-			}
-			
-			{portfolio && 
-				<ShowMoreContainer 
-					title="TOP POSITIONS" 
-					containerStyle={{paddingLeft: WP(2)}}
-					content={<PortfolioDisplay {...{portfolio, orders}} displayCount={MAX_POSITIONS_COUNT_HOME}/>} 
-				/>
-			}
-			{(pendingOrders && pendingOrders.length > 0) && 
-				<ShowMoreContainer title="PENDING ORDERS" 
-					containerStyle={{marginTop: HP(2)}}
-					content={<DisplayOrderList orders={pendingOrders}/>}
-					endButton={<CancelOrderButton onPress={cancelOrders}/>}
-					buttonContainerStyle={{justifyContent: 'flex-end', marginBottom: HP(2)}} 
-				/>
-			}
-			{(relevantActivity && relevantActivity.length > 0) && 
-				<ShowMoreContainer 
-					title="RECENT ACTIVITY" 
-					content={<DisplayActivityList activityList={relevantActivity}/>}
-					endButton={<ShowMoreButton onPress={() => navigation.navigate('History')} />} 
-				/>
-			}
-
-			{portfolio &&
-				<ShowMoreContainer 
-					title="PORTFOLIO NEWS" 
-					containerStyle={{marginBottom: HP(4)}}
-					content={<PortfolioNews symbols={portfolio.map(pos => pos.symbol)}/>} 
-				/>
+		<AppView title="Portfolio" isLoading={loading} header={<Header />}>
+			{(portfolio && orders) && 
+				<View style={{marginTop: HP(4)}}>
+					<StyledText style={{fontSize: WP(6), color: theme.grey1, marginBottom: HP(1)}}> Your Holdings </StyledText>
+					<PortfolioDisplay {...{portfolio, orders}} screen='Portfolio'/>
+				</View>
 			}
 		</AppView>
 	);
@@ -257,27 +146,27 @@ const useStyles = () => {
 	const styles = StyleSheet.create({
 		portfolioHeader: {
 			flexDirection: 'row',
-			justifyContent: 'space-between',
+			alignItems: 'flex-end',
 			padding: WP(2),
 			paddingTop: WP(2),
 			width: '100%',
-			shadowColor: "#fff",
-			shadowOpacity: 1,
-			shadowRadius: 5,
-			shadowOffset: {
-				height: 11,
-				width: 0
-			},
-			elevation: 5
+		},
+		horizontalField: {
+			flexDirection: 'row', 
+			alignItems: 'flex-end', 
+			marginBottom: HP(0.5),
+			marginTop: HP(0.5)
 		},
 		portfolioFieldLabel: {
 			fontSize: WP(4.5)
 		},
 		pnlHeaderLabel: {
-			textAlign: 'right',
+			// textAlign: 'left',
+			fontSize: WP(3.5)
 		},
 		pnlHeaderValue: {
 			textAlign: 'right',
+			fontSize: WP(3.5)
 		},
 		accountSummaryContainer: {
 			flexDirection: 'row',
