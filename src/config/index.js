@@ -181,4 +181,4 @@ export const SCREEN_NAMES = {
 }
 
 export const MAX_ACTIVITY_COUNT_HOME = 3;
-export const MAX_POSITIONS_COUNT_HOME = 1;
+export const MAX_POSITIONS_COUNT_HOME = 3;

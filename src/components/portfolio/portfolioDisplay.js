@@ -161,15 +161,14 @@ const useStyles = () => {
 		tickerDisplayContainer: {
 			width: WP(50), 
 			flexDirection: 'row',
-			justifyContent: 'center'
+			justifyContent: 'center',
+			alignItems: 'center'
 		},
 		priceChangeStyle: {
-			// textAlign: 'center',
-			// marginLeft: WP(2),
-			fontSize: WP(3.5)
+			fontSize: WP(3.5),
 		},
 		priceStyle: {
-			fontSize: WP(4)
+			fontSize: WP(4)		
 		}
 	});
 

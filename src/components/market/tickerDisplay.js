@@ -8,6 +8,7 @@ import { useFocusEffect } from '@react-navigation/native';
 
 const PriceChange = ({price, changeValue, changePct, ...props}) => {
 	const {theme, styles} = useStyles();
+	const {WP, HP} = useDimensions();
 
 	const getColor = React.useCallback((chg) => {
 		return chg > 0 ? theme.green : theme.red;
@@ -24,7 +25,7 @@ const PriceChange = ({price, changeValue, changePct, ...props}) => {
 	return (
 		<View style={[styles.priceChangeContainer, props.style, {...props.vertical && {flexDirection: 'column'}}]}>
 			<StyledText isNumber={true} style={[styles.price, props.priceStyle]}>{!!price ? price.toFixed(2) : '--'}</StyledText>
-			<StyledText isNumber={true} style={[styles.priceChange, props.priceChangeStyle, {color: getColor(changeValue)}]}>{changeText}</StyledText>
+			<StyledText isNumber={true} style={[styles.priceChange, props.priceChangeStyle, {color: getColor(changeValue)}, {...!props.vertical && {marginLeft: WP(2)}}]}>{changeText}</StyledText>
 		</View>
 	);
 }
