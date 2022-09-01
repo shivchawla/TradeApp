@@ -124,11 +124,38 @@ export const ACCOUNT_SUMMARY_FIELDS = {
   "maintenance_margin": "Maintenance Margin",
 }
 
+export const ACCOUNT_FIELDS = {
+   "account_number":{title: "Account Number", isText: true},
+   "status":{title: "Account Status", isText: true},
+   "currency":{title: "Currency", isText: true},
+   "portfolio_value":"Portfolio Value",
+   "equity":"Equity",
+   "cash":"Cash",
+   "initial_margin":"Initial Margin",
+   "maintenance_margin":"Maintenance Margin",
+   "buying_power":"Buying Power",
+   "regt_buying_power":"Reg. T. Buying Power",
+   "daytrading_buying_power":"Day Buying Power",
+   "accrued_fees":"Accrued Fees",
+   "short_market_value":"Short Market Value",
+   "sma":"SMA",
+   "cash_transferable":"Cash Available for Transfer",
+   "cash_withdrawable":"Cash Available for Withdraw",
+   "daytrade_count": "Number of Day Trades",
+   "pending_transfer_in":"Pending Deposit",
+   "pending_transfer_out":"Pending Withdrawal",
+   "pattern_day_trader": {title: "Pattern Trader", isBool: true},
+   "shorting_enabled": {title: "Shorting Enabled", isBool: true},
+   "account_blocked": {title: 'Account Blocked', isBool: true},
+   "trading_blocked": {title: "Trading Blocked", isBool: true},
+   "transfers_blocked": {title: "Transfer Blocked", isBool: true},
+}
 
 export const BANK_CURRENCIES = [
   {key:'USD', title:'US Dollar'}, 
   {key: 'GTQ', title: 'Guatemalan Quetzal'}
 ];
+
 export const SUPPORTED_BANKS = [{key:'bi', title:'Banco Industrial'}, 
   {key: 'azteca', title: 'Banco Azteca Guatemala'},
   {key: 'bac', title: 'BAC Credomatic'},

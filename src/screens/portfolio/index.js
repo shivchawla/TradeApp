@@ -56,7 +56,6 @@ const getDailyPnL = (history) => {
 	return (history?.profit_loss || []).slice(-1)[0];
 }
 
-
 const getDailyPnLChange = (history, portfolio = []) => {
 	const totalCost = getTotalCost(portfolio);
 	return totalCost > 0 ? getDailyPnL(history)/totalCost : 0;
@@ -162,7 +161,8 @@ const useStyles = () => {
 		},
 		pnlHeaderLabel: {
 			// textAlign: 'left',
-			fontSize: WP(3.5)
+			fontSize: WP(3.5),
+			width: WP(20)
 		},
 		pnlHeaderValue: {
 			textAlign: 'right',

@@ -33,6 +33,8 @@ import FAQ from '../screens/settings/faq';
 import AboutUs from '../screens/settings/aboutUs';
 
 import Notifications from '../screens/notifications';
+import Account from '../screens/account';
+
 
 const innerScreens = (Stack) => {
   return [
@@ -67,7 +69,8 @@ const innerScreens = (Stack) => {
 
       <Stack.Screen key="AboutUs" name="AboutUs" component={AboutUs} />,
 
-      <Stack.Screen key="Notifications" name="Notifications" component={Notifications} />
+      <Stack.Screen key="Notifications" name="Notifications" component={Notifications} />,
+      <Stack.Screen key="Account" name="Account" component={Account} />
   
   ];
 };

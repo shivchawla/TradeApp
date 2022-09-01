@@ -1,4 +1,4 @@
- import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { View, StyleSheet, TouchableOpacity} from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -175,27 +175,6 @@ const Home = (props) => {
 
 	const pendingOrders = orders && orders.filter(item => item.status == "new");
 
-	// const onScroll = (e) => {
-	// 	console.log("WTF - onLayout");
-	// 	console.log(e.nativeEvent.contentOffset);
-	// 	setScreenOffset(e?.nativeEvent?.contentOffset?.y || 0)
-	// }
-
-	// useEffect(() => {
-	// 	console.log(screenOffset);
-	// }, [screenOffset])
-
-	// const bottomHeaderStyle = {...(screenOffset > 10) && {
-	// 		borderBottomColor: theme.grey5,
-	// 		borderBottomWidth: 2,
-	// 		backgroundColor: theme.grey9
-	// 	}, 
-	// };
-
-	// const topHeaderStyle={...(screenOffset > 100) && {height: 0}};
-	// console.log(bottomHeaderStyle);
-
-	// const hideTop = screenOffset > 50;
 
 	const Header = () => <PortfolioHeader {...{portfolioHistory}} />
 	return (
@@ -210,7 +189,7 @@ const Home = (props) => {
 				<ShowMoreContainer 
 					title="ACCOUNT SUMMARY" 
 					content={<AccountSummary {...{tradingAccount}} />}
-					onShowMore={() => navigation.navigate('AccountSummary')} 
+					onShowMore={() => navigation.navigate('Account')} 
 					containerStyle={{}}
 				/>
 			}

@@ -21,6 +21,7 @@ import OrdersTrades from '../screens/order/ordersTrades';
 import Portfolio from '../screens/portfolio';
 import Settings from '../screens/settings';
 import NoInternet from '../screens/errors/noInternet';
+import Account from '../screens/account';
 
 import AuthStack from './auth';
 import OnboardStack from './onboard';
@@ -49,8 +50,8 @@ const HomeTabs = () => {
 
 	return (
 	  <Tabs.Navigator {...{screenOptions}} tabBar={props => <CustomTabBar {...props} />}>
-		<Tabs.Screen name="Home" component={Portfolio}/>
-		<Tabs.Screen name="Portfolio" component={Home}/>
+		<Tabs.Screen name="Home" component={Home}/>
+		<Tabs.Screen name="Portfolio" component={Portfolio}/>
 		<Tabs.Screen name="Market" component={Market} />
 	  	<Tabs.Screen name="Explore" component={Splash} />
 	  </Tabs.Navigator>

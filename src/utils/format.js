@@ -20,7 +20,7 @@ export const formatValue = (value, {upperCase = true, titleCase = false, lowerCa
 	var output = value;
 	let dollarUSLocale = Intl.NumberFormat('en-US');
 
-	if (value) {
+	if (value || value == 0) {
 		try {
 			output = parseFloat(value);
 			var decimals = output.countDecimals();
