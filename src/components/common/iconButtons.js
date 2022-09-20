@@ -50,9 +50,10 @@ export const IconTextButton = ({iconName, image, title, onPress, opacity = 0.8, 
 
 export const AccountIcon = (props) => {
 	const navigation = useNavigation();
-
+	const onPress = props.onPress ? props.onPress : () => navigation.navigate('Settings');
+	
 	return (
-		<IconButton {...props} iconName="person-circle" onPress={() => navigation.navigate('Settings')} />
+		<IconButton {...props} iconName="person-circle" onPress={onPress} />
 	)
 }
 

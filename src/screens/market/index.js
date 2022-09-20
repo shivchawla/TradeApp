@@ -1,10 +1,11 @@
 
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet} from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 import { AppView, AccountIcon, SearchIcon, HorizontalScrollMenu, AddIcon, TinyTextButton} from '../../components/common';
 import { SingleStock } from '../../components/market';
+import { ProfileSidebarWithIcon } from '../../components/profile';
 import { useTheme, useDimensions, useTypography, StyledText } from '../../theme' 
 
 import {defaultStocks} from '../../config';
@@ -12,7 +13,6 @@ import { useWatchlist, useWatchlistHelper, useCreateWatchlist, useStockPortfolio
 
 const ShowAllStocks = ({assets}) => {
 
-	// console.log("Render ShowAllStocks: ", assets);
 	const {styles} = useStyles();
 
 	const navigation = useNavigation();
@@ -131,7 +131,7 @@ const Market = (props) => {
 	}	
 
 	return (
-		<AppView headerLeft={<AccountIcon />} headerRight={<HeaderRight />}
+		<AppView headerLeft={<ProfileSidebarWithIcon />} headerRight={<HeaderRight />}
 			title="Market" 
 			goBack={false}>
 

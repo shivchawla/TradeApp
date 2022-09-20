@@ -8,9 +8,7 @@ import {AppView, AppHeader, PnLText,
 	AccountIcon, SearchIcon, Collapsible, Clickable, ShowMoreContainer } from '../../components/common';
 
 import { PortfolioDisplay } from '../../components/portfolio';
-import { DisplayOrderList } from '../../components/order';
-import { DisplayActivityList } from '../../components/activity';
-import { StockNews } from '../../components/market';
+import { ProfileSidebarWithIcon } from '../../components/profile';
 
 import { useStockPortfolioData, usePortfolioHistory, useOrders } from '../../helper';
 
@@ -35,7 +33,6 @@ const HorizontalField = ({label, value, changeValue,  isPnL=false, isNumber = fa
 
 const getTotalCost = (portfolio = []) => {
 	const totalCost = portfolio ? portfolio.reduce((tv, position) => tv + parseFloat(position.cost_basis), 0) : 0;
-	console.log("Total Cost: ". totalCost);
 	return totalCost;
 }
 
@@ -69,7 +66,7 @@ const PortfolioHeader = ({portfolioHistory, portfolio, ...props}) => {
 
 	return (
 		<>
-		{!props.hideTop && <AppHeader headerLeft={<AccountIcon />} headerRight={<SearchIcon onPress={() => navigation.navigate("SearchStock")} iconColor={theme.greyIcon}/>} title={t('screens:portfolio')} goBack={false} headerContainerStyle={props.topHeaderStyle}/>}
+		{!props.hideTop && <AppHeader headerLeft={<ProfileSidebarWithIcon />} headerRight={<SearchIcon onPress={() => navigation.navigate("SearchStock")} iconColor={theme.greyIcon}/>} title={t('screens:portfolio')} goBack={false} headerContainerStyle={props.topHeaderStyle}/>}
 		<View style={[styles.portfolioHeader, props.bottomHeaderStyle]}>
 			<VerticalField 
 				label="Portfolio Value" 

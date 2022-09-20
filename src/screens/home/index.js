@@ -11,6 +11,7 @@ import { PortfolioDisplay, PnLGraph	 } from '../../components/portfolio';
 import { DisplayOrderList } from '../../components/order';
 import { DisplayActivityList } from '../../components/activity';
 import { StockNews } from '../../components/market';
+import { ProfileSidebarWithIcon } from '../../components/profile'; 
 
 import { useStockPortfolioData, useTradingAccountData, 
 	usePortfolioHistory, useOrders, useCancelAllOrders, useAccountActivity } from '../../helper';
@@ -73,27 +74,33 @@ const PortfolioHeader = ({portfolioHistory, ...props}) => {
 	const navigation = useNavigation();
 	const {t} = useTranslation();
 
+	const totalBalance = React.useMemo(() => getLatestEquity(portfolioHistory), [portfolioHistory]);
+	const balanceChange1M = React.useMemo(() => formatValue(getPnL(portfolioHistory)), [portfolioHistory]);
+	const balanceChange1D = React.useMemo(() => formatValue(getPnL(portfolioHistory)), [portfolioHistory]);
+
+	console.log("PortfolioHeader");
+
 	return (
 		<>
-		{!props.hideTop && <AppHeader headerLeft={<AccountIcon />} headerRight={<SearchIcon onPress={() => navigation.navigate("SearchStock")} iconColor={theme.greyIcon}/>} title={t('screens:portfolio')} goBack={false} headerContainerStyle={props.topHeaderStyle}/>}
+		{!props.hideTop && <AppHeader headerLeft={<ProfileSidebarWithIcon />} headerRight={<SearchIcon onPress={() => navigation.navigate("SearchStock")} iconColor={theme.greyIcon}/>} title={t('screens:portfolio')} goBack={false} headerContainerStyle={props.topHeaderStyle}/>}
 		<View style={[styles.portfolioHeader, props.bottomHeaderStyle]}>
 			<VerticalField 
 				label="Total Balance" 
 				labelTop={false}
 				isNumber={true} 
-				value={getLatestEquity(portfolioHistory)} 
+				value={totalBalance} 
 				valuePrefix='$ '
 				valueStyle={styles.latestEquityText}
 			/>
 			<View>
 				<HorizontalField
 					label="Chg. (1M)"
-					value={formatValue(getPnL(portfolioHistory))}
+					value={balanceChange1M}
 					isPnL={true}
 				/>
 				<HorizontalField
 					label="Chg. (1D)"
-					value={formatValue(getPnL(portfolioHistory))}
+					value={balanceChange1D}
 					isPnL={true}
 				/> 
 			</View>
@@ -128,16 +135,14 @@ const Home = (props) => {
 	const {theme, styles} = useStyles();
 	const {WP, HP} = useDimensions();
 
-	const {portfolio, getPortfolio} = useStockPortfolioData({enabled: false}); 
+	const {portfolio, getPortfolio} = useStockPortfolioData({enabled: false});
+	const {portfolioHistory, getPortfolioHistory} = usePortfolioHistory(); 
 	const {tradingAccount, getTradingAccount} = useTradingAccountData({enabled: false});
-	const {portfolioHistory, getPortfolioHistory} = usePortfolioHistory({enabled: false});
 	const {orders, getOrders} = useOrders({status: 'all', limit: 10}, {enabled: false});
 	const {accountActivity, getAccountActivity } = useAccountActivity({activity_type: 'DIV', limit: 10}, {enabled: false});
 	
 	const {cancelAllOrders} = useCancelAllOrders();
 	const [relevantActivity, setActivity] = useState(null);
-
-	const [screenOffset, setScreenOffset] = useState(0);
 
 	React.useEffect(() => {
 		(async() => {
@@ -164,21 +169,21 @@ const Home = (props) => {
 		}, [])
 	);
 
-	const cancelOrders = () => {
+
+	const cancelOrders = React.useCallback(() => {
 		cancelAllOrders({
 			onSuccess: (response, input) => getOrders(),
 			onError: (err, input) => console.log(err)
 		})
-	}
+	})
 
 	const loading = !!!portfolioHistory;
+	const pendingOrders = React.useMemo(() => orders && orders.filter(item => item.status == "new"), [orders]);
 
-	const pendingOrders = orders && orders.filter(item => item.status == "new");
+	console.log("Rendering Home");
 
-
-	const Header = () => <PortfolioHeader {...{portfolioHistory}} />
 	return (
-		<AppView title="Home"  isLoading={loading} header={<Header />}>
+		<AppView title="Home" isLoading={loading} header={<PortfolioHeader {...{portfolioHistory}}/>}>
 			<Collapsible
 				title="PERFORMANCE" 
 				content={<PnLGraph />}  

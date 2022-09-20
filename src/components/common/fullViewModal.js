@@ -1,21 +1,23 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { View, StyleSheet } from 'react-native';
 import Modal from 'react-native-modal';
 import { useTheme, useDimensions, useTypography, StyledText } from '../../theme'; 
 
 import {CloseIcon} from './iconButtons';
 
-export const FullViewModal = React.memo(({isVisible = false, opacity = 1.0, animation="slideInUp", onClose, title, ...props}) => {
+export const FullViewModal = React.memo(({isVisible = false, opacity = 1.0, animationIn="slideInUp", animationOut="fadeOut", onClose, onHide, title, ...props}) => {
 	const {theme, styles} = useStyles();
 	const {deviceWidth, deviceHeight} = useDimensions();
 
 	return (
 		<Modal
-			animationIn={animation} 
-			animationOut="fadeOut" 
+			animationIn={animationIn} 
+			animationOut={animationOut} 
 			backdropOpacity={opacity}
 			backdropColor={theme.background}
-			style={styles.modal}
+			onBackdropPress={onHide}
+        	onSwipeComplete={onHide} 
+			style={[styles.modal, props.modalStyle]}
 			{...{isVisible, deviceWidth, deviceHeight}}>
 			<View style={[styles.modalContent, props.modalContentStyle]}>
 				<View style={[styles.modalContentHeader, props.contentHeaderStyle]}>
@@ -36,25 +38,21 @@ const useStyles = () => {
 	
 	const styles = StyleSheet.create({
 		modal: {
-			// backgroundColor: theme.background,
 			margin: 0
 		},
 		modalContent: {
 			flex:1, 
-			// justifyContent: 'center', 
+			justifyContent: 'center',
 			alignItems: 'center',
 			height: '100%',
-			// backgroundColor: theme.background,
+			backgroundColor: theme.background
 		},
 		modalContentHeader: {
 			width: '100%', 
 			marginBottom: WP(5),
 			justifyContent: 'center',
-			// position:'absolute', ???
-			// top:0, ???
 			padding: WP(5),
 			backgroundColor: theme.background,
-
 		},
 		closeIconStyle: {
 			position: 'absolute', 

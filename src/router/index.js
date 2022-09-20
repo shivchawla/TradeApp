@@ -53,7 +53,7 @@ const HomeTabs = () => {
 		<Tabs.Screen name="Home" component={Home}/>
 		<Tabs.Screen name="Portfolio" component={Portfolio}/>
 		<Tabs.Screen name="Market" component={Market} />
-	  	<Tabs.Screen name="Explore" component={Splash} />
+	  	<Tabs.Screen name="Settings" component={Settings} />
 	  </Tabs.Navigator>
 	)
 }
@@ -62,7 +62,7 @@ const TradingStack = () => {
 	console.log("Render TradingStack");
 	return (
 		<Stack.Navigator screenOptions={{headerShown: false}}>
-			<Stack.Screen name="Home" component={HomeTabs} />
+			<Stack.Screen name="HomeTabs" component={HomeTabs} />
       		{innerScreens(Stack)}
 	    	<Stack.Screen name="Settings" component={Settings} />    
 		</Stack.Navigator>
