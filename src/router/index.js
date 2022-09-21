@@ -74,17 +74,16 @@ const Routes = () => {
 	console.log("Render Routes");
 	
 	const [hasInternet, setHasInternet] = useState(true);
-	const [isLoading , setIsLoading] = useState(true);	
 
-	const appStartup = useAppStartup();
+	const {isLoading: isAppLoading} = useAppStartup();
 
 	// Extract auth  from APP startup and make it dependent on app loading state
-	const { isLoadingAuth, verifiedUser, authMeta, userAccount } = useAuth(); 
-
-	//Extract brokerage account from Auth as well
-	// const {brokerageAccount, getBrokerageAccount} = useBrokerageAccountData({enabled: false})
-
-	const navRef = React.useRef();
+	// const {isLoadingAuth = true, verifiedUser = false, authMeta = null, userAccount = null } = {}; //= useAuth(); 
+	const {isLoadingAuth, verifiedUser, authMeta, userAccount} = useAuth(); 
+	
+	// console.log(isLoadingAuth);
+	// console.log(verifiedUser);
+	// console.log(userAccount);
 
 	//Subscribe to net events
 	React.useEffect(() => {
@@ -99,29 +98,23 @@ const Routes = () => {
 		return () => unsubscribe();
 	}, []);
 
- 	const pendingAction = !!userAccount && authMeta?.pending;
+
+	//Conditional Stacking; 
+	//Should we stack uncondtionally and navigation be used to route?? - PERFORMANCE QUESTION
 
 	return (
 		<NavigationContainer>
 			<Stack.Navigator screenOptions={{headerShown: false}}>
-				{(isLoadingAuth || isLoadingAuth == null) && <Stack.Screen name="Splash" component={Splash} />}
-
-				{!hasInternet ? 
-					<Stack.Screen name="NoInternet" component={NoInternet} />
-					:
-					<>
-					{!!pendingAction ?? <Stack.Screen name={pendingAction} component={pendingAction} />}
-					
-					{(verifiedUser && !!userAccount) &&  
+				{!hasInternet 
+					? <Stack.Screen name="NoInternet" component={NoInternet} />
+				: 	isAppLoading ? 
+						<Stack.Screen name="Splash" component={Splash} />
+				:   (!isLoadingAuth && verifiedUser && !!userAccount) ?  
 						<Stack.Screen name="Trading" component={TradingStack} />
-					}
-					
-					{verifiedUser && 
-						 <Stack.Screen name="OnboardStack" component={OnboardStack} />
-					}
-
+				: 	(!isLoadingAuth && verifiedUser) ? 
+						<Stack.Screen name="OnboardStack" component={OnboardStack} />
+				: 
 					<Stack.Screen name="Auth" component={AuthStack} />
-					</>
 				}
 			</Stack.Navigator>
 	   </NavigationContainer>

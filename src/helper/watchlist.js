@@ -9,7 +9,9 @@ import { currentISODate, toISODate, yearStartISODate, dayStartISODate, dayEndISO
 import { useClock } from './clock';
 
 import {getWatchlistOrder, setWatchlistOrder} from './store'
+import {defaultStocks} from '../config';
 
+console.log(defaultStocks);
 
 const validateWatchlist = (watclistParams) => {
 	return true;

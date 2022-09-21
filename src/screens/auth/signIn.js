@@ -24,7 +24,7 @@ const SignIn = (props) => {
 	const {theme, styles} = useStyles();
 	const [error , setError] = useState(null);
 
-	const {currentUser, verifiedUser,  userAccount, confirmPhone, signInEmail, signInPhone, submitPhoneCode} = useAuth();
+	const {isLoadingAuth, currentUser, confirmPhone, signInEmail, signInPhone, submitPhoneCode} = useAuth();
 
 	const [otp, setOtp] = useState('');
 
@@ -34,29 +34,6 @@ const SignIn = (props) => {
 
 		return () => updateLoading(false);
 	}, []))
-
-	React.useEffect(() => {
-		// console.log("Running the useEffect in SignIn");
-		// console.log("Whats the brokerage Account");
-		// console.log(userAccount);
-		// console.log(currentUser);
-
-		if (verifiedUser && !!userAccount?.account && 
-				userAccount?.account?.status == ACCOUNT_STATUS.ACTIVE) {
-
-			navigation.navigate(SCREEN_NAMES.Trading)	
-		} 
-
-		//What to do in other status message
-
-		// else if (!!currentUser?.user) {
-		// 	// console.log("~~~~Sign out!!!!");
-		// 	// signOut()
-		// 	console.log("Navigating to Onboard");
-		// 	navigation.navigate('Onboard')
-		// } 
-
-	}, [userAccount]);
 
 	const onSignInPhone = async() => {
 		try {
@@ -107,8 +84,10 @@ const SignIn = (props) => {
 		}
 	}
 	
+	console.log("Sigin Loading:  ", isLoading || isLoadingAuth);
+
 	return (
-		<AuthLayout {...isLoading} header={{title: t('auth:signIn.title'), description: t('auth:signIn.description')}}>
+		<AuthLayout isLoading={isLoading || isLoadingAuth} header={{title: t('auth:signIn.title'), description: t('auth:signIn.description')}}>
 
 			<View style={{ marginBottom: HP(5), alignItems: 'center', width: '100%' }}>
 				{!!!phoneAuth ?
