@@ -35,7 +35,7 @@ export const IconButton = ({iconName, onPress, opacity=0.8,  ...props}) => {
 	)
 }
 
-export const IconTextButton = ({iconName, image, title, onPress, opacity = 0.8, ...props}) => {
+export const IconTextButton = ({iconName, image, title, onPress,  subTitle='', opacity = 0.8, ...props}) => {
 	const {theme, styles} = useStyles();
 	const { DefaultIconSize } = useTypography();
 	
@@ -43,7 +43,10 @@ export const IconTextButton = ({iconName, image, title, onPress, opacity = 0.8, 
 		<TouchableOpacity activeOpacity={opacity} style={props.containerStyle} onPress={onPress}>
 			{iconName && <Ionicons name={iconName} color={props.iconColor || theme.icon} size={props.iconSize || DefaultIconSize} />} 
 			{image && <Image source={image} style={[styles.imageIcon, props.imageIconStyle]} />}
-			<StyledText style={props.textStyle}>{title}</StyledText>
+			<View>
+				<StyledText style={props.textStyle}>{title}</StyledText>
+				{subTitle && <StyledText style={props.subTitleStyle}>{subTitle}</StyledText>}
+			</View>
 		</TouchableOpacity>
 	)
 }

@@ -1,12 +1,14 @@
 export { AppView, AppHeader } from './appView';
 export { ShowJson } from './showJson';
 export { ConfirmButton } from './confirmButton';
+export { SimpleButton } from './simpleButton';
 export { Picker, BottomPicker, TextInputWithIcon, 
 	HorizontalInputField, HorizontalPickField } from './picker';
 export { PnLText } from './pnlText';
 export { LineChart } from './linechart';
 export { HorizontalScrollMenu } from './horizontalScrollMenu';
 export { VerticalField } from './verticalField';
+export { HorizontalField } from './horizontalField';
 
 export { CustomIcon, IconButton, IconTextButton, GobackIcon, AccountIcon, SearchIcon, 
 	FavoriteIcon, EditIcon, AddIcon,

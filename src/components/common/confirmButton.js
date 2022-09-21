@@ -5,6 +5,7 @@ import { useTheme, useDimensions, useTypography, StyledText }  from '../../theme
 
 import { CustomIcon} from './iconButtons';
 import { SwipeButton } from './swipeButton';
+import { SimpleButton } from './simpleButton';
 
 export const ConfirmButton = ({title, afterTitle, onClick, onSwipeSuccess, swipe = false, cancel = false, disabled = false,  ...props}) => {
 	const {theme, styles} = useStyles();
@@ -17,8 +18,6 @@ export const ConfirmButton = ({title, afterTitle, onClick, onSwipeSuccess, swipe
 	const CancelIcon = ({size = WP(5)} = {}) => {
 		return <CustomIcon iconName="close-circle"  iconSize={size} iconColor="white"/>
 	}
-
-	const ClickableComponent = disabled ? View : TouchableOpacity;
 
 	const color = cancel ? theme.red : props?.color ??  theme.green;
 
@@ -42,10 +41,11 @@ export const ConfirmButton = ({title, afterTitle, onClick, onSwipeSuccess, swipe
 
           	:
 
-				<ClickableComponent style={[styles.button, props.buttonStyle, {...disabled && {backgroundColor: theme.grey9}}]} onPress={disabled ? null : onClick}>
-					<StyledText style={[styles.buttonText, props.buttonTextStyle]}>{title}</StyledText>
-				</ClickableComponent>
-		
+      		<SimpleButton 
+      			{...{title, disabled, onClick}} 
+      			buttonTextStyle={props.buttonTextStyle} 
+      			buttonStyle={[props.buttonStyle, {width: '40%'}]}
+  			/>
 		}
 		</View>
 	);
@@ -56,25 +56,13 @@ const useStyles = () => {
 	const { theme } = useTheme();
     const { HP, WP } = useDimensions();
     const Typography = useTypography();
+
 	const styles = StyleSheet.create({
 		buttonContainer: {
 		    width: '100%',
 		    flexDirection:'row',
 		    justifyContent:'center'
-		},
-		button: {
-		    backgroundColor:'#FE9901',
-		    height: 35,
-		    justifyContent:'center',
-		    alignItems:'center',
-		    width: '40%'
-		  },
-		buttonText: {
-		    fontFamily: "roboto-700",
-		    color: 'white',
-		    fontSize: 16,
-		    fontWeight:"700"
-		},
+		}
 	});
 
 	return {theme, styles};

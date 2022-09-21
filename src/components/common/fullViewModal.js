@@ -5,7 +5,7 @@ import { useTheme, useDimensions, useTypography, StyledText } from '../../theme'
 
 import {CloseIcon} from './iconButtons';
 
-export const FullViewModal = React.memo(({isVisible = false, opacity = 1.0, animationIn="slideInUp", animationOut="fadeOut", onClose, onHide, title, ...props}) => {
+export const FullViewModal = React.memo(({isVisible = false, opacity = 1.0, animationIn="slideInUp", animationOut="fadeOut", onClose, onHide, title, hasHeader=true, ...props}) => {
 	const {theme, styles} = useStyles();
 	const {deviceWidth, deviceHeight} = useDimensions();
 
@@ -20,10 +20,12 @@ export const FullViewModal = React.memo(({isVisible = false, opacity = 1.0, anim
 			style={[styles.modal, props.modalStyle]}
 			{...{isVisible, deviceWidth, deviceHeight}}>
 			<View style={[styles.modalContent, props.modalContentStyle]}>
-				<View style={[styles.modalContentHeader, props.contentHeaderStyle]}>
-					{title && <StyledText style={[styles.headerTitle, props.headerTitleStyle]}>{title}</StyledText>}
-					{onClose && <CloseIcon onPress={onClose} containerStyle={styles.closeIconStyle}/>}
-				</View>
+				{hasHeader && 
+					<View style={[styles.modalContentHeader, props.contentHeaderStyle]}>
+						{title && <StyledText style={[styles.headerTitle, props.headerTitleStyle]}>{title}</StyledText>}
+						{onClose && <CloseIcon onPress={onClose} containerStyle={styles.closeIconStyle}/>}
+					</View>
+				}
 				{props.children}
 			</View>
 		</Modal>
