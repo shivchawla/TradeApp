@@ -12,8 +12,8 @@ export const HorizontalSetting = ({title, value, onPress, hasIcon = true, leftIc
 	return (
 		<TouchableOpacity activeOpacity={0.8} onPress={onPress} style={styles.horizontalSettingContainer}>
 			<View style={styles.flexContainer}>
-				{leftIcon && <CustomIcon iconName={leftIcon} iconSize={WP(4)} iconColor={theme.grey2}/>}
-				<StyledText style={[styles.horizontalSettingTitle, {...leftIcon && {marginLeft: WP(2)}}]}>{title}</StyledText>
+				{leftIcon && <CustomIcon iconName={leftIcon} iconSize={WP(6)} />}
+				<StyledText style={[styles.horizontalSettingTitle, {...leftIcon && {marginLeft: WP(6)}}]}>{title}</StyledText>
 			</View>
 			<View style={styles.flexContainer}>
 				{value && <StyledText style={styles.horizontalSettingValue}>{value}</StyledText> }
@@ -50,7 +50,12 @@ const useStyles = () => {
 		horizontalSettingContainer: {
 			flexDirection: 'row',
 			justifyContent: 'space-between',
-			marginBottom: HP(4)
+			marginBottom: HP(2),
+			padding: WP(2),
+			height: HP(7),
+			borderColor: theme.grey9,
+			borderWidth: 1,
+			borderRadius: 10,
 		},
 
 		horizontalSettingTitle: {

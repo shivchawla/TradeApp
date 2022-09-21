@@ -22,7 +22,6 @@ const TopSectionSettings = () => {
 			<TopSetting iconName="shirt-outline" title="Deposit Funds" onPress={() => navigation.navigate('CreateDeposit')} />
 			<TopSetting iconName="umbrella-outline" title="Withdraw Funds" onPress={() => navigation.navigate('CreateWithdraw')} />
 			<TopSetting iconName="ios-albums-outline" title="Deposit History" onPress={() => navigation.navigate("FundHistory")} />
-			<TopSetting iconName="ios-arrow-redo-circle-outline" title="Trade Settings" onPress={() => navigation.navigate('TradeSettings')} />
 			<TopSetting iconName="ios-boat-outline" title="Trade Reports" onPress={() => navigation.navigate('DownloadDocument', {type: 'trade_confirmation'})} />
 			<TopSetting iconName="ios-cellular-outline" title="Account Statement" onPress={() => navigation.navigate('DownloadDocument', {type: 'account_statement'})} />
 		</View>	
@@ -38,8 +37,10 @@ const MiddleSectionSettings = () => {
 
 	return (
 		<View style={styles.middleSettingsContainer}>
+			<HorizontalSetting title="TRADE SETTINGS" leftIcon="ios-arrow-redo-circle-outline" onPress={() => navigation.navigate('TradeSettings')} />
+			<HorizontalSetting title="ACCOUNT SETTINGS" leftIcon="person-outline" onPress={() => navigation.navigate('AccountSettings')} />
 			<HorizontalSetting title="NOTIFICATIONS" leftIcon="notifications-outline" onPress={() => navigation.navigate("Notifications")} />
-			<HorizontalSetting title="USER" leftIcon="person-outline" onPress={() => navigation.navigate("UserSettings")} />
+			<HorizontalSetting title="SECURITY" leftIcon="shield-checkmark-outline" onPress={() => navigation.navigate("UserSettings")} />
 			<HorizontalSetting title="HELP" leftIcon="help-circle-outline" onPress={() => navigation.navigate("FAQ")} />
 			<HorizontalSetting title="LANGUAGE" leftIcon="language" value={currentLanguage} onPress={() => navigation.navigate("SelectLanguage")} />
 		</View>
@@ -70,7 +71,6 @@ const BottomSectionSettings = () => {
 
 	      };
 
-	      console.log(shareObj);
 		try {
 	      const result = await Share.share(shareObj);
 	    } catch (error) {
@@ -100,7 +100,7 @@ const Settings = (props) => {
 	
 	return (
 		<AppView scroll={false} title="Settings">
-			<TopSectionSettings />
+			{/*<TopSectionSettings />*/}
 			<MiddleSectionSettings />
 			<BottomSectionSettings />
 		</AppView>
@@ -151,13 +151,13 @@ const useStyles = () => {
 		},
 
 		bottomSetting: {
-			marginBottom: HP(2),
+			marginBottom: HP(1),
 			alignItems: 'center',
 		},
 
 		bottomSettingTitle: {
 			color: theme.grey2,
-			fontSize: WP(4.5)
+			fontSize: WP(4)
 		}
 
 	});	
