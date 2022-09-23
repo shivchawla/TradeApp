@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, KeyboardAvoidingView } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView, KeyboardAwareFlatList } from 'react-native-keyboard-aware-scroll-view';
 
 import { useNavigation, useFocusEffect, useIsFocused } from '@react-navigation/native';
 import { BarIndicator } from 'react-native-indicators';
@@ -35,6 +35,7 @@ export const AppHeader = ({ title, goBack = true, ...props }) => {
 
 export const AppView = ({
   scroll = true,
+  list = false,
   footer,
   hasHeader = true,
   header,
@@ -45,11 +46,6 @@ export const AppView = ({
 }) => {
   const { WP } = useDimensions(); 
   const { theme, styles } = useStyles();
-
-  // console.log("Scroll: ", scroll);
-  // console.log(props.children);
-
-  console.log("--------Rendering App View------")
 
   const [showModal, setShowModal] = useState(false);
   const scrollRef = React.useRef();
@@ -68,6 +64,11 @@ export const AppView = ({
   //Check for ZERO padding
   const hasPadding = (props?.padding ?? '') !== '';
 
+  const SpecialScrollView = list ? KeyboardAwareFlatList : KeyboardAwareScrollView;
+
+  // console.log("AppView Component: ", SpecialScrollView);
+  // console.log(Object.keys(props));
+
   return (
     <>
       <FullViewModal isVisible={showModal} opacity={0.8}>
@@ -77,7 +78,7 @@ export const AppView = ({
       {scroll || keyboardMode == 'overlap' ? (
         <View style={styles.scrollAppContainer}>
           {hasHeader || header ? header ? header : <AppHeader {...props} /> : <></>}
-          <KeyboardAwareScrollView
+          <SpecialScrollView
             innerRef={(r) => (scrollRef.current = r)}
             enableOnAndroid={true}
             contentContainerStyle={[
@@ -92,9 +93,10 @@ export const AppView = ({
             ]}
             showsVerticalScrollIndicator={false}
             {...{ onScroll }}
+            {...props}
           >
             {props.children}
-          </KeyboardAwareScrollView>
+          </SpecialScrollView>
           {footer && (
             <View style={[styles.footerContainer, props.footerContainerStyle]}>{footer}</View>
           )}
