@@ -20,10 +20,15 @@ export const useAppStartup = () => {
 	    	addNotification(remoteMessage)
 	    });
 
-	    messaging().setBackgroundMessageHandler(async (remoteMessage) => {
-		  	console.log('Message handled in the background!', remoteMessage);
-		  	addNotification(remoteMessage)
-		});
+
+		//To setup a background handler, 
+		//call the setBackgroundMessageHandler outside of your application logic as early as possible:
+	    //LOGIC now moved to index.js
+
+	 	// messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+		//   	console.log('Message handled in the background!', remoteMessage);
+		//   	addNotification(remoteMessage)
+		// });
 
 		(async() => {
 

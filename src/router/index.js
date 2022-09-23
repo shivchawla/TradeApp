@@ -22,6 +22,7 @@ import Portfolio from '../screens/portfolio';
 import Settings from '../screens/settings';
 import NoInternet from '../screens/errors/noInternet';
 import Account from '../screens/account';
+import Notifications from '../screens/notifications';
 
 import AuthStack from './auth';
 import OnboardStack from './onboard';
@@ -34,7 +35,7 @@ const Stack = createStackNavigator();
 
 const HomeTabs = () => {
 
-	console.log("Render HomeTabs");
+	// console.log("Render HomeTabs");
 	
 	const { theme } = useTheme();
     const { HP, WP } = useDimensions();
@@ -50,7 +51,7 @@ const HomeTabs = () => {
 
 	return (
 	  <Tabs.Navigator {...{screenOptions}} tabBar={props => <CustomTabBar {...props} />}>
-		<Tabs.Screen name="Home" component={Home}/>
+		<Tabs.Screen name="Home" component={Notifications}/>
 		<Tabs.Screen name="Portfolio" component={Portfolio}/>
 		<Tabs.Screen name="Market" component={Market} />
 	  	<Tabs.Screen name="Settings" component={Settings} />
@@ -59,7 +60,7 @@ const HomeTabs = () => {
 }
 
 const TradingStack = () => {
-	console.log("Render TradingStack");
+	// console.log("Render TradingStack");
 	return (
 		<Stack.Navigator screenOptions={{headerShown: false}}>
 			<Stack.Screen name="HomeTabs" component={HomeTabs} />
@@ -71,7 +72,7 @@ const TradingStack = () => {
 
 const Routes = () => {
 
-	console.log("Render Routes");
+	// console.log("Render Routes");
 	
 	const [hasInternet, setHasInternet] = useState(true);
 
