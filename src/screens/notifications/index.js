@@ -8,33 +8,36 @@ import { toTimeZoneDate, dayStartISODate } from '../../utils'
 
 const NotificationContext = React.createContext(null);
 
-const NotificationProvider = ({children}) => {
-	const [selectedNotifications, setSelectedNotifications] = useState([]);
+// const NotificationProvider = ({children}) => {
+// 	const [selectedNotifications, setSelectedNotifications] = useState([]);
 
-	const [selectionMode, setSelectionMode] = useState(false)
+// 	const [selectionMode, setSelectionMode] = useState(false)
 
-	/**WHY THE CHILD RENDER IS SLOW
-	 * As this function gets modified with every selection, all child notification items get re-rendered
-	 **/
-	const onNotificationSelected = (notification, selected) => {
-		if(selected) {
-			setSelectionMode(true);
-		}
+// 	/**WHY THE CHILD RENDER IS SLOW
+// 	 * As this function gets modified with every selection, all child notification items get re-rendered
+// 	 **/
+// 	const onNotificationSelected = React.useCallback((notification, selected) => {
+// 		if(selected) {
+// 			setSelectionMode(true);
+// 		}
 
-		if (selected) {
-			setSelectedNotifications([...selectedNotifications, notification.messageId])
-		} else {
-			setSelectedNotifications(selectedNotifications.filter(msgId => msgId != notification.messageId ))
-		}
+// 		 IMPORTANT CHANGE: Use function state updates to get previous values
+// 		 * this in conjucntion with usecallback will offer updated but memoized function for children
+		
+// 		if (selected) {
+// 			setSelectedNotifications((x) => [...x, notification.messageId])
+// 		} else {
+// 			setSelectedNotifications((x) => x.filter(msgId => msgId != notification.messageId ))
+// 		}
 
-	}
+// 	}, [])
 
-	return (
-		<NotificationContext.Provider value={{selectionMode, onNotificationSelected}}>
-			{children}
-		</NotificationContext.Provider>
-	)
-} 
+// 	return (
+// 		<NotificationContext.Provider value={{selectionMode, onNotificationSelected}}>
+// 			{children}
+// 		</NotificationContext.Provider>
+// 	)
+// } 
 
 
 const OtherNotification = ({notification}) => {
@@ -44,11 +47,11 @@ const OtherNotification = ({notification}) => {
 	// )
 }
 
-const TradeNotification = React.memo(({notification}) => {
+const TradeNotification = React.memo(({notification, showRadio, onNotificationSelected}) => {
 
-	// console.log("Render Trade notification");
+	console.log("Render Trade notification");
 
-	const {onNotificationSelected, selectionMode: showRadio} = React.useContext(NotificationContext);
+	// const {onNotificationSelected, selectionMode: showRadio} = React.useContext(NotificationContext);
 	const [selected, setSelected] = useState(false);
 	const {read = false} = notification;
 	const {styles} = useStyles();
@@ -57,7 +60,6 @@ const TradeNotification = React.memo(({notification}) => {
 		// console.log("onRadioSelected: ", selected)
 		onNotificationSelected(notification, selected);
 	}, [selected])
-
 
 
 	React.useEffect(() => {
@@ -145,7 +147,7 @@ const JournalNotification = ({notification}) => {
 		// <Text>{JSON.stringify(notification)}</Text>
 }
 
-const Notification = ({notification}) => {
+const Notification = ({notification, showRadio, onNotificationSelected}) => {
 	const navigation = useNavigation();
 	const {type} = notification?.data;
 
@@ -164,22 +166,44 @@ const Notification = ({notification}) => {
 	}
 
 	return (
-		<NotificationElem {...{notification}} />
+		<NotificationElem {...{notification, showRadio, onNotificationSelected}} />
 	)
 }
 
 
-const renderNotification = ({item: notification}) => {
-	return (
-		<Notification {...{notification}}/>
-	)
-}
-
-
-const NotificationsList = (props) => {
+const Notifications = (props) => {
 
 	const {isLoading, notifications, deleteNotifications, markReadNotifications, getNotifications } = useNotifications({enabled: false});
-	
+	const [selectedNotifications, setSelectedNotifications] = useState([]);
+
+	const [selectionMode, setSelectionMode] = useState(false)
+
+	/**WHY THE CHILD RENDER IS SLOW
+	 * As this function gets modified with every selection, all child notification items get re-rendered
+	 **/
+	const onNotificationSelected = React.useCallback((notification, selected) => {
+		if(selected) {
+			setSelectionMode(true);
+		}
+
+		/*IMPORTANT CHANGE: Use function state updates to get previous values
+		 * this in conjucntion with usecallback will offer updated but memoized function for children
+		*/
+		if (selected) {
+			setSelectedNotifications((x) => [...x, notification.messageId])
+		} else {
+			setSelectedNotifications((x) => x.filter(msgId => msgId != notification.messageId ))
+		}
+
+	}, [])
+
+	const renderNotification = ({item: notification}) => {
+		return (
+			<Notification {...{notification, onNotificationSelected}} showRadio={selectionMode}/>
+		)
+	}
+
+
 	useFocusEffect(
 		React.useCallback(() => {
 			(async() => {
@@ -206,13 +230,13 @@ const NotificationsList = (props) => {
 	);
 }
 
-const Notifications = () => {
-	return (
-		<NotificationProvider>
-			<NotificationsList />
-		</NotificationProvider>
-	)
-}
+// const Notifications = () => {
+// 	return (
+// 		<NotificationProvider>
+// 			<NotificationsList />
+// 		</NotificationProvider>
+// 	)
+// }
 
 const useStyles = () => {
 	const { theme } = useTheme();
