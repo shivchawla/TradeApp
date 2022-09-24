@@ -49,7 +49,7 @@ const OtherNotification = ({notification}) => {
 
 const TradeNotification = React.memo(({notification, showRadio, onNotificationSelected}) => {
 
-	console.log("Render Trade notification");
+	// console.log("Render Trade notification");
 
 	// const {onNotificationSelected, selectionMode: showRadio} = React.useContext(NotificationContext);
 	const [selected, setSelected] = useState(false);
@@ -62,9 +62,9 @@ const TradeNotification = React.memo(({notification, showRadio, onNotificationSe
 	}, [selected])
 
 
-	React.useEffect(() => {
-		console.log("onNotificationSelected Changed");
-	}, [onNotificationSelected])
+	// React.useEffect(() => {
+	// 	console.log("onNotificationSelected Changed");
+	// }, [onNotificationSelected])
 
 	const onLongPress = () => {
 		if (!showRadio) {
@@ -82,9 +82,9 @@ const TradeNotification = React.memo(({notification, showRadio, onNotificationSe
 
 	const {event = ""} = message;
 
-	if (event == "new" || event == "") {
-		return null;
-	}
+	// if (event == "new" || event == "") {
+	// 	return <></>;
+	// }
 
 	const {symbol, price, status, order_type, filled_avg_price, filled_qty, filled_at, canceled_at, updated_at, failed_at} = message?.order; 
 
@@ -147,8 +147,9 @@ const JournalNotification = ({notification}) => {
 		// <Text>{JSON.stringify(notification)}</Text>
 }
 
-const Notification = ({notification, showRadio, onNotificationSelected}) => {
+const Notification = (props) => {
 	const navigation = useNavigation();
+	const {notification} = props;
 	const {type} = notification?.data;
 
 	// console.log("Render Notification")
@@ -166,17 +167,28 @@ const Notification = ({notification, showRadio, onNotificationSelected}) => {
 	}
 
 	return (
-		<NotificationElem {...{notification, showRadio, onNotificationSelected}} />
+		<NotificationElem {...props} />
 	)
 }
 
 
 const Notifications = (props) => {
 
-	const {isLoading, notifications, deleteNotifications, markReadNotifications, getNotifications } = useNotifications({enabled: false});
+	const {isLoading, notifications: allNotifications, deleteNotifications, markReadNotifications, getNotifications } = useNotifications({enabled: false});
 	const [selectedNotifications, setSelectedNotifications] = useState([]);
-
 	const [selectionMode, setSelectionMode] = useState(false)
+
+	const [notifications, setNotifications] = useState([]);
+
+	const loadMoreNotifications = () => {
+		setNotifications((nfs) => allNotifications.slice(0, nfs.length + 10));
+	}
+
+	React.useEffect(() => {
+		if(allNotifications && allNotifications.length > 0) {
+			setNotifications(allNotifications.slice(0, 10));
+		}
+	}, [allNotifications])
 
 	/**WHY THE CHILD RENDER IS SLOW
 	 * As this function gets modified with every selection, all child notification items get re-rendered
@@ -212,20 +224,23 @@ const Notifications = (props) => {
 		}, [])
 	)
 
-	console.log("Render Notifications")
+	// console.log("Render Notifications")
 
 	
 	// console.log("Notifications Loaded: ", isLoading);
 	// console.log(notifications.map(it => it.messageId));
+
+	// console.log(allNotifications.length)
 
 	return (
 		<AppView 
 			title="Notifications Screen"
 			{...{isLoading}} 
 			list={true} 
-			data={notifications.slice(0,100)}
+			data={notifications}
 			renderItem={renderNotification}
 			keyExtractor={item => item.messageId}
+			onEndReached={loadMoreNotifications}
 		/>	
 	);
 }
