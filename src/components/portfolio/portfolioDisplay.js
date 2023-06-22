@@ -62,7 +62,7 @@ export const PortfolioDisplay = ({portfolio, orders = [], displayCount = -1, scr
 					style={styles.tickerDisplayContainer} 
 					priceChangeStyle={styles.priceChangeStyle}
 					priceStyle={styles.priceStyle}/>
-				<PnLText valueStyle={styles.pnlText} value={unrealized_pl}  />
+				<PnLText valueStyle={styles.pnlText} containerStyle={{alignItems: 'center'}} value={unrealized_pl}  />
 			</TouchableOpacity>
 		)
 	}
@@ -156,7 +156,8 @@ const useStyles = () => {
 		},
 		pnlText: {
 			width: WP(25), 
-			textAlign:'center'
+			textAlign:'center',
+			alignItems: 'center'
 		},
 		tickerDisplayContainer: {
 			width: WP(50), 

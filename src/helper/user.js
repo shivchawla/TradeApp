@@ -176,16 +176,18 @@ const useAuthHelper = () => {
 		let needsUpdate = true;
 		if(token && lastUpdated) {
 			const timePassed = duration(lastUpdated);
-			if (timePassed < 30*24*60*60*1000) {
-				needsUpdate = false;
-			}
+			// console.log("timePassed: ", timePassed);
+
+			// if (timePassed < 30*24*60*60*1000) {
+			// 	needsUpdate = false;
+			// }
 		} 
 		
-		console.log("Is Token update needed: ", needsUpdate);
+		// console.log("Is Token update needed: ", needsUpdate);
 		if (needsUpdate) {
 			//Add FCM token to 
 			const fcmToken = await messaging().getToken();
-			console.log(currentUser?.email);
+			// console.log(currentUser?.email);
 			await updateUserInDb(currentUser?.email, {fcmInfo: {token: fcmToken, lastUpdated: new Date()}});
 		}
 	}
@@ -296,7 +298,6 @@ const useAuthHelper = () => {
 
 		}
 	}
-
 
 	//Not in use downstream
 	//because phone credentials can't be connected once verified

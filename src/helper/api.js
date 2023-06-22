@@ -69,7 +69,7 @@ export const getPortfolioHistory = async (params = {}) => {
 
 export const getTradingAccount = async () => {
 	console.log("Fetching User Trading Account");
-	console.log(`/v1/trading/accounts/${await getAccountId()}/account`);
+	// console.log(`/v1/trading/accounts/${await getAccountId()}/account`);
 	return await axios.get(`/v1/trading/accounts/${await getAccountId()}/account`).then(r => r.data)
 }
 
@@ -193,10 +193,10 @@ export const deleteWatchlist = async(watchlist_id) => {
 }
 
 export const getSeekingAlphaNews = async (symbol) => {
-	console.log("Getting News from Seeking Alpha");
-	console.log(symbol);
-	console.log("News URL");
-	console.log(`${newsApiUrl}/${symbol}/news`)
+	// console.log("Getting News from Seeking Alpha");
+	// console.log(symbol);
+	// console.log("News URL");
+	// console.log(`${newsApiUrl}/${symbol}/news`)
 	return await axios.get(`${newsApiUrl}/${symbol}/news`).then(r => r.data);
 }
 

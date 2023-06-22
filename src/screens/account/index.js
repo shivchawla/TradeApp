@@ -29,8 +29,6 @@ const AccountSummary = ({tradingAccount}) => {
 	const {theme, styles} = useStyles();
 
 	const getLabel = (key) => {
-		console.log(typeof(ACCOUNT_FIELDS[key]));
-
 		if(typeof(ACCOUNT_FIELDS[key]) == 'object') {
 			return ACCOUNT_FIELDS[key].title;
 		} else {
@@ -82,9 +80,6 @@ const Account = () => {
 	const {WP, HP} = useDimensions();
 
 	const {isLoading, tradingAccount} = useTradingAccountData();
-
-	console.log("Trading Account");
-	console.log(tradingAccount);
 
 	return (
 		<AppView title="Account" {...{isLoading}}>

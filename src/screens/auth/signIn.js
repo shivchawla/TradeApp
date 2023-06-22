@@ -84,7 +84,7 @@ const SignIn = (props) => {
 		}
 	}
 	
-	console.log("Sigin Loading:  ", isLoading || isLoadingAuth);
+	// console.log("Sigin Loading:  ", isLoading || isLoadingAuth);
 
 	return (
 		<AuthLayout isLoading={isLoading || isLoadingAuth} header={{title: t('auth:signIn.title'), description: t('auth:signIn.description')}}>

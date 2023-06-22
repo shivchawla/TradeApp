@@ -3,8 +3,9 @@ import { initReactI18next } from 'react-i18next';
 
 import languages, {getCurrentLanguage} from './src/locales';
 
-const initialize = async() => {
-  const currentLocale = await getCurrentLanguage();
+const initialize = () => {
+  // const currentLocale = await getCurrentLanguage();
+  const currentLocale = 'en';
 
   i18n.use(initReactI18next).init({
     fallbackLng: 'en-US',

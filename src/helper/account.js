@@ -8,14 +8,14 @@ const validateAccountParams = (params) => {
 	return true;
 }
 
-export function useTradingAccountData(params={}) {
+export function useTradingAccountData(params = {}) {
 	// console.log("useTradingAccountData");
-	const {isError, error, data: tradingAccount, refetch} = useQuery(['tradingAccount'], async() => getTradingAccount(), params);
+	const {isLoading, isError, error, data: tradingAccount, refetch} = useQuery(['tradingAccount'], async() => getTradingAccount(), params);
 	if (isError) {
 		console.log(`ERROR (useTradingAccountData): ${error}`);
 	}
 
-	return {isError, tradingAccount, getTradingAccount: async() => refetch().then(r => r.data)};  
+	return {isLoading, tradingAccount, getTradingAccount: async() => refetch().then(r => r.data)};  
 }
 
 

@@ -1,6 +1,7 @@
 export const apiUrl = 'https://broker-api.sandbox.alpaca.markets';
 export const apiKey="CK6VCAV223KKYEEPM2IY";
 export const apiSecret="BxizAIrVC5Q9hLwsgmninuL5pzCBhafofX7ZchXy";
+export const circleKey="QVBJX0tFWTowNGY3MjA1NjI5YjQxNmQ1NzdkYjc1YmU3OWE5MDg5ZTowOGUyODE1OWQ1Y2Y0MWFmODYwYzFlZGY0NTY4ZTg0ZA==";
 
 export const dataUrl = 'https://data.sandbox.alpaca.markets';
 export const wsUrl = 'wss://stream.data.sandbox.alpaca.markets/v2/iex';

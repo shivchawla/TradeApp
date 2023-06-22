@@ -78,7 +78,7 @@ const PortfolioHeader = ({portfolioHistory, ...props}) => {
 	const balanceChange1M = React.useMemo(() => formatValue(getPnL(portfolioHistory)), [portfolioHistory]);
 	const balanceChange1D = React.useMemo(() => formatValue(getPnL(portfolioHistory)), [portfolioHistory]);
 
-	console.log("PortfolioHeader");
+	// console.log("PortfolioHeader");
 
 	return (
 		<>
@@ -180,7 +180,7 @@ const Home = (props) => {
 	const loading = !!!portfolioHistory;
 	const pendingOrders = React.useMemo(() => orders && orders.filter(item => item.status == "new"), [orders]);
 
-	console.log("Rendering Home");
+	// console.log("Rendering Home");
 
 	return (
 		<AppView title="Home" isLoading={loading} header={<PortfolioHeader {...{portfolioHistory}}/>}>

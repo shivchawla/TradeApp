@@ -32,8 +32,8 @@ export function useStockIntradayData(symbol, {start = dayStartISODate(), end = d
 
 export function useStockList(params={}) {
   const {clock, getClock} = useClock();
-  console.log("useStockList");
-  console.log(clock);
+  // console.log("useStockList");
+  // console.log(clock);
   const cacheTime = !!clock?.next_open ? duration(clock.next_open) : null;
   const staleTime = cacheTime;
   const {isError, error, data: stockList, refetch} = useQuery(['stockList', clock?.next_open ?? ''], async() => clock ? getStocks() : [], {...params, ...cacheTime && {cacheTime}, ...staleTime && {staleTime}});

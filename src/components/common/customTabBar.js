@@ -65,8 +65,8 @@ export const CustomTabBar = ({ state, descriptors, navigation }) => {
           return "pie-chart";
       case "Market":
           return "analytics";
-      case "Explore":
-          return "compass";  
+      case "Settings":
+          return "settings";  
     }
   }
 
@@ -75,9 +75,9 @@ export const CustomTabBar = ({ state, descriptors, navigation }) => {
         case "Home":
             return {marginRight: WP(0)}
         case "Portfolio":
-          return {marginRight: WP(0)}
+          return {marginRight: WP(10)}
         case "Market":
-          return {marginLeft: WP(0)}
+          return {marginLeft: WP(10)}
         case "Explore":
           return {marginLeft: WP(0)}
       }
